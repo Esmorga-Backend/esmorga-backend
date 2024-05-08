@@ -1,0 +1,10 @@
+{
+  "uri": "mongodb://localhost:27017/",
+  "database": "esmorga",
+  "options": {
+    "useNewUrlParser": true,
+    "useUnifiedTopology": true
+  },
+  "migrationsDir": "migrations",
+  "migrationsCollection": "migrations_changelog"
+}
