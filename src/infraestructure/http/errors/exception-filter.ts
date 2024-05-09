@@ -14,7 +14,6 @@ export class HttpExceptionFilter {
       message: string;
     };
 
-    console.log(exception.getResponse());
     response.status(status).json({
       title,
       status,

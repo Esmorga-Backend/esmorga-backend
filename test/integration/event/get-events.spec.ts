@@ -27,12 +27,53 @@ describe('Get events - [GET v1/events]', () => {
     await app.close();
   });
 
-  it('Should a 00 without event list if there are no events in the db', async () => {
+  it('Should return a 200 with an event list that have not been celebrated', async () => {
+    jest
+      .spyOn(eventReposiory, 'find')
+      .mockResolvedValue([futureEventDB, oldEventDB]);
+
+    const response = await request(app.getHttpServer()).get(path);
+
+    expect(response.status).toBe(HttpStatus.OK);
+    expect(response.body).toEqual({
+      totalEvents: 1,
+      events: [
+        {
+          eventName: futureEventDB.eventName,
+          eventDate: futureEventDB.eventDate.toISOString(),
+          description: futureEventDB.description,
+          eventType: futureEventDB.eventType,
+          imageUrl: futureEventDB.imageUrl,
+          location: futureEventDB.location,
+          tags: futureEventDB.tags,
+          createdAt: futureEventDB.createdAt.toISOString(),
+          updatedAt: futureEventDB.updatedAt.toISOString(),
+        },
+      ],
+    });
+  });
+
+  it('Should a 200 without event list if there are no events in the db', async () => {
     jest.spyOn(eventReposiory, 'find').mockResolvedValue([]);
 
     const response = await request(app.getHttpServer()).get(path);
 
     expect(response.status).toBe(HttpStatus.OK);
-    expect(response.body).toBe({ totalEvents: 0, events: [] });
+    expect(response.body).toEqual({ totalEvents: 0, events: [] });
+  });
+
+  it('Should return a 500 error if something wrong happended and it is not handled', async () => {
+    jest.spyOn(eventReposiory, 'find').mockRejectedValue(new Error());
+
+    const response = await request(app.getHttpServer()).get(path);
+
+    expect(response.status).toEqual(HttpStatus.INTERNAL_SERVER_ERROR);
+    expect(response.body).toEqual({
+      title: 'InternalSerError',
+      status: HttpStatus.INTERNAL_SERVER_ERROR,
+      type: path,
+      detail: 'Unexpected error',
+      errors: ['Internal server error occurred in database operation'],
+    });
   });
 });
