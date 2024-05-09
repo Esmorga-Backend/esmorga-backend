@@ -38,7 +38,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.add_events1715175185780 = void 0;
 var collection = 'events';
-var eventNames = ['MobgenFest', 'Paintball'];
+var eventNames = ['MobgenFest', 'Paintball', 'MobgenFest 2', 'MobgenFest 3'];
+var futureDate = new Date();
+futureDate.setFullYear(2025);
+var oldDate = new Date();
+oldDate.setFullYear(2023);
 var add_events1715175185780 = /** @class */ (function () {
     function add_events1715175185780() {
     }
@@ -51,30 +55,54 @@ var add_events1715175185780 = /** @class */ (function () {
                         newEvents = [
                             {
                                 eventName: eventNames[0],
-                                eventDate: new Date(),
+                                eventDate: futureDate,
                                 description: 'Hello World',
-                                eventType: "Party",
-                                imageUrl: "img.url",
+                                eventType: 'Party',
+                                imageUrl: 'img.url',
                                 location: {
                                     lat: 43.35525182148881,
                                     long: -8.41937931298951,
-                                    name: "A Coruña",
+                                    name: 'A Coruña',
                                 },
-                                tags: ["Meal", "Music"]
+                                tags: ['Meal', 'Music'],
                             },
                             {
                                 eventName: eventNames[1],
-                                eventDate: new Date(),
+                                eventDate: futureDate,
                                 description: 'Hello World',
-                                eventType: "Sport",
-                                imageUrl: "img.url",
+                                eventType: 'Sport',
+                                imageUrl: 'img.url',
                                 location: {
                                     lat: 43.35525182148881,
                                     long: -8.41937931298951,
-                                    name: "Vigo",
+                                    name: 'Vigo',
                                 },
-                                tags: ["Shoots", "Sports"]
-                            }
+                                tags: ['Shoots', 'Sports'],
+                            },
+                            {
+                                eventName: eventNames[2],
+                                eventDate: futureDate,
+                                description: 'Event with only location.name',
+                                eventType: 'Party',
+                                imageUrl: 'img.url',
+                                location: {
+                                    name: 'A Coruña',
+                                },
+                                tags: ['Meal', 'Music'],
+                            },
+                            {
+                                eventName: eventNames[3],
+                                eventDate: oldDate,
+                                description: 'Event with eventDate some time ago',
+                                eventType: 'Party',
+                                imageUrl: 'img.url',
+                                location: {
+                                    lat: 43.35525182148881,
+                                    long: -8.41937931298951,
+                                    name: 'A Coruña',
+                                },
+                                tags: ['Meal', 'Music'],
+                            },
                         ];
                         return [4 /*yield*/, db.collection(collection).insertMany(newEvents)];
                     case 1:
@@ -89,7 +117,7 @@ var add_events1715175185780 = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, db.collection(collection).deleteMany({
-                            eventName: { $in: eventNames }
+                            eventName: { $in: eventNames },
                         })];
                     case 1:
                         _a.sent();
