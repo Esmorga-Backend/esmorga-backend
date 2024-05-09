@@ -11,11 +11,10 @@ async function main() {
     .setTitle('Esmorga API')
     .setDescription('Swagger for Esmorga API.')
     .setVersion('1.0')
-    .addTag('Events')
     .build();
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('swagger', app, document);
 
-  await app.listen(3000);
+  await app.listen(process.env.APP_PORT);
 }
 main();
