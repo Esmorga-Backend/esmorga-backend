@@ -1,5 +1,5 @@
 ## Description
-Backend of Esmorga.An app to manage events.
+Backend of Esmorga. An app to manage events.
 
 ## Installation
 
