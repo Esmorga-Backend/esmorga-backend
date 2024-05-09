@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { EventReposiory } from '../../infraestructure/db/repositories';
+import { filterAvaliableEvents } from '../../domain/services';
 
 @Injectable()
 export class GetEventListService {
@@ -9,9 +10,12 @@ export class GetEventListService {
     try {
       const events = await this.eventRepository.getEventList();
 
-      //TODO call service to delete events ocurred before
+      const avaliableEvents = filterAvaliableEvents(events);
 
-      return events;
+      return {
+        totalEvents: avaliableEvents.length,
+        avaliableEvents,
+      };
     } catch (error) {
       throw error;
     }
