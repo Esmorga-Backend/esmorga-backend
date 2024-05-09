@@ -1,5 +1,5 @@
 import { Controller, Get, UseFilters } from '@nestjs/common';
-import { GetEventListService } from '../../../application/event';
+import { GetEventListService } from '../../../application/handler/event';
 import { HttpExceptionFilter } from '../errors';
 
 @Controller('/v1/events')

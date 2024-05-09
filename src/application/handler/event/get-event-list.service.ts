@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { EventReposiory } from '../../infraestructure/db/repositories';
-import { filterAvaliableEvents } from '../../domain/services';
+import { EventReposiory } from '../../../infraestructure/db/repositories';
+import { filterAvaliableEvents } from '../../../domain/services';
 
 @Injectable()
 export class GetEventListService {
