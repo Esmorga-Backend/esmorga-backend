@@ -1,13 +1,14 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, UseFilters } from '@nestjs/common';
 import { GetEventListService } from '../../../application/event';
+import { HttpExceptionFilter } from '../errors';
 
 @Controller('/v1/events')
 export class EventController {
   constructor(private readonly getEventListService: GetEventListService) {}
 
   // TODO add swagger decorators
-  // TODO implement error filter
   @Get('/')
+  @UseFilters(new HttpExceptionFilter())
   async getEvents() {
     try {
       return this.getEventListService.find();
