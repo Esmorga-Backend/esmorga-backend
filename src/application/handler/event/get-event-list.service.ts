@@ -14,7 +14,7 @@ export class GetEventListService {
 
       return {
         totalEvents: avaliableEvents.length,
-        avaliableEvents,
+        events: avaliableEvents,
       };
     } catch (error) {
       throw error;
