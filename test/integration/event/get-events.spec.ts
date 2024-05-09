@@ -3,7 +3,7 @@ import { HttpStatus, INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../../../src/app.module';
 import { EventReposiory } from '../../../src/infraestructure/db/repositories';
-import { futureEventDB, oldEventDB } from '../../mocks';
+import { futureEventMockDB, oldEventMockDB } from '../../mocks';
 
 const path: string = '/v1/events';
 
@@ -30,7 +30,7 @@ describe('Get events - [GET v1/events]', () => {
   it('Should return a 200 with an event list that have not been celebrated', async () => {
     jest
       .spyOn(eventReposiory, 'find')
-      .mockResolvedValue([futureEventDB, oldEventDB]);
+      .mockResolvedValue([futureEventMockDB, oldEventMockDB]);
 
     const response = await request(app.getHttpServer()).get(path);
 
@@ -39,15 +39,15 @@ describe('Get events - [GET v1/events]', () => {
       totalEvents: 1,
       events: [
         {
-          eventName: futureEventDB.eventName,
-          eventDate: futureEventDB.eventDate.toISOString(),
-          description: futureEventDB.description,
-          eventType: futureEventDB.eventType,
-          imageUrl: futureEventDB.imageUrl,
-          location: futureEventDB.location,
-          tags: futureEventDB.tags,
-          createdAt: futureEventDB.createdAt.toISOString(),
-          updatedAt: futureEventDB.updatedAt.toISOString(),
+          eventName: futureEventMockDB.eventName,
+          eventDate: futureEventMockDB.eventDate.toISOString(),
+          description: futureEventMockDB.description,
+          eventType: futureEventMockDB.eventType,
+          imageUrl: futureEventMockDB.imageUrl,
+          location: futureEventMockDB.location,
+          tags: futureEventMockDB.tags,
+          createdAt: futureEventMockDB.createdAt.toISOString(),
+          updatedAt: futureEventMockDB.updatedAt.toISOString(),
         },
       ],
     });
