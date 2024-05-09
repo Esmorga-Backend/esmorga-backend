@@ -4,6 +4,8 @@ import { MigrationInterface } from 'mongo-migrate-ts';
 const collection = 'events';
 const eventNames = ['MobgenFest', 'Paintball', 'MobgenFest 2', 'MobgenFest 3'];
 
+const currentDate: Date = new Date();
+
 const futureDate = new Date();
 futureDate.setFullYear(2025);
 
@@ -25,6 +27,7 @@ export class add_events1715175185780 implements MigrationInterface {
           name: 'A Coruña',
         },
         tags: ['Meal', 'Music'],
+        createdAt: currentDate,
       },
       {
         eventName: eventNames[1],
@@ -38,6 +41,7 @@ export class add_events1715175185780 implements MigrationInterface {
           name: 'Vigo',
         },
         tags: ['Shoots', 'Sports'],
+        createdAt: currentDate,
       },
       {
         eventName: eventNames[2],
@@ -49,6 +53,7 @@ export class add_events1715175185780 implements MigrationInterface {
           name: 'A Coruña',
         },
         tags: ['Meal', 'Music'],
+        createdAt: currentDate,
       },
       {
         eventName: eventNames[3],
@@ -62,6 +67,7 @@ export class add_events1715175185780 implements MigrationInterface {
           name: 'A Coruña',
         },
         tags: ['Meal', 'Music'],
+        createdAt: currentDate,
       },
     ];
 

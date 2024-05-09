@@ -10,6 +10,9 @@ export class Event {
   eventDate: Date;
 
   @Prop({ required: true })
+  eventType: string;
+
+  @Prop({ required: true })
   description: string;
 
   @Prop({ required: true })
@@ -17,6 +20,9 @@ export class Event {
 
   @Prop({ type: LocationSchema, required: false })
   location: Location;
+
+  @Prop({ required: false })
+  createdAt: Date;
 
   @Prop({ required: false })
   updatedAt: Date;

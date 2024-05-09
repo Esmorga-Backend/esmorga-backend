@@ -19,6 +19,8 @@ export function mapToEventsEntity(eventsFromDataBase): Event[] {
         name,
       },
       tags: event.tags,
+      createdAt: event.createdAt,
+      updatedAt: event.updatedAt,
     };
   });
 }

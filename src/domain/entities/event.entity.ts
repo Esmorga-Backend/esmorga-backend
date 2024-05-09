@@ -34,4 +34,10 @@ export class Event {
   @IsArray()
   @IsString({ each: true })
   tags: string[];
+
+  @IsDateString()
+  createdAt: Date;
+
+  @IsDateString()
+  updatedAt: Date;
 }

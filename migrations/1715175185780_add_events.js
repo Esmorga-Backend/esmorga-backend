@@ -39,6 +39,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.add_events1715175185780 = void 0;
 var collection = 'events';
 var eventNames = ['MobgenFest', 'Paintball', 'MobgenFest 2', 'MobgenFest 3'];
+var currentDate = new Date();
 var futureDate = new Date();
 futureDate.setFullYear(2025);
 var oldDate = new Date();
@@ -65,6 +66,7 @@ var add_events1715175185780 = /** @class */ (function () {
                                     name: 'A Coruña',
                                 },
                                 tags: ['Meal', 'Music'],
+                                createdAt: currentDate,
                             },
                             {
                                 eventName: eventNames[1],
@@ -78,6 +80,7 @@ var add_events1715175185780 = /** @class */ (function () {
                                     name: 'Vigo',
                                 },
                                 tags: ['Shoots', 'Sports'],
+                                createdAt: currentDate,
                             },
                             {
                                 eventName: eventNames[2],
@@ -89,6 +92,7 @@ var add_events1715175185780 = /** @class */ (function () {
                                     name: 'A Coruña',
                                 },
                                 tags: ['Meal', 'Music'],
+                                createdAt: currentDate,
                             },
                             {
                                 eventName: eventNames[3],
@@ -102,6 +106,7 @@ var add_events1715175185780 = /** @class */ (function () {
                                     name: 'A Coruña',
                                 },
                                 tags: ['Meal', 'Music'],
+                                createdAt: currentDate,
                             },
                         ];
                         return [4 /*yield*/, db.collection(collection).insertMany(newEvents)];
