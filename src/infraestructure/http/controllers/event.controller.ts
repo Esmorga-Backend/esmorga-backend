@@ -22,7 +22,7 @@ export class EventController {
 
   @Get('/')
   @UseFilters(new HttpExceptionFilter())
-  @ApiOperation({ summary: 'Return a list of aavaliable events' })
+  @ApiOperation({ summary: 'Return a list of avaliable events' })
   @ApiResponse(GET_EVENTS_RESPONSES.OK)
   @ApiInternalServerErrorResponse(GET_EVENTS_RESPONSES.INTERNAL_ERROR)
   async getEvents() {
