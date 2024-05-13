@@ -1,4 +1,10 @@
-import { Controller, Get, UseFilters } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  HttpException,
+  InternalServerErrorException,
+  UseFilters,
+} from '@nestjs/common';
 import { GetEventListService } from '../../../application/handler/event';
 import { HttpExceptionFilter } from '../errors';
 
@@ -13,7 +19,10 @@ export class EventController {
     try {
       return this.getEventListService.find();
     } catch (error) {
-      throw error;
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new InternalServerErrorException();
     }
   }
 }

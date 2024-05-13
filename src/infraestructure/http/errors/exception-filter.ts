@@ -1,12 +1,27 @@
-import { Catch, HttpException } from '@nestjs/common';
+import {
+  Catch,
+  ExceptionFilter,
+  HttpException,
+  InternalServerErrorException,
+} from '@nestjs/common';
 
 @Catch(HttpException)
-export class HttpExceptionFilter {
+export class HttpExceptionFilter implements ExceptionFilter {
   catch(exception, host) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
     const request = ctx.getRequest();
     const status = exception.getStatus();
+
+    if (exception instanceof InternalServerErrorException) {
+      return response.status(status).json({
+        title: 'InternalServerError',
+        status,
+        type: request.url,
+        detail: 'unexpected error',
+        errors: [],
+      });
+    }
 
     const { title, detail, message } = exception.getResponse() as {
       title: string;
@@ -14,7 +29,7 @@ export class HttpExceptionFilter {
       message: string;
     };
 
-    response.status(status).json({
+    return response.status(status).json({
       title,
       status,
       type: request.url,
