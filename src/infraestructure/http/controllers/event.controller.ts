@@ -5,16 +5,26 @@ import {
   InternalServerErrorException,
   UseFilters,
 } from '@nestjs/common';
+import {
+  ApiInternalServerErrorResponse,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { GetEventListService } from '../../../application/handler/event';
 import { HttpExceptionFilter } from '../errors';
+import { GET_EVENTS_RESPONSES } from '../swagger';
 
 @Controller('/v1/events')
+@ApiTags('Event')
 export class EventController {
   constructor(private readonly getEventListService: GetEventListService) {}
 
-  // TODO add swagger decorators
   @Get('/')
   @UseFilters(new HttpExceptionFilter())
+  @ApiOperation({ summary: 'Return a list of aavaliable events' })
+  @ApiResponse(GET_EVENTS_RESPONSES.OK)
+  @ApiInternalServerErrorResponse(GET_EVENTS_RESPONSES.INTERNAL_ERROR)
   async getEvents() {
     try {
       const response = await this.getEventListService.find();
