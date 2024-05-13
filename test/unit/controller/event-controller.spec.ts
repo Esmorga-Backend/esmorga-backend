@@ -3,6 +3,7 @@ import { EventController } from '../../../src/infraestructure/http/controllers';
 import { GetEventListService } from '../../../src/application/handler/event';
 import { eventMock } from '../../mocks';
 import { Event } from '../../../src/domain/entities';
+import { HttpException } from '@nestjs/common';
 
 jest.mock('../../../src/application/handler/event');
 
@@ -40,6 +41,15 @@ describe('[unit-test] - EventController', () => {
       const response = await eventControler.getEvents();
 
       expect(response).toEqual({ totalEvents: 1, events });
+      expect(getEventListService.find).toHaveBeenCalled();
+    });
+
+    it('Should throw HttpException if error is HttpException type', async () => {
+      const httpException = new HttpException('ForbiddenException', 403);
+
+      jest.spyOn(getEventListService, 'find').mockRejectedValue(httpException);
+
+      await expect(eventControler.getEvents()).rejects.toThrow(httpException);
       expect(getEventListService.find).toHaveBeenCalled();
     });
   });

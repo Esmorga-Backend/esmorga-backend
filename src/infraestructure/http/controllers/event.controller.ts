@@ -17,7 +17,9 @@ export class EventController {
   @UseFilters(new HttpExceptionFilter())
   async getEvents() {
     try {
-      return this.getEventListService.find();
+      const response = await this.getEventListService.find();
+
+      return response;
     } catch (error) {
       if (error instanceof HttpException) {
         throw error;

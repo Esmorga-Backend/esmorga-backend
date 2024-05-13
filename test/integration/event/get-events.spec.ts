@@ -62,7 +62,7 @@ describe('Get events - [GET v1/events]', () => {
     expect(response.body).toEqual({ totalEvents: 0, events: [] });
   });
 
-  it('Should return a 500 error if something wrong happended and it is not handled', async () => {
+  it('Should throw a 500 error if something wrong happended and it is not handled', async () => {
     jest.spyOn(eventReposiory, 'find').mockRejectedValue(new Error());
 
     const response = await request(app.getHttpServer()).get(path);
