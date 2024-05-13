@@ -10,9 +10,9 @@ import { DataBaseInternalError } from '../errors';
 @Injectable()
 export class EventReposiory extends MongoRepository<EventSchema> {
   constructor(
-    @InjectModel(EventSchema.name) private userModel: Model<EventSchema>,
+    @InjectModel(EventSchema.name) private eventModel: Model<EventSchema>,
   ) {
-    super(userModel);
+    super(eventModel);
   }
 
   async getEventList(): Promise<Event[]> {
