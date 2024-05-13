@@ -60,3 +60,20 @@ export const eventMock: Event = {
   createdAt: currentDate,
   updatedAt: currentDate,
 };
+
+export const oldEventMock: Event = {
+  eventId: 1235,
+  eventName: 'Paintball',
+  eventDate: oldDate,
+  description: 'Hello World',
+  eventType: 'Sport',
+  imageUrl: 'img.url',
+  location: {
+    lat: 43.35525182148881,
+    long: -8.41937931298951,
+    name: 'Vigo',
+  },
+  tags: ['Shoots', 'Sports'],
+  createdAt: currentDate,
+  updatedAt: currentDate,
+};
