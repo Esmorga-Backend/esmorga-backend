@@ -7,11 +7,6 @@ import { redisStore } from 'cache-manager-redis-yet';
 
 @Module({
   imports: [
-    MongooseModule.forRootAsync({
-      useFactory: () => ({
-        uri: process.env.MONGODB_URI,
-      }),
-    }),
     CacheModule.registerAsync({
       isGlobal: true,
       useFactory: async () => ({
@@ -21,6 +16,11 @@ import { redisStore } from 'cache-manager-redis-yet';
             port: parseInt(process.env.REDIS_PORT),
           },
         }),
+      }),
+    }),
+    MongooseModule.forRootAsync({
+      useFactory: () => ({
+        uri: process.env.MONGODB_URI,
       }),
     }),
   ],

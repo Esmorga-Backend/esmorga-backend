@@ -15,6 +15,7 @@ async function main() {
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('swagger', app, document);
 
-  await app.listen(process.env.APP_PORT);
+  await app.listen(parseInt(process.env.APP_PORT));
 }
+
 main();
