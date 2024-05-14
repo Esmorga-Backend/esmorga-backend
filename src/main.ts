@@ -1,18 +1,19 @@
-import { NestFactory } from '@nestjs/core';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { NestFactory } from '@nestjs/core';
 
-async function bootstrap() {
+async function main() {
   const app = await NestFactory.create(AppModule);
 
-  const config = new DocumentBuilder()
-    .setTitle('Smorga Backend API')
-    .setDescription('The smorga API description')
+  const swaggerConfig = new DocumentBuilder()
+    .setTitle('Esmorga API')
+    .setDescription('Swagger for Esmorga API.')
     .setVersion('1.0')
     .build();
-  const document = SwaggerModule.createDocument(app, config);
+  const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('swagger', app, document);
 
-  await app.listen(3000);
+  await app.listen(parseInt(process.env.APP_PORT));
 }
-bootstrap();
+
+main();
