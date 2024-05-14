@@ -27,7 +27,31 @@ describe('Get events - [GET v1/events]', () => {
     await app.close();
   });
 
-  it('Should return a 200 with an event list that have not been celebrated', async () => {
+  it('Should return a 200 with an upcoming events', async () => {
+    jest.spyOn(eventReposiory, 'find').mockResolvedValue([futureEventMockDB]);
+
+    const response = await request(app.getHttpServer()).get(path);
+
+    expect(response.status).toBe(HttpStatus.OK);
+    expect(response.body).toEqual({
+      totalEvents: 1,
+      events: [
+        {
+          eventName: futureEventMockDB.eventName,
+          eventDate: futureEventMockDB.eventDate.toISOString(),
+          description: futureEventMockDB.description,
+          eventType: futureEventMockDB.eventType,
+          imageUrl: futureEventMockDB.imageUrl,
+          location: futureEventMockDB.location,
+          tags: futureEventMockDB.tags,
+          createdAt: futureEventMockDB.createdAt.toISOString(),
+          updatedAt: futureEventMockDB.updatedAt.toISOString(),
+        },
+      ],
+    });
+  });
+
+  it('Should return a 200 with an upcoming events filtered', async () => {
     jest
       .spyOn(eventReposiory, 'find')
       .mockResolvedValue([futureEventMockDB, oldEventMockDB]);
@@ -51,6 +75,15 @@ describe('Get events - [GET v1/events]', () => {
         },
       ],
     });
+  });
+
+  it('Should a 200 without event list if events are not avaliable', async () => {
+    jest.spyOn(eventReposiory, 'find').mockResolvedValue([oldEventMockDB]);
+
+    const response = await request(app.getHttpServer()).get(path);
+
+    expect(response.status).toBe(HttpStatus.OK);
+    expect(response.body).toEqual({ totalEvents: 0, events: [] });
   });
 
   it('Should a 200 without event list if there are no events in the db', async () => {
