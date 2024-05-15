@@ -8,7 +8,7 @@ import { mapToEventsEntity } from '../services';
 import { DataBaseInternalError } from '../errors';
 
 @Injectable()
-export class EventReposiory extends MongoRepository<EventSchema> {
+export class EventRepository extends MongoRepository<EventSchema> {
   constructor(
     @InjectModel(EventSchema.name) private eventModel: Model<EventSchema>,
   ) {

@@ -2,14 +2,14 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../../../src/app.module';
-import { EventReposiory } from '../../../src/infraestructure/db/repositories';
+import { EventRepository } from '../../../src/infraestructure/db/repositories';
 import { futureEventMockDB, oldEventMockDB } from '../../mocks';
 
 const path: string = '/v1/events';
 
 describe('Get events - [GET v1/events]', () => {
   let app: INestApplication;
-  let eventReposiory: EventReposiory;
+  let eventRepository: EventRepository;
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -20,7 +20,7 @@ describe('Get events - [GET v1/events]', () => {
 
     await app.init();
 
-    eventReposiory = moduleFixture.get<EventReposiory>(EventReposiory);
+    eventRepository = moduleFixture.get<EventRepository>(EventRepository);
   });
 
   afterAll(async () => {
@@ -28,7 +28,7 @@ describe('Get events - [GET v1/events]', () => {
   });
 
   it('Should return a 200 with an upcoming events', async () => {
-    jest.spyOn(eventReposiory, 'find').mockResolvedValue([futureEventMockDB]);
+    jest.spyOn(eventRepository, 'find').mockResolvedValue([futureEventMockDB]);
 
     const response = await request(app.getHttpServer()).get(path);
 
@@ -53,7 +53,7 @@ describe('Get events - [GET v1/events]', () => {
 
   it('Should return a 200 with an upcoming events filtered', async () => {
     jest
-      .spyOn(eventReposiory, 'find')
+      .spyOn(eventRepository, 'find')
       .mockResolvedValue([futureEventMockDB, oldEventMockDB]);
 
     const response = await request(app.getHttpServer()).get(path);
@@ -78,7 +78,7 @@ describe('Get events - [GET v1/events]', () => {
   });
 
   it('Should a 200 without event list if events are not avaliable', async () => {
-    jest.spyOn(eventReposiory, 'find').mockResolvedValue([oldEventMockDB]);
+    jest.spyOn(eventRepository, 'find').mockResolvedValue([oldEventMockDB]);
 
     const response = await request(app.getHttpServer()).get(path);
 
@@ -87,7 +87,7 @@ describe('Get events - [GET v1/events]', () => {
   });
 
   it('Should a 200 without event list if there are no events in the db', async () => {
-    jest.spyOn(eventReposiory, 'find').mockResolvedValue([]);
+    jest.spyOn(eventRepository, 'find').mockResolvedValue([]);
 
     const response = await request(app.getHttpServer()).get(path);
 
@@ -96,7 +96,7 @@ describe('Get events - [GET v1/events]', () => {
   });
 
   it('Should throw a 500 error if something wrong happended and it is not handled', async () => {
-    jest.spyOn(eventReposiory, 'find').mockRejectedValue(new Error());
+    jest.spyOn(eventRepository, 'find').mockRejectedValue(new Error());
 
     const response = await request(app.getHttpServer()).get(path);
 

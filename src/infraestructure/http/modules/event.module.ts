@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { EventController } from '../controllers/event.controller';
 import { GetEventListService } from '../../../application/handler/event';
-import { EventReposiory } from '../../../infraestructure/db/repositories';
+import { EventRepository } from '../../../infraestructure/db/repositories';
 import { EventSchema, Event } from '../../../infraestructure/db/schema';
 
 @Module({
@@ -10,6 +10,6 @@ import { EventSchema, Event } from '../../../infraestructure/db/schema';
     MongooseModule.forFeature([{ name: Event.name, schema: EventSchema }]),
   ],
   controllers: [EventController],
-  providers: [GetEventListService, EventReposiory],
+  providers: [GetEventListService, EventRepository],
 })
 export class EventModule {}

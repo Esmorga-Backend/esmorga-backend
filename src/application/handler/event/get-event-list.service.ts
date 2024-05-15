@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { EventReposiory } from '../../../infraestructure/db/repositories';
+import { EventRepository } from '../../../infraestructure/db/repositories';
 import { filterAvaliableEvents } from '../../../domain/services';
 
 @Injectable()
 export class GetEventListService {
-  constructor(private readonly eventRepository: EventReposiory) {}
+  constructor(private readonly eventRepository: EventRepository) {}
 
   async find() {
     try {
