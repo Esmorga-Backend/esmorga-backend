@@ -1,5 +1,12 @@
 import { Event } from 'src/domain/entities';
 
+/**
+ * Addapt a list of events provided by the database into a list of events that 
+ * follow the domain entity that is expected to be returned
+ * 
+ * @param eventsFromDataBase - Event array provided by the db
+ * @returns - Event array following the domain schema
+ */
 export function mapToEventsEntity(eventsFromDataBase): Event[] {
   return eventsFromDataBase.map((event) => {
     const {
