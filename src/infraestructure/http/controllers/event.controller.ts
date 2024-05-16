@@ -13,7 +13,7 @@ import {
 } from '@nestjs/swagger';
 import { GetEventListService } from '../../../application/handler/event';
 import { HttpExceptionFilter } from '../errors';
-import { GET_EVENTS_RESPONSES } from '../swagger';
+import { SwaggerGetEvents } from '../swagger/decorators/events';
 
 @Controller('/v1/events')
 @ApiTags('Event')
@@ -22,9 +22,7 @@ export class EventController {
 
   @Get('/')
   @UseFilters(new HttpExceptionFilter())
-  @ApiOperation({ summary: 'Return a list of avaliable events' })
-  @ApiResponse(GET_EVENTS_RESPONSES.OK)
-  @ApiInternalServerErrorResponse(GET_EVENTS_RESPONSES.INTERNAL_ERROR)
+  @SwaggerGetEvents()
   async getEvents() {
     try {
       const response = await this.getEventListService.find();
