@@ -1,6 +1,7 @@
 import { Model } from 'mongoose';
+import { DBRepository } from '../../../domain/interfaces';
 
-export class MongoRepository<E> {
+export class MongoRepository<E> implements DBRepository<E>{
   constructor(protected readonly entityModel: Model<E>) { }
 
   /**
