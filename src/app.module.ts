@@ -1,12 +1,13 @@
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { CacheModule } from '@nestjs/cache-manager';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { EventModule } from './infraestructure/http/modules';
+import { CacheModule } from '@nestjs/cache-manager';
 import { redisStore } from 'cache-manager-redis-yet';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     CacheModule.registerAsync({
       isGlobal: true,
       useFactory: async () => ({
@@ -19,12 +20,11 @@ import { redisStore } from 'cache-manager-redis-yet';
       }),
     }),
     MongooseModule.forRootAsync({
-      useFactory: () => ({
+      useFactory: async () => ({
         uri: process.env.MONGODB_URI,
       }),
     }),
+    EventModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}
