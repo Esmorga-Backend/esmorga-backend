@@ -5,9 +5,7 @@ import {
   InternalServerErrorException,
   UseFilters,
 } from '@nestjs/common';
-import {
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 import { GetEventListService } from '../../../application/handler/event';
 import { HttpExceptionFilter } from '../errors';
 import { SwaggerGetEvents } from '../swagger/decorators/events';
@@ -15,7 +13,7 @@ import { SwaggerGetEvents } from '../swagger/decorators/events';
 @Controller('/v1/events')
 @ApiTags('Event')
 export class EventController {
-  constructor(private readonly getEventListService: GetEventListService) { }
+  constructor(private readonly getEventListService: GetEventListService) {}
 
   @Get('/')
   @UseFilters(new HttpExceptionFilter())
