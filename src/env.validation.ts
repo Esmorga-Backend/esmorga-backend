@@ -1,9 +1,16 @@
 import { plainToInstance } from 'class-transformer';
-import { IsNotEmpty, IsString, IsNumber, validateSync } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsString,
+  IsNumber,
+  validateSync,
+  IsPositive,
+} from 'class-validator';
 
 class EnvVars {
   @IsNotEmpty()
   @IsNumber()
+  @IsPositive()
   APP_PORT: number;
 
   @IsNotEmpty()
@@ -16,6 +23,7 @@ class EnvVars {
 
   @IsNotEmpty()
   @IsNumber()
+  @IsPositive()
   REDIS_PORT: number;
 }
 
