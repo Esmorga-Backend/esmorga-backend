@@ -1,7 +1,7 @@
 import { plainToInstance } from 'class-transformer';
 import { IsNotEmpty, IsString, IsNumber, validateSync } from 'class-validator';
 
-class EnviromentVarialbles {
+class EnvVars {
   @IsNotEmpty()
   @IsNumber()
   APP_PORT: number;
@@ -19,8 +19,8 @@ class EnviromentVarialbles {
   REDIS_PORT: number;
 }
 
-export function validateEnvVariables(config) {
-  const validatedConfig = plainToInstance(EnviromentVarialbles, config, {
+export function validateEnvVars(config) {
+  const validatedConfig = plainToInstance(EnvVars, config, {
     enableImplicitConversion: true,
   });
 

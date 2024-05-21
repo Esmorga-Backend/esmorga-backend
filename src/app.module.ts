@@ -4,10 +4,13 @@ import { EventModule } from './infraestructure/http/modules';
 import { CacheModule } from '@nestjs/cache-manager';
 import { redisStore } from 'cache-manager-redis-yet';
 import { ConfigModule } from '@nestjs/config';
+import { validateEnvVars } from './env.validation';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      validate: validateEnvVars,
+    }),
     CacheModule.registerAsync({
       isGlobal: true,
       useFactory: async () => ({
