@@ -27,6 +27,12 @@ class EnvVars {
   REDIS_PORT: number;
 }
 
+/**
+ * Validate if the configuration is according to specified conditions of EnvVars class
+ * @param config - An object containing the environment variables to be validated
+ * @returns EnvVars validated
+ * @throws {Error} - Throw and error if some envVar does not match the implemented decorators
+ */
 export function validateEnvVars(config) {
   const validatedConfig = plainToInstance(EnvVars, config, {
     enableImplicitConversion: true,
