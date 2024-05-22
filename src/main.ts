@@ -3,7 +3,6 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { NestFactory } from '@nestjs/core';
 
 async function main() {
-  console.log('hola');
   const app = await NestFactory.create(AppModule);
 
   const swaggerConfig = new DocumentBuilder()
