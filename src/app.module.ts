@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { EventModule } from './infraestructure/http/modules';
 import { CacheModule } from '@nestjs/cache-manager';
-import { redisStore } from 'cache-manager-redis-yet';
 import { ConfigModule } from '@nestjs/config';
+import { redisStore } from 'cache-manager-redis-yet';
+import { EventModule } from './infraestructure/http/modules';
 
 @Module({
   imports: [

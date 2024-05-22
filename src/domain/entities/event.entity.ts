@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import {
   IsString,
   IsNumber,
@@ -7,7 +8,6 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { Location } from './location.entity';
-import { ApiProperty } from '@nestjs/swagger';
 
 export class Event {
   @IsNumber()
