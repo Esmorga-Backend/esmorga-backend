@@ -1,3 +1,3 @@
 export interface DBRepository<E> {
-    find(): Promise<E[]>;
+  find(): Promise<E[]>;
 }

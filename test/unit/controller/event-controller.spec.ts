@@ -1,9 +1,9 @@
-import { Test } from '@nestjs/testing';
-import { EventController } from '../../../src/infraestructure/http/controllers';
-import { GetEventListService } from '../../../src/application/handler/event';
-import { eventMock } from '../../mocks';
-import { Event } from '../../../src/domain/entities';
 import { HttpException } from '@nestjs/common';
+import { Test } from '@nestjs/testing';
+import { GetEventListService } from '../../../src/application/handler/event';
+import { Event } from '../../../src/domain/entities';
+import { EventController } from '../../../src/infraestructure/http/controllers';
+import { eventMock } from '../../mocks';
 
 jest.mock('../../../src/application/handler/event');
 
