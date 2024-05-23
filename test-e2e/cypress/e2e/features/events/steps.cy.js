@@ -21,7 +21,7 @@ When("a request is made to retrieve events", () => {
 });
 
 Then("the response should contain 1 upcoming events", () => {
-  api[use_endpoint].check()
+  api[use_endpoint].check_response()
 });
 
 Then("the response should following swagger schema", () => {

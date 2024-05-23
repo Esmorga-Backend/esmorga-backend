@@ -1,15 +1,18 @@
-class ApiEvents{
+import ApiBasics from "./api_basic"
+class ApiEvents extends ApiBasics{
     #result=''
-    url='v1/events'
-    get(){
-        this.#result=cy.request('GET', Cypress.config().baseUrl + 'v1/events')
-    
+    #url='v1/events'
+
+    constructor() {
+        super();
     }
-    check(){
-        this.#result.then((response) => {
-            expect(response.status).to.eq(200);
-          })
-    
+
+    get(){
+        this.#result=super.get(this.#url)
+    }
+
+    check_response(){
+        super.check_response(this.#result)    
     }
 
 }
