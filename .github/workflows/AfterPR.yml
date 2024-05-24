@@ -2,8 +2,11 @@ name: Run Tests & Deploy QA ENv
 run-name: ${{ github.actor }} is testing to deploy new code to QA Env 🚀
 on:
   pull_request:
+    types: [closed]
     branches:
       - main
+  workflow_dispatch:
+  
 jobs:
   Run-tests-on-Ubuntu:
     name: Run npm test on Ubuntu
