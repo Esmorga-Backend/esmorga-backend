@@ -16,15 +16,6 @@ class EnvVars {
   @IsNotEmpty()
   @IsString()
   MONGODB_URI: string;
-
-  @IsNotEmpty()
-  @IsString()
-  REDIS_HOST: string;
-
-  @IsNotEmpty()
-  @IsNumber()
-  @IsPositive()
-  REDIS_PORT: number;
 }
 
 /**
