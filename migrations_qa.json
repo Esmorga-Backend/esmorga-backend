@@ -1,0 +1,10 @@
+{
+    "uri": "mongodb+srv://MigrationUser:zRK5draVbFYScGZu@clousterqa.xofidzb.mongodb.net/",
+    "database": "esmorga",
+    "options": {
+        "useNewUrlParser": true,
+        "useUnifiedTopology": true
+    },
+    "migrationsDir": "migrations",
+    "migrationsCollection": "migrations_changelog"
+}
