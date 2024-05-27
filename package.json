@@ -18,20 +18,16 @@
     "test:cov": "jest --coverage --detectOpenHandles",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:integration": "jest --config ./test/jest.config.json --detectOpenHandles",
-    "test:e2e-run-cypress": "cypress run --config-file test-e2e/cypress.config.js", 
-    "test:e2e-open-cypress": "cypress open --config-file test-e2e/cypress.config.js" 
-
+    "test:e2e-run-cypress": "cypress run --config-file test-e2e/cypress.config.js",
+    "test:e2e-open-cypress": "cypress open --config-file test-e2e/cypress.config.js"
   },
   "dependencies": {
-    "@nestjs/cache-manager": "^2.2.2",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.2.2",
     "@nestjs/core": "^10.0.0",
     "@nestjs/mongoose": "^10.0.6",
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/swagger": "^7.3.1",
-    "cache-manager": "^5.5.2",
-    "cache-manager-redis-yet": "^5.0.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "mongoose": "^8.3.4",
