@@ -21,7 +21,11 @@
     "test:e2e-run-cypress": "cypress run --config-file test-e2e/cypress.config.js",
     "test:e2e-open-cypress": "cypress open --config-file test-e2e/cypress.config.js",
     "migrate:local-up": "cp migrations_local.json migrations.json && npx mongo-migrate-ts up",
-    "migrate:local-down-all": "cp migrations_local.json migrations.json && npx mongo-migrate-ts down -a"
+    "migrate:local-down-all": "cp migrations_local.json migrations.json && npx mongo-migrate-ts down -a",
+    "migrate:qa-up": "cp migrations_qa.json migrations.json && npx mongo-migrate-ts up",
+    "migrate:qa-down-all": "cp migrations_qa.json migrations.json && npx mongo-migrate-ts down -a",
+    "migrate:prod-up": "cp migrations_prod.json migrations.json && npx mongo-migrate-ts up",
+    "migrate:prod-down-all": "cp migrations_prod.json migrations.json && npx mongo-migrate-ts down -a"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
