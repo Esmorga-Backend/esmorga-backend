@@ -5,27 +5,28 @@ import ApiEvents from "../../pages/api_events"
 const api_events = new ApiEvents()
 var use_endpoint=""
 const api={
-  "Events": api_events
+  "events": api_events
 }
 
-Given(/^the GET (.*) API is available$/, (endpoint) => {
+Given(/^the GET (\w+) API is available$/, (endpoint) => {
   use_endpoint=endpoint
 });
 
-And(/^(-?\d+) events in DB, (-?\d+) are in the past$/, () => {
-  console.log("Need to be deploy")
+And(/^(-?\d+) (\w+) in DB, (-?\d+) are in the past$/, (events_on_db,endpoint,expired_events_on_db) => {
+  console.log("Need to be deploy add"+events_on_db+" and "+expired_events_on_db+" to DB for "+endpoint)
 });
 
-When("a request is made to retrieve events", () => {
-  api[use_endpoint].get();
+When(/^a request is made to retrieve (\w+)$/, (endpoint) => {
+  api[endpoint].get();
 });
 
-Then("the response should contain 1 upcoming events", () => {
-  api[use_endpoint].check_response()
+Then("the response should contain (-?\d+) upcoming (.*)", (events_to_check,endpoint) => {
+  api[endpoint].check_response(events_to_check)
+  api[endpoint].check_data_response(events_to_check)
 });
 
-Then("the response should following swagger schema", () => {
-  console.log("Need to be deploy")
+AND("the response should following swagger schema", () => {
+  console.log("Need to be deploy swager check for "+endpoint)
 });
 
 
