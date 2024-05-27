@@ -17,7 +17,10 @@
     "test:watch": "jest --watch --detectOpenHandles",
     "test:cov": "jest --coverage --detectOpenHandles",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:integration": "jest --config ./test/jest.config.json --detectOpenHandles"
+    "test:integration": "jest --config ./test/jest.config.json --detectOpenHandles",
+    "test:e2e-run-cypress": "cypress run --config-file test-e2e/cypress.config.js", 
+    "test:e2e-open-cypress": "cypress open --config-file test-e2e/cypress.config.js" 
+
   },
   "dependencies": {
     "@nestjs/cache-manager": "^2.2.2",
@@ -47,6 +50,7 @@
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "cypress": "^13.9.0",
+    "cypress-cucumber-preprocessor": "^4.3.1",
     "eslint": "^8.42.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.29.1",
@@ -83,5 +87,9 @@
       "/index\\.ts$",
       "/src/domain/entities/.*\\.ts$"
     ]
+  },
+  "cypress-cucumber-preprocessor": {
+    "nonGlobalStepDefinitions": true,
+    "step_definitions": "cypress/e2e/features/"
   }
 }
