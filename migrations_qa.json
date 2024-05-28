@@ -1,5 +1,5 @@
 {
-    "uri": "mongodb://localhost:27017/",
+    "uri": "mongodb+srv://MigrationUser:zRK5draVbFYScGZu@clousterqa.xofidzb.mongodb.net/",
     "database": "esmorga",
     "options": {
         "useNewUrlParser": true,
