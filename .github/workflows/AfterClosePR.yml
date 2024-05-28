@@ -12,7 +12,8 @@ on:
 jobs:
   Deploy-QA:
     name: Run Deploy QA
-    if: github.event.pull_request.merged == true
+# This filter works, delete it 
+#    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
     steps:
