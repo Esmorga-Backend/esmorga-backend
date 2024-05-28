@@ -3,10 +3,9 @@ import sys
 try:
     import StringIO 
 except ImportError:
-    from io import StringIO 
-
+    import io
 hostname=sys.argv[1]
-pkey = paramiko.RSAKey.from_private_key(StringIO.StringIO(sys.argv[2]))
+pkey = paramiko.RSAKey.from_private_key(io.StringIO(sys.argv[2]))
 print(hostname)
 ssh_client =paramiko.SSHClient()
 ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
