@@ -12,6 +12,11 @@ jobs:
   Run-tests-on-Ubuntu:
     name: Run npm test on Ubuntu
     runs-on: ubuntu-latest
+    env:
+      APP_PORT: 3000
+      MONGODB_URI: "mongodb+srv://NewServerQA:ohdDcwCDce1uzq5n@clousterqa.xofidzb.mongodb.net/esmorga?retryWrites=true&w=majority&appName=ClousterQA"
+      REDIS_HOST: "redis-10358.c6.eu-west-1-1.ec2.redns.redis-cloud.com"
+      REDIS_PORT: 10358
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
