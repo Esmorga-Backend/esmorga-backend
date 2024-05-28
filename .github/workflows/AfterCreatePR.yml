@@ -6,7 +6,8 @@ on:
     branches:
       - main
   workflow_dispatch:
-  
+    
+    
 jobs:
   Run-tests-on-Ubuntu:
     name: Run npm test on Ubuntu
@@ -18,10 +19,10 @@ jobs:
           node-version: '22.1'
       - run: npm ci
       - run: npm run test:integration
-      if: success()
+        if: ${{ success() }}
       
   deploy:
-        needs: build
+        needs: Run-tests-on-Ubuntu
         runs-on: ubuntu-latest
         steps:
           - name: Request approval
