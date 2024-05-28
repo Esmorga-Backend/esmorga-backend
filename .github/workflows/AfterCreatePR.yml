@@ -1,5 +1,5 @@
 name: Run Tests & Deploy QA ENv
-run-name: ${{ github.actor }} is testing to deploy new code to QA Env 🚀
+run-name: ${{ github.actor }} is testing PR new code 🚀
 on:
   pull_request:
     types: [opened, edited, reopened, synchronize]
