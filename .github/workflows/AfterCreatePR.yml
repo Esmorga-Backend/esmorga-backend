@@ -2,7 +2,8 @@ name: Run Tests & Deploy QA ENv
 run-name: ${{ github.actor }} is testing PR new code 🚀
 on:
   pull_request:
-    types: [opened, edited, reopened, synchronize]
+    types: [opened]
+# edited, reopened, synchronize ???
     branches:
       - main
   workflow_dispatch:
