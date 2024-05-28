@@ -16,6 +16,10 @@ class EnvVars {
   @IsNotEmpty()
   @IsString()
   MONGODB_URI: string;
+
+  @IsNotEmpty()
+  @IsString()
+  NODE_ENV: string;
 }
 
 /**
