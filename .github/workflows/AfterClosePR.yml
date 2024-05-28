@@ -2,8 +2,8 @@ name: Deploy QA Env
 run-name: ${{ github.actor }} is deploying new code to QA Env 🚀
 on:
   pull_request:
-#    types: [closed]
-    types: [synchronize]
+    types: [closed]
+#    types: [synchronize]
     
     branches:
       - main
@@ -13,7 +13,7 @@ jobs:
   Deploy-QA:
     name: Run Deploy to QA
 # This filter works, delete it 
-#    if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
     steps:
