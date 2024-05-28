@@ -14,13 +14,14 @@
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest --detectOpenHandles",
+    "test:unit": "jest --config ./test/unit/jest.config.json --detectOpenHandles",
+    "test:integration": "jest --config ./test/component/jest.config.json --detectOpenHandles",
     "test:watch": "jest --watch --detectOpenHandles",
     "test:cov": "jest --coverage --detectOpenHandles",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:integration": "jest --config ./test/jest.config.json --detectOpenHandles",
-    "test:e2e-run-cypress": "cypress run --config-file test-e2e/cypress.config.js", 
-    "test:e2e-open-cypress": "cypress open --config-file test-e2e/cypress.config.js" 
-
+    "test:component": "jest --config ./test/jest.config.json --detectOpenHandles",
+    "test:e2e-run-cypress": "cypress run --config-file test-e2e/cypress.config.js",
+    "test:e2e-open-cypress": "cypress open --config-file test-e2e/cypress.config.js"
   },
   "dependencies": {
     "@nestjs/cache-manager": "^2.2.2",
