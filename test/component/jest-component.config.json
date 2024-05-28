@@ -22,5 +22,10 @@
   "testPathIgnorePatterns": [
     "/node_modules/",
     "/test/unit/"
+  ],
+  "coverageReporters": [
+    "json",
+    "lcov",
+    "clover"
   ]
 }
