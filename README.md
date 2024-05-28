@@ -33,7 +33,10 @@ $ npm run start:prod
 $ npm run test
 
 # e2e tests
-$ npm run test:e2e
+    #Open 
+$ npm run test:e2e-open-cypress
+    #Run
+$ npm run test:e2e-run-cypress
 
 # test coverage
 $ npm run test:cov
