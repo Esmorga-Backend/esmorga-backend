@@ -39,4 +39,4 @@ jobs:
         with:
           node-version: '22.1'
       - run: npm ci
-      - run: npm run test:integrationtest:e2e-run-cypress
+      - run: npm run test:e2e-run-cypress
