@@ -1,0 +1,37 @@
+name: Run Tests & Deploy QA ENv
+run-name: ${{ github.actor }} is testing to deploy new code to QA Env 🚀
+on:
+  pull_request:
+    types: [opened, reopened]
+    branches:
+      - main
+  workflow_dispatch:
+  
+jobs:
+  Run-tests-on-Ubuntu:
+    name: Run npm test on Ubuntu
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.1'
+      - run: npm ci
+      - run: npm run test:integration
+      if: success()
+      
+  deploy:
+        needs: build
+        runs-on: ubuntu-latest
+        steps:
+          - name: Request approval
+            uses: actions/github-script@v4
+            with:
+              github-token: ${{ secrets.GITHUB_TOKEN }}
+              script: |
+                const { owner, repo, number } = context.issue;
+                await github.pulls.createReviewRequest({
+                  owner,
+                  repo,
+                  pull_number: number,
+                });
