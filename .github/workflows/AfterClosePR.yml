@@ -2,7 +2,9 @@ name: Deploy QA Evv
 run-name: ${{ github.actor }} is deploying new code to QA Env 🚀
 on:
   pull_request:
-    types: [closed]
+#    types: [closed]
+    types: [opened]
+    
     branches:
       - main
   workflow_dispatch:
