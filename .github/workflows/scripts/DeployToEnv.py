@@ -1,5 +1,7 @@
 import paramiko
 import sys
+import StringIO
+
 hostname=sys.argv[1]
 pkey = paramiko.RSAKey.from_private_key(StringIO.StringIO(sys.argv[2]))
 print(hostname)
