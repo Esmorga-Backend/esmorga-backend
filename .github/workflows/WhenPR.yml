@@ -30,18 +30,4 @@ jobs:
 #      - run: npm run test:component
         if: ${{ success() }}
       
-  deploy:
-        needs: Run-tests-on-Ubuntu
-        runs-on: ubuntu-latest
-        steps:
-          - name: Request approval
-            uses: actions/github-script@v4
-            with:
-              github-token: ${{ secrets.GITHUB_TOKEN }}
-              script: |
-                const { owner, repo, number } = context.issue;
-                await github.pulls.createReviewRequest({
-                  owner,
-                  repo,
-                  pull_number: number,
-                });
+  
