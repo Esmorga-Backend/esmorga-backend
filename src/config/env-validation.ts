@@ -19,12 +19,7 @@ class EnvVars {
 
   @IsNotEmpty()
   @IsString()
-  REDIS_HOST: string;
-
-  @IsNotEmpty()
-  @IsNumber()
-  @IsPositive()
-  REDIS_PORT: number;
+  NODE_ENV: string;
 }
 
 /**
