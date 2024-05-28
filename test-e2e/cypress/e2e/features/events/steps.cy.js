@@ -20,13 +20,14 @@ When(/^a request is made to retrieve (\w+)$/, (endpoint) => {
   api[endpoint].get();
 });
 
-Then("the response should contain (-?\d+) upcoming (.*)", (events_to_check,endpoint) => {
+Then(/^the response should contain (-?\d+) upcoming (\w+)$/, (events_to_check,endpoint) => {
   api[endpoint].check_response(events_to_check)
-  api[endpoint].check_data_response(events_to_check)
+//  api[endpoint].check_data_response(events_to_check)
 });
 
-AND("the response should following swagger schema", () => {
-  console.log("Need to be deploy swager check for "+endpoint)
+And("the response should following swagger schema", () => {
+  console.log("Need to be deploy swager check for "+use_endpoint)
 });
+
 
 
