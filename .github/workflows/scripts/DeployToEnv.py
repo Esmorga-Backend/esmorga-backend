@@ -1,11 +1,9 @@
 import paramiko
 import sys
-try:
-    import StringIO 
-except ImportError:
-    import io
+import io
+key=sys.argv[2]
 hostname=sys.argv[1]
-pkey = paramiko.RSAKey.from_private_key(io.StringIO(sys.argv[2]))
+pkey = paramiko.RSAKey.from_private_key(io.StringIO(key))
 print(hostname)
 ssh_client =paramiko.SSHClient()
 ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
