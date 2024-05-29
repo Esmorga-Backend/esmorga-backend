@@ -7,6 +7,12 @@ First clone de repository:
 ```bash
 $ git clone https://github.com/Esmorga-Backend/esmorga-backend.git
 ```
+
+Install mongodb and init it:
+```
+https://www.mongodb.com/docs/manual/administration/install-community/
+```
+
 And then execute:
 
 ```bash
@@ -29,8 +35,17 @@ $ npm run start:prod
 ## Test
 
 ```bash
-# unit tests
+# jest test (unit and component)
 $ npm run test
+
+# test coverage
+$ npm run test:cov
+
+# jest unit test
+$ npm run test:unit
+
+# jest component test 
+$ npm run test:component
 
 # e2e tests
     #Open 
