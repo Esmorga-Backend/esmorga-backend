@@ -48,4 +48,4 @@ jobs:
           -o features.zip
         
       - run: unzip features.zip
-      - run: npm run test:e2e-run-cypress
+      - run: npm run test:e2e-run-cypress-pipe
