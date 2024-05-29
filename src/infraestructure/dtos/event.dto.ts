@@ -3,10 +3,25 @@ import {
   IsString,
   IsDateString,
   IsArray,
+  IsNumber,
   ValidateNested,
+  IsObject,
 } from 'class-validator';
 import { Expose, Transform, Type } from 'class-transformer';
-import { LocationDTO } from './location.dto';
+
+class Location {
+  @Expose()
+  @IsNumber()
+  lat: number;
+
+  @Expose()
+  @IsNumber()
+  long: number;
+
+  @Expose()
+  @IsString()
+  name: string;
+}
 
 export class EventDTO {
   @Transform(({ value }) => value.toString(), { toClassOnly: true })
@@ -42,9 +57,21 @@ export class EventDTO {
 
   @Expose()
   @ValidateNested()
-  @Type(() => LocationDTO)
-  @ApiProperty({ type: LocationDTO })
-  location: LocationDTO;
+  @Type(() => Location)
+  @IsObject()
+  @ApiProperty({
+    type: 'object',
+    properties: {
+      lat: { type: 'number', example: 43.35525182148881 },
+      long: { type: 'number', example: -8.41937931298951 },
+      name: { type: 'string', example: 'A Coruña' },
+    },
+  })
+  location: {
+    lat: number;
+    long: number;
+    name: string;
+  };
 
   @Expose()
   @IsArray()
