@@ -6,7 +6,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { Expose, Transform, Type } from 'class-transformer';
-import { Location } from './location.dto';
+import { LocationDTO } from './location.dto';
 
 export class EventDTO {
   @Transform(({ value }) => value.toString(), { toClassOnly: true })
@@ -42,9 +42,9 @@ export class EventDTO {
 
   @Expose()
   @ValidateNested()
-  @Type(() => Location)
-  @ApiProperty({ type: Location })
-  location: Location;
+  @Type(() => LocationDTO)
+  @ApiProperty({ type: LocationDTO })
+  location: LocationDTO;
 
   @Expose()
   @IsArray()

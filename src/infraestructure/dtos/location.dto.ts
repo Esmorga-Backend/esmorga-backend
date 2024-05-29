@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { IsNumber, IsString } from 'class-validator';
 
-export class Location {
+export class LocationDTO {
   @Expose()
   @IsNumber()
   @ApiProperty({ example: 43.35525182148881 })

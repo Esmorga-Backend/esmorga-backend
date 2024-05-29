@@ -18,7 +18,7 @@ export class EventRepository extends MongoRepository<EventSchema> {
   /**
    * Get all events saved in the db.
    *
-   * @returns - List of events mapped following event domain entity format.
+   * @returns - List of events mapped.
    * @throws {DataBaseInternalError} - If something wrong happend and it's not handle.
    */
   async getEventList(): Promise<EventDTO[]> {
