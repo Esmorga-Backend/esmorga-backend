@@ -44,6 +44,6 @@ jobs:
         run: |
           curl -X POST \
           "https://tcms.aiojiraapps.com/aio-tcms/api/v1/project/MOB/testcase/export/feature?type=NONE" \
-          -H "accept: application/octet-stream" -H "Authorization: AioAuth ${{ AoiToken }}" -H "Content-Type: application/json" -d '{"status\":{"comparisonType":"IN\","list":[1]},"automationStatus":{"comparisonType":"IN","list":[4]},"customFields":[{"name":"Test type","value":{"comparisonType":"IN","list":[3]}}]}'
+          -H "accept: application/octet-stream" -H "Authorization: AioAuth ${{ secrets.AoiToken }}" -H "Content-Type: application/json" -d '{"status\":{"comparisonType":"IN\","list":[1]},"automationStatus":{"comparisonType":"IN","list":[4]},"customFields":[{"name":"Test type","value":{"comparisonType":"IN","list":[3]}}]}'
       - run: ls
       - run: npm run test:e2e-run-cypress
