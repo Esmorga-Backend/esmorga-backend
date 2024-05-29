@@ -25,9 +25,8 @@ jobs:
           node-version: '22.1'
       - run: echo $APP_PORT
       - run: npm ci
-# Uncomment when test are ready
-#      - run: npm run test:unit
-#      - run: npm run test:component
+      - run: npm run test:unit
+      - run: npm run test:component
         if: ${{ success() }}
       
   
