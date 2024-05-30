@@ -72,6 +72,7 @@ export class EventDTO {
   @Expose()
   @IsArray()
   @IsString({ each: true })
+  @Type(() => String)
   @ApiProperty({ example: '["Meal", "Music"]' })
   tags: string[];
 
