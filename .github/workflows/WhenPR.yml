@@ -1,4 +1,4 @@
-name: Run Tests & Deploy QA Env
+name: Run  Unit & Component Tests
 run-name: ${{ github.actor }} is testing PR new code 🚀
 on:
   pull_request:
