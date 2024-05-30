@@ -16,7 +16,7 @@ And(/^(-?\d+) (\w+) in DB, (-?\d+) are in the past$/, (events_on_db,endpoint,exp
   console.log("Need to be deploy add"+events_on_db+" and "+expired_events_on_db+" to DB for "+endpoint)
 });
 
-When(/^a GET request is made to retrieve (\w+)$/, (endpoint) => {
+When(/^a GET request is made to (\w+) API$/, (endpoint) => {
   api[endpoint].get();
 });
 
