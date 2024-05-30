@@ -1,0 +1,52 @@
+name: Deploy QA Env & Then Test E2E
+run-name: ${{ github.actor }} is deploying new code to QA Env 🚀
+on:
+#Delete this , just for test
+#  pull_request:
+#    types: [opened,reopened,edited,synchronize]
+
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+  
+jobs:
+  Deploy-QA:
+    name: Run Deploy to QA
+# This filter works, delete it 
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python "pypy3.9"
+        uses: actions/setup-python@v5
+        with:
+          python-version: "pypy3.9"
+      # You can test your matrix by printing the current Python version
+      - name: Display Python version
+        run: python -c "import sys; print(sys.version)"
+      - name: Install dependencies
+        run: python -m pip install --upgrade pip paramiko 
+      - run: python .github/workflows/scripts/DeployToEnv.py ec2-34-254-203-250.eu-west-1.compute.amazonaws.com ${{ secrets.SSHRSA}}
+
+  Run-e2e-on-Ubuntu:
+    needs: Deploy-QA
+    name: Run E2E test on Ubuntu
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.1'
+      - run: npm ci
+      - run: rm test-e2e/cypress/e2e/features/*.feature  
+      - name: Get Test to Run From Jira
+        run: |
+          curl -X POST \
+          "https://tcms.aiojiraapps.com/aio-tcms/api/v1/project/MOB/testcase/export/feature?type=NONE" \
+          -H "accept: application/octet-stream" -H "Authorization: AioAuth ${{ secrets.AoiToken }}" -H "Content-Type: application/json" -d '{"statusID":{"comparisonType":"IN","list":[3]},"automationStatusID":{"comparisonType":"IN","list":[4]},"customFields":[{"name":"Test type","value":{"comparisonType":"IN","list":[3]}}]}}' \
+          -o features.zip
+        
+      - run: unzip features.zip -d test-e2e/cypress/e2e/features/
+      - run: npm run test:e2e-run-cypress

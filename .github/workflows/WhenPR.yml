@@ -1,0 +1,37 @@
+name: Run  Unit & Component Tests
+run-name: ${{ github.actor }} is testing PR new code 🚀
+on:
+  pull_request:
+    types: [opened,reopened,edited,synchronize]
+
+    branches:
+      - main
+  workflow_dispatch:
+    
+    
+jobs:
+  Run-tests-on-Ubuntu:
+    name: Run npm test on Ubuntu
+    runs-on: ubuntu-latest
+    env:
+      APP_PORT: 3000
+      MONGODB_URI: "mongodb://localhost:27017/"
+      REDIS_HOST: "redis-10358.c6.eu-west-1-1.ec2.redns.redis-cloud.com"
+      REDIS_PORT: 10358
+      NODE_ENV: "LOCAL"
+    steps:
+      - name: Start MongoDB
+        uses: supercharge/mongodb-github-action@1.11.0
+        with:
+          mongodb-version: '6.0'
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.1'
+      - run: echo $APP_PORT
+      - run: npm ci
+      - run: npm run test:unit
+      - run: npm run test:component
+        if: ${{ success() }}
+      
+  
