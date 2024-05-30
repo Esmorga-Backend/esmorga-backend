@@ -40,6 +40,7 @@ jobs:
         with:
           node-version: '22.1'
       - run: npm ci
+      - run: rm test-e2e/cypress/e2e/features/*.feature  
       - name: Get Test to Run From Jira
         run: |
           curl -X POST \
@@ -47,5 +48,5 @@ jobs:
           -H "accept: application/octet-stream" -H "Authorization: AioAuth ${{ secrets.AoiToken }}" -H "Content-Type: application/json" -d '{"status":{"comparisonType":"IN","list":[1]},"automationStatus":{"comparisonType":"IN","list":[4]},"customFields":[{"name":"Test type","value":{"comparisonType":"IN","list":[3]}}]}' \
           -o features.zip
         
-      - run: unzip features.zip
-      - run: npm run test:e2e-run-cypress-pipe
+      - run: unzip features.zip -d test-e2e/cypress/e2e/features/
+      - run: npm run test:e2e-run-cypress
