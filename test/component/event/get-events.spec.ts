@@ -3,7 +3,7 @@ import { HttpStatus, INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../../../src/app.module';
 import { EventRepository } from '../../../src/infraestructure/db/repositories';
-import { futureEventMockDB, oldEventMockDB } from '../../mocks';
+import { futureEventMockDB, oldEventMockDB } from '../../mocks/db';
 
 const path: string = '/v1/events';
 
@@ -37,6 +37,7 @@ describe('Get events - [GET v1/events]', () => {
       totalEvents: 1,
       events: [
         {
+          eventId: futureEventMockDB._id,
           eventName: futureEventMockDB.eventName,
           eventDate: futureEventMockDB.eventDate.toISOString(),
           description: futureEventMockDB.description,
@@ -63,6 +64,7 @@ describe('Get events - [GET v1/events]', () => {
       totalEvents: 1,
       events: [
         {
+          eventId: futureEventMockDB._id,
           eventName: futureEventMockDB.eventName,
           eventDate: futureEventMockDB.eventDate.toISOString(),
           description: futureEventMockDB.description,
@@ -77,7 +79,7 @@ describe('Get events - [GET v1/events]', () => {
     });
   });
 
-  it('Should a 200 without event list if events are not avaliable', async () => {
+  it('Should return a 200 without event list if events are not avaliable', async () => {
     jest.spyOn(eventRepository, 'find').mockResolvedValue([oldEventMockDB]);
 
     const response = await request(app.getHttpServer()).get(path);
@@ -86,7 +88,7 @@ describe('Get events - [GET v1/events]', () => {
     expect(response.body).toEqual({ totalEvents: 0, events: [] });
   });
 
-  it('Should a 200 without event list if there are no events in the db', async () => {
+  it('Should return a 200 without event list if there are no events in the db', async () => {
     jest.spyOn(eventRepository, 'find').mockResolvedValue([]);
 
     const response = await request(app.getHttpServer()).get(path);

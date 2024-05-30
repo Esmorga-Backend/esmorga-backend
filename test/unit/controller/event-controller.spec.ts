@@ -1,9 +1,9 @@
 import { HttpException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { GetEventListService } from '../../../src/application/handler/event';
-import { Event } from '../../../src/domain/entities';
+import { EventListDTO, EventDTO } from '../../../src/infraestructure/dtos';
 import { EventController } from '../../../src/infraestructure/http/controllers';
-import { eventMock } from '../../mocks';
+import { eventMock } from '../../mocks/dtos';
 
 jest.mock('../../../src/application/handler/event');
 
@@ -31,12 +31,14 @@ describe('[unit-test] - EventController', () => {
 
   describe('[getEvents] - Get event list', () => {
     it('Should return the data provided mapped', async () => {
-      const events: Event[] = [eventMock];
+      const events: EventDTO[] = [eventMock];
 
-      jest.spyOn(getEventListService, 'find').mockResolvedValue({
-        totalEvents: 1,
-        events,
-      });
+      const eventList: EventListDTO = {
+        totalEvents: events.length,
+        events: events,
+      };
+
+      jest.spyOn(getEventListService, 'find').mockResolvedValue(eventList);
 
       const response = await eventControler.getEvents();
 

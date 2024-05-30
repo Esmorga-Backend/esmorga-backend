@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { plainToClass } from 'class-transformer';
+import { EventDTO } from '../../dtos';
 import { MongoRepository } from './mongo.repository';
-import { Event } from '../../../domain/entities';
 import { Event as EventSchema } from '../schema';
-import { mapToEventsEntity } from '../services';
 import { DataBaseInternalError } from '../errors';
 
 @Injectable()
@@ -18,16 +18,18 @@ export class EventRepository extends MongoRepository<EventSchema> {
   /**
    * Get all events saved in the db.
    *
-   * @returns - List of events mapped following event domain entity format.
+   * @returns - List of events mapped.
    * @throws {DataBaseInternalError} - If something wrong happend and it's not handle.
    */
-  async getEventList(): Promise<Event[]> {
+  async getEventList(): Promise<EventDTO[]> {
     try {
-      const response = await this.find();
+      const events = await this.find();
 
-      const eventList = mapToEventsEntity(response);
+      const adaptedEvents: EventDTO[] = events.map((event) => {
+        return plainToClass(EventDTO, event, { excludeExtraneousValues: true });
+      });
 
-      return eventList;
+      return adaptedEvents;
     } catch (error) {
       throw new DataBaseInternalError();
     }

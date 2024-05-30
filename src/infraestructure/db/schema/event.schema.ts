@@ -15,7 +15,7 @@ export class Event {
   @Prop({ required: true })
   description: string;
 
-  @Prop({ required: true })
+  @Prop({ type: [String], required: true })
   tags: string[];
 
   @Prop({ type: LocationSchema, required: false })
