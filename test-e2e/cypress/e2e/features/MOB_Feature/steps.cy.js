@@ -6,7 +6,6 @@ const api_events = new ApiEvents()
 var use_endpoint=""
 const api={
   "Events": api_events
-  "Events": api_events
 }
 
 Given(/^the GET (\w+) API is available$/, (endpoint) => {
