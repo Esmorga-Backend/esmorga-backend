@@ -67,11 +67,7 @@ export class EventDTO {
       name: { type: 'string', example: 'A Coruña' },
     },
   })
-  location: {
-    lat: number;
-    long: number;
-    name: string;
-  };
+  location: Location;
 
   @Expose()
   @IsArray()
