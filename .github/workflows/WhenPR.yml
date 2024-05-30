@@ -20,6 +20,10 @@ jobs:
       REDIS_PORT: 10358
       NODE_ENV: "LOCAL"
     steps:
+      - name: Start MongoDB
+        uses: supercharge/mongodb-github-action@1.11.0
+        with:
+          mongodb-version: '6.0'
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
