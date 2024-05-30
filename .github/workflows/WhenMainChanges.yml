@@ -2,12 +2,12 @@ name: Deploy QA Env
 run-name: ${{ github.actor }} is deploying new code to QA Env 🚀
 on:
 #Delete this , just for test
-  pull_request:
-    types: [opened,reopened,edited,synchronize]
+#  pull_request:
+#    types: [opened,reopened,edited,synchronize]
 
-#  push:
-#    branches:
-#      - main
+  push:
+    branches:
+      - main
   workflow_dispatch:
   
 jobs:
