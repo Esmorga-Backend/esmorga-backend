@@ -1,5 +1,5 @@
 import { filterAvaliableEvents } from '../../../../src/domain/services';
-import { eventMock, oldEventMock } from '../../../mocks/dtos';
+import { eventMock, oldEventMock } from '../../../mocks/event';
 
 describe('[unit-test] [filterAvaliableEvents]', () => {
   it('Should return events not celebrated yet', () => {
