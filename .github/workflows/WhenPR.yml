@@ -18,7 +18,7 @@ jobs:
       MONGODB_URI: "mongodb://localhost:27017/"
       REDIS_HOST: "redis-10358.c6.eu-west-1-1.ec2.redns.redis-cloud.com"
       REDIS_PORT: 10358
-      NODE_ENV: LOCAL
+      NODE_ENV: "LOCAL"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
