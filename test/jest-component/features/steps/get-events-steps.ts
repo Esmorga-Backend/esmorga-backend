@@ -37,8 +37,10 @@ export const getEvents: StepDefinitions = ({ given, and, when, then}) => {
     });
 
 
-    and(/^(\d+) Events in DB, (\d+) are in the past$/, (DB_events, arg1) => {
-      if (DB_events!=0){
+    and(/^(\d+) Events in DB, (\d+) are in the past$/, (events_on_db,expired_events_on_db) => {
+      if (expired_events_on_db!=0){
+        jest.spyOn(eventRepository, 'find').mockResolvedValue([futureEventMockDB, oldEventMockDB]);
+      }else if (events_on_db!=0){
         jest.spyOn(eventRepository, 'find').mockResolvedValue([futureEventMockDB]);
       }
     });
@@ -49,9 +51,9 @@ export const getEvents: StepDefinitions = ({ given, and, when, then}) => {
 
     });
 
-    then(/^the response should contain (\d+) upcoming Events$/, (DB_events) => {
+    then(/^the response should contain (\d+) upcoming Events$/, (events_to_check) => {
       expect(response.status).toBe(HttpStatus.OK);
-      if (DB_events!=0){
+      if (events_to_check!=0){
         expect(response.body).toEqual({
         totalEvents: 1,
         events: [
