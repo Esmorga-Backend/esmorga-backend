@@ -16,3 +16,6 @@ Feature: MOB_Feature
 		When a GET request is made to Events API
 		Then the response should contain 1 upcoming Events
 		And the response should following swagger schema
+
+
+
