@@ -5,6 +5,7 @@ import {
   InternalServerErrorException,
   UseFilters,
   Body,
+  HttpCode,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { LoginService } from '../../../application/handler/account';
@@ -18,6 +19,7 @@ export class AccountController {
 
   @Post('/login')
   @UseFilters(new HttpExceptionFilter())
+  @HttpCode(200)
   async login(@Body() accountLoginDTO: AccountLoginDTO) {
     try {
       const response = await this.loginService.login(accountLoginDTO);
