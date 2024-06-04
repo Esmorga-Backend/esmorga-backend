@@ -75,14 +75,4 @@ export class EventDTO {
   @Type(() => String)
   @ApiProperty({ example: '["Meal", "Music"]' })
   tags: string[];
-
-  @Expose()
-  @IsDateString()
-  @ApiProperty({ example: '2024-03-08T10:05:30.915Z' })
-  createdAt: Date;
-
-  @Expose()
-  @IsDateString()
-  @ApiProperty({ example: '2024-03-08T10:05:30.915Z' })
-  updatedAt: Date;
 }

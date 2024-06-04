@@ -1,7 +1,5 @@
 import { EventDTO } from '../../../src/infraestructure/dtos';
 
-const currentDate: Date = new Date();
-
 const futureDate: Date = new Date();
 futureDate.setFullYear(2025);
 
@@ -21,8 +19,6 @@ export const eventMock: EventDTO = {
     name: 'A Coruña',
   },
   tags: ['Meal', 'Music'],
-  createdAt: currentDate,
-  updatedAt: currentDate,
 };
 
 export const oldEventMock: EventDTO = {
@@ -38,6 +34,4 @@ export const oldEventMock: EventDTO = {
     name: 'Vigo',
   },
   tags: ['Shoots', 'Sports'],
-  createdAt: currentDate,
-  updatedAt: currentDate,
 };
