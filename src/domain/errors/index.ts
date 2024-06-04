@@ -1,2 +1,2 @@
-export * from './ApiError';
-export * from './InvalidCredentialsApiError';
+export * from './api-error';
+export * from './invalid-credential-error';

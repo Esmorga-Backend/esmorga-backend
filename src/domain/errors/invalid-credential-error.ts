@@ -1,4 +1,4 @@
-import { ApiError } from './ApiError';
+import { ApiError } from './api-error';
 
 export class InvalidCredentialsApiError extends ApiError {
   constructor() {
