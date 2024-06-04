@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
+import { plainToClass } from 'class-transformer';
 import { AccountRepository } from '../../../infraestructure/db/repositories';
-import { AccountLoginDTO } from '../../../infraestructure/dtos';
+import { AccountLoginDTO, UserProfileDTO } from '../../../infraestructure/dtos';
 import { validateLoginCredentials } from '../../../domain/services';
 
 @Injectable()
@@ -14,7 +15,12 @@ export class LoginService {
       const user = await this.accountRepository.getUserByEmail(email);
 
       validateLoginCredentials(user, password);
-      return user;
+
+      const adaptedUserProfile = plainToClass(UserProfileDTO, user, {
+        excludeExtraneousValues: true,
+      });
+
+      return adaptedUserProfile;
     } catch (error) {
       throw error;
     }

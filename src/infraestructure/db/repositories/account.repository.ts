@@ -13,7 +13,7 @@ export class AccountRepository extends MongoRepository<UserSchema> {
     super(userModel);
   }
 
-  async getUserByEmail(email: string) {
+  async getUserByEmail(email: string): Promise<UserSchema> {
     try {
       const user = await this.findOneByEmail(email);
 
