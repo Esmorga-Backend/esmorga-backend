@@ -4,7 +4,7 @@ module.exports = defineConfig({
   e2e: {
     supportFile: false,
     baseUrl: 'https://qa.esmorga.canarte.org/',
-    specPattern: 'test-e2e/cypress/e2e/**/*.feature',
+    specPattern: 'test/cypress-e2e/cypress/e2e/**/*.feature',
     setupNodeEvents(on, config) {
       on("file:preprocessor", cucumber());
     },
