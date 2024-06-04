@@ -5,7 +5,7 @@ import { EventListDTO } from '../../../dtos';
 const INTERNAL_ERROR_COMMON_PROPERTIES = {
   title: {
     type: 'string',
-    example: 'InternalServerError',
+    example: 'internalServerError',
   },
   status: { type: 'number', example: 500 },
   detail: {

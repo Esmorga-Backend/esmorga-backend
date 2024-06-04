@@ -104,7 +104,7 @@ describe('Get events - [GET v1/events]', () => {
 
     expect(response.status).toEqual(HttpStatus.INTERNAL_SERVER_ERROR);
     expect(response.body).toEqual({
-      title: 'InternalSerError',
+      title: 'internalServerError',
       status: HttpStatus.INTERNAL_SERVER_ERROR,
       type: path,
       detail: 'Unexpected error',
