@@ -12,6 +12,11 @@ Install mongodb and init it:
 ```
 https://www.mongodb.com/docs/manual/administration/install-community/
 ```
+Define ENV:
+
+export APP_PORT=3000
+export MONGODB_URI="mongodb://localhost:27017/"
+export AoiToken="XXX"
 
 And then execute:
 

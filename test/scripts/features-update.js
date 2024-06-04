@@ -4,7 +4,14 @@ const path = require('path');
 const AdmZip = require('adm-zip');
 
 if (process.argv.length < 5) {
-    console.error('Usage: node exportAndExtract.js <output_directory> <automationStatusID> <Test type>');
+    console.error('Usage: node exportAndExtract.js <output_directory> <automationStatusID> <Test type>\n \
+    "automationStatus": \n \
+                        4 : "Automated"\n \
+                        2 : "To be Automated"\n \
+    "Test type" \n \
+                       3 : "Backend-Cypress-E2E" \n \
+                       5: "Backend-Jest-Component" \n \
+    ');
     process.exit(1);
   }
 
@@ -12,10 +19,10 @@ const outputDir = process.argv[2];
 if (!fs.existsSync(outputDir)) {
     process.exit(1);
 }
-const automationStatusID = process.argv[3];
 
-const Test_Type = process.argv[4];
-
+const automationStatusID = process.argv[3].split(',');;
+const Test_Type = process.argv[4].split(',');
+console.log('Value"', automationStatusID, '"');
 
 
 
@@ -32,19 +39,19 @@ const data = {
   },
   "automationStatusID": {
     "comparisonType": "IN",
-    "list": [automationStatusID]
+    "list": automationStatusID
   },
   "customFields": [
     {
       "name": "Test type",
       "value": {
         "comparisonType": "IN",
-        "list": [Test_Type]
+        "list": Test_Type
       }
     }
   ]
 };
-
+console.log('Make the Request');
 axios.post(url, data, { headers, responseType: 'arraybuffer' })
   .then(response => {
     const zipPath = path.resolve(__dirname, 'features.zip');

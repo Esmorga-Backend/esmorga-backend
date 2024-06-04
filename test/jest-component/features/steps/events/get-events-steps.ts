@@ -1,10 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { HttpStatus, INestApplication } from '@nestjs/common';
-import * as request from 'supertest';
-import { AppModule } from '../../../../src/app.module';
-import { EventRepository } from '../../../../src/infraestructure/db/repositories';
-import { futureEventMockDB, oldEventMockDB } from '../../../mocks/db';
 import { StepDefinitions} from 'jest-cucumber';
+
+import * as request from 'supertest';
+import { AppModule } from '../../../../../src/app.module';
+import { HttpStatus, INestApplication } from '@nestjs/common';
+import { EventRepository } from '../../../../../src/infraestructure/db/repositories';
+
+import { futureEventMockDB, oldEventMockDB } from '../../../../mocks/db';
 
 
 let app : INestApplication;
@@ -81,6 +83,5 @@ export const getEvents: StepDefinitions = ({ given, and, when, then}) => {
     and('the response should following swagger schema', () => {
 
     });
-//      jest.spyOn(eventRepository, 'find').mockResolvedValue([futureEventMockDB]);
-   
+
 }
