@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { EventRepository } from '../../../infraestructure/db/repositories';
 import { filterAvaliableEvents } from '../../../domain/services';
-import { EventDTO, EventListDTO } from '../../../infraestructure/dtos';
+import { EventDto, EventListDto } from '../../../infraestructure/dtos';
 
 @Injectable()
 export class GetEventListService {
@@ -12,9 +12,9 @@ export class GetEventListService {
    *
    * @returns - Object containing the total number of available events and the list of available events.
    */
-  async find(): Promise<EventListDTO> {
+  async find(): Promise<EventListDto> {
     try {
-      const events: EventDTO[] = await this.eventRepository.getEventList();
+      const events: EventDto[] = await this.eventRepository.getEventList();
 
       const avaliableEvents = filterAvaliableEvents(events);
 

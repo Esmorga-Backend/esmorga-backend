@@ -18,7 +18,7 @@ import {
   SwaggerCreateEvent,
   SwaggerGetEvents,
 } from '../swagger/decorators/events';
-import { EventListDTO } from '../../dtos';
+import { EventListDto } from '../../dtos';
 import { CreateEventDto } from '../dtos';
 
 @ApiTags('Event')
@@ -32,9 +32,9 @@ export class EventController {
 
   @Get('/')
   @SwaggerGetEvents()
-  async getEvents(): Promise<EventListDTO> {
+  async getEvents(): Promise<EventListDto> {
     try {
-      const response: EventListDTO = await this.getEventListService.find();
+      const response: EventListDto = await this.getEventListService.find();
 
       return response;
     } catch (error) {

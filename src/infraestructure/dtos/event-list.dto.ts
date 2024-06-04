@@ -1,15 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNumber, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
-import { EventDTO } from './event.dto';
+import { EventDto } from './event.dto';
 
-export class EventListDTO {
+export class EventListDto {
   @IsNumber()
   @ApiProperty({ example: 5 })
   totalEvents: number;
 
   @ValidateNested()
-  @Type(() => EventDTO)
-  @ApiProperty({ type: [EventDTO] })
-  events: EventDTO[];
+  @Type(() => EventDto)
+  @ApiProperty({ type: [EventDto] })
+  events: EventDto[];
 }

@@ -1,4 +1,4 @@
-import { EventDTO } from '../../../src/infraestructure/dtos';
+import { EventDto } from '../../../src/infraestructure/dtos';
 
 const currentDate: Date = new Date();
 
@@ -8,7 +8,7 @@ futureDate.setFullYear(2025);
 const oldDate: Date = new Date();
 oldDate.setFullYear(2023);
 
-export const eventMock: EventDTO = {
+export const eventMock: EventDto = {
   eventId: '6656e23640e1fdb4ceb23cc9',
   eventName: 'MobgenFest',
   eventDate: futureDate,
@@ -25,7 +25,7 @@ export const eventMock: EventDTO = {
   updatedAt: currentDate,
 };
 
-export const oldEventMock: EventDTO = {
+export const oldEventMock: EventDto = {
   eventId: '6656e23640e1fdb4ceb23cc8',
   eventName: 'Paintball',
   eventDate: oldDate,

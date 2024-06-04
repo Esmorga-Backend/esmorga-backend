@@ -1,6 +1,6 @@
 import { HttpStatus } from '@nestjs/common';
 import { ApiResponseOptions } from '@nestjs/swagger';
-import { EventListDTO } from '../../../dtos';
+import { EventListDto } from '../../../dtos';
 
 const BAD_REQUEST_ERROR_COMMON_PROPERTIES = {
   title: {
@@ -81,7 +81,7 @@ export const GET_EVENTS_RESPONSES: { [key: string]: ApiResponseOptions } = {
   OK: {
     status: HttpStatus.OK,
     description: 'List of avaliable events',
-    type: EventListDTO,
+    type: EventListDto,
   },
   INTERNAL_ERROR: {
     status: HttpStatus.INTERNAL_SERVER_ERROR,

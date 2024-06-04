@@ -23,7 +23,7 @@ class Location {
   name: string;
 }
 
-export class EventDTO {
+export class EventDto {
   @Transform(({ value }) => value.toString(), { toClassOnly: true })
   @Expose({ name: '_id' })
   @IsString()
