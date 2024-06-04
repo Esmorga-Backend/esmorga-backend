@@ -18,7 +18,7 @@ import {
   registerDecorator,
 } from 'class-validator';
 
-enum EventType {
+export enum EventType {
   PARTY = 'PARTY',
   SPORT = 'SPORT',
   FOOD = 'FOOD',
