@@ -1,8 +1,16 @@
 import { Model } from 'mongoose';
+import { CreateEventDto } from '../../http/dtos';
 import { DBRepository } from '../../../domain/interfaces';
 
 export class MongoRepository<E> implements DBRepository<E> {
   constructor(protected readonly entityModel: Model<E>) {}
+
+  /**
+   * A document with the new event is saved in the collection.
+   */
+  async create(event: CreateEventDto): Promise<void> {
+    await this.entityModel.create(event);
+  }
 
   /**
    * Return an array with the documents saved in the collection.

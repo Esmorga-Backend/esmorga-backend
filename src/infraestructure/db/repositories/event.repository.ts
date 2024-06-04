@@ -6,6 +6,7 @@ import { EventDTO } from '../../dtos';
 import { MongoRepository } from './mongo.repository';
 import { Event as EventSchema } from '../schema';
 import { DataBaseInternalError } from '../errors';
+import { CreateEventDto } from '../../http/dtos';
 
 @Injectable()
 export class EventRepository extends MongoRepository<EventSchema> {
@@ -13,6 +14,19 @@ export class EventRepository extends MongoRepository<EventSchema> {
     @InjectModel(EventSchema.name) private eventModel: Model<EventSchema>,
   ) {
     super(eventModel);
+  }
+
+  /**
+   * Create a new event and save it in the db.
+   *
+   * @throws {DataBaseInternalError} - If something wrong happend and it's not handle.
+   */
+  async createEvent(event: CreateEventDto) {
+    try {
+      await this.create(event);
+    } catch (error) {
+      throw new DataBaseInternalError();
+    }
   }
 
   /**

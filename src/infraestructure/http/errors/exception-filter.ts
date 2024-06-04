@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Catch,
   ExceptionFilter,
   HttpException,
@@ -13,21 +14,36 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const request = ctx.getRequest();
     const status = exception.getStatus();
 
-    if (exception instanceof InternalServerErrorException) {
-      return response.status(status).json({
-        title: 'InternalServerError',
-        status,
-        type: request.url,
-        detail: 'unexpected error',
-        errors: [],
-      });
-    }
-
     const { title, detail, message } = exception.getResponse() as {
       title: string;
       detail: string;
       message: string;
     };
+
+    const errorResponse = {
+      title,
+      status,
+      type: request.url,
+      detail,
+      errors: [],
+    };
+
+    if (exception instanceof InternalServerErrorException) {
+      return response.status(status).json({
+        ...errorResponse,
+        title: 'internalServerError',
+        detail: 'unexpected error',
+      });
+    }
+
+    if (exception instanceof BadRequestException) {
+      return response.status(status).json({
+        ...errorResponse,
+        title: 'badRequestError',
+        detail: 'some inputs are missing',
+        errors: message,
+      });
+    }
 
     return response.status(status).json({
       title,
