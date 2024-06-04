@@ -13,7 +13,7 @@ import { AccountLoginDTO } from '../../dtos';
 
 @Controller('/v1/account')
 @ApiTags('Account')
-export class EventController {
+export class AccountController {
   constructor(private readonly loginService: LoginService) {}
 
   @Post('/login')

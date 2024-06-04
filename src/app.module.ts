@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { validateEnvVars } from './config';
-import { EventModule } from './infraestructure/http/modules';
+import { EventModule, AccountModule } from './infraestructure/http/modules';
 
 @Module({
   imports: [
@@ -17,6 +17,7 @@ import { EventModule } from './infraestructure/http/modules';
       }),
     }),
     EventModule,
+    AccountModule,
   ],
 })
 export class AppModule {}
