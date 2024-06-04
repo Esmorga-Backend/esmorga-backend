@@ -12,4 +12,8 @@ export class MongoRepository<E> implements DBRepository<E> {
   async find(): Promise<E[]> {
     return this.entityModel.find();
   }
+
+  async findOneByEmail(email): Promise<E[]> {
+    return this.entityModel.findOne({ email: email });
+  }
 }
