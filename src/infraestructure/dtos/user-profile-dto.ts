@@ -1,8 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Expose } from 'class-transformer';
-import { IsString } from 'class-validator';
+import { Expose, Transform } from 'class-transformer';
+import { IsDateString, IsString } from 'class-validator';
 
 export class UserProfileDTO {
+  @Transform(({ value }) => value.toString(), { toClassOnly: true })
+  @Expose({ name: '_id' })
+  @IsString()
+  @ApiProperty({ example: '665f019c17331ebee550b2fd' })
+  uuid: string;
+
   @Expose()
   @IsString()
   @ApiProperty({ example: 'Test Name' })
@@ -12,4 +18,14 @@ export class UserProfileDTO {
   @IsString()
   @ApiProperty({ example: 'esmorga.test.01@yopmail.com' })
   email: string;
+
+  @Expose()
+  @IsString()
+  @ApiProperty({ example: 'USER' })
+  role: string;
+
+  @Expose()
+  @IsDateString()
+  @ApiProperty({ example: '2024-03-08T10:05:30.915Z' })
+  createdAt: Date;
 }
