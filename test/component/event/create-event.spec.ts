@@ -54,7 +54,6 @@ describe('Create a new event - [POST v1/events]', () => {
     expect(response.body).toEqual({});
   });
 
-  //TODO add TC for this scenario
   it('A POST request to Events API with valid data but without optional fields should return a success response code 201', async () => {
     jest.spyOn(eventRepository, 'create').mockResolvedValue();
 
