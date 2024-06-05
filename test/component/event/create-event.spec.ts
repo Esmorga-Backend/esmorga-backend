@@ -40,7 +40,7 @@ describe('Create a new event - [POST v1/events]', () => {
   it('Should throw a 500 error if something wrong happended and it is not handled', async () => {
     jest.spyOn(eventRepository, 'create').mockRejectedValue(new Error());
 
-    const response = await request(app.getHttpServer()).get(path);
+    const response = await request(app.getHttpServer()).post(path);
 
     expect(response.status).toEqual(HttpStatus.INTERNAL_SERVER_ERROR);
     expect(response.body).toEqual({
