@@ -1,9 +1,18 @@
-import { HttpStatus, INestApplication } from '@nestjs/common';
+import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
 import { AppModule } from '../../../src/app.module';
 import { EventRepository } from '../../../src/infraestructure/db/repositories';
-import { createEventMock } from '../../mocks/dtos';
+import {
+  createEventMock,
+  createEventWithoutOptionalFieldsMock,
+} from '../../mocks/dtos';
+
+/**
+ * *  Logic realated to authentication will be implemented in phase 2
+ * TC-19
+ * TC-20
+ */
 
 const path: string = '/v1/events';
 
@@ -22,6 +31,8 @@ describe('Create a new event - [POST v1/events]', () => {
 
     app = moduleFixture.createNestApplication();
 
+    app.useGlobalPipes(new ValidationPipe());
+
     await app.init();
 
     eventRepository = moduleFixture.get<EventRepository>(EventRepository);
@@ -31,7 +42,7 @@ describe('Create a new event - [POST v1/events]', () => {
     await app.close();
   });
 
-  it('Should return a 201 with an empty object', async () => {
+  it('A POST request to Events API with valid data should return a success response code 201', async () => {
     jest.spyOn(eventRepository, 'create').mockResolvedValue();
 
     const response = await request(app.getHttpServer())
@@ -43,10 +54,37 @@ describe('Create a new event - [POST v1/events]', () => {
     expect(response.body).toEqual({});
   });
 
-  // it('Should return a 400 error if request data is invalid', async () => {
-  //   const response = await request(app.getHttpServer()).post(path);
+  //TODO add TC for this scenario
+  it('A POST request to Events API with valid data but without optional fields should return a success response code 201', async () => {
+    jest.spyOn(eventRepository, 'create').mockResolvedValue();
 
-  // });
+    const response = await request(app.getHttpServer())
+      .post(path)
+      .set(headers)
+      .send(createEventWithoutOptionalFieldsMock);
+
+    expect(response.status).toBe(HttpStatus.CREATED);
+    expect(response.body).toEqual({});
+  });
+
+  it('A POST request to Events API with invalid data should return an errore response code 400', async () => {
+    const wrongEvent = { ...createEventMock };
+
+    delete wrongEvent.eventName;
+
+    const response = await request(app.getHttpServer())
+      .post(path)
+      .set(headers)
+      .send(wrongEvent);
+
+    expect(response.status).toBe(HttpStatus.BAD_REQUEST);
+    expect(response.body.errors).toBe([
+      'eventName must be shorter than or equal to 100 characters',
+      'eventName must be longer than or equal to 3 characters',
+      'eventName must be a string',
+      'eventName should not be empty',
+    ]);
+  });
 
   it('Should throw a 500 error if something wrong happended and it is not handled', async () => {
     jest.spyOn(eventRepository, 'create').mockRejectedValue(new Error());

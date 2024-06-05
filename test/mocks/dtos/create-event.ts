@@ -16,3 +16,13 @@ export const createEventMock: CreateEventDto = {
   },
   tags: ['Meal', 'Music'],
 };
+
+export const createEventWithoutOptionalFieldsMock: CreateEventDto = {
+  eventName: 'MobgenFest',
+  eventDate: '2025-03-08T10:05:30.915Z',
+  description: 'Hello World',
+  eventType: EventType.PARTY,
+  location: {
+    name: 'A Coruña',
+  },
+};

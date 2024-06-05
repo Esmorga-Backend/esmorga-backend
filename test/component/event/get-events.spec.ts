@@ -7,6 +7,10 @@ import { futureEventMockDB, oldEventMockDB } from '../../mocks/db';
 
 const path: string = '/v1/events';
 
+const headers = {
+  'Content-Type': 'application/json',
+};
+
 describe('Get events - [GET v1/events]', () => {
   let app: INestApplication;
   let eventRepository: EventRepository;
@@ -30,7 +34,7 @@ describe('Get events - [GET v1/events]', () => {
   it('Should return a 200 with an upcoming events', async () => {
     jest.spyOn(eventRepository, 'find').mockResolvedValue([futureEventMockDB]);
 
-    const response = await request(app.getHttpServer()).get(path);
+    const response = await request(app.getHttpServer()).get(path).set(headers);
 
     expect(response.status).toBe(HttpStatus.OK);
     expect(response.body).toEqual({
@@ -57,7 +61,7 @@ describe('Get events - [GET v1/events]', () => {
       .spyOn(eventRepository, 'find')
       .mockResolvedValue([futureEventMockDB, oldEventMockDB]);
 
-    const response = await request(app.getHttpServer()).get(path);
+    const response = await request(app.getHttpServer()).get(path).set(headers);
 
     expect(response.status).toBe(HttpStatus.OK);
     expect(response.body).toEqual({
@@ -82,7 +86,7 @@ describe('Get events - [GET v1/events]', () => {
   it('Should return a 200 without event list if events are not avaliable', async () => {
     jest.spyOn(eventRepository, 'find').mockResolvedValue([oldEventMockDB]);
 
-    const response = await request(app.getHttpServer()).get(path);
+    const response = await request(app.getHttpServer()).get(path).set(headers);
 
     expect(response.status).toBe(HttpStatus.OK);
     expect(response.body).toEqual({ totalEvents: 0, events: [] });
