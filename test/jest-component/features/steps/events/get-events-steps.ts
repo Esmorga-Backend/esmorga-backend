@@ -62,6 +62,8 @@ export const getEvents: StepDefinitions = ({ given, and, when, then}) => {
     and(/^(\d+) Events in DB, (\d+) are in the past$/, (events_on_db,expired_events_on_db) => {
       if (expired_events_on_db == 1 && events_on_db == 2 ){
         jest.spyOn(eventRepository, 'find').mockResolvedValue([futureEventMockDB, oldEventMockDB]);
+      }else if (expired_events_on_db == 1 && events_on_db == 1 ){
+          jest.spyOn(eventRepository, 'find').mockResolvedValue([oldEventMockDB]);
       }else if (events_on_db == 1){
         jest.spyOn(eventRepository, 'find').mockResolvedValue([futureEventMockDB]);
       }else if (expired_events_on_db != 0 && events_on_db != 0 ){
