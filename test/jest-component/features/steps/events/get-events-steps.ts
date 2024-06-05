@@ -1,15 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { StepDefinitions} from 'jest-cucumber';
-
 import * as request from 'supertest';
 import { AppModule } from '../../../../../src/app.module';
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import { EventRepository } from '../../../../../src/infraestructure/db/repositories';
-
 import { futureEventMockDB, oldEventMockDB } from '../../../../mocks/db';
 import { matchers } from 'jest-json-schema';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-
 
 const addFormats = require('ajv-formats');
 const axios = require('axios');
@@ -37,18 +34,8 @@ beforeEach(async () => {
   eventRepository = moduleFixture.get<EventRepository>(EventRepository);
   const response = await request(app.getHttpServer()).get('/swagger-json');
   const rawSchema = response.body
-/*const rawSchema = {"openapi":"3.0.0","paths":{"/v1/events":{"get":{"operationId":"EventController_getEvents","summary":"Return a list of avaliable events","parameters":[{"name":"Content-Type","in":"header","description":"application/json","schema":{"type":"string"}}],"responses":{"200":{"description":"List of avaliable events","content":{"application/json":{"schema":{"$ref":"#/components/schemas/EventListDTO"}}}},"500":{"description":"Error not handled","content":{"application/json":{"schema":{"type":"object","properties":{"title":{"type":"string","example":"InternalServerError"},"status":{"type":"number","example":500},"detail":{"type":"string","example":"unexpected error"},"errors":{"type":"array","example":[]},"type":{"type":"string","example":"/v1/events"}}}}}}},"tags":["Event"]}}},"info":{"title":"Esmorga API","description":"Swagger for Esmorga API.","version":"1.0","contact":{}},"tags":[],"servers":[],"components":{"schemas":{"EventDTO":{"type":"object","properties":{"eventId":{"type":"string","example":"6656e23640e1fdb4ceb23cc9"},"eventName":{"type":"string","example":"MobgenFest"},"eventDate":{"format":"date-time","type":"string","example":"2024-03-08T10:05:30.915Z"},"description":{"type":"string","example":"Hello World"},"eventType":{"type":"string","example":"Party"},"imageUrl":{"type":"string","example":"img.url"},"location":{"type":"object","properties":{"lat":{"type":"number","example":43.35525182148881},"long":{"type":"number","example":-8.41937931298951},"name":{"type":"string","example":"A Coruña"}}},"tags":{"example":"[\"Meal\", \"Music\"]","type":"array","items":{"type":"string"}}},"required":["eventId","eventName","eventDate","description","eventType","imageUrl","location","tags"]},"EventListDTO":{"type":"object","properties":{"totalEvents":{"type":"number","example":5},"events":{"type":"array","items":{"$ref":"#/components/schemas/EventDTO"}}},"required":["totalEvents","events"]}}}}
-const rawSchema = {"openapi":"3.0.0","paths":{"/v1/events":{"get":{"operationId":"EventController_getEvents","summary":"Return a list of avaliable events","parameters":[{"name":"Content-Type","in":"header","description":"application/json","schema":{"type":"string"}}],
-"responses":{"200":{"description":"List of avaliable events","content":{"application/json":{"schema":{"$ref":"#/components/schemas/EventListDTO"}}}},"500":{"description":"Error not handled","content":{"application/json":{"schema":{"type":"object","properties":{"title":{"type":"string","example":"InternalServerError"},
-"status":{"type":"number","example":500},"detail":{"type":"string","example":"unexpected error"},"errors":{"type":"array","example":[]},"type":{"type":"string","example":"/v1/events"}}}}}}},"tags":["Event"]}}},"info":{"title":"Esmorga API","description":"Swagger for Esmorga API.","version":"1.0","contact":{}},
-"tags":[],"servers":[],"components":{"schemas":{"EventDTO":{"type":"object","properties":{"eventId":{"type":"string","example":"6656e23640e1fdb4ceb23cc9"},"eventName":{"type":"string","example":"MobgenFest"},"eventDate":{"format":"date","type":"string","example":"2024-03-08"},"description":{"type":"string","example":"Hello World"},"eventType":{"type":"string","example":"Party"},"imageUrl":{"type":"string","example":"img.url"},"location":{"type":"object","properties":{"lat":{"type":"number","example":43.35525182148881},"long":{"type":"number","example":-8.41937931298951},"name":{"type":"string","example":"A Coruña"}}},"tags":{"example":"[\"Meal\", \"Music\"]","type":"array","items":{"type":"string"}}},"required":["eventId","eventName","eventDate","description","eventType","imageUrl","location","tags"]},"EventListDTO":{"type":"object","properties":{"totalEvents":{"type":"number","example":5},"events":{"type":"array","items":{"$ref":"#/components/schemas/EventDTO"}}},"required":["totalEvents","events"]}}}}
-*/
-schema = await SwaggerParser.dereference(rawSchema);
-//  schema = 
+  schema = await SwaggerParser.dereference(rawSchema);
   
-  if (typeof schema !== 'object') {
-    console.log('El esquema Swagger no es un objeto válido');
-  }
 });
 
 afterEach(async () => {
@@ -67,14 +54,17 @@ export const getEvents: StepDefinitions = ({ given, and, when, then}) => {
     given('the GET Events API is available', () => {
       path = '/v1/events';
     });
-
+    given('the GET Events API is unavailable', () => {
+      path = '/v1/events';
+      jest.spyOn(eventRepository, 'find').mockRejectedValue(new Error());
+    });
 
     and(/^(\d+) Events in DB, (\d+) are in the past$/, (events_on_db,expired_events_on_db) => {
       if (expired_events_on_db == 1 && events_on_db == 2 ){
         jest.spyOn(eventRepository, 'find').mockResolvedValue([futureEventMockDB, oldEventMockDB]);
       }else if (events_on_db == 1){
         jest.spyOn(eventRepository, 'find').mockResolvedValue([futureEventMockDB]);
-      }else{
+      }else if (expired_events_on_db != 0 && events_on_db != 0 ){
         expect(false).toBe(true)
       }
     });
@@ -132,7 +122,20 @@ export const getEvents: StepDefinitions = ({ given, and, when, then}) => {
 
       expect(valid).toBe(true);
 
-
     });
-
+    then(/^an error (\d+) in response should be returned$/, (error) => {
+      if (error==500){
+        expect(response.status).toBe(HttpStatus.INTERNAL_SERVER_ERROR);
+        expect(response.body).toEqual({
+          title: 'InternalSerError',
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          type: path,
+          detail: 'Unexpected error',
+          errors: ['Internal server error occurred in database operation'],
+        });
+      }else{
+        expect(true).toBe(false);
+      }
+      
+    });
 }
