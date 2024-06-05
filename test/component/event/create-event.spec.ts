@@ -3,8 +3,13 @@ import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
 import { AppModule } from '../../../src/app.module';
 import { EventRepository } from '../../../src/infraestructure/db/repositories';
+import { createEventMock } from '../../mocks/dtos';
 
 const path: string = '/v1/events';
+
+const headers = {
+  'Content-Type': 'application/json',
+};
 
 describe('Create a new event - [POST v1/events]', () => {
   let app: INestApplication;
@@ -29,13 +34,19 @@ describe('Create a new event - [POST v1/events]', () => {
   it('Should return a 201 with an empty object', async () => {
     jest.spyOn(eventRepository, 'create').mockResolvedValue();
 
-    const response = await request(app.getHttpServer()).post(path);
+    const response = await request(app.getHttpServer())
+      .post(path)
+      .set(headers)
+      .send(createEventMock);
 
     expect(response.status).toBe(HttpStatus.CREATED);
     expect(response.body).toEqual({});
   });
 
-  it('Should return a 400 error if wrong ', async () => {});
+  // it('Should return a 400 error if request data is invalid', async () => {
+  //   const response = await request(app.getHttpServer()).post(path);
+
+  // });
 
   it('Should throw a 500 error if something wrong happended and it is not handled', async () => {
     jest.spyOn(eventRepository, 'create').mockRejectedValue(new Error());
