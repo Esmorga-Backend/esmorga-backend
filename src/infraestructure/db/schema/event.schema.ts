@@ -15,10 +15,10 @@ export class Event {
   @Prop({ required: true })
   description: string;
 
-  @Prop({ type: [String], required: true })
+  @Prop({ type: [String], required: false, select: false })
   tags: string[];
 
-  @Prop({ type: LocationSchema, required: false })
+  @Prop({ type: LocationSchema, required: true })
   location: Location;
 
   @Prop({ required: false })
