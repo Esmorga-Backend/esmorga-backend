@@ -51,11 +51,12 @@ const data = {
     }
   ]
 };
+/*
 if (!fs.existsSync(outputDir+'/MOB_Feature.feature')) {
   console.log('Remove MOB_Feature.feature');
   fs.unlinkSync(outputDir+'/MOB_Feature.feature');
 }
-
+*/
 axios.post(url, data, { headers, responseType: 'arraybuffer' })
   .then(response => {
     const zipPath = path.resolve(__dirname, 'features.zip');
