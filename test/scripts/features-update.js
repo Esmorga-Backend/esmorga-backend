@@ -29,7 +29,7 @@ console.log('Value"', automationStatusID, '"');
 const url = "https://tcms.aiojiraapps.com/aio-tcms/api/v1/project/MOB/testcase/export/feature?type=NONE";
 const headers = {
   "accept": "application/octet-stream",
-  "Authorization": `AioAuth ${process.env.AoiToken}`,
+  "Authorization": `AioAuth ${process.env.AioToken}`,
   "Content-Type": "application/json"
 };
 const data = {

@@ -16,7 +16,7 @@ Define ENV:
 
 export APP_PORT=3000
 export MONGODB_URI="mongodb://localhost:27017/"
-export AoiToken="XXX"
+export AioToken="XXX"
 
 And then execute:
 

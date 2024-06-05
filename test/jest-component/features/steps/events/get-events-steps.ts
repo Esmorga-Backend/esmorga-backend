@@ -12,16 +12,12 @@ import { futureEventMockDB, oldEventMockDB } from '../../../../mocks/db';
 let app : INestApplication;
 let eventRepository: EventRepository;
 
-
 beforeEach(async () => {
   const moduleFixture: TestingModule = await Test.createTestingModule({
     imports: [AppModule],
   }).compile();
-
   app = moduleFixture.createNestApplication();
-
   await app.init();
-
   eventRepository = moduleFixture.get<EventRepository>(EventRepository);
 });
 
@@ -33,9 +29,11 @@ afterEach(async () => {
 
 export const getEvents: StepDefinitions = ({ given, and, when, then}) => {
     let response
-    const path: string = '/v1/events';
-    given('the GET Events API is available', () => {
+    let path: string = '';
+    
 
+    given('the GET Events API is available', () => {
+      path = '/v1/events';
     });
 
 
@@ -48,13 +46,15 @@ export const getEvents: StepDefinitions = ({ given, and, when, then}) => {
     });
 
 
-    when('a GET request is made to Events API', async () => {
+    when(/^a GET request is made to (\w+) API$/, async (endpoint) => {
       response = await request(app.getHttpServer()).get(path);
 
     });
 
     then(/^the response should contain (\d+) upcoming Events$/, (events_to_check) => {
       expect(response.status).toBe(HttpStatus.OK);
+      console.log(response.body)
+
       if (events_to_check!=0){
         expect(response.body).toEqual({
         totalEvents: 1,
