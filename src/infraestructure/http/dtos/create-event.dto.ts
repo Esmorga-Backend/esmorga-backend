@@ -64,6 +64,22 @@ function IsValidDate(validationOptions?: ValidationOptions) {
   };
 }
 
+function IsNotPastDate(validationOptions?: ValidationOptions) {
+  return function (target: object, propertyName: string) {
+    registerDecorator({
+      target: target.constructor,
+      propertyName: propertyName,
+      options: validationOptions,
+      validator: {
+        validate(value: any) {
+          const date = new Date(value);
+          return date > new Date();
+        },
+      },
+    });
+  };
+}
+
 class LocationDto {
   @IsNotEmpty()
   @IsString()
@@ -97,6 +113,7 @@ export class CreateEventDto {
     message: 'eventDate must be in ISO format (yyyy-MM-ddTHH:mm:ss.SSSZ)',
   })
   @IsValidDate({ message: 'eventDate must be a valid date and time' })
+  @IsNotPastDate({ message: 'eventDate can not be a past date' })
   eventDate: string;
 
   @ApiProperty({
