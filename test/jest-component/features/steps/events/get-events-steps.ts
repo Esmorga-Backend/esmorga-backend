@@ -7,18 +7,43 @@ import { HttpStatus, INestApplication } from '@nestjs/common';
 import { EventRepository } from '../../../../../src/infraestructure/db/repositories';
 
 import { futureEventMockDB, oldEventMockDB } from '../../../../mocks/db';
+import { matchers } from 'jest-json-schema';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+
+
+
+const axios = require('axios');
+const SwaggerParser = require('swagger-parser');
+const Ajv = require('ajv');
 
 
 let app : INestApplication;
 let eventRepository: EventRepository;
+let schema;
+
 
 beforeEach(async () => {
   const moduleFixture: TestingModule = await Test.createTestingModule({
     imports: [AppModule],
   }).compile();
   app = moduleFixture.createNestApplication();
+  const swaggerConfig = new DocumentBuilder()
+  .setTitle('Esmorga API')
+  .setDescription('Swagger for Esmorga API.')
+  .setVersion('1.0')
+  .build();
+  const document = SwaggerModule.createDocument(app, swaggerConfig);
+  SwaggerModule.setup('swagger', app, document);
   await app.init();
   eventRepository = moduleFixture.get<EventRepository>(EventRepository);
+  const response = await request(app.getHttpServer()).get('/swagger-json');
+  const rawSchema = response.body
+  schema = await SwaggerParser.dereference(rawSchema);
+//  schema = 
+  
+  if (typeof schema !== 'object') {
+    console.log('El esquema Swagger no es un objeto válido');
+  }
 });
 
 afterEach(async () => {
@@ -30,7 +55,8 @@ afterEach(async () => {
 export const getEvents: StepDefinitions = ({ given, and, when, then}) => {
     let response
     let path: string = '';
-    
+    const ajv = new Ajv({ strict: false });
+   
 
     given('the GET Events API is available', () => {
       path = '/v1/events';
@@ -38,10 +64,12 @@ export const getEvents: StepDefinitions = ({ given, and, when, then}) => {
 
 
     and(/^(\d+) Events in DB, (\d+) are in the past$/, (events_on_db,expired_events_on_db) => {
-      if (expired_events_on_db!=0){
+      if (expired_events_on_db == 1 && events_on_db == 2 ){
         jest.spyOn(eventRepository, 'find').mockResolvedValue([futureEventMockDB, oldEventMockDB]);
-      }else if (events_on_db!=0){
+      }else if (events_on_db == 1){
         jest.spyOn(eventRepository, 'find').mockResolvedValue([futureEventMockDB]);
+      }else{
+        expect(false).toBe(true)
       }
     });
 
@@ -51,37 +79,53 @@ export const getEvents: StepDefinitions = ({ given, and, when, then}) => {
 
     });
 
-    then(/^the response should contain (\d+) upcoming Events$/, (events_to_check) => {
+    then(/^the response should contain (\d+) upcoming Events$/, ( events_to_check) => {
       expect(response.status).toBe(HttpStatus.OK);
-      console.log(response.body)
+      expect.extend(matchers);
+      
+      expect(response.body).toMatchObject(
+        {"totalEvents": parseInt(events_to_check)}
 
-      if (events_to_check!=0){
-        expect(response.body).toEqual({
-        totalEvents: 1,
-        events: [
-          {
-            eventId: futureEventMockDB._id,
-            eventName: futureEventMockDB.eventName,
-            eventDate: futureEventMockDB.eventDate.toISOString(),
-            description: futureEventMockDB.description,
-            eventType: futureEventMockDB.eventType,
-            imageUrl: futureEventMockDB.imageUrl,
-            location: futureEventMockDB.location,
-            tags: futureEventMockDB.tags,
-            createdAt: futureEventMockDB.createdAt.toISOString(),
-            updatedAt: futureEventMockDB.updatedAt.toISOString(),
-          },
-          ],
-        })
-      }else{
+      )
+
+      if (events_to_check == 1){
           expect(response.body).toEqual({
-            totalEvents: 0 ,
-            events: []
-          })
-      }   
+            totalEvents: 1,
+            events: [
+              {
+                eventId: futureEventMockDB._id,
+                eventName: futureEventMockDB.eventName,
+                eventDate: futureEventMockDB.eventDate.toISOString(),
+                description: futureEventMockDB.description,
+                eventType: futureEventMockDB.eventType,
+                imageUrl: futureEventMockDB.imageUrl,
+                location: futureEventMockDB.location,
+                tags: futureEventMockDB.tags,
+                createdAt: futureEventMockDB.createdAt.toISOString(),
+                updatedAt: futureEventMockDB.updatedAt.toISOString(),
+              },
+            ],
+          });
+      }else if (events_to_check == 0){
+        expect(response.body).toEqual({
+          totalEvents: 0,
+          events: []
+        });
+      } else {
+        expect(false).toBe(true)
+      }        
     });
     and('the response should following swagger schema', () => {
+      const reference = schema.paths[path].get.responses['200'].content['application/json'].schema
 
+      const validate = ajv.compile(reference);
+      const valid = validate(response);
+      expect(valid).toBe(true);
+/*
+      if (!valid) {
+        console.error(validate.errors);
+      }
+*/
     });
 
 }
