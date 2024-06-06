@@ -100,17 +100,17 @@ class LocationDto {
 
 export class CreateEventDto {
   @ApiProperty({ example: 'End of the World Party' })
-  @MinLength(3)
-  @MaxLength(100)
+  @MinLength(3, { message: 'Min 3 characters' })
+  @MaxLength(100, { message: 'Max 100 characters' })
   @IsString()
   @IsNotEmpty()
   eventName: string;
 
   @ApiProperty({ example: '2025-03-08T10:05:30.915Z' })
   @IsValidDate({ message: 'eventDate must be a valid date and time' })
-  @IsNotPastDate({ message: 'eventDate can not be a past date' })
+  @IsNotPastDate({ message: 'Date cannot be in the past' })
   @Matches(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/, {
-    message: 'eventDate must be in ISO format (yyyy-MM-ddTHH:mm:ss.SSSZ)',
+    message: 'Date must be in ISO format (yyyy-MM-ddTHH:mm:ss.SSSZ)',
   })
   @IsString()
   @IsNotEmpty()

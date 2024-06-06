@@ -39,7 +39,7 @@ describe('[unit-test] [CreateEventDto]', () => {
       expect(errors.length).toEqual(1);
       expect(errors[0].property).toEqual('eventName');
       expect(errors[0].constraints).toEqual({
-        minLength: 'eventName must be longer than or equal to 3 characters',
+        minLength: 'Min 3 characters',
       });
     });
 
@@ -55,14 +55,14 @@ describe('[unit-test] [CreateEventDto]', () => {
       expect(errors.length).toEqual(1);
       expect(errors[0].property).toEqual('eventName');
       expect(errors[0].constraints).toEqual({
-        maxLength: 'eventName must be shorter than or equal to 100 characters',
+        maxLength: 'Max 100 characters',
       });
     });
 
     it('Should not accept empty value', async () => {
       const event = { ...createEventMock };
 
-      event.eventName = null;
+      delete event.eventName;
 
       const createEventDto = plainToInstance(CreateEventDto, event);
 
@@ -105,7 +105,7 @@ describe('[unit-test] [CreateEventDto]', () => {
       expect(errors.length).toEqual(1);
       expect(errors[0].property).toEqual('eventDate');
       expect(errors[0].constraints).toEqual({
-        customValidation: 'eventDate can not be a past date',
+        customValidation: 'Date cannot be in the past',
       });
     });
 
@@ -137,7 +137,7 @@ describe('[unit-test] [CreateEventDto]', () => {
       expect(errors.length).toEqual(1);
       expect(errors[0].property).toEqual('eventDate');
       expect(errors[0].constraints).toEqual({
-        matches: 'eventDate must be in ISO format (yyyy-MM-ddTHH:mm:ss.SSSZ)',
+        matches: 'Date must be in ISO format (yyyy-MM-ddTHH:mm:ss.SSSZ)',
       });
     });
   });
