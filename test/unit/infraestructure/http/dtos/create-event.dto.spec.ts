@@ -368,4 +368,84 @@ describe('[unit-test] [CreateEventDto]', () => {
       });
     });
   });
+
+  describe('[CreateEventDto] [location] [name]', () => {
+    it('Should not accept empty value', async () => {
+      const event = { ...createEventMock };
+
+      delete event.location.name;
+
+      const createEventDto = plainToInstance(CreateEventDto, event);
+
+      const errors = await validate(createEventDto, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('location');
+      expect(errors[0].children[0].property).toEqual('name');
+      expect(errors[0].children[0].constraints).toEqual({
+        isDefined: 'name should not be empty',
+      });
+    });
+
+    it('Should not accept less than 3 characters', async () => {
+      const event = { ...createEventMock };
+
+      event.location.name = '';
+
+      const createEventDto = plainToInstance(CreateEventDto, event);
+
+      const errors = await validate(createEventDto, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('location');
+      expect(errors[0].children[0].property).toEqual('name');
+      expect(errors[0].children[0].constraints).toEqual({
+        minLength: 'Min 1 characters',
+      });
+    });
+
+    it('Should not accept more than 100 characters', async () => {
+      const event = { ...createEventMock };
+
+      event.location.name = 'A'.repeat(200);
+
+      const createEventDto = plainToInstance(CreateEventDto, event);
+
+      const errors = await validate(createEventDto, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('location');
+      expect(errors[0].children[0].property).toEqual('name');
+      expect(errors[0].children[0].constraints).toEqual({
+        maxLength: 'Max 100 characters',
+      });
+    });
+
+    it('Should only accept string values', async () => {
+      const event = {
+        eventName: 'Mobgen Fest',
+        eventDate: '2025-03-08T10:05:30.915Z',
+        description: 'Hello World',
+        eventType: 'PARTY',
+        imageUrl: 'img.url',
+        location: {
+          lat: 43.35525182148881,
+          long: -8.41937931298951,
+          name: 123,
+        },
+        tags: ['Meal', 'Music'],
+      };
+
+      const createEventDto = plainToInstance(CreateEventDto, event);
+
+      const errors = await validate(createEventDto, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('location');
+      expect(errors[0].children[0].property).toEqual('name');
+      expect(errors[0].children[0].constraints).toEqual({
+        isString: 'name must be a string',
+      });
+    });
+  });
 });

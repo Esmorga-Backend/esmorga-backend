@@ -82,10 +82,10 @@ function IsNotPastDate(validationOptions?: ValidationOptions) {
 }
 
 class LocationDto {
-  @IsNotEmpty()
+  @MinLength(1, { message: 'Min 1 characters' })
+  @MaxLength(100, { message: 'Max 100 characters' })
   @IsString()
-  @MinLength(1)
-  @MaxLength(100)
+  @IsDefined({ message: 'name should not be empty' })
   name: string;
 
   @ValidateIf((location) => location.long)
