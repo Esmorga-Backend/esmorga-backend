@@ -49,6 +49,9 @@ jobs:
     name: Run Postman test on Ubuntu
     runs-on: ubuntu-latest
     steps:
+      - name: Sleep for 30 seconds (need to wait for start server)
+        run: sleep 30
+
       - run: curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
       - run: postman login --with-api-key ${{ secrets.postmanToken }}
       - run: postman collection run 25091136-0af5bd1f-1b37-450c-b138-b961128c40ec -e 25091136-b857199d-2fd0-43c3-a231-24249d76d33f
