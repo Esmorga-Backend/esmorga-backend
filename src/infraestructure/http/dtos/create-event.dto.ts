@@ -82,8 +82,8 @@ function IsNotPastDate(validationOptions?: ValidationOptions) {
 }
 
 class LocationDto {
-  @MinLength(1, { message: 'Min 1 characters' })
-  @MaxLength(100, { message: 'Max 100 characters' })
+  @MinLength(1, { message: 'min 1 characters' })
+  @MaxLength(100, { message: 'max 100 characters' })
   @IsString()
   @IsDefined({ message: 'name should not be empty' })
   name: string;
@@ -101,8 +101,8 @@ class LocationDto {
 
 export class CreateEventDto {
   @ApiProperty({ example: 'End of the World Party' })
-  @MinLength(3, { message: 'Min 3 characters' })
-  @MaxLength(100, { message: 'Max 100 characters' })
+  @MinLength(3, { message: 'min 3 characters' })
+  @MaxLength(100, { message: 'max 100 characters' })
   @IsString()
   @IsNotEmpty()
   eventName: string;
@@ -127,8 +127,8 @@ export class CreateEventDto {
     example:
       'Join us for an unforgettable celebration as we dance into the apocalypse.',
   })
-  @MinLength(1, { message: 'Min 1 characters' })
-  @MaxLength(5000, { message: 'Max 5000 characters' })
+  @MinLength(1, { message: 'min 1 characters' })
+  @MaxLength(5000, { message: 'max 5000 characters' })
   @IsString()
   @IsDefined({ message: 'description should not be empty' })
   description: string;
@@ -143,7 +143,7 @@ export class CreateEventDto {
   eventType: EventType;
 
   @ApiProperty({ example: 'image.url' })
-  @MaxLength(500, { message: 'Max 500 characters' })
+  @MaxLength(500, { message: 'max 500 characters' })
   @IsString()
   @IsOptional()
   imageUrl?: string;
@@ -164,15 +164,21 @@ export class CreateEventDto {
 
   @ApiProperty({ example: ['Dance', 'Music'] })
   @IsOptional()
-  @IsArray()
-  @ArrayMaxSize(10)
+  @MinLength(3, { each: true, message: 'min 3 characters for each tag' })
+  @MaxLength(25, { each: true, message: 'max 25 characters for each tag' })
   @IsString({ each: true })
-  @MinLength(3, { each: true })
-  @MaxLength(25, { each: true })
-  @Transform(({ value }) => [
-    ...new Set(
-      value.map((tag) => (typeof tag === 'string' ? tag.toUpperCase() : tag)),
-    ),
-  ])
+  @ArrayMaxSize(10, { message: 'max 10 elements in tags' })
+  @IsArray({ message: 'tags must be an array' })
+  @Transform(({ value }) =>
+    Array.isArray(value)
+      ? [
+          ...new Set(
+            value.map((tag) =>
+              typeof tag === 'string' ? tag.toUpperCase() : tag,
+            ),
+          ),
+        ]
+      : value,
+  )
   tags?: string[];
 }

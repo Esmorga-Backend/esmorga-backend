@@ -55,7 +55,7 @@ describe('[unit-test] [CreateEventDto]', () => {
       expect(errors.length).toEqual(1);
       expect(errors[0].property).toEqual('eventName');
       expect(errors[0].constraints).toEqual({
-        minLength: 'Min 3 characters',
+        minLength: 'min 3 characters',
       });
     });
 
@@ -71,7 +71,7 @@ describe('[unit-test] [CreateEventDto]', () => {
       expect(errors.length).toEqual(1);
       expect(errors[0].property).toEqual('eventName');
       expect(errors[0].constraints).toEqual({
-        maxLength: 'Max 100 characters',
+        maxLength: 'max 100 characters',
       });
     });
 
@@ -207,7 +207,7 @@ describe('[unit-test] [CreateEventDto]', () => {
       expect(errors.length).toEqual(1);
       expect(errors[0].property).toEqual('description');
       expect(errors[0].constraints).toEqual({
-        minLength: 'Min 1 characters',
+        minLength: 'min 1 characters',
       });
     });
 
@@ -223,7 +223,7 @@ describe('[unit-test] [CreateEventDto]', () => {
       expect(errors.length).toEqual(1);
       expect(errors[0].property).toEqual('description');
       expect(errors[0].constraints).toEqual({
-        maxLength: 'Max 5000 characters',
+        maxLength: 'max 5000 characters',
       });
     });
 
@@ -364,14 +364,14 @@ describe('[unit-test] [CreateEventDto]', () => {
       expect(errors.length).toEqual(1);
       expect(errors[0].property).toEqual('imageUrl');
       expect(errors[0].constraints).toEqual({
-        maxLength: 'Max 500 characters',
+        maxLength: 'max 500 characters',
       });
     });
   });
 
   describe('[CreateEventDto] [location] [name]', () => {
     it('Should not accept empty value', async () => {
-      const event = { ...createEventMock };
+      const event = JSON.parse(JSON.stringify(createEventMock));
 
       delete event.location.name;
 
@@ -388,7 +388,7 @@ describe('[unit-test] [CreateEventDto]', () => {
     });
 
     it('Should not accept less than 3 characters', async () => {
-      const event = { ...createEventMock };
+      const event = JSON.parse(JSON.stringify(createEventMock));
 
       event.location.name = '';
 
@@ -400,12 +400,12 @@ describe('[unit-test] [CreateEventDto]', () => {
       expect(errors[0].property).toEqual('location');
       expect(errors[0].children[0].property).toEqual('name');
       expect(errors[0].children[0].constraints).toEqual({
-        minLength: 'Min 1 characters',
+        minLength: 'min 1 characters',
       });
     });
 
     it('Should not accept more than 100 characters', async () => {
-      const event = { ...createEventMock };
+      const event = JSON.parse(JSON.stringify(createEventMock));
 
       event.location.name = 'A'.repeat(200);
 
@@ -417,7 +417,7 @@ describe('[unit-test] [CreateEventDto]', () => {
       expect(errors[0].property).toEqual('location');
       expect(errors[0].children[0].property).toEqual('name');
       expect(errors[0].children[0].constraints).toEqual({
-        maxLength: 'Max 100 characters',
+        maxLength: 'max 100 characters',
       });
     });
 
@@ -451,7 +451,7 @@ describe('[unit-test] [CreateEventDto]', () => {
 
   describe('[CreateEventDto] [location] [lat]', () => {
     it('Should accept empty value if location.long is defined', async () => {
-      const event = { ...createEventMock };
+      const event = JSON.parse(JSON.stringify(createEventMock));
 
       delete event.location.lat;
 
@@ -497,7 +497,7 @@ describe('[unit-test] [CreateEventDto]', () => {
 
   describe('[CreateEventDto] [location] [long]', () => {
     it('Should accept empty value if location.long is defined', async () => {
-      const event = { ...createEventMock };
+      const event = JSON.parse(JSON.stringify(createEventMock));
 
       delete event.location.long;
 
@@ -537,6 +537,130 @@ describe('[unit-test] [CreateEventDto]', () => {
       expect(errors[0].children[0].property).toEqual('long');
       expect(errors[0].children[0].constraints).toEqual({
         isNumber: 'long must be a number',
+      });
+    });
+  });
+
+  describe('[CreateEventDto] [tags]', () => {
+    it('Should not accept less than 3 characters for each array field', async () => {
+      const event = { ...createEventMock };
+
+      event.tags = ['AA'];
+
+      const createEventDto = plainToInstance(CreateEventDto, event);
+
+      const errors = await validate(createEventDto, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('tags');
+      expect(errors[0].constraints).toEqual({
+        minLength: 'min 3 characters for each tag',
+      });
+    });
+
+    it('Should not accept more than 25 characters for each array field', async () => {
+      const event = { ...createEventMock };
+
+      event.tags = ['A'.repeat(30)];
+
+      const createEventDto = plainToInstance(CreateEventDto, event);
+
+      const errors = await validate(createEventDto, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('tags');
+      expect(errors[0].constraints).toEqual({
+        maxLength: 'max 25 characters for each tag',
+      });
+    });
+
+    it('Should not accept more than 10 different tags', async () => {
+      const event = {
+        eventName: 'MobgenFest',
+        eventDate: '2025-03-08T10:05:30.915Z',
+        description: 'Hello World',
+        eventType: 'PARTY',
+        imageUrl: 'img.url',
+        location: {
+          lat: 43.35525182148881,
+          long: -8.41937931298951,
+          name: 'A Coruña',
+        },
+        tags: [
+          'AAA',
+          'AAB',
+          'AAC',
+          'AAD',
+          'AAF',
+          'AAG',
+          'AAH',
+          'AAI',
+          'AAJ',
+          'AAK',
+          'AAAA',
+        ],
+      };
+
+      const createEventDto = plainToInstance(CreateEventDto, event);
+
+      const errors = await validate(createEventDto, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('tags');
+      expect(errors[0].constraints).toEqual({
+        arrayMaxSize: 'max 10 elements in tags',
+      });
+    });
+
+    it('Should only accept string values inside the array', async () => {
+      const event = {
+        eventName: 'MobgenFest',
+        eventDate: '2025-03-08T10:05:30.915Z',
+        description: 'Hello World',
+        eventType: 'PARTY',
+        imageUrl: 'img.url',
+        location: {
+          lat: 43.35525182148881,
+          long: -8.41937931298951,
+          name: 'A Coruña',
+        },
+        tags: [134],
+      };
+
+      const createEventDto = plainToInstance(CreateEventDto, event);
+
+      const errors = await validate(createEventDto, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('tags');
+      expect(errors[0].constraints).toEqual({
+        isString: 'each value in tags must be a string',
+      });
+    });
+
+    it('Should only accept an array as tags field', async () => {
+      const event = {
+        eventName: 'MobgenFest',
+        eventDate: '2025-03-08T10:05:30.915Z',
+        description: 'Hello World',
+        eventType: 'PARTY',
+        imageUrl: 'img.url',
+        location: {
+          lat: 43.35525182148881,
+          long: -8.41937931298951,
+          name: 'A Coruña',
+        },
+        tags: 'test',
+      };
+
+      const createEventDto = plainToInstance(CreateEventDto, event);
+
+      const errors = await validate(createEventDto, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('tags');
+      expect(errors[0].constraints).toEqual({
+        isArray: 'tags must be an array',
       });
     });
   });
