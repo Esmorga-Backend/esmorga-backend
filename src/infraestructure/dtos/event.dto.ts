@@ -70,6 +70,7 @@ export class EventDTO {
   location: Location;
 
   @Expose()
+  @Transform(({ value }) => (value.length > 0 ? value : undefined))
   @IsArray()
   @IsString({ each: true })
   @Type(() => String)
