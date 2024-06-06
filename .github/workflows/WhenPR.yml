@@ -19,6 +19,7 @@ jobs:
       REDIS_HOST: "redis-10358.c6.eu-west-1-1.ec2.redns.redis-cloud.com"
       REDIS_PORT: 10358
       NODE_ENV: "LOCAL"
+      AioToken: "${{ secrets.AoiToken }}"
     steps:
       - name: Start MongoDB
         uses: supercharge/mongodb-github-action@1.11.0

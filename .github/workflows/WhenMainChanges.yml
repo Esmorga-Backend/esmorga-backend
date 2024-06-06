@@ -34,19 +34,12 @@ jobs:
     needs: Deploy-QA
     name: Run E2E test on Ubuntu
     runs-on: ubuntu-latest
+    env:
+      AioToken: "${{ secrets.AoiToken }}"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '22.1'
       - run: npm ci
-      - run: rm test-e2e/cypress/e2e/features/*.feature  
-      - name: Get Test to Run From Jira
-        run: |
-          curl -X POST \
-          "https://tcms.aiojiraapps.com/aio-tcms/api/v1/project/MOB/testcase/export/feature?type=NONE" \
-          -H "accept: application/octet-stream" -H "Authorization: AioAuth ${{ secrets.AoiToken }}" -H "Content-Type: application/json" -d '{"statusID":{"comparisonType":"IN","list":[3]},"automationStatusID":{"comparisonType":"IN","list":[4]},"customFields":[{"name":"Test type","value":{"comparisonType":"IN","list":[3]}}]}}' \
-          -o features.zip
-        
-      - run: unzip features.zip -d test-e2e/cypress/e2e/features/
       - run: npm run test:e2e-run-cypress
