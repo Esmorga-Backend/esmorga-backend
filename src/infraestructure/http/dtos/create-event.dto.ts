@@ -93,9 +93,9 @@ class LocationDto {
   @ValidateIf((location) => location.long)
   lat?: number;
 
+  @IsNumber({}, { message: 'long must be a number' })
+  @IsNotEmpty({ message: 'long must be defined if lat is already define' })
   @ValidateIf((location) => location.lat)
-  @IsNotEmpty()
-  @IsNumber()
   long?: number;
 }
 

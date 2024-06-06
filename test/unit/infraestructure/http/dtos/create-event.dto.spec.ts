@@ -494,4 +494,50 @@ describe('[unit-test] [CreateEventDto]', () => {
       });
     });
   });
+
+  describe('[CreateEventDto] [location] [long]', () => {
+    it('Should accept empty value if location.long is defined', async () => {
+      const event = { ...createEventMock };
+
+      delete event.location.long;
+
+      const createEventDto = plainToInstance(CreateEventDto, event);
+
+      const errors = await validate(createEventDto, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('location');
+      expect(errors[0].children[0].property).toEqual('long');
+      expect(errors[0].children[0].constraints).toEqual({
+        isNotEmpty: 'long must be defined if lat is already define',
+      });
+    });
+
+    it('Should only accept numbers as value', async () => {
+      const event = {
+        eventName: 'MobgenFest',
+        eventDate: '2025-03-08T10:05:30.915Z',
+        description: 'Hello World',
+        eventType: 'PARTY',
+        imageUrl: 'img.url',
+        location: {
+          lat: -8.41937931298951,
+          long: 'test',
+          name: 'A Coruña',
+        },
+        tags: ['Meal', 'Music'],
+      };
+
+      const createEventDto = plainToInstance(CreateEventDto, event);
+
+      const errors = await validate(createEventDto, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('location');
+      expect(errors[0].children[0].property).toEqual('long');
+      expect(errors[0].children[0].constraints).toEqual({
+        isNumber: 'long must be a number',
+      });
+    });
+  });
 });
