@@ -3,6 +3,7 @@ import { Transform, Type } from 'class-transformer';
 import {
   ArrayMaxSize,
   IsArray,
+  IsDefined,
   IsEnum,
   IsNotEmpty,
   IsNumber,
@@ -80,21 +81,6 @@ function IsNotPastDate(validationOptions?: ValidationOptions) {
   };
 }
 
-function IsNotNullOrEmpty(validationOptions?: ValidationOptions) {
-  return function (target: object, propertyName: string) {
-    registerDecorator({
-      target: target.constructor,
-      propertyName: propertyName,
-      options: validationOptions,
-      validator: {
-        validate(value: any) {
-          return value !== null || value !== undefined;
-        },
-      },
-    });
-  };
-}
-
 class LocationDto {
   @IsNotEmpty()
   @IsString()
@@ -131,6 +117,12 @@ export class CreateEventDto {
   @IsNotEmpty()
   eventDate: string;
 
+  /**
+   * description can not use @IsNotEmpty() cause this decorator cause it
+   * checks !== '', !== null and !== undefined. With !== '', @MinLength()
+   * for 1 char will not be thrown.
+   * Message for @IsDefined() is addapted as @IsNotEmpty()
+   */
   @ApiProperty({
     example:
       'Join us for an unforgettable celebration as we dance into the apocalypse.',
@@ -138,16 +130,16 @@ export class CreateEventDto {
   @MinLength(1, { message: 'Min 1 characters' })
   @MaxLength(5000, { message: 'Max 5000 characters' })
   @IsString()
-  @IsNotNullOrEmpty({ message: 'description should not be empty' })
+  @IsDefined({ message: 'description should not be empty' })
   description: string;
 
   @ApiProperty({ example: 'Party' })
-  @IsNotEmpty()
-  @IsString()
   @Transform(({ value }) =>
     typeof value === 'string' ? value.toUpperCase() : value,
   )
   @IsEnum(EventType)
+  @IsString()
+  @IsNotEmpty()
   eventType: EventType;
 
   @ApiProperty({ example: 'image.url' })

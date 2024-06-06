@@ -74,6 +74,32 @@ describe('[unit-test] [CreateEventDto]', () => {
         maxLength: 'Max 100 characters',
       });
     });
+
+    it('Should only accept string values', async () => {
+      const event = {
+        eventName: 1345,
+        eventDate: '2025-03-08T10:05:30.915Z',
+        description: 'Hello World',
+        eventType: 'PARTY',
+        imageUrl: 'img.url',
+        location: {
+          lat: 43.35525182148881,
+          long: -8.41937931298951,
+          name: 'A Coruña',
+        },
+        tags: ['Meal', 'Music'],
+      };
+
+      const createEventDto = plainToInstance(CreateEventDto, event);
+
+      const errors = await validate(createEventDto, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('eventName');
+      expect(errors[0].constraints).toEqual({
+        isString: 'eventName must be a string',
+      });
+    });
   });
 
   describe('[CreateEventDto] [eventDate]', () => {
@@ -109,22 +135,6 @@ describe('[unit-test] [CreateEventDto]', () => {
       });
     });
 
-    it('Should not accept empty value', async () => {
-      const event = { ...createEventMock };
-
-      delete event.eventDate;
-
-      const createEventDto = plainToInstance(CreateEventDto, event);
-
-      const errors = await validate(createEventDto, { stopAtFirstError: true });
-
-      expect(errors.length).toEqual(1);
-      expect(errors[0].property).toEqual('eventDate');
-      expect(errors[0].constraints).toEqual({
-        isNotEmpty: 'eventDate should not be empty',
-      });
-    });
-
     it('Should only accept ISO format', async () => {
       const event = { ...createEventMock };
 
@@ -138,6 +148,32 @@ describe('[unit-test] [CreateEventDto]', () => {
       expect(errors[0].property).toEqual('eventDate');
       expect(errors[0].constraints).toEqual({
         matches: 'Date must be in ISO format (yyyy-MM-ddTHH:mm:ss.SSSZ)',
+      });
+    });
+
+    it('Should only accept string value', async () => {
+      const event = {
+        eventName: 'MongoFest',
+        eventDate: 123,
+        description: 'Hello World',
+        eventType: 'PARTY',
+        imageUrl: 'img.url',
+        location: {
+          lat: 43.35525182148881,
+          long: -8.41937931298951,
+          name: 'A Coruña',
+        },
+        tags: ['Meal', 'Music'],
+      };
+
+      const createEventDto = plainToInstance(CreateEventDto, event);
+
+      const errors = await validate(createEventDto, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('eventDate');
+      expect(errors[0].constraints).toEqual({
+        isString: 'eventDate must be a string',
       });
     });
   });
@@ -155,7 +191,7 @@ describe('[unit-test] [CreateEventDto]', () => {
       expect(errors.length).toEqual(1);
       expect(errors[0].property).toEqual('description');
       expect(errors[0].constraints).toEqual({
-        isNotEmpty: 'description should not be empty',
+        isDefined: 'description should not be empty',
       });
     });
 
@@ -188,6 +224,32 @@ describe('[unit-test] [CreateEventDto]', () => {
       expect(errors[0].property).toEqual('description');
       expect(errors[0].constraints).toEqual({
         maxLength: 'Max 5000 characters',
+      });
+    });
+
+    it('Should only accept string value', async () => {
+      const event = {
+        eventName: 'MongoFest',
+        eventDate: '2025-03-08T10:05:30.915Z',
+        description: 123,
+        eventType: 'PARTY',
+        imageUrl: 'img.url',
+        location: {
+          lat: 43.35525182148881,
+          long: -8.41937931298951,
+          name: 'A Coruña',
+        },
+        tags: ['Meal', 'Music'],
+      };
+
+      const createEventDto = plainToInstance(CreateEventDto, event);
+
+      const errors = await validate(createEventDto, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('description');
+      expect(errors[0].constraints).toEqual({
+        isString: 'description must be a string',
       });
     });
   });
