@@ -27,6 +27,22 @@ describe('[unit-test] [CreateEventDto]', () => {
   });
 
   describe('[CreateEventDto] [eventName]', () => {
+    it('Should not accept empty value', async () => {
+      const event = { ...createEventMock };
+
+      delete event.eventName;
+
+      const createEventDto = plainToInstance(CreateEventDto, event);
+
+      const errors = await validate(createEventDto, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('eventName');
+      expect(errors[0].constraints).toEqual({
+        isNotEmpty: 'eventName should not be empty',
+      });
+    });
+
     it('Should not accept less than 3 characters', async () => {
       const event = { ...createEventMock };
 
@@ -56,22 +72,6 @@ describe('[unit-test] [CreateEventDto]', () => {
       expect(errors[0].property).toEqual('eventName');
       expect(errors[0].constraints).toEqual({
         maxLength: 'Max 100 characters',
-      });
-    });
-
-    it('Should not accept empty value', async () => {
-      const event = { ...createEventMock };
-
-      delete event.eventName;
-
-      const createEventDto = plainToInstance(CreateEventDto, event);
-
-      const errors = await validate(createEventDto, { stopAtFirstError: true });
-
-      expect(errors.length).toEqual(1);
-      expect(errors[0].property).toEqual('eventName');
-      expect(errors[0].constraints).toEqual({
-        isNotEmpty: 'eventName should not be empty',
       });
     });
   });
@@ -138,6 +138,56 @@ describe('[unit-test] [CreateEventDto]', () => {
       expect(errors[0].property).toEqual('eventDate');
       expect(errors[0].constraints).toEqual({
         matches: 'Date must be in ISO format (yyyy-MM-ddTHH:mm:ss.SSSZ)',
+      });
+    });
+  });
+
+  describe('[CreateEventDto] [description]', () => {
+    it('Should not accept empty value', async () => {
+      const event = { ...createEventMock };
+
+      delete event.description;
+
+      const createEventDto = plainToInstance(CreateEventDto, event);
+
+      const errors = await validate(createEventDto, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('description');
+      expect(errors[0].constraints).toEqual({
+        isNotEmpty: 'description should not be empty',
+      });
+    });
+
+    it('Should not accept less than 1 characters', async () => {
+      const event = { ...createEventMock };
+
+      event.description = '';
+
+      const createEventDto = plainToInstance(CreateEventDto, event);
+
+      const errors = await validate(createEventDto, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('description');
+      expect(errors[0].constraints).toEqual({
+        minLength: 'Min 1 characters',
+      });
+    });
+
+    it('Should not accept more than 100 characters', async () => {
+      const event = { ...createEventMock };
+
+      event.description = 'A'.repeat(5001);
+
+      const createEventDto = plainToInstance(CreateEventDto, event);
+
+      const errors = await validate(createEventDto, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('description');
+      expect(errors[0].constraints).toEqual({
+        maxLength: 'Max 5000 characters',
       });
     });
   });

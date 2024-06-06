@@ -80,6 +80,21 @@ function IsNotPastDate(validationOptions?: ValidationOptions) {
   };
 }
 
+function IsNotNullOrEmpty(validationOptions?: ValidationOptions) {
+  return function (target: object, propertyName: string) {
+    registerDecorator({
+      target: target.constructor,
+      propertyName: propertyName,
+      options: validationOptions,
+      validator: {
+        validate(value: any) {
+          return value !== null || value !== undefined;
+        },
+      },
+    });
+  };
+}
+
 class LocationDto {
   @IsNotEmpty()
   @IsString()
@@ -120,10 +135,10 @@ export class CreateEventDto {
     example:
       'Join us for an unforgettable celebration as we dance into the apocalypse.',
   })
-  @IsNotEmpty()
+  @MinLength(1, { message: 'Min 1 characters' })
+  @MaxLength(5000, { message: 'Max 5000 characters' })
   @IsString()
-  @MinLength(1)
-  @MaxLength(5000)
+  @IsNotNullOrEmpty({ message: 'description should not be empty' })
   description: string;
 
   @ApiProperty({ example: 'Party' })
