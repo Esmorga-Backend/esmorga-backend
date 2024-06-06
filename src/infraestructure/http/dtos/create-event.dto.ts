@@ -88,9 +88,9 @@ class LocationDto {
   @IsDefined({ message: 'name should not be empty' })
   name: string;
 
+  @IsNumber({}, { message: 'lat must be a number' })
+  @IsNotEmpty({ message: 'lat must be defined if long is already define' })
   @ValidateIf((location) => location.long)
-  @IsNotEmpty()
-  @IsNumber()
   lat?: number;
 
   @ValidateIf((location) => location.lat)
