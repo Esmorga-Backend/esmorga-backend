@@ -253,4 +253,75 @@ describe('[unit-test] [CreateEventDto]', () => {
       });
     });
   });
+
+  describe('[CreateEventDto] [eventType]', () => {
+    it('Should not accept empty value', async () => {
+      const event = { ...createEventMock };
+
+      delete event.eventType;
+
+      const createEventDto = plainToInstance(CreateEventDto, event);
+
+      const errors = await validate(createEventDto, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('eventType');
+      expect(errors[0].constraints).toEqual({
+        isNotEmpty: 'eventType should not be empty',
+      });
+    });
+
+    it('Should only accept string value', async () => {
+      const event = {
+        eventName: 'MongoFest',
+        eventDate: '2025-03-08T10:05:30.915Z',
+        description: 'Hello World',
+        eventType: 123,
+        imageUrl: 'img.url',
+        location: {
+          lat: 43.35525182148881,
+          long: -8.41937931298951,
+          name: 'A Coruña',
+        },
+        tags: ['Meal', 'Music'],
+      };
+
+      const createEventDto = plainToInstance(CreateEventDto, event);
+
+      const errors = await validate(createEventDto, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('eventType');
+      expect(errors[0].constraints).toEqual({
+        isString: 'eventType must be a string',
+      });
+    });
+
+    it('Should only accept value predifined values', async () => {
+      const event = {
+        eventName: 'MongoFest',
+        eventDate: '2025-03-08T10:05:30.915Z',
+        description: 'Hello World',
+        eventType: 'TEST',
+        imageUrl: 'img.url',
+        location: {
+          lat: 43.35525182148881,
+          long: -8.41937931298951,
+          name: 'A Coruña',
+        },
+        tags: ['Meal', 'Music'],
+      };
+
+      const createEventDto = plainToInstance(CreateEventDto, event);
+
+      const errors = await validate(createEventDto, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('eventType');
+      expect(errors[0].constraints).toEqual({
+        isEnum:
+          'eventType must be one of the following values: PARTY, SPORT, FOOD, CHARITY, GAMES',
+      });
+    });
+  });
 });
