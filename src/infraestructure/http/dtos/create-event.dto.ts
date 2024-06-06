@@ -100,10 +100,10 @@ class LocationDto {
 
 export class CreateEventDto {
   @ApiProperty({ example: 'End of the World Party' })
-  @IsNotEmpty()
-  @IsString()
   @MinLength(3)
   @MaxLength(100)
+  @IsString()
+  @IsNotEmpty()
   eventName: string;
 
   @ApiProperty({ example: '2025-03-08T10:05:30.915Z' })
