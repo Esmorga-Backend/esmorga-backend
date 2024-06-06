@@ -59,7 +59,7 @@ describe('[unit-test] [CreateEventDto]', () => {
       });
     });
 
-    it('Should only accept string value', async () => {
+    it('Should not accept empty value', async () => {
       const event = { ...createEventMock };
 
       event.eventName = null;
@@ -77,6 +77,22 @@ describe('[unit-test] [CreateEventDto]', () => {
   });
 
   describe('[CreateEventDto] [eventDate]', () => {
+    it('Should not accept empty value', async () => {
+      const event = { ...createEventMock };
+
+      delete event.eventDate;
+
+      const createEventDto = plainToInstance(CreateEventDto, event);
+
+      const errors = await validate(createEventDto, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('eventDate');
+      expect(errors[0].constraints).toEqual({
+        isNotEmpty: 'eventDate should not be empty',
+      });
+    });
+
     it('Should not accept past dates', async () => {
       const event = { ...createEventMock };
 
@@ -88,9 +104,41 @@ describe('[unit-test] [CreateEventDto]', () => {
 
       expect(errors.length).toEqual(1);
       expect(errors[0].property).toEqual('eventDate');
-      expect(errors[0].constraints).toEqual(
-        expect.objectContaining('eventDate can not be a past date'),
-      );
+      expect(errors[0].constraints).toEqual({
+        customValidation: 'eventDate can not be a past date',
+      });
+    });
+
+    it('Should not accept empty value', async () => {
+      const event = { ...createEventMock };
+
+      delete event.eventDate;
+
+      const createEventDto = plainToInstance(CreateEventDto, event);
+
+      const errors = await validate(createEventDto, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('eventDate');
+      expect(errors[0].constraints).toEqual({
+        isNotEmpty: 'eventDate should not be empty',
+      });
+    });
+
+    it('Should only accept ISO format', async () => {
+      const event = { ...createEventMock };
+
+      event.eventDate = '02-02-1996T03:04:05.000Z';
+
+      const createEventDto = plainToInstance(CreateEventDto, event);
+
+      const errors = await validate(createEventDto, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('eventDate');
+      expect(errors[0].constraints).toEqual({
+        matches: 'eventDate must be in ISO format (yyyy-MM-ddTHH:mm:ss.SSSZ)',
+      });
     });
   });
 });

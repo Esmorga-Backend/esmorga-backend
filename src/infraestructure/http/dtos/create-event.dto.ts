@@ -107,13 +107,13 @@ export class CreateEventDto {
   eventName: string;
 
   @ApiProperty({ example: '2025-03-08T10:05:30.915Z' })
-  @IsNotEmpty()
-  @IsString()
+  @IsValidDate({ message: 'eventDate must be a valid date and time' })
+  @IsNotPastDate({ message: 'eventDate can not be a past date' })
   @Matches(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/, {
     message: 'eventDate must be in ISO format (yyyy-MM-ddTHH:mm:ss.SSSZ)',
   })
-  @IsValidDate({ message: 'eventDate must be a valid date and time' })
-  @IsNotPastDate({ message: 'eventDate can not be a past date' })
+  @IsString()
+  @IsNotEmpty()
   eventDate: string;
 
   @ApiProperty({
