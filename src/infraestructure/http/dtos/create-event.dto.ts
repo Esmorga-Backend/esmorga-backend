@@ -143,9 +143,9 @@ export class CreateEventDto {
   eventType: EventType;
 
   @ApiProperty({ example: 'image.url' })
-  @IsOptional()
+  @MaxLength(500, { message: 'Max 500 characters' })
   @IsString()
-  @MaxLength(500)
+  @IsOptional()
   imageUrl?: string;
 
   @ApiProperty({

@@ -324,4 +324,48 @@ describe('[unit-test] [CreateEventDto]', () => {
       });
     });
   });
+
+  describe('[CreateEventDto] [imageUrl]', () => {
+    it('Should only accept string value', async () => {
+      const event = {
+        eventName: 'MongoFest',
+        eventDate: '2025-03-08T10:05:30.915Z',
+        description: 'Hello world',
+        eventType: 'PARTY',
+        imageUrl: 123,
+        location: {
+          lat: 43.35525182148881,
+          long: -8.41937931298951,
+          name: 'A Coruña',
+        },
+        tags: ['Meal', 'Music'],
+      };
+
+      const createEventDto = plainToInstance(CreateEventDto, event);
+
+      const errors = await validate(createEventDto, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('imageUrl');
+      expect(errors[0].constraints).toEqual({
+        isString: 'imageUrl must be a string',
+      });
+    });
+
+    it('Should not accept more than 500 characters', async () => {
+      const event = { ...createEventMock };
+
+      event.imageUrl = 'A'.repeat(600);
+
+      const createEventDto = plainToInstance(CreateEventDto, event);
+
+      const errors = await validate(createEventDto, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('imageUrl');
+      expect(errors[0].constraints).toEqual({
+        maxLength: 'Max 500 characters',
+      });
+    });
+  });
 });
