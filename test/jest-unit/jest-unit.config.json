@@ -10,9 +10,9 @@
     "^.+\\.(t|j)s$": "ts-jest"
   },
   "collectCoverageFrom": [
-    "<rootDir>/src/**/*.{ts,tsx}"
+    "<rootDir>/src/**"
   ],
-  "coverageDirectory": "<rootDir>/coverage/component",
+  "coverageDirectory": "<rootDir>/coverage/unit",
   "testEnvironment": "node",
   "coveragePathIgnorePatterns": [
     "/main\\.ts$",
@@ -21,7 +21,7 @@
   ],
   "testPathIgnorePatterns": [
     "/node_modules/",
-    "/test/unit/"
+    "/test/jest-component/"
   ],
   "coverageReporters": [
     "json",

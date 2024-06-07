@@ -49,8 +49,6 @@ describe('Get events - [GET v1/events]', () => {
           imageUrl: futureEventMockDB.imageUrl,
           location: futureEventMockDB.location,
           tags: futureEventMockDB.tags,
-          createdAt: futureEventMockDB.createdAt.toISOString(),
-          updatedAt: futureEventMockDB.updatedAt.toISOString(),
         },
       ],
     });
@@ -76,8 +74,6 @@ describe('Get events - [GET v1/events]', () => {
           imageUrl: futureEventMockDB.imageUrl,
           location: futureEventMockDB.location,
           tags: futureEventMockDB.tags,
-          createdAt: futureEventMockDB.createdAt.toISOString(),
-          updatedAt: futureEventMockDB.updatedAt.toISOString(),
         },
       ],
     });

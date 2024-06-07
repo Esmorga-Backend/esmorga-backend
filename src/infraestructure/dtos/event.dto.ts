@@ -26,6 +26,7 @@ class Location {
 export class EventDto {
   @Transform(({ value }) => value.toString(), { toClassOnly: true })
   @Expose({ name: '_id' })
+  @Transform((value) => value.obj._id.toString())
   @IsString()
   @ApiProperty({ example: '6656e23640e1fdb4ceb23cc9' })
   eventId: string;
@@ -70,19 +71,10 @@ export class EventDto {
   location: Location;
 
   @Expose()
+  @Transform(({ value }) => (value.length > 0 ? value : undefined))
   @IsArray()
   @IsString({ each: true })
   @Type(() => String)
   @ApiProperty({ example: '["Meal", "Music"]' })
   tags: string[];
-
-  @Expose()
-  @IsDateString()
-  @ApiProperty({ example: '2024-03-08T10:05:30.915Z' })
-  createdAt: Date;
-
-  @Expose()
-  @IsDateString()
-  @ApiProperty({ example: '2024-03-08T10:05:30.915Z' })
-  updatedAt: Date;
 }
