@@ -5,17 +5,13 @@ import { EventListDto } from '../../../dtos';
 const BAD_REQUEST_ERROR_COMMON_PROPERTIES = {
   title: {
     type: 'string',
-    example: 'BadRequestError',
+    example: 'badRequestError',
   },
   status: { type: 'number', example: 400 },
   type: { type: 'string', example: '' },
   detail: {
     type: 'string',
-    example: 'unexpected error',
-  },
-  errors: {
-    type: 'array',
-    example: [],
+    example: 'some inputs are missing',
   },
 };
 
@@ -58,6 +54,10 @@ export const CREATE_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
       properties: {
         ...BAD_REQUEST_ERROR_COMMON_PROPERTIES,
         type: { example: PATHS.POST_EVENT },
+        errors: {
+          type: 'array',
+          example: ['location.name should not be empty'],
+        },
       },
     },
   },
@@ -69,9 +69,6 @@ export const CREATE_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
       properties: {
         ...INTERNAL_ERROR_COMMON_PROPERTIES,
         type: { example: PATHS.POST_EVENT },
-        errors: {
-          example: ['location.name should not be empty'],
-        },
       },
     },
   },
