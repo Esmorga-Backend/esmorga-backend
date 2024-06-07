@@ -60,7 +60,7 @@ export class EventDto {
   @IsString()
   @IsOptional()
   @ApiPropertyOptional({ example: 'img.url' })
-  imageUrl: string;
+  imageUrl?: string;
 
   @Expose()
   @ValidateNested()

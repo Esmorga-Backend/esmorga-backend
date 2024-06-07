@@ -92,14 +92,12 @@ class LocationDto {
   @IsNumber({}, { message: 'lat must be a number' })
   @IsNotEmpty({ message: 'lat must be defined if long is already define' })
   @ValidateIf((location) => location.long)
-  @IsOptional()
   @ApiPropertyOptional({ example: 43.35525182148881 })
   lat?: number;
 
   @IsNumber({}, { message: 'long must be a number' })
   @IsNotEmpty({ message: 'long must be defined if lat is already define' })
   @ValidateIf((location) => location.lat)
-  @IsOptional()
   @ApiPropertyOptional({ example: -8.41937931298951 })
   long?: number;
 }
