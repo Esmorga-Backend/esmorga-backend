@@ -11,11 +11,9 @@ export class CreateEventService {
    *
    * @param createEventDto - Data transfer object containing event details.
    */
-  async create(createEventDto: CreateEventDto): Promise<void> {
+  async create(createEventDto: CreateEventDto) {
     try {
-      const currentTime = new Date();
-      const event = { ...createEventDto, createdAt: currentTime };
-      await this.eventRepository.createEvent(event);
+      await this.eventRepository.createEvent(createEventDto);
     } catch (error) {
       throw error;
     }

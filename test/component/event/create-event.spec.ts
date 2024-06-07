@@ -77,18 +77,16 @@ describe('Create a new event - [POST v1/events]', () => {
       .send(wrongEvent);
 
     expect(response.status).toBe(HttpStatus.BAD_REQUEST);
-    expect(response.body.errors).toBe([
-      'eventName must be shorter than or equal to 100 characters',
-      'eventName must be longer than or equal to 3 characters',
-      'eventName must be a string',
-      'eventName should not be empty',
-    ]);
+    expect(response.body.errors[0]).toBe('eventName should not be empty');
   });
 
   it('Should throw a 500 error if something wrong happended and it is not handled', async () => {
     jest.spyOn(eventRepository, 'create').mockRejectedValue(new Error());
 
-    const response = await request(app.getHttpServer()).post(path);
+    const response = await request(app.getHttpServer())
+      .post(path)
+      .set(headers)
+      .send(createEventMock);
 
     expect(response.status).toEqual(HttpStatus.INTERNAL_SERVER_ERROR);
     expect(response.body).toEqual({

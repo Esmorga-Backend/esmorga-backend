@@ -8,7 +8,7 @@ export class Location {
   @Prop({ required: false })
   long: number;
 
-  @Prop({ required: false })
+  @Prop({ required: true })
   name: string;
 }
 
