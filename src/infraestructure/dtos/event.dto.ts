@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsString,
   IsDateString,
@@ -6,20 +6,26 @@ import {
   IsNumber,
   ValidateNested,
   IsObject,
+  IsOptional,
 } from 'class-validator';
 import { Expose, Transform, Type } from 'class-transformer';
 
-class Location {
+class LocationDto {
   @Expose()
   @IsNumber()
-  lat: number;
+  @IsOptional()
+  @ApiPropertyOptional({ example: 43.35525182148881 })
+  lat?: number;
 
   @Expose()
   @IsNumber()
+  @IsOptional()
+  @ApiPropertyOptional({ example: -8.41937931298951 })
   long: number;
 
   @Expose()
   @IsString()
+  @ApiProperty({ example: 'A Coruña' })
   name: string;
 }
 
@@ -52,28 +58,23 @@ export class EventDto {
 
   @Expose()
   @IsString()
-  @ApiProperty({ example: 'img.url' })
+  @IsOptional()
+  @ApiPropertyOptional({ example: 'img.url' })
   imageUrl: string;
 
   @Expose()
   @ValidateNested()
-  @Type(() => Location)
+  @Type(() => LocationDto)
   @IsObject()
-  @ApiProperty({
-    type: 'object',
-    properties: {
-      lat: { type: 'number', example: 43.35525182148881 },
-      long: { type: 'number', example: -8.41937931298951 },
-      name: { type: 'string', example: 'A Coruña' },
-    },
-  })
-  location: Location;
+  @ApiProperty({ type: LocationDto })
+  location: LocationDto;
 
   @Expose()
   @Transform(({ value }) => (value.length > 0 ? value : undefined))
   @IsArray()
   @IsString({ each: true })
   @Type(() => String)
-  @ApiProperty({ example: '["Meal", "Music"]' })
-  tags: string[];
+  @IsOptional()
+  @ApiPropertyOptional({ example: '["Meal", "Music"]' })
+  tags?: string[];
 }

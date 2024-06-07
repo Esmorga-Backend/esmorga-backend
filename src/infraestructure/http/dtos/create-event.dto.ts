@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
 import {
   ArrayMaxSize,
@@ -86,16 +86,21 @@ class LocationDto {
   @MaxLength(100, { message: 'max 100 characters' })
   @IsString()
   @IsDefined({ message: 'name should not be empty' })
+  @ApiProperty({ example: 'A Coruña' })
   name: string;
 
   @IsNumber({}, { message: 'lat must be a number' })
   @IsNotEmpty({ message: 'lat must be defined if long is already define' })
   @ValidateIf((location) => location.long)
+  @IsOptional()
+  @ApiPropertyOptional({ example: 43.35525182148881 })
   lat?: number;
 
   @IsNumber({}, { message: 'long must be a number' })
   @IsNotEmpty({ message: 'long must be defined if lat is already define' })
   @ValidateIf((location) => location.lat)
+  @IsOptional()
+  @ApiPropertyOptional({ example: -8.41937931298951 })
   long?: number;
 }
 
@@ -142,27 +147,20 @@ export class CreateEventDto {
   @IsNotEmpty()
   eventType: EventType;
 
-  @ApiProperty({ example: 'image.url' })
+  @ApiPropertyOptional({ example: 'image.url' })
   @MaxLength(500, { message: 'max 500 characters' })
   @IsString()
   @IsOptional()
   imageUrl?: string;
 
-  @ApiProperty({
-    type: 'object',
-    properties: {
-      name: { type: 'string', example: 'A Coruña' },
-      lat: { type: 'number', example: 43.35525182148881 },
-      long: { type: 'number', example: -8.41937931298951 },
-    },
-  })
+  @ApiProperty({ type: LocationDto })
   @IsNotEmpty()
   @IsObject()
   @ValidateNested()
   @Type(() => LocationDto)
   location: LocationDto;
 
-  @ApiProperty({ example: ['Dance', 'Music'] })
+  @ApiPropertyOptional({ example: ['Dance', 'Music'] })
   @IsOptional()
   @MinLength(3, { each: true, message: 'min 3 characters for each tag' })
   @MaxLength(25, { each: true, message: 'max 25 characters for each tag' })
