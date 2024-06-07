@@ -7,7 +7,7 @@ export class MongoRepository<E> implements DBRepository<E> {
   /**
    * A document with the new event is saved in the collection.
    */
-  async create(event): Promise<void> {
+  async create(event) {
     await this.entityModel.create(event);
   }
 

@@ -21,8 +21,10 @@ export class EventRepository extends MongoRepository<EventSchema> {
    *
    * @throws {DataBaseInternalError} - If something wrong happend and it's not handle.
    */
-  async createEvent(event: CreateEventDto) {
+  async createEvent(createEventDto: CreateEventDto) {
     try {
+      const event = new this.eventModel(createEventDto);
+
       await this.create(event);
     } catch (error) {
       throw new DataBaseInternalError();
