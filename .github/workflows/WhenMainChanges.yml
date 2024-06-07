@@ -50,8 +50,9 @@ jobs:
         
       - run: unzip features.zip -d test-e2e/cypress/e2e/features/
       - run: npm run test:e2e-run-cypress
+        id: test-cypress
       - name: Send custom JSON data to Slack workflow
-        if: ${{ step5.result != 'success' }}
+        if: steps.test-cypress.outcome == 'success'
         uses: slackapi/slack-github-action@v1.26.0
         with:
           # This data can be any valid JSON from a previous step in the GitHub Action
@@ -72,9 +73,9 @@ jobs:
       - run: curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
       - run: postman login --with-api-key ${{ secrets.postmanToken }}
       - run: postman collection run 25091136-0af5bd1f-1b37-450c-b138-b961128c40ec -e 25091136-b857199d-2fd0-43c3-a231-24249d76d33f
-        
+        id: test-postman
       - name: Send custom JSON data to Slack workflow
-        if: ${{ step3.result != 'success' }}
+        if: steps.test-postman.outcome == 'success'
         uses: slackapi/slack-github-action@v1.26.0
         with:
           # This data can be any valid JSON from a previous step in the GitHub Action
