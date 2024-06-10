@@ -17,7 +17,6 @@ export class TokensRepository extends MongoRepository<TokensSchema> {
     try {
       await this.save({ uuid, accessToken, refreshToken });
     } catch (error) {
-      console.log({ error });
       throw new DataBaseInternalError();
     }
   }

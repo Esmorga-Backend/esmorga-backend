@@ -35,8 +35,6 @@ export class LoginService {
       const { accessToken, refreshToken } =
         await this.generateTokenPair.generateTokens(uuid);
 
-      console.log({ accessToken, refreshToken });
-
       await this.tokensRepository.saveTokens(uuid, accessToken, refreshToken);
       return adaptedUserProfile;
     } catch (error) {
