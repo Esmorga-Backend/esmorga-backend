@@ -90,10 +90,10 @@ describe('Create a new event - [POST v1/events]', () => {
 
     expect(response.status).toEqual(HttpStatus.INTERNAL_SERVER_ERROR);
     expect(response.body).toEqual({
-      title: 'InternalSerError',
+      title: 'internalServerError',
       status: HttpStatus.INTERNAL_SERVER_ERROR,
       type: path,
-      detail: 'Unexpected error',
+      detail: 'unexpected error',
       errors: ['Internal server error occurred in database operation'],
     });
   });

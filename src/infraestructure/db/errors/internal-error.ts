@@ -4,8 +4,8 @@ export class DataBaseInternalError extends HttpException {
   constructor() {
     super(
       {
-        title: 'InternalSerError',
-        detail: 'Unexpected error',
+        title: 'internalServerError',
+        detail: 'unexpected error',
         message: 'Internal server error occurred in database operation',
       },
       HttpStatus.INTERNAL_SERVER_ERROR,
