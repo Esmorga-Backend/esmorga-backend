@@ -17,7 +17,13 @@ export class TokensRepository extends MongoRepository<TokensSchema> {
 
   async saveTokens(uuid: string, accessToken: string, refreshToken: string) {
     try {
-      await this.save({ uuid, accessToken, refreshToken });
+      const pairOfTokens = new this.tokensModel({
+        uuid,
+        accessToken,
+        refreshToken,
+      });
+
+      await this.save(pairOfTokens);
     } catch (error) {
       throw new DataBaseInternalError();
     }
@@ -34,6 +40,14 @@ export class TokensRepository extends MongoRepository<TokensSchema> {
       });
 
       return pairOfTokens;
+    } catch (error) {
+      throw new DataBaseInternalError();
+    }
+  }
+
+  async removeTokensById(id: string) {
+    try {
+      await this.removeById(id);
     } catch (error) {
       throw new DataBaseInternalError();
     }

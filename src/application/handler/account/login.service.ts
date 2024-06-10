@@ -12,6 +12,7 @@ import {
 } from '../../../infraestructure/dtos';
 import {
   validateLoginCredentials,
+  getOldestPairOfTokens,
   GenerateTokenPair,
 } from '../../../domain/services';
 
@@ -41,11 +42,12 @@ export class LoginService {
       const pairOfTokens: PairOfTokensDTO[] =
         await this.tokensRepository.getAllTokensByUuid(uuid);
 
-      if (pairOfTokens.length > this.configService.get('MAX_PAIR_OF_TOKEN')) {
-        console.log('Total');
-      } else {
-        await this.tokensRepository.saveTokens(uuid, accessToken, refreshToken);
+      if (pairOfTokens.length >= this.configService.get('MAX_PAIR_OF_TOKEN')) {
+        const oldestPairOfTokenId = getOldestPairOfTokens(pairOfTokens);
+
+        await this.tokensRepository.removeTokensById(oldestPairOfTokenId);
       }
+      await this.tokensRepository.saveTokens(uuid, accessToken, refreshToken);
 
       const ttl = this.configService.get('ACCESS_TOKEN_TTL');
 
