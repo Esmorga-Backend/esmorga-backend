@@ -21,7 +21,7 @@ class LocationDto {
   @IsNumber()
   @IsOptional()
   @ApiPropertyOptional({ example: -8.41937931298951 })
-  long: number;
+  long?: number;
 
   @Expose()
   @IsString()
