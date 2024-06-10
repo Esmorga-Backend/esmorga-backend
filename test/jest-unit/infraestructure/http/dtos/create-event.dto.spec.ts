@@ -43,6 +43,30 @@ describe('[unit-test] [CreateEventDto]', () => {
       });
     });
 
+    it('Should accept the minimum 3 characters allowed', async () => {
+      const event = { ...createEventMock };
+
+      event.eventName = 'AAA';
+
+      const createEventDto = plainToInstance(CreateEventDto, event);
+
+      const errors = await validate(createEventDto, { stopAtFirstError: true });
+
+      expect(errors.length).toBe(0);
+    });
+
+    it('Should accept the maximum 100 characters allowed', async () => {
+      const event = { ...createEventMock };
+
+      event.eventName = 'A'.repeat(100);
+
+      const createEventDto = plainToInstance(CreateEventDto, event);
+
+      const errors = await validate(createEventDto, { stopAtFirstError: true });
+
+      expect(errors.length).toBe(0);
+    });
+
     it('Should not accept less than 3 characters', async () => {
       const event = { ...createEventMock };
 
@@ -195,6 +219,30 @@ describe('[unit-test] [CreateEventDto]', () => {
       });
     });
 
+    it('Should accept the minimum 1 character allowed', async () => {
+      const event = { ...createEventMock };
+
+      event.description = 'A';
+
+      const createEventDto = plainToInstance(CreateEventDto, event);
+
+      const errors = await validate(createEventDto, { stopAtFirstError: true });
+
+      expect(errors.length).toBe(0);
+    });
+
+    it('Should accept the maximum 5000 character allowed', async () => {
+      const event = { ...createEventMock };
+
+      event.description = 'A'.repeat(5000);
+
+      const createEventDto = plainToInstance(CreateEventDto, event);
+
+      const errors = await validate(createEventDto, { stopAtFirstError: true });
+
+      expect(errors.length).toBe(0);
+    });
+
     it('Should not accept less than 1 characters', async () => {
       const event = { ...createEventMock };
 
@@ -211,7 +259,7 @@ describe('[unit-test] [CreateEventDto]', () => {
       });
     });
 
-    it('Should not accept more than 100 characters', async () => {
+    it('Should not accept more than 5000 characters', async () => {
       const event = { ...createEventMock };
 
       event.description = 'A'.repeat(5001);
@@ -352,6 +400,18 @@ describe('[unit-test] [CreateEventDto]', () => {
       });
     });
 
+    it('Should accept the maximum 500 characters allowed', async () => {
+      const event = { ...createEventMock };
+
+      event.imageUrl = 'A'.repeat(500);
+
+      const createEventDto = plainToInstance(CreateEventDto, event);
+
+      const errors = await validate(createEventDto, { stopAtFirstError: true });
+
+      expect(errors.length).toBe(0);
+    });
+
     it('Should not accept more than 500 characters', async () => {
       const event = { ...createEventMock };
 
@@ -387,7 +447,31 @@ describe('[unit-test] [CreateEventDto]', () => {
       });
     });
 
-    it('Should not accept less than 3 characters', async () => {
+    it('Should accept the minimum 1 character allowed', async () => {
+      const event = { ...createEventMock };
+
+      event.location.name = 'A';
+
+      const createEventDto = plainToInstance(CreateEventDto, event);
+
+      const errors = await validate(createEventDto, { stopAtFirstError: true });
+
+      expect(errors.length).toBe(0);
+    });
+
+    it('Should accept the maximum 100 characters allowed', async () => {
+      const event = { ...createEventMock };
+
+      event.eventName = 'A'.repeat(100);
+
+      const createEventDto = plainToInstance(CreateEventDto, event);
+
+      const errors = await validate(createEventDto, { stopAtFirstError: true });
+
+      expect(errors.length).toBe(0);
+    });
+
+    it('Should not accept less than 1 character', async () => {
       const event = JSON.parse(JSON.stringify(createEventMock));
 
       event.location.name = '';
@@ -450,7 +534,7 @@ describe('[unit-test] [CreateEventDto]', () => {
   });
 
   describe('[CreateEventDto] [location] [lat]', () => {
-    it('Should accept empty value if location.long is defined', async () => {
+    it('Should not accept empty value if location.long is defined', async () => {
       const event = JSON.parse(JSON.stringify(createEventMock));
 
       delete event.location.lat;
@@ -496,7 +580,7 @@ describe('[unit-test] [CreateEventDto]', () => {
   });
 
   describe('[CreateEventDto] [location] [long]', () => {
-    it('Should accept empty value if location.long is defined', async () => {
+    it('Should not accept empty value if location.lat is defined', async () => {
       const event = JSON.parse(JSON.stringify(createEventMock));
 
       delete event.location.long;
@@ -542,6 +626,30 @@ describe('[unit-test] [CreateEventDto]', () => {
   });
 
   describe('[CreateEventDto] [tags]', () => {
+    it('Should accept the minimum 3 characters allowed for each array field', async () => {
+      const event = { ...createEventMock };
+
+      event.tags = ['AAA'];
+
+      const createEventDto = plainToInstance(CreateEventDto, event);
+
+      const errors = await validate(createEventDto, { stopAtFirstError: true });
+
+      expect(errors.length).toBe(0);
+    });
+
+    it('Should accept the maximum 25 characters allowed for each array field', async () => {
+      const event = { ...createEventMock };
+
+      event.tags = ['A'.repeat(25)];
+
+      const createEventDto = plainToInstance(CreateEventDto, event);
+
+      const errors = await validate(createEventDto, { stopAtFirstError: true });
+
+      expect(errors.length).toBe(0);
+    });
+
     it('Should not accept less than 3 characters for each array field', async () => {
       const event = { ...createEventMock };
 
