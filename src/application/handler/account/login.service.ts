@@ -1,17 +1,21 @@
 import { Injectable } from '@nestjs/common';
-
 import { plainToClass } from 'class-transformer';
-import { AccountRepository } from '../../../infraestructure/db/repositories';
+import {
+  AccountRepository,
+  TokensRepository,
+} from '../../../infraestructure/db/repositories';
 import { AccountLoginDTO, UserProfileDTO } from '../../../infraestructure/dtos';
 import {
   validateLoginCredentials,
   GenerateTokenPair,
 } from '../../../domain/services';
+
 @Injectable()
 export class LoginService {
   constructor(
-    private readonly accountRepository: AccountRepository,
     private readonly generateTokenPair: GenerateTokenPair,
+    private readonly accountRepository: AccountRepository,
+    private readonly tokensRepository: TokensRepository,
   ) {}
 
   async login(accountLoginDTO: AccountLoginDTO) {
@@ -32,6 +36,8 @@ export class LoginService {
         await this.generateTokenPair.generateTokens(uuid);
 
       console.log({ accessToken, refreshToken });
+
+      await this.tokensRepository.saveTokens(uuid, accessToken, refreshToken);
       return adaptedUserProfile;
     } catch (error) {
       throw error;
