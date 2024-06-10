@@ -47,7 +47,6 @@ export class EventController {
 
   @Post('/')
   @SwaggerCreateEvent()
-  @HttpCode(201)
   async createEvent(
     @Body() createEventDto: CreateEventDto,
   ): Promise<Record<string, never>> {
