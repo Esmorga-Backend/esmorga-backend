@@ -1,15 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+
 import { plainToClass } from 'class-transformer';
 import { AccountRepository } from '../../../infraestructure/db/repositories';
 import { AccountLoginDTO, UserProfileDTO } from '../../../infraestructure/dtos';
-import { validateLoginCredentials } from '../../../domain/services';
-
+import {
+  validateLoginCredentials,
+  GenerateTokenPair,
+} from '../../../domain/services';
 @Injectable()
 export class LoginService {
   constructor(
     private readonly accountRepository: AccountRepository,
-    private jwtService: JwtService,
+    private readonly generateTokenPair: GenerateTokenPair,
   ) {}
 
   async login(accountLoginDTO: AccountLoginDTO) {
@@ -26,10 +28,10 @@ export class LoginService {
 
       const { uuid } = adaptedUserProfile;
 
-      const accessToken = this.jwtService.sign({ uuid });
+      const { accessToken, refreshToken } =
+        await this.generateTokenPair.generateTokens(uuid);
 
-      console.log({ accessToken });
-
+      console.log({ accessToken, refreshToken });
       return adaptedUserProfile;
     } catch (error) {
       throw error;
