@@ -14,7 +14,7 @@ export class GenerateTokenPair {
       { uuid },
       {
         secret: this.configService.get('JWT_SECRET'),
-        expiresIn: '3300s',
+        expiresIn: `${this.configService.get('ACCESS_TOKEN_TTL')}s`,
       },
     );
 

@@ -20,6 +20,15 @@ class EnvVars {
   @IsNotEmpty()
   @IsString()
   NODE_ENV: string;
+
+  @IsNotEmpty()
+  @IsString()
+  JWT_SECRET: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  @IsPositive()
+  ACCESS_TOKEN_TTL: number;
 }
 
 /**
