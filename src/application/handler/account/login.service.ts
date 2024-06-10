@@ -47,6 +47,7 @@ export class LoginService {
 
         await this.tokensRepository.removeTokensById(oldestPairOfTokenId);
       }
+
       await this.tokensRepository.saveTokens(uuid, accessToken, refreshToken);
 
       const ttl = this.configService.get('ACCESS_TOKEN_TTL');
