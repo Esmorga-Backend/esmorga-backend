@@ -6,6 +6,7 @@ import { EventDTO } from '../../dtos';
 import { MongoRepository } from './mongo.repository';
 import { Event as EventSchema } from '../schema';
 import { DataBaseInternalError } from '../errors';
+import { validateEventDto } from '../services';
 
 @Injectable()
 export class EventRepository extends MongoRepository<EventSchema> {
@@ -26,7 +27,13 @@ export class EventRepository extends MongoRepository<EventSchema> {
       const events = await this.find();
 
       const adaptedEvents: EventDTO[] = events.map((event) => {
-        return plainToClass(EventDTO, event, { excludeExtraneousValues: true });
+        const eventDto = plainToClass(EventDTO, event, {
+          excludeExtraneousValues: true,
+        });
+
+        validateEventDto(eventDto);
+
+        return eventDto;
       });
 
       return adaptedEvents;
