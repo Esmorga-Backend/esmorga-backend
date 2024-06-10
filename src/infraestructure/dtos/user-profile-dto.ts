@@ -3,7 +3,7 @@ import { Expose, Transform } from 'class-transformer';
 import { IsDateString, IsString } from 'class-validator';
 
 export class UserProfileDTO {
-  @Transform(({ value }) => value.toString(), { toClassOnly: true })
+  @Transform((value) => value.obj._id.toString())
   @Expose({ name: '_id' })
   @IsString()
   @ApiProperty({ example: '665f019c17331ebee550b2fd' })

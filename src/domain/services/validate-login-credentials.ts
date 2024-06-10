@@ -1,10 +1,14 @@
 import { createHash } from 'crypto';
 import { InvalidCredentialsApiError } from '../errors';
 
-export function validateLoginCredentials(user, requestPassword) {
+export function validateLoginCredentials(
+  userDbPassword: string,
+  requestPassword: string,
+) {
   if (
-    !user ||
-    user.password !== createHash('sha256').update(requestPassword).digest('hex')
+    !userDbPassword ||
+    userDbPassword !==
+      createHash('sha256').update(requestPassword).digest('hex')
   ) {
     throw new InvalidCredentialsApiError();
   }
