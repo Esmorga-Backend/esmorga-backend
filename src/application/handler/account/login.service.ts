@@ -8,6 +8,7 @@ import {
 import {
   AccountLoginDTO,
   AccountLoggedDTO,
+  PairOfTokensDTO,
 } from '../../../infraestructure/dtos';
 import {
   validateLoginCredentials,
@@ -37,7 +38,14 @@ export class LoginService {
       const { accessToken, refreshToken } =
         await this.generateTokenPair.generateTokens(uuid);
 
-      await this.tokensRepository.saveTokens(uuid, accessToken, refreshToken);
+      const pairOfTokens: PairOfTokensDTO[] =
+        await this.tokensRepository.getAllTokensByUuid(uuid);
+
+      if (pairOfTokens.length > this.configService.get('MAX_PAIR_OF_TOKEN')) {
+        console.log('Total');
+      } else {
+        await this.tokensRepository.saveTokens(uuid, accessToken, refreshToken);
+      }
 
       const ttl = this.configService.get('ACCESS_TOKEN_TTL');
 

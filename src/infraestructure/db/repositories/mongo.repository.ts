@@ -13,6 +13,10 @@ export class MongoRepository<E> implements DBRepository<E> {
     return this.entityModel.find();
   }
 
+  async findByUuid(uuid): Promise<E[]> {
+    return this.entityModel.find({ uuid: uuid });
+  }
+
   async findOneByEmail(email): Promise<E> {
     return this.entityModel.findOne({ email: email });
   }
