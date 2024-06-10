@@ -17,24 +17,25 @@ export function validateEventDto(eventDto: EventDto) {
   ];
 
   const missingFields = requiredEventFields.filter((field) => {
+    const fieldPath = field.split('.');
     let currentObject = eventDto;
 
-    for (const nestedField of field.split('.')) {
+    const isMissed = fieldPath.some((nestedField) => {
       if (
         !(nestedField in currentObject) ||
         currentObject[nestedField] === undefined
       ) {
         return true;
       }
-
       currentObject = currentObject[nestedField];
-    }
-    return false;
+      return false;
+    });
+
+    return isMissed;
   });
 
   if (missingFields.length > 0) {
-    // eslint-disable-next-line no-console
-    console.log({ missingFields });
+    //TODO add a trace with the missingFields
 
     throw new DataBaseInternalError();
   }
