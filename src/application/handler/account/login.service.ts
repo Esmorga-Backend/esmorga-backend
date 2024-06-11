@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { plainToClass } from 'class-transformer';
+import { DataBaseUnathorizedError } from '../../../infraestructure/db/errors';
 import {
   AccountRepository,
   TokensRepository,
@@ -15,6 +16,7 @@ import {
   getOldestPairOfTokens,
   GenerateTokenPair,
 } from '../../../domain/services';
+import { InvalidCredentialsApiError } from '../../../domain/errors';
 
 @Injectable()
 export class LoginService {
@@ -65,6 +67,10 @@ export class LoginService {
 
       return accountLoggedDTO;
     } catch (error) {
+      if (error instanceof DataBaseUnathorizedError)
+        throw new InvalidCredentialsApiError();
+
+      console.log({ error });
       throw error;
     }
   }
