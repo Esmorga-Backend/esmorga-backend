@@ -1,6 +1,4 @@
-import { EventDTO } from '../../../src/infrastructure/dtos';
-
-const currentDate: Date = new Date();
+import { EventDto } from '../../../src/infrastructure/dtos';
 
 const futureDate: Date = new Date();
 futureDate.setFullYear(2025);
@@ -8,7 +6,7 @@ futureDate.setFullYear(2025);
 const oldDate: Date = new Date();
 oldDate.setFullYear(2023);
 
-export const eventMock: EventDTO = {
+export const eventMock: EventDto = {
   eventId: '6656e23640e1fdb4ceb23cc9',
   eventName: 'MobgenFest',
   eventDate: futureDate,
@@ -21,11 +19,9 @@ export const eventMock: EventDTO = {
     name: 'A Coruña',
   },
   tags: ['Meal', 'Music'],
-  createdAt: currentDate,
-  updatedAt: currentDate,
 };
 
-export const oldEventMock: EventDTO = {
+export const oldEventMock: EventDto = {
   eventId: '6656e23640e1fdb4ceb23cc8',
   eventName: 'Paintball',
   eventDate: oldDate,
@@ -38,6 +34,4 @@ export const oldEventMock: EventDTO = {
     name: 'Vigo',
   },
   tags: ['Shoots', 'Sports'],
-  createdAt: currentDate,
-  updatedAt: currentDate,
 };

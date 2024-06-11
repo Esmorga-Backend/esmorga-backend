@@ -1,7 +1,7 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { Location, LocationSchema } from './location.schema';
 
-@Schema()
+@Schema({ timestamps: true })
 export class Event {
   @Prop({ required: true })
   eventName: string;
@@ -15,17 +15,11 @@ export class Event {
   @Prop({ required: true })
   description: string;
 
-  @Prop({ type: [String], required: true })
+  @Prop({ type: [String], required: false })
   tags: string[];
 
-  @Prop({ type: LocationSchema, required: false })
+  @Prop({ type: LocationSchema, required: true })
   location: Location;
-
-  @Prop({ required: false })
-  createdAt: Date;
-
-  @Prop({ required: false })
-  updatedAt: Date;
 
   @Prop({ required: false })
   imageUrl: string;

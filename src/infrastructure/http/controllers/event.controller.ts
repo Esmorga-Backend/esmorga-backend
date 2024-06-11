@@ -1,29 +1,57 @@
 import {
+  Body,
   Controller,
   Get,
   HttpException,
   InternalServerErrorException,
+  Post,
   UseFilters,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { GetEventListService } from '../../../application/handler/event';
+import {
+  CreateEventService,
+  GetEventListService,
+} from '../../../application/handler/event';
 import { HttpExceptionFilter } from '../errors';
-import { SwaggerGetEvents } from '../swagger/decorators/events';
-import { EventListDTO } from '../../dtos';
+import {
+  SwaggerCreateEvent,
+  SwaggerGetEvents,
+} from '../swagger/decorators/events';
+import { EventListDto } from '../../dtos';
+import { CreateEventDto } from '../dtos';
 
-@Controller('/v1/events')
 @ApiTags('Event')
+@Controller('/v1/events')
+@UseFilters(new HttpExceptionFilter())
 export class EventController {
-  constructor(private readonly getEventListService: GetEventListService) {}
+  constructor(
+    private readonly getEventListService: GetEventListService,
+    private readonly createEventService: CreateEventService,
+  ) {}
 
   @Get('/')
-  @UseFilters(new HttpExceptionFilter())
   @SwaggerGetEvents()
-  async getEvents(): Promise<EventListDTO> {
+  async getEvents(): Promise<EventListDto> {
     try {
-      const response: EventListDTO = await this.getEventListService.find();
+      const response: EventListDto = await this.getEventListService.find();
 
       return response;
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new InternalServerErrorException();
+    }
+  }
+
+  @Post('/')
+  @SwaggerCreateEvent()
+  async createEvent(
+    @Body() createEventDto: CreateEventDto,
+  ): Promise<Record<string, never>> {
+    try {
+      await this.createEventService.create(createEventDto);
+      return {};
     } catch (error) {
       if (error instanceof HttpException) {
         throw error;

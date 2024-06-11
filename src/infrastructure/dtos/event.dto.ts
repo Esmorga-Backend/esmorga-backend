@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsString,
   IsDateString,
@@ -6,26 +6,32 @@ import {
   IsNumber,
   ValidateNested,
   IsObject,
+  IsOptional,
 } from 'class-validator';
 import { Expose, Transform, Type } from 'class-transformer';
 
-class Location {
+class LocationDto {
   @Expose()
   @IsNumber()
-  lat: number;
+  @IsOptional()
+  @ApiPropertyOptional({ example: 43.35525182148881 })
+  lat?: number;
 
   @Expose()
   @IsNumber()
-  long: number;
+  @IsOptional()
+  @ApiPropertyOptional({ example: -8.41937931298951 })
+  long?: number;
 
   @Expose()
   @IsString()
+  @ApiProperty({ example: 'A Coruña' })
   name: string;
 }
 
-export class EventDTO {
-  @Transform(({ value }) => value.toString(), { toClassOnly: true })
+export class EventDto {
   @Expose({ name: '_id' })
+  @Transform((value) => value.obj._id.toString())
   @IsString()
   @ApiProperty({ example: '6656e23640e1fdb4ceb23cc9' })
   eventId: string;
@@ -52,37 +58,23 @@ export class EventDTO {
 
   @Expose()
   @IsString()
-  @ApiProperty({ example: 'img.url' })
-  imageUrl: string;
+  @IsOptional()
+  @ApiPropertyOptional({ example: 'img.url' })
+  imageUrl?: string;
 
   @Expose()
   @ValidateNested()
-  @Type(() => Location)
+  @Type(() => LocationDto)
   @IsObject()
-  @ApiProperty({
-    type: 'object',
-    properties: {
-      lat: { type: 'number', example: 43.35525182148881 },
-      long: { type: 'number', example: -8.41937931298951 },
-      name: { type: 'string', example: 'A Coruña' },
-    },
-  })
-  location: Location;
+  @ApiProperty({ type: LocationDto })
+  location: LocationDto;
 
   @Expose()
+  @Transform(({ value }) => (value.length > 0 ? value : undefined))
   @IsArray()
   @IsString({ each: true })
   @Type(() => String)
-  @ApiProperty({ example: '["Meal", "Music"]' })
-  tags: string[];
-
-  @Expose()
-  @IsDateString()
-  @ApiProperty({ example: '2024-03-08T10:05:30.915Z' })
-  createdAt: Date;
-
-  @Expose()
-  @IsDateString()
-  @ApiProperty({ example: '2024-03-08T10:05:30.915Z' })
-  updatedAt: Date;
+  @IsOptional()
+  @ApiPropertyOptional({ example: '["Meal", "Music"]' })
+  tags?: string[];
 }

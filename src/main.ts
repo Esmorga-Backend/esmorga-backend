@@ -12,8 +12,10 @@ async function main() {
 
   app.useGlobalPipes(
     new ValidationPipe({
-      whitelist: true,
+      stopAtFirstError: true,
+      forbidNonWhitelisted: true,
       transform: true,
+      whitelist: true,
     }),
   );
 
