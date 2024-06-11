@@ -1,8 +1,8 @@
 import { HttpException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { GetEventListService } from '../../../src/application/handler/event';
-import { EventListDTO, EventDTO } from '../../../src/infraestructure/dtos';
-import { EventController } from '../../../src/infraestructure/http/controllers';
+import { EventListDTO, EventDTO } from '../../../src/infrastructure/dtos';
+import { EventController } from '../../../src/infrastructure/http/controllers';
 import { eventMock } from '../../mocks/dtos';
 
 jest.mock('../../../src/application/handler/event');

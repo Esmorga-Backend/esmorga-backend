@@ -1,4 +1,4 @@
-import { PairOfTokensDTO } from '../../../../src/infraestructure/dtos';
+import { PairOfTokensDTO } from '../../../../src/infrastructure/dtos';
 import { getOldestPairOfTokens } from '../../../../src/domain/services';
 
 const CURRENT_DATE: Date = new Date();

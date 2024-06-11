@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { plainToClass } from 'class-transformer';
-import { DataBaseUnathorizedError } from '../../../infraestructure/db/errors';
+import { DataBaseUnathorizedError } from '../../../infrastructure/db/errors';
 import {
   AccountRepository,
   TokensRepository,
-} from '../../../infraestructure/db/repositories';
+} from '../../../infrastructure/db/repositories';
 import {
   AccountLoginDTO,
   AccountLoggedDTO,
   PairOfTokensDTO,
-} from '../../../infraestructure/dtos';
+} from '../../../infrastructure/dtos';
 import {
   validateLoginCredentials,
   getOldestPairOfTokens,

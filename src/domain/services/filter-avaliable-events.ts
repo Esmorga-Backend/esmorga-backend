@@ -1,4 +1,4 @@
-import { EventDTO } from '../../infraestructure/dtos';
+import { EventDTO } from '../../infrastructure/dtos';
 
 /**
  * Filter the event list discarting celebrated ones.

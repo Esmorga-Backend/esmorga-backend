@@ -5,7 +5,7 @@ import { AppModule } from '../../../src/app.module';
 import {
   AccountRepository,
   TokensRepository,
-} from '../../../src/infraestructure/db/repositories';
+} from '../../../src/infrastructure/db/repositories';
 import { GenerateTokenPair } from '../../../src/domain/services/';
 import { USER_DB, PASSWORD } from '../../mocks/db';
 

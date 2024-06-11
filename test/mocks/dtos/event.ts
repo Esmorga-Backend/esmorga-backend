@@ -1,4 +1,4 @@
-import { EventDTO } from '../../../src/infraestructure/dtos';
+import { EventDTO } from '../../../src/infrastructure/dtos';
 
 const currentDate: Date = new Date();
 

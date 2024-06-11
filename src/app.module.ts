@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { validateEnvVars } from './config';
-import { EventModule, AccountModule } from './infraestructure/http/modules';
+import { EventModule, AccountModule } from './infrastructure/http/modules';
 
 @Module({
   imports: [
