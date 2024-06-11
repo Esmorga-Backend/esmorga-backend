@@ -1,5 +1,5 @@
-import { validateEventDto } from '../../../../../src/infraestructure/db/services';
-import { DataBaseInternalError } from '../../../../../src/infraestructure/db/errors';
+import { validateEventDto } from '../../../../../src/infrastructure/db/services';
+import { DataBaseInternalError } from '../../../../../src/infrastructure/db/errors';
 import { eventMock } from '../../../../mocks/dtos/event';
 
 describe('[unit-test] [validateEventDto]', () => {

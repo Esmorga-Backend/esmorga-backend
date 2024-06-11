@@ -2,7 +2,7 @@ import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
 import { AppModule } from '../../../src/app.module';
-import { EventRepository } from '../../../src/infraestructure/db/repositories';
+import { EventRepository } from '../../../src/infrastructure/db/repositories';
 import {
   createEventMock,
   createEventWithoutOptionalFieldsMock,

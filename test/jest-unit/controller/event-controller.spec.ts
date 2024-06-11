@@ -4,8 +4,8 @@ import {
   CreateEventService,
   GetEventListService,
 } from '../../../src/application/handler/event';
-import { EventListDto, EventDto } from '../../../src/infraestructure/dtos';
-import { EventController } from '../../../src/infraestructure/http/controllers';
+import { EventListDto, EventDto } from '../../../src/infrastructure/dtos';
+import { EventController } from '../../../src/infrastructure/http/controllers';
 import { createEventMock, eventMock } from '../../mocks/dtos';
 
 jest.mock('../../../src/application/handler/event');

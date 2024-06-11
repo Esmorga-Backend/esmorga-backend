@@ -1,7 +1,7 @@
 import {
   CreateEventDto,
   EventType,
-} from '../../../src/infraestructure/http/dtos';
+} from '../../../src/infrastructure/http/dtos';
 
 export const createEventMock: CreateEventDto = {
   eventName: 'MobgenFest',

@@ -1,6 +1,6 @@
 import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
-import { CreateEventDto } from '../../../../../src/infraestructure/http/dtos';
+import { CreateEventDto } from '../../../../../src/infrastructure/http/dtos';
 import {
   createEventMock,
   createEventWithoutOptionalFieldsMock,
@@ -55,7 +55,7 @@ describe('[unit-test] [CreateEventDto]', () => {
       expect(errors.length).toEqual(1);
       expect(errors[0].property).toEqual('eventName');
       expect(errors[0].constraints).toEqual({
-        minLength: 'min 3 characters',
+        minLength: 'eventName must have min 3 characters',
       });
     });
 
@@ -71,7 +71,7 @@ describe('[unit-test] [CreateEventDto]', () => {
       expect(errors.length).toEqual(1);
       expect(errors[0].property).toEqual('eventName');
       expect(errors[0].constraints).toEqual({
-        maxLength: 'max 100 characters',
+        maxLength: 'eventName must have max 100 characters',
       });
     });
 
@@ -119,6 +119,22 @@ describe('[unit-test] [CreateEventDto]', () => {
       });
     });
 
+    it('Should not accept invalid dates', async () => {
+      const event = { ...createEventMock };
+
+      event.eventDate = '2020-03-08T10:65:30.915Z';
+
+      const createEventDto = plainToInstance(CreateEventDto, event);
+
+      const errors = await validate(createEventDto, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('eventDate');
+      expect(errors[0].constraints).toEqual({
+        customValidation: 'eventDate must be valid',
+      });
+    });
+
     it('Should not accept past dates', async () => {
       const event = { ...createEventMock };
 
@@ -131,7 +147,7 @@ describe('[unit-test] [CreateEventDto]', () => {
       expect(errors.length).toEqual(1);
       expect(errors[0].property).toEqual('eventDate');
       expect(errors[0].constraints).toEqual({
-        customValidation: 'Date cannot be in the past',
+        customValidation: 'eventDate cannot be in the past',
       });
     });
 
@@ -147,7 +163,7 @@ describe('[unit-test] [CreateEventDto]', () => {
       expect(errors.length).toEqual(1);
       expect(errors[0].property).toEqual('eventDate');
       expect(errors[0].constraints).toEqual({
-        matches: 'Date must be in ISO format (yyyy-MM-ddTHH:mm:ss.SSSZ)',
+        matches: 'eventDate must be in ISO format (yyyy-MM-ddTHH:mm:ss.SSSZ)',
       });
     });
 
@@ -207,7 +223,7 @@ describe('[unit-test] [CreateEventDto]', () => {
       expect(errors.length).toEqual(1);
       expect(errors[0].property).toEqual('description');
       expect(errors[0].constraints).toEqual({
-        minLength: 'min 1 characters',
+        minLength: 'description must have min 1 character',
       });
     });
 
@@ -223,7 +239,7 @@ describe('[unit-test] [CreateEventDto]', () => {
       expect(errors.length).toEqual(1);
       expect(errors[0].property).toEqual('description');
       expect(errors[0].constraints).toEqual({
-        maxLength: 'max 5000 characters',
+        maxLength: 'description must have max 5000 characters',
       });
     });
 
@@ -364,7 +380,7 @@ describe('[unit-test] [CreateEventDto]', () => {
       expect(errors.length).toEqual(1);
       expect(errors[0].property).toEqual('imageUrl');
       expect(errors[0].constraints).toEqual({
-        maxLength: 'max 500 characters',
+        maxLength: 'imageUrl description must have max 500 characters',
       });
     });
   });
@@ -400,7 +416,7 @@ describe('[unit-test] [CreateEventDto]', () => {
       expect(errors[0].property).toEqual('location');
       expect(errors[0].children[0].property).toEqual('name');
       expect(errors[0].children[0].constraints).toEqual({
-        minLength: 'min 1 characters',
+        minLength: 'name must have min 1 character',
       });
     });
 
@@ -417,7 +433,7 @@ describe('[unit-test] [CreateEventDto]', () => {
       expect(errors[0].property).toEqual('location');
       expect(errors[0].children[0].property).toEqual('name');
       expect(errors[0].children[0].constraints).toEqual({
-        maxLength: 'max 100 characters',
+        maxLength: 'name must have max 100 characters',
       });
     });
 
@@ -554,7 +570,7 @@ describe('[unit-test] [CreateEventDto]', () => {
       expect(errors.length).toEqual(1);
       expect(errors[0].property).toEqual('tags');
       expect(errors[0].constraints).toEqual({
-        minLength: 'min 3 characters for each tag',
+        minLength: 'tags must have min 3 characters for each tag',
       });
     });
 
@@ -570,7 +586,7 @@ describe('[unit-test] [CreateEventDto]', () => {
       expect(errors.length).toEqual(1);
       expect(errors[0].property).toEqual('tags');
       expect(errors[0].constraints).toEqual({
-        maxLength: 'max 25 characters for each tag',
+        maxLength: 'tags must have max 25 characters for each tag',
       });
     });
 
@@ -608,7 +624,7 @@ describe('[unit-test] [CreateEventDto]', () => {
       expect(errors.length).toEqual(1);
       expect(errors[0].property).toEqual('tags');
       expect(errors[0].constraints).toEqual({
-        arrayMaxSize: 'max 10 elements in tags',
+        arrayMaxSize: 'tags must have max 10 elements',
       });
     });
 

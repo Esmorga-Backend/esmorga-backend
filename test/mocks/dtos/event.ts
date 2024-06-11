@@ -1,4 +1,4 @@
-import { EventDto } from '../../../src/infraestructure/dtos';
+import { EventDto } from '../../../src/infrastructure/dtos';
 
 const futureDate: Date = new Date();
 futureDate.setFullYear(2025);

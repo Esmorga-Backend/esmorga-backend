@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../../../src/app.module';
-import { EventRepository } from '../../../src/infraestructure/db/repositories';
+import { EventRepository } from '../../../src/infrastructure/db/repositories';
 import { futureEventMockDB, oldEventMockDB } from '../../mocks/db';
 
 const path: string = '/v1/events';

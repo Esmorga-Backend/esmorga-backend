@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { EventRepository } from '../../../infraestructure/db/repositories';
+import { EventRepository } from '../../../infrastructure/db/repositories';
 import { filterAvaliableEvents } from '../../../domain/services';
-import { EventDto, EventListDto } from '../../../infraestructure/dtos';
+import { EventDto, EventListDto } from '../../../infrastructure/dtos';
 
 @Injectable()
 export class GetEventListService {
