@@ -18,6 +18,7 @@ jobs:
       MONGODB_URI: "mongodb://localhost:27017/"
       REDIS_HOST: "redis-10358.c6.eu-west-1-1.ec2.redns.redis-cloud.com"
       REDIS_PORT: 10358
+      SWAGGER_JSON_SCHEMA_URL: "https://qa.esmorga.canarte.org/swagger-json"
       NODE_ENV: "LOCAL"
     steps:
       - name: Start MongoDB
