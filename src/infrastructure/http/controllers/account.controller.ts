@@ -22,9 +22,9 @@ export class AccountController {
   @SwaggerAccountLogin()
   @UseFilters(new HttpExceptionFilter())
   @HttpCode(200)
-  async login(@Body() accountLoginDTO: AccountLoginDto) {
+  async login(@Body() accountLoginDto: AccountLoginDto) {
     try {
-      const response = await this.loginService.login(accountLoginDTO);
+      const response = await this.loginService.login(accountLoginDto);
 
       return response;
     } catch (error) {

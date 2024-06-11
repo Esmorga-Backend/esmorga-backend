@@ -27,9 +27,9 @@ export class LoginService {
     private configService: ConfigService,
   ) {}
 
-  async login(accountLoginDTO: AccountLoginDto): Promise<AccountLoggedDto> {
+  async login(accountLoginDto: AccountLoginDto): Promise<AccountLoggedDto> {
     try {
-      const { email, password } = accountLoginDTO;
+      const { email, password } = accountLoginDto;
 
       const { userProfile, password: userDbPassword } =
         await this.accountRepository.getUserByEmail(email);
@@ -54,7 +54,7 @@ export class LoginService {
 
       const ttl = this.configService.get('ACCESS_TOKEN_TTL');
 
-      const accountLoggedDTO: AccountLoggedDto = plainToClass(
+      const accountLoggedDto: AccountLoggedDto = plainToClass(
         AccountLoggedDto,
         {
           profile: userProfile,
@@ -65,7 +65,7 @@ export class LoginService {
         { excludeExtraneousValues: true },
       );
 
-      return accountLoggedDTO;
+      return accountLoggedDto;
     } catch (error) {
       if (error instanceof DataBaseUnathorizedError)
         throw new InvalidCredentialsApiError();
