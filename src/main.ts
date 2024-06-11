@@ -19,7 +19,9 @@ async function main() {
 
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Esmorga API')
-    .setDescription('Swagger for Esmorga API.')
+    .setDescription(
+      '[Swagger in JSON format]( https://qa.esmorga.canarte.org/swagger-json)  \n\nSwagger for Esmorga API.',
+    )
     .setVersion('1.0')
     .build();
   const document = SwaggerModule.createDocument(app, swaggerConfig);
