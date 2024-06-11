@@ -70,7 +70,6 @@ export class LoginService {
       if (error instanceof DataBaseUnathorizedError)
         throw new InvalidCredentialsApiError();
 
-      console.log({ error });
       throw error;
     }
   }
