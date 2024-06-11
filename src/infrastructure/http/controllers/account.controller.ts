@@ -10,7 +10,7 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import { LoginService } from '../../../application/handler/account';
 import { HttpExceptionFilter } from '../errors';
-import { AccountLoginDTO } from '../../dtos';
+import { AccountLoginDto } from '../../dtos';
 import { SwaggerAccountLogin } from '../swagger/decorators/account';
 
 @Controller('/v1/account')
@@ -22,7 +22,7 @@ export class AccountController {
   @SwaggerAccountLogin()
   @UseFilters(new HttpExceptionFilter())
   @HttpCode(200)
-  async login(@Body() accountLoginDTO: AccountLoginDTO) {
+  async login(@Body() accountLoginDTO: AccountLoginDto) {
     try {
       const response = await this.loginService.login(accountLoginDTO);
 

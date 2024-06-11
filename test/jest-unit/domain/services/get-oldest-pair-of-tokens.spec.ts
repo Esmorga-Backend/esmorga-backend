@@ -1,4 +1,4 @@
-import { PairOfTokensDTO } from '../../../../src/infrastructure/dtos';
+import { PairOfTokensDto } from '../../../../src/infrastructure/dtos';
 import { getOldestPairOfTokens } from '../../../../src/domain/services';
 
 const CURRENT_DATE: Date = new Date();
@@ -8,7 +8,7 @@ OLD_DATE.setFullYear(2020);
 
 describe('[unit-test] [getOldestPairOfTokens]', () => {
   it('Should return the id related to the oldest created pair of tokens', () => {
-    const PAIR_OF_TOKENS: PairOfTokensDTO[] = [
+    const PAIR_OF_TOKENS: PairOfTokensDto[] = [
       {
         id: 'ID_FIRST_CREATED',
         uuid: '665f019c17331ebee550b2fd',

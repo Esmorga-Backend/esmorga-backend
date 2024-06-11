@@ -5,7 +5,7 @@ import { plainToClass } from 'class-transformer';
 import { MongoRepository } from './mongo.repository';
 import { Tokens as TokensSchema } from '../schema';
 import { DataBaseInternalError } from '../errors';
-import { PairOfTokensDTO } from '../../dtos';
+import { PairOfTokensDto } from '../../dtos';
 
 @Injectable()
 export class TokensRepository extends MongoRepository<TokensSchema> {
@@ -33,8 +33,8 @@ export class TokensRepository extends MongoRepository<TokensSchema> {
     try {
       const tokensData = await this.findByUuid(uuid);
 
-      const pairOfTokens: PairOfTokensDTO[] = tokensData.map((data) => {
-        return plainToClass(PairOfTokensDTO, data, {
+      const pairOfTokens: PairOfTokensDto[] = tokensData.map((data) => {
+        return plainToClass(PairOfTokensDto, data, {
           excludeExtraneousValues: true,
         });
       });

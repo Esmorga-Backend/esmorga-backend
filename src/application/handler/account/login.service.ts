@@ -7,9 +7,9 @@ import {
   TokensRepository,
 } from '../../../infrastructure/db/repositories';
 import {
-  AccountLoginDTO,
-  AccountLoggedDTO,
-  PairOfTokensDTO,
+  AccountLoginDto,
+  AccountLoggedDto,
+  PairOfTokensDto,
 } from '../../../infrastructure/dtos';
 import {
   validateLoginCredentials,
@@ -27,7 +27,7 @@ export class LoginService {
     private configService: ConfigService,
   ) {}
 
-  async login(accountLoginDTO: AccountLoginDTO): Promise<AccountLoggedDTO> {
+  async login(accountLoginDTO: AccountLoginDto): Promise<AccountLoggedDto> {
     try {
       const { email, password } = accountLoginDTO;
 
@@ -41,7 +41,7 @@ export class LoginService {
       const { accessToken, refreshToken } =
         await this.generateTokenPair.generateTokens(uuid);
 
-      const pairOfTokens: PairOfTokensDTO[] =
+      const pairOfTokens: PairOfTokensDto[] =
         await this.tokensRepository.getAllTokensByUuid(uuid);
 
       if (pairOfTokens.length >= this.configService.get('MAX_PAIR_OF_TOKEN')) {
@@ -54,8 +54,8 @@ export class LoginService {
 
       const ttl = this.configService.get('ACCESS_TOKEN_TTL');
 
-      const accountLoggedDTO: AccountLoggedDTO = plainToClass(
-        AccountLoggedDTO,
+      const accountLoggedDTO: AccountLoggedDto = plainToClass(
+        AccountLoggedDto,
         {
           profile: userProfile,
           accessToken,

@@ -5,7 +5,7 @@ import { plainToClass } from 'class-transformer';
 import { MongoRepository } from './mongo.repository';
 import { User as UserSchema } from '../schema';
 import { DataBaseInternalError, DataBaseUnathorizedError } from '../errors';
-import { UserProfileDTO } from '../../dtos';
+import { UserProfileDto } from '../../dtos';
 
 @Injectable()
 export class AccountRepository extends MongoRepository<UserSchema> {
@@ -19,7 +19,7 @@ export class AccountRepository extends MongoRepository<UserSchema> {
     try {
       const user = await this.findOneByEmail(email);
 
-      const userProfile = plainToClass(UserProfileDTO, user, {
+      const userProfile = plainToClass(UserProfileDto, user, {
         excludeExtraneousValues: true,
       });
 

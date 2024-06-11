@@ -1,6 +1,6 @@
 import { HttpStatus } from '@nestjs/common';
 import { ApiResponseOptions } from '@nestjs/swagger';
-import { AccountLoggedDTO } from '../../../dtos';
+import { AccountLoggedDto } from '../../../dtos';
 
 const INTERNAL_ERROR_COMMON_PROPERTIES = {
   title: {
@@ -26,7 +26,7 @@ export const LOGIN_RESPONSES: { [key: string]: ApiResponseOptions } = {
   OK: {
     status: HttpStatus.OK,
     description: 'User has successfully logged in',
-    type: AccountLoggedDTO,
+    type: AccountLoggedDto,
   },
   INTERNAL_ERROR: {
     status: HttpStatus.INTERNAL_SERVER_ERROR,

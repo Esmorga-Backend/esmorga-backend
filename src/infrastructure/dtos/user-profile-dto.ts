@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Expose, Transform } from 'class-transformer';
 import { IsDateString, IsString } from 'class-validator';
 
-export class UserProfileDTO {
+export class UserProfileDto {
   @Transform((value) => value.obj._id.toString())
   @Expose({ name: '_id' })
   @IsString()

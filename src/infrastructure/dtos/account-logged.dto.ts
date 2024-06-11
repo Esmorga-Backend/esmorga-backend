@@ -12,7 +12,7 @@ class Profile {
   email: string;
 }
 
-export class AccountLoggedDTO {
+export class AccountLoggedDto {
   @Expose()
   @IsString()
   @ApiProperty({

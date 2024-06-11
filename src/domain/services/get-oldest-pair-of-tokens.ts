@@ -1,6 +1,6 @@
-import { PairOfTokensDTO } from '../../infrastructure/dtos';
+import { PairOfTokensDto } from '../../infrastructure/dtos';
 
-export function getOldestPairOfTokens(tokensData: PairOfTokensDTO[]) {
+export function getOldestPairOfTokens(tokensData: PairOfTokensDto[]) {
   const oldersCreatedAt = tokensData.reduce((acc, tokenData) =>
     tokenData.createdAt < acc.createdAt ? tokenData : acc,
   );
