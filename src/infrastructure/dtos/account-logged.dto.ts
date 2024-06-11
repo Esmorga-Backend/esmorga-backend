@@ -41,8 +41,8 @@ export class AccountLoggedDTO {
   @ApiProperty({
     type: 'object',
     properties: {
-      name: { type: 'string', example: 43.35525182148881 },
-      email: { type: 'string', example: 'Test Name' },
+      name: { type: 'string', example: 'Test Name' },
+      email: { type: 'string', example: 'eventslogin01@yopmail.com' },
     },
   })
   profile: Profile;

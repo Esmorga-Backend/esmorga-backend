@@ -27,7 +27,7 @@ export class LoginService {
     private configService: ConfigService,
   ) {}
 
-  async login(accountLoginDTO: AccountLoginDTO) {
+  async login(accountLoginDTO: AccountLoginDTO): Promise<AccountLoggedDTO> {
     try {
       const { email, password } = accountLoginDTO;
 
@@ -54,7 +54,7 @@ export class LoginService {
 
       const ttl = this.configService.get('ACCESS_TOKEN_TTL');
 
-      const accountLoggedDTO = plainToClass(
+      const accountLoggedDTO: AccountLoggedDTO = plainToClass(
         AccountLoggedDTO,
         {
           profile: userProfile,
