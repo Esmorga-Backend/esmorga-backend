@@ -19,7 +19,7 @@ const INTERNAL_ERROR_COMMON_PROPERTIES = {
 };
 
 const PATHS = {
-  GET_EVENTS: '/v1/events',
+  LOGIN: '/v1/account/login',
 };
 
 export const LOGIN_RESPONSES: { [key: string]: ApiResponseOptions } = {
@@ -28,6 +28,52 @@ export const LOGIN_RESPONSES: { [key: string]: ApiResponseOptions } = {
     description: 'User has successfully logged in',
     type: AccountLoggedDto,
   },
+  BAD_REQUEST_ERROR: {
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Some inputs are missed or wrong',
+    schema: {
+      type: 'object',
+      properties: {
+        title: {
+          type: 'string',
+          example: 'badRequestError',
+        },
+        status: { type: 'number', example: HttpStatus.BAD_REQUEST },
+        type: { type: 'string', example: PATHS.LOGIN },
+        detail: {
+          type: 'string',
+          example: 'some inputs are missing',
+        },
+        errors: {
+          type: 'array',
+          example: ['email should not be empty'],
+        },
+      },
+    },
+  },
+  UNAUTHORIZED_ERROR: {
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Invalid credentials',
+    schema: {
+      type: 'object',
+      properties: {
+        title: {
+          type: 'string',
+          example: 'unauthorizedRequestError',
+        },
+        status: { type: 'number', example: HttpStatus.UNAUTHORIZED },
+        type: { type: 'string', example: PATHS.LOGIN },
+        detail: {
+          type: 'string',
+          example: 'inputs are invalid',
+        },
+        errors: {
+          type: 'array',
+          example: ['email password combination is not correct'],
+        },
+      },
+    },
+  },
   INTERNAL_ERROR: {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Error not handled',
@@ -35,7 +81,7 @@ export const LOGIN_RESPONSES: { [key: string]: ApiResponseOptions } = {
       type: 'object',
       properties: {
         ...INTERNAL_ERROR_COMMON_PROPERTIES,
-        type: { type: 'string', example: PATHS.GET_EVENTS },
+        type: { type: 'string', example: PATHS.LOGIN },
       },
     },
   },
