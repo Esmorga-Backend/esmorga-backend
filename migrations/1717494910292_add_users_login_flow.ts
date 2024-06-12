@@ -20,21 +20,24 @@ export class add_users_login_flow1717494910292 implements MigrationInterface {
   public async up(db: Db): Promise<any> {
     const users = [
       {
-        name: 'Magico Gonzalez',
+        name: 'Magico',
+        lastName: 'Gonzalez',
         email: emails[0],
         password: hash('Password1'),
         role: 'ADMIN',
         createdAt: currentDate,
       },
       {
-        name: 'Floyd Mayweather',
+        name: 'Floyd',
+        lastName: 'Mayweather',
         email: emails[1],
         password: hash('Password2'),
         role: 'ADMIN',
         createdAt: currentDate,
       },
       {
-        name: 'Scottie Pippen',
+        name: 'Scottie',
+        lastName: 'Pippen',
         email: emails[2],
         password: hash('Password3'),
         role: 'USER',
