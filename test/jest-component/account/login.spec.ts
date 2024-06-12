@@ -53,7 +53,7 @@ describe('Login - [POST v1/account/login]', () => {
 
     jest.spyOn(tokensRepository, 'findByUuid').mockResolvedValue([]);
 
-    jest.spyOn(tokensRepository, 'saveTokens').mockResolvedValue();
+    jest.spyOn(tokensRepository, 'save').mockResolvedValue();
 
     const validEmail = USER_DB.email;
 
@@ -86,6 +86,20 @@ describe('Login - [POST v1/account/login]', () => {
       });
 
     expect(response.status).toBe(HttpStatus.BAD_REQUEST);
+    expect(response.body.detail).toBe('some inputs are missing');
+  });
+
+  it('Should throw a 400 if email or password format is wrong', async () => {
+    const response = await request(app.getHttpServer())
+      .post(PATH)
+      .set(HEADERS)
+      .send({
+        email: 123,
+        password: PASSWORD,
+      });
+
+    expect(response.status).toBe(HttpStatus.BAD_REQUEST);
+    expect(response.body.detail).toBe('email');
   });
 
   it('Should throw a 401 if email does not match with an user in the db', async () => {

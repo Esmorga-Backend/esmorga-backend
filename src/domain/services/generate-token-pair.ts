@@ -9,6 +9,11 @@ export class GenerateTokenPair {
     private configService: ConfigService,
   ) {}
 
+  /**
+   * Generate an accessToken and refreshToken using the uuid as payload.
+   * @param uuid User id.
+   * @returns New pair of tokens.
+   */
   async generateTokens(uuid: string) {
     const accessToken = await this.jwtService.signAsync(
       { uuid },

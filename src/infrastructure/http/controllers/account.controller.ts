@@ -15,12 +15,12 @@ import { SwaggerAccountLogin } from '../swagger/decorators/account';
 
 @Controller('/v1/account')
 @ApiTags('Account')
+@UseFilters(new HttpExceptionFilter())
 export class AccountController {
   constructor(private readonly loginService: LoginService) {}
 
   @Post('/login')
   @SwaggerAccountLogin()
-  @UseFilters(new HttpExceptionFilter())
   @HttpCode(200)
   async login(@Body() accountLoginDto: AccountLoginDto) {
     try {
