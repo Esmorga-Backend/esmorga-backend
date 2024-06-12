@@ -18,17 +18,19 @@ async function main() {
   );
 
   let description = 'Swagger for Esmorga API.';
-  if (process.env.SWAGGER_JSON_SCHEMA_URL) {
-    description =
-      `[Swagger in JSON format](${process.env.SWAGGER_JSON_SCHEMA_URL})\n\n` +
-      description;
-  }
-
-  const swaggerConfig = new DocumentBuilder()
+  let swaggerConfigBuilder = new DocumentBuilder()
     .setTitle('Esmorga API')
     .setDescription(description)
-    .setVersion('1.0')
-    .build();
+    .setVersion('1.0');
+
+  if (process.env.DNS_NAME) {
+    description =
+      `[Swagger in JSON format](${process.env.DNS_NAME}/swagger-json)\n\n` +
+      description;
+    swaggerConfigBuilder = swaggerConfigBuilder.addServer(process.env.DNS_NAME);
+  }
+
+  const swaggerConfig = swaggerConfigBuilder.build();
 
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('swagger', app, document);
