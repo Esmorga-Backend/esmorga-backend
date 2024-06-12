@@ -6,6 +6,7 @@ import { MongoRepository } from './mongo.repository';
 import { User as UserSchema } from '../schema';
 import { DataBaseInternalError, DataBaseUnathorizedError } from '../errors';
 import { UserProfileDto } from '../../dtos';
+import { validateObjectDto, REQUIRED_FIELDS } from '../services';
 
 @Injectable()
 export class AccountRepository extends MongoRepository<UserSchema> {
@@ -19,11 +20,13 @@ export class AccountRepository extends MongoRepository<UserSchema> {
     try {
       const user = await this.findOneByEmail(email);
 
-      const userProfile = plainToClass(UserProfileDto, user, {
+      const userProfile: UserProfileDto = plainToClass(UserProfileDto, user, {
         excludeExtraneousValues: true,
       });
 
       if (!userProfile) throw new DataBaseUnathorizedError();
+
+      validateObjectDto(userProfile, REQUIRED_FIELDS.USER_PROFILE);
 
       return { userProfile, password: user.password };
     } catch (error) {

@@ -6,7 +6,7 @@ import {
 } from '../../../src/application/handler/event';
 import { EventListDto, EventDto } from '../../../src/infrastructure/dtos';
 import { EventController } from '../../../src/infrastructure/http/controllers';
-import { createEventMock, eventMock } from '../../mocks/dtos';
+import { createEventMock, EVENT_MOCK } from '../../mocks/dtos';
 
 jest.mock('../../../src/application/handler/event');
 
@@ -37,7 +37,7 @@ describe('[unit-test] - EventController', () => {
 
   describe('[getEvents] - Get event list', () => {
     it('Should return the data provided mapped', async () => {
-      const events: EventDto[] = [eventMock];
+      const events: EventDto[] = [EVENT_MOCK];
 
       const eventList: EventListDto = {
         totalEvents: events.length,

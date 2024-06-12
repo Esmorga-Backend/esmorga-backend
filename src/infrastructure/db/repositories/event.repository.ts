@@ -7,7 +7,7 @@ import { MongoRepository } from './mongo.repository';
 import { Event as EventSchema } from '../schema';
 import { DataBaseInternalError } from '../errors';
 import { CreateEventDto } from '../../http/dtos';
-import { validateEventDto } from '../services';
+import { validateObjectDto, REQUIRED_FIELDS } from '../services';
 
 @Injectable()
 export class EventRepository extends MongoRepository<EventSchema> {
@@ -36,7 +36,7 @@ export class EventRepository extends MongoRepository<EventSchema> {
           excludeExtraneousValues: true,
         });
 
-        validateEventDto(eventDto);
+        validateObjectDto(eventDto, REQUIRED_FIELDS.EVENTS);
 
         return eventDto;
       });
