@@ -118,10 +118,10 @@ export const getEvents: StepDefinitions = ({ given, and, when, then}) => {
       if (error==500){
         expect(response.status).toBe(HttpStatus.INTERNAL_SERVER_ERROR);
         expect(response.body).toEqual({
-          title: 'InternalSerError',
+          title: 'internalServerError',
           status: HttpStatus.INTERNAL_SERVER_ERROR,
           type: path,
-          detail: 'Unexpected error',
+          detail: 'unexpected error',
           errors: ['Internal server error occurred in database operation'],
         });
       }else{
