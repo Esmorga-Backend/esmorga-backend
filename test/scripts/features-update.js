@@ -51,21 +51,13 @@ const data = {
     }
   ]
 };
-/*
-if (!fs.existsSync(outputDir+'/MOB_Feature.feature')) {
-  console.log('Remove MOB_Feature.feature');
-  fs.unlinkSync(outputDir+'/MOB_Feature.feature');
-}
-*/
+
 axios.post(url, data, { headers, responseType: 'arraybuffer' })
   .then(response => {
     const zipPath = path.resolve(__dirname, 'features.zip');
     fs.writeFileSync(zipPath, response.data);
     console.log('File saved to', zipPath);
-
-    // Descomprimir el fichero ZIP
     const zip = new AdmZip(zipPath);
-//    const outputDir = path.resolve(__dirname, 'extracted');
     zip.extractAllTo(outputDir, true);
     console.log('Files extracted to', outputDir);
     fs.unlinkSync(zipPath);

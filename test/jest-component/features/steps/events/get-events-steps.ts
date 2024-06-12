@@ -3,7 +3,7 @@ import { StepDefinitions} from 'jest-cucumber';
 import * as request from 'supertest';
 import { AppModule } from '../../../../../src/app.module';
 import { HttpStatus, INestApplication } from '@nestjs/common';
-import { EventRepository } from '../../../../../src/infraestructure/db/repositories';
+import { EventRepository } from '../../../../../src/infrastructure/db/repositories' ;
 import { futureEventMockDB, oldEventMockDB } from '../../../../mocks/db';
 import { matchers } from 'jest-json-schema';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -12,11 +12,9 @@ const addFormats = require('ajv-formats');
 const axios = require('axios');
 const SwaggerParser = require('swagger-parser');
 const Ajv = require('ajv');
-
 let app : INestApplication;
 let eventRepository: EventRepository;
 let schema;
-
 
 beforeEach(async () => {
   const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -42,18 +40,16 @@ afterEach(async () => {
   await app.close();
 });
 
-
-
 export const getEvents: StepDefinitions = ({ given, and, when, then}) => {
     let response
     let path: string = '';
     const ajv = new Ajv({ strict: false });
     addFormats(ajv)
 
-
     given('the GET Events API is available', () => {
       path = '/v1/events';
     });
+
     given('the GET Events API is unavailable', () => {
       path = '/v1/events';
       jest.spyOn(eventRepository, 'find').mockRejectedValue(new Error());
@@ -71,21 +67,16 @@ export const getEvents: StepDefinitions = ({ given, and, when, then}) => {
       }
     });
 
-
     when(/^a GET request is made to (\w+) API$/, async (endpoint) => {
       response = await request(app.getHttpServer()).get(path);
-
     });
 
     then(/^the response should contain (\d+) upcoming Events$/, ( events_to_check) => {
       expect(response.status).toBe(HttpStatus.OK);
       expect.extend(matchers);
-      
       expect(response.body).toMatchObject(
         {"totalEvents": parseInt(events_to_check)}
-
       )
-
       if (events_to_check == 1){
           expect(response.body).toEqual({
             totalEvents: 1,
@@ -113,7 +104,6 @@ export const getEvents: StepDefinitions = ({ given, and, when, then}) => {
     });
     
     and('the response should following swagger schema', () => {
-
       const reference = schema.paths[path].get.responses[response.status].content['application/json'].schema
       const validate = ajv.compile(reference);
       const valid = validate(response.body);
@@ -123,8 +113,8 @@ export const getEvents: StepDefinitions = ({ given, and, when, then}) => {
       expect(valid).toBe(true);
 
     });
-    then(/^an error (\d+) in response should be returned$/, (error) => {
 
+    then(/^an error (\d+) in response should be returned$/, (error) => {
       if (error==500){
         expect(response.status).toBe(HttpStatus.INTERNAL_SERVER_ERROR);
         expect(response.body).toEqual({
@@ -137,6 +127,5 @@ export const getEvents: StepDefinitions = ({ given, and, when, then}) => {
       }else{
         expect(true).toBe(false);
       }
-      
     });
 }
