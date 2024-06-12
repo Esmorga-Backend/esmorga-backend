@@ -9,6 +9,10 @@ class Profile {
 
   @Expose()
   @IsString()
+  lastName: string;
+
+  @Expose()
+  @IsString()
   email: string;
 }
 
@@ -41,7 +45,8 @@ export class AccountLoggedDto {
   @ApiProperty({
     type: 'object',
     properties: {
-      name: { type: 'string', example: 'Test Name' },
+      name: { type: 'string', example: 'John' },
+      lastName: { type: 'string', example: 'Donnel-Vic' },
       email: { type: 'string', example: 'eventslogin01@yopmail.com' },
     },
   })

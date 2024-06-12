@@ -11,8 +11,13 @@ export class UserProfileDto {
 
   @Expose()
   @IsString()
-  @ApiProperty({ example: 'Test Name' })
+  @ApiProperty({ example: 'John' })
   name: string;
+
+  @Expose()
+  @IsString()
+  @ApiProperty({ example: 'Donnel-Vic' })
+  lastName: string;
 
   @Expose()
   @IsString()
