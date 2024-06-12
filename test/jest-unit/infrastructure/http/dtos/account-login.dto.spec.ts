@@ -1,6 +1,6 @@
 import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
-import { AccountLoginDto } from '../../../../../src/infrastructure/dtos';
+import { AccountLoginDto } from '../../../../../src/infrastructure/http/dtos';
 
 const ACCOUNT_LOGIN_MOCK: AccountLoginDto = {
   email: 'esmorga.test.01@yopmail.com',

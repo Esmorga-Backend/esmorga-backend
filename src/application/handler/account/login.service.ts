@@ -7,10 +7,10 @@ import {
   TokensRepository,
 } from '../../../infrastructure/db/repositories';
 import {
-  AccountLoginDto,
   AccountLoggedDto,
   PairOfTokensDto,
 } from '../../../infrastructure/dtos';
+import { AccountLoginDto } from '../../../infrastructure/http/dtos';
 import {
   validateLoginCredentials,
   getOldestPairOfTokens,

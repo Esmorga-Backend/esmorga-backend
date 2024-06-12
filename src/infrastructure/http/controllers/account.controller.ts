@@ -10,7 +10,7 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import { LoginService } from '../../../application/handler/account';
 import { HttpExceptionFilter } from '../errors';
-import { AccountLoginDto } from '../../dtos';
+import { AccountLoginDto } from '../dtos';
 import { SwaggerAccountLogin } from '../swagger/decorators/account';
 
 @Controller('/v1/account')
