@@ -22,6 +22,7 @@ jobs:
       JWT_SECRET: "j1u5RDS8Ga4hzDcS1vGULNPHYMGjMfjINLarWJM9UIjAVPxgFUgA1tMc/OT4NItCzGqU/cGlkjg4l6kgqcNEcQ"
       ACCESS_TOKEN_TTL: 600
       MAX_PAIR_OF_TOKEN: 5
+      AioToken: "${{ secrets.AoiToken }}"
     steps:
       - name: Start MongoDB
         uses: supercharge/mongodb-github-action@1.11.0

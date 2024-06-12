@@ -51,4 +51,7 @@ pids
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
+#Ignore Features to force download
+test/jest-component/features/MOB_Feature.feature
+test/cypress-e2e/cypress/e2e/features/MOB_Feature.feature
 jest.config.json
