@@ -27,7 +27,9 @@ async function main() {
     description =
       `[Swagger in JSON format](${process.env.DNS_NAME}/swagger-json)\n\n` +
       description;
-    swaggerConfigBuilder = swaggerConfigBuilder.addServer(process.env.DNS_NAME);
+    swaggerConfigBuilder = swaggerConfigBuilder
+      .addServer(process.env.DNS_NAME)
+      .setDescription(description);
   }
 
   const swaggerConfig = swaggerConfigBuilder.build();
