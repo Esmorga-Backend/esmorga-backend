@@ -1,6 +1,9 @@
 import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
-import { AccountRegisterDto } from '../../../../../src/infrastructure/http/dtos';
+import {
+  AccountRegisterDto,
+  ACCOUNT_REGISTER_REGEX,
+} from '../../../../../src/infrastructure/http/dtos';
 import { accountRegister } from '../../../../mocks/dtos';
 
 describe('[unit test] [AccountRegisterDto]', () => {
@@ -71,6 +74,76 @@ describe('[unit test] [AccountRegisterDto]', () => {
         isString: 'name must be a string',
       });
     });
+
+    it(`Should only accept letters (Uppercase or lowercase), spaces and ''',  '-'`, async () => {
+      const accountRegisterData = {
+        name: 'John@',
+        lastName: "O'Donnel-Vic",
+        password: 'SuperSecret1!',
+        email: 'eventslogin01@yopmail.com',
+      };
+
+      const data = plainToInstance(AccountRegisterDto, accountRegisterData);
+
+      const errors = await validate(data, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('name');
+      expect(errors[0].constraints).toEqual({
+        matches:
+          "name only accept letters (Uppercase or lowercase), spaces and ''',  '-'",
+      });
+    });
+
+    it(`Regex used for name property should only accept letters (Uppercase or lowercase), spaces and ''',  '-'`, async () => {
+      const validExamples: string[] = [
+        'john',
+        'JOHN',
+        'John',
+        `John'`,
+        'John-',
+        'Jo hn',
+      ];
+
+      validExamples.forEach((value) =>
+        expect(ACCOUNT_REGISTER_REGEX.NAME.test(value)).toBe(true),
+      );
+
+      const invalidExampls: string[] = [
+        'John123',
+        'John_',
+        'John+',
+        'John=',
+        'John(',
+        'John)',
+        'John*',
+        'John&',
+        'John^',
+        'John%',
+        'John$',
+        'John#',
+        'John@',
+        'John!',
+        'John|',
+        'John[',
+        'John]',
+        'John{',
+        'John}',
+        'John"',
+        'John,',
+        'John;',
+        'John:',
+        'John>',
+        'John<',
+        'John.',
+        'John/',
+        'John?',
+      ];
+
+      invalidExampls.forEach((value) =>
+        expect(ACCOUNT_REGISTER_REGEX.NAME.test(value)).toBe(false),
+      );
+    });
   });
 
   describe('[AccountRegisterDto] [lastName]', () => {
@@ -138,6 +211,26 @@ describe('[unit test] [AccountRegisterDto]', () => {
       expect(errors[0].property).toEqual('lastName');
       expect(errors[0].constraints).toEqual({
         isString: 'lastName must be a string',
+      });
+    });
+
+    it(`Should only accept letters (Uppercase or lowercase), spaces and ''',  '-'`, async () => {
+      const accountRegisterData = {
+        name: 'John',
+        lastName: "O'Donnel-Vic@",
+        password: 'SuperSecret1!',
+        email: 'eventslogin01@yopmail.com',
+      };
+
+      const data = plainToInstance(AccountRegisterDto, accountRegisterData);
+
+      const errors = await validate(data, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('lastName');
+      expect(errors[0].constraints).toEqual({
+        matches:
+          "lastName only accept letters (Uppercase or lowercase), spaces and ''',  '-'",
       });
     });
   });
