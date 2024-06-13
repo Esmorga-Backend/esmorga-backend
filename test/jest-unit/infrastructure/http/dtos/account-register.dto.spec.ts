@@ -72,4 +72,73 @@ describe('[unit test] [AccountRegisterDto]', () => {
       });
     });
   });
+
+  describe('[AccountRegisterDto] [lastName]', () => {
+    it('Should not accept an empty value', async () => {
+      const accountRegisterData = { ...accountRegister };
+
+      delete accountRegisterData.lastName;
+
+      const data = plainToInstance(AccountRegisterDto, accountRegisterData);
+
+      const errors = await validate(data, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('lastName');
+      expect(errors[0].constraints).toEqual({
+        isNotEmpty: 'lastName should not be empty',
+      });
+    });
+
+    it('Should not accept less than 3 characters', async () => {
+      const accountRegisterData = { ...accountRegister };
+
+      accountRegisterData.lastName = 'AA';
+
+      const data = plainToInstance(AccountRegisterDto, accountRegisterData);
+
+      const errors = await validate(data, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('lastName');
+      expect(errors[0].constraints).toEqual({
+        minLength: 'lastName must have min 3 characters',
+      });
+    });
+
+    it('Should not accept more than 100 characters', async () => {
+      const accountRegisterData = { ...accountRegister };
+
+      accountRegisterData.lastName = 'A'.repeat(101);
+
+      const data = plainToInstance(AccountRegisterDto, accountRegisterData);
+
+      const errors = await validate(data, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('lastName');
+      expect(errors[0].constraints).toEqual({
+        maxLength: 'lastName must have max 100 characters',
+      });
+    });
+
+    it('Should only accept string values', async () => {
+      const accountRegisterData = {
+        name: 'John',
+        lastName: 123,
+        password: 'SuperSecret1!',
+        email: 'eventslogin01@yopmail.com',
+      };
+
+      const data = plainToInstance(AccountRegisterDto, accountRegisterData);
+
+      const errors = await validate(data, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('lastName');
+      expect(errors[0].constraints).toEqual({
+        isString: 'lastName must be a string',
+      });
+    });
+  });
 });
