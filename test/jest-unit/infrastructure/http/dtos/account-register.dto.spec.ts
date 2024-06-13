@@ -234,4 +234,95 @@ describe('[unit test] [AccountRegisterDto]', () => {
       });
     });
   });
+
+  describe('[AccountRegisterDto] [password]', () => {
+    it('Should not accept an empty value', async () => {
+      const accountRegisterData = { ...accountRegister };
+
+      delete accountRegisterData.password;
+
+      const data = plainToInstance(AccountRegisterDto, accountRegisterData);
+
+      const errors = await validate(data, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('password');
+      expect(errors[0].constraints).toEqual({
+        isNotEmpty: 'password should not be empty',
+      });
+    });
+
+    it('Should not accept less than 8 characters', async () => {
+      const accountRegisterData = { ...accountRegister };
+
+      accountRegisterData.password = 'AA';
+
+      const data = plainToInstance(AccountRegisterDto, accountRegisterData);
+
+      const errors = await validate(data, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('password');
+      expect(errors[0].constraints).toEqual({
+        minLength: 'password must have min 8 characters',
+      });
+    });
+
+    it('Should not accept more than 50 characters', async () => {
+      const accountRegisterData = { ...accountRegister };
+
+      accountRegisterData.password = 'A'.repeat(51);
+
+      const data = plainToInstance(AccountRegisterDto, accountRegisterData);
+
+      const errors = await validate(data, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('password');
+      expect(errors[0].constraints).toEqual({
+        maxLength: 'password must have max 50 characters',
+      });
+    });
+
+    it('Should only accept string values', async () => {
+      const accountRegisterData = {
+        name: 'John',
+        lastName: "O'Donnel-Vic",
+        password: 123,
+        email: 'eventslogin01@yopmail.com',
+      };
+
+      const data = plainToInstance(AccountRegisterDto, accountRegisterData);
+
+      const errors = await validate(data, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('password');
+      expect(errors[0].constraints).toEqual({
+        isString: 'password must be a string',
+      });
+    });
+
+    it('Regex used for password property force to include at least one digit and one symbol', async () => {
+      const validExamples: string[] = [
+        'Password!1',
+        'Password!123',
+        'Password!@#123',
+      ];
+
+      validExamples.forEach((value) =>
+        expect(ACCOUNT_REGISTER_REGEX.PASSWORD.test(value)).toBe(true),
+      );
+
+      const invalidExampls: string[] = [
+        'NoDigistNoSpecialChartacters',
+        'NoSpecialCharacters123',
+        'OnlySpecialChars!@#$%',
+      ];
+
+      invalidExampls.forEach((value) =>
+        expect(ACCOUNT_REGISTER_REGEX.PASSWORD.test(value)).toBe(false),
+      );
+    });
+  });
 });
