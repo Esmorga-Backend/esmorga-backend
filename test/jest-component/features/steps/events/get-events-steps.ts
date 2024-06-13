@@ -103,7 +103,7 @@ export const getEvents: StepDefinitions = ({ given, and, when, then}) => {
       }        
     });
     
-    and('the response should following swagger schema', () => {
+    and('response follows swagger schema', () => {
       const reference = schema.paths[path].get.responses[response.status].content['application/json'].schema
       const validate = ajv.compile(reference);
       const valid = validate(response.body);
@@ -114,7 +114,7 @@ export const getEvents: StepDefinitions = ({ given, and, when, then}) => {
 
     });
 
-    then(/^an error (\d+) in response should be returned$/, (error) => {
+    then(/^error response code (\d+) returned$/, (error) => {
       if (error==500){
         expect(response.status).toBe(HttpStatus.INTERNAL_SERVER_ERROR);
         expect(response.body).toEqual({
