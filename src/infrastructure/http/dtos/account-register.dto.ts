@@ -9,6 +9,7 @@ import {
 // Regex for name and lastName is the same one
 export const ACCOUNT_REGISTER_REGEX = {
   NAME: /^[A-Za-z\s'-]+$/,
+  PASSWORD: /(?=.*[0-9])(?=.*[!@#$%^&*()_+])/,
 };
 
 export class AccountRegisterDto {
@@ -32,5 +33,12 @@ export class AccountRegisterDto {
 
   email: string;
 
+  @Matches(ACCOUNT_REGISTER_REGEX.PASSWORD, {
+    message: 'password must include at least one digit and one symbol',
+  })
+  @MinLength(8, { message: 'password must have min 8 characters' })
+  @MaxLength(50, { message: 'password must have max 50 characters' })
+  @IsString()
+  @IsNotEmpty()
   password: string;
 }
