@@ -235,6 +235,86 @@ describe('[unit test] [AccountRegisterDto]', () => {
     });
   });
 
+  describe('[AccountRegisterDto] [email]', () => {
+    it('Should not accept an empty value', async () => {
+      const accountRegisterData = { ...accountRegister };
+
+      delete accountRegisterData.email;
+
+      const data = plainToInstance(AccountRegisterDto, accountRegisterData);
+
+      const errors = await validate(data, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('email');
+      expect(errors[0].constraints).toEqual({
+        isNotEmpty: 'email should not be empty',
+      });
+    });
+
+    it('Should not accept more than 100 characters', async () => {
+      const accountRegisterData = { ...accountRegister };
+
+      accountRegisterData.email = 'A'.repeat(101);
+
+      const data = plainToInstance(AccountRegisterDto, accountRegisterData);
+
+      const errors = await validate(data, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('email');
+      expect(errors[0].constraints).toEqual({
+        maxLength: 'email must have max 100 characters',
+      });
+    });
+
+    it('Should only accept string values', async () => {
+      const accountRegisterData = {
+        name: 'John',
+        lastName: "O'Donnel-Vic",
+        password: 'Password!1',
+        email: 123,
+      };
+
+      const data = plainToInstance(AccountRegisterDto, accountRegisterData);
+
+      const errors = await validate(data, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('email');
+      expect(errors[0].constraints).toEqual({
+        isString: 'email must be a string',
+      });
+    });
+
+    it('Regex used should not accept +, spaces and after the @ only letters (Uppercase or lowercase) and digits are allowed, _ - ', async () => {
+      const validExamples: string[] = [
+        'eventslogin01@yopmail.com',
+        'eventslogin01.name123@yopmail.co.es',
+        'another-eventslogin01@sub.domain.yopmail.net',
+        'events_login01@yopmail.org',
+        '1234@yopmail.com',
+      ];
+
+      validExamples.forEach((value) =>
+        expect(ACCOUNT_REGISTER_REGEX.EMAIL.test(value)).toBe(true),
+      );
+
+      const invalidExampls: string[] = [
+        'eventslogin01+alias@yopmail.com',
+        'events login01@yopmail.com',
+        'eventslogin01@invalid domainYopmail.com',
+        'invalidemail',
+        '@yopmail.com',
+        'eventslogin01@yopmail',
+      ];
+
+      invalidExampls.forEach((value) =>
+        expect(ACCOUNT_REGISTER_REGEX.EMAIL.test(value)).toBe(false),
+      );
+    });
+  });
+
   describe('[AccountRegisterDto] [password]', () => {
     it('Should not accept an empty value', async () => {
       const accountRegisterData = { ...accountRegister };

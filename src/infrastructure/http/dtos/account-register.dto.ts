@@ -9,6 +9,7 @@ import {
 // Regex for name and lastName is the same one
 export const ACCOUNT_REGISTER_REGEX = {
   NAME: /^[A-Za-z\s'-]+$/,
+  EMAIL: /^[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
   PASSWORD: /(?=.*[0-9])(?=.*[!@#$%^&*()_+])/,
 };
 
@@ -31,6 +32,13 @@ export class AccountRegisterDto {
   @IsNotEmpty()
   lastName: string;
 
+  @Matches(ACCOUNT_REGISTER_REGEX.EMAIL, {
+    message:
+      'email do not accept +, spaces and after the @ only letters (Uppercase or lowercase) and digits are allowed, _ - ',
+  })
+  @MaxLength(100, { message: 'email must have max 100 characters' })
+  @IsString()
+  @IsNotEmpty()
   email: string;
 
   @Matches(ACCOUNT_REGISTER_REGEX.PASSWORD, {
