@@ -3,6 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import { executeMigrations } from './config';
+const DNS_NAME = process.env.DNS_NAME;
 
 async function main() {
   executeMigrations();
@@ -17,11 +18,17 @@ async function main() {
     }),
   );
 
+  const description = DNS_NAME
+    ? `[Swagger in JSON format](${DNS_NAME}/swagger-json)\n\n Swagger for Esmorga API.`
+    : 'Swagger for Esmorga API.';
+
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Esmorga API')
-    .setDescription('Swagger for Esmorga API.')
     .setVersion('1.0')
+    .addServer(`${DNS_NAME}`)
+    .setDescription(description)
     .build();
+
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('swagger', app, document);
 
