@@ -5,7 +5,7 @@
     "ts"
   ],
   "rootDir": "../..",
-  "testRegex": ".*\\jest-cucumber-setup\\.ts$",
+  "testRegex": ".*\\.spec\\.ts$",
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
   },

@@ -17,7 +17,7 @@
     "test:unit": "jest --config ./test/jest-unit/jest-unit.config.json --detectOpenHandles",
     "test:cov:unit": "jest --config ./test/jest-unit/jest-unit.config.json --coverage --detectOpenHandles",
     "test:component": "node test/scripts/features-update.js test/jest-component/features/ 2,4 5 && jest --config ./test/jest-component/jest-component.config.json --detectOpenHandles --forceExit",
-    "test:cov:component": "node test/scripts/features-update.js test/jest-component/features/ 4 5 && jest --config ./test/jest-component/jest-component.config.json --coverage --detectOpenHandles  --forceExit",
+    "test:cov:component": "jest --config ./test/jest-component/jest-component.config.json --coverage --detectOpenHandles  --forceExit",
     "test:merge-coverage": "istanbul-merge --out coverage/merged-output/merged-coverage.json coverage/unit/coverage-final.json coverage/component/coverage-final.json",
     "test:report": "nyc report -t coverage/merged-output --report-dir coverage --reporter=html --reporter=cobertura --reporter=lcov",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
