@@ -1,4 +1,4 @@
-import { app, eventRepository, schema, context } from '../steps-config'
+import { app, eventRepository, schema, context } from '../../steps-config'
 import { StepDefinitions} from 'jest-cucumber';
 
 const Ajv = require('ajv');

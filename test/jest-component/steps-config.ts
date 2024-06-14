@@ -2,8 +2,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
 import { INestApplication } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { EventRepository } from '../../../src/infrastructure/db/repositories' ;
-import { AppModule } from '../../../src/app.module';
+import { EventRepository } from '../../src/infrastructure/db/repositories' ;
+import { AppModule } from '../../src/app.module';
 
 
 const SwaggerParser = require('swagger-parser');

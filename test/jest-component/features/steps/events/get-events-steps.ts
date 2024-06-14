@@ -1,4 +1,4 @@
-import { app, eventRepository, schema, context } from '../../steps-config'
+import { app, eventRepository, schema, context } from '../../../steps-config'
 import { StepDefinitions} from 'jest-cucumber';
 import * as request from 'supertest';
 import { HttpStatus, INestApplication } from '@nestjs/common';
