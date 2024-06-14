@@ -1,3 +1,4 @@
+import { app, eventRepository, schema, context } from '../../steps-config'
 import { StepDefinitions} from 'jest-cucumber';
 import * as request from 'supertest';
 import { HttpStatus, INestApplication } from '@nestjs/common';
@@ -5,26 +6,17 @@ import { EventRepository } from '../../../../../src/infrastructure/db/repositori
 import { futureEventMockDB, oldEventMockDB } from '../../../../mocks/db';
 import { matchers } from 'jest-json-schema';
 
-const addFormats = require('ajv-formats');
-
-let app : INestApplication;
-let eventRepository: EventRepository;
-let schema;
 
 
 
 export const getEvents: StepDefinitions = ({ given, and, when, then}) => {
-    let response
-    let path: string = '';
-    const ajv = new Ajv({ strict: false });
-    addFormats(ajv)
 
     given('the GET Events API is available', () => {
-      path = '/v1/events';
+      context.path = '/v1/events';
     });
 
     given('the GET Events API is unavailable', () => {
-      path = '/v1/events';
+      context.path = '/v1/events';
       jest.spyOn(eventRepository, 'find').mockRejectedValue(new Error());
     });
 
@@ -41,17 +33,17 @@ export const getEvents: StepDefinitions = ({ given, and, when, then}) => {
     });
 
     when(/^a GET request is made to (\w+) API$/, async (endpoint) => {
-      response = await request(app.getHttpServer()).get(path);
+      context.response = await request(app.getHttpServer()).get(context.path);
     });
 
     then(/^the response should contain (\d+) upcoming Events$/, ( events_to_check) => {
-      expect(response.status).toBe(HttpStatus.OK);
+      expect(context.response.status).toBe(HttpStatus.OK);
       expect.extend(matchers);
-      expect(response.body).toMatchObject(
+      expect(context.response.body).toMatchObject(
         {"totalEvents": parseInt(events_to_check)}
       )
       if (events_to_check == 1){
-          expect(response.body).toEqual({
+          expect(context.response.body).toEqual({
             totalEvents: 1,
             events: [
               {
@@ -67,7 +59,7 @@ export const getEvents: StepDefinitions = ({ given, and, when, then}) => {
             ],
           });
       }else if (events_to_check == 0){
-        expect(response.body).toEqual({
+        expect(context.response.body).toEqual({
           totalEvents: 0,
           events: []
         });
@@ -78,11 +70,11 @@ export const getEvents: StepDefinitions = ({ given, and, when, then}) => {
     
     then(/^an error (\d+) in response should be returned$/, (error) => {
       if (error==500){
-        expect(response.status).toBe(HttpStatus.INTERNAL_SERVER_ERROR);
-        expect(response.body).toEqual({
+        expect(context.response.status).toBe(HttpStatus.INTERNAL_SERVER_ERROR);
+        expect(context.response.body).toEqual({
           title: 'internalServerError',
           status: HttpStatus.INTERNAL_SERVER_ERROR,
-          type: path,
+          type: context.path,
           detail: 'unexpected error',
           errors: ['Internal server error occurred in database operation'],
         });

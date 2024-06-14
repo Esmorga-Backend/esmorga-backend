@@ -1,28 +1,20 @@
+import { app, eventRepository, schema, context } from '../steps-config'
 import { StepDefinitions} from 'jest-cucumber';
-import * as request from 'supertest';
-import { HttpStatus, INestApplication } from '@nestjs/common';
-import { EventRepository } from '../../../../src/infrastructure/db/repositories' ;
-import { matchers } from 'jest-json-schema';
 
+const Ajv = require('ajv');
 const addFormats = require('ajv-formats');
-
-let app : INestApplication;
-let eventRepository: EventRepository;
-let schema;
 
 
 
 export const reusableSteps: StepDefinitions = ({ given, and, when, then}) => {
-    let response
-    let path: string = '';
     const ajv = new Ajv({ strict: false });
     addFormats(ajv)
 
     
     and('the response should following swagger schema', () => {
-      const reference = schema.paths[path].get.responses[response.status].content['application/json'].schema
+      const reference = schema.paths[context.path].get.responses[context.response.status].content['application/json'].schema
       const validate = ajv.compile(reference);
-      const valid = validate(response.body);
+      const valid = validate(context.response.body);
       if (!valid) {
         console.error(validate.errors);
       }
