@@ -81,12 +81,12 @@ function IsNotPastDate(validationOptions?: ValidationOptions) {
   };
 }
 
-class LocationDto {
+class CreateEventLocationDto {
   @MinLength(1, { message: 'name must have min 1 character' })
   @MaxLength(100, { message: 'name must have max 100 characters' })
   @IsString()
   @IsDefined({ message: 'name should not be empty' })
-  @ApiProperty({ example: 'A Coruña' })
+  @ApiProperty({ example: 'A Coruña', minLength: 1, maxLength: 100 })
   name: string;
 
   @IsNumber({}, { message: 'lat must be a number' })
@@ -107,7 +107,11 @@ class LocationDto {
 }
 
 export class CreateEventDto {
-  @ApiProperty({ example: 'End of the World Party' })
+  @ApiProperty({
+    example: 'End of the World Party',
+    minLength: 3,
+    maxLength: 100,
+  })
   @MinLength(3, { message: 'eventName must have min 3 characters' })
   @MaxLength(100, { message: 'eventName must have max 100 characters' })
   @IsString()
@@ -133,6 +137,8 @@ export class CreateEventDto {
   @ApiProperty({
     example:
       'Join us for an unforgettable celebration as we dance into the apocalypse.',
+    minLength: 1,
+    maxLength: 5000,
   })
   @MinLength(1, { message: 'description must have min 1 character' })
   @MaxLength(5000, { message: 'description must have max 5000 characters' })
@@ -149,7 +155,7 @@ export class CreateEventDto {
   @IsNotEmpty()
   eventType: EventType;
 
-  @ApiPropertyOptional({ example: 'image.url' })
+  @ApiPropertyOptional({ example: 'image.url', maxLength: 500 })
   @MaxLength(500, {
     message: 'imageUrl description must have max 500 characters',
   })
@@ -157,14 +163,18 @@ export class CreateEventDto {
   @IsOptional()
   imageUrl?: string;
 
-  @ApiProperty({ type: LocationDto })
+  @ApiProperty({ type: CreateEventLocationDto })
   @IsNotEmpty()
   @IsObject()
   @ValidateNested()
-  @Type(() => LocationDto)
-  location: LocationDto;
+  @Type(() => CreateEventLocationDto)
+  location: CreateEventLocationDto;
 
-  @ApiPropertyOptional({ example: ['Dance', 'Music'] })
+  @ApiPropertyOptional({
+    example: ['Dance', 'Music'],
+    minLength: 3,
+    maxLength: 25,
+  })
   @IsOptional()
   @MinLength(3, {
     each: true,
