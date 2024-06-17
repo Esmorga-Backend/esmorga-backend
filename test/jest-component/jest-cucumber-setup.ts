@@ -1,6 +1,6 @@
 
 import { loadFeatures, autoBindSteps } from 'jest-cucumber';
-import 'steps-config'
+import './steps-config'
 const { directoryImport } = require('directory-import');
 const importedModules = directoryImport('./features/steps/');
 

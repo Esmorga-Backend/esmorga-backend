@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { EventRepository } from '../../src/infrastructure/db/repositories' ;
 import { AppModule } from '../../src/app.module';
@@ -19,6 +19,7 @@ beforeEach(async () => {
     imports: [AppModule],
   }).compile();
   app = moduleFixture.createNestApplication();
+  app.useGlobalPipes(new ValidationPipe());
   const swaggerConfig = new DocumentBuilder()
   .setTitle('Esmorga API')
   .setDescription('Swagger for Esmorga API.')

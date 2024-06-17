@@ -1,15 +1,14 @@
 import { app, eventRepository, schema, context } from '../../../steps-config'
 import { StepDefinitions} from 'jest-cucumber';
 import * as request from 'supertest';
-import { HttpStatus, INestApplication } from '@nestjs/common';
-import { EventRepository } from '../../../../../src/infrastructure/db/repositories' ;
+import { HttpStatus } from '@nestjs/common';
 import { futureEventMockDB, oldEventMockDB } from '../../../../mocks/db';
 import { matchers } from 'jest-json-schema';
 
 
 
 
-export const getEvents: StepDefinitions = ({ given, and, when, then}) => {
+export const getEventsSteps: StepDefinitions = ({ given, and, when, then}) => {
 
     given('the GET Events API is available', () => {
       context.path = '/v1/events';
@@ -27,14 +26,14 @@ export const getEvents: StepDefinitions = ({ given, and, when, then}) => {
           jest.spyOn(eventRepository, 'find').mockResolvedValue([oldEventMockDB]);
       }else if (events_on_db == 1){
         jest.spyOn(eventRepository, 'find').mockResolvedValue([futureEventMockDB]);
-      }else if (expired_events_on_db != 0 && events_on_db != 0 ){
-        expect(false).toBe(true)
+      }else if (expired_events_on_db == 0 && events_on_db == 0 ){
+        jest.spyOn(eventRepository, 'find').mockResolvedValue([]);
+      }else{
+          expect(false).toBe(true)
       }
     });
 
-    when(/^a GET request is made to (\w+) API$/, async (endpoint) => {
-      context.response = await request(app.getHttpServer()).get(context.path);
-    });
+  
 
     then(/^the response should contain (\d+) upcoming Events$/, ( events_to_check) => {
       expect(context.response.status).toBe(HttpStatus.OK);
@@ -68,18 +67,5 @@ export const getEvents: StepDefinitions = ({ given, and, when, then}) => {
       }        
     });
     
-    then(/^an error (\d+) in response should be returned$/, (error) => {
-      if (error==500){
-        expect(context.response.status).toBe(HttpStatus.INTERNAL_SERVER_ERROR);
-        expect(context.response.body).toEqual({
-          title: 'internalServerError',
-          status: HttpStatus.INTERNAL_SERVER_ERROR,
-          type: context.path,
-          detail: 'unexpected error',
-          errors: ['Internal server error occurred in database operation'],
-        });
-      }else{
-        expect(true).toBe(false);
-      }
-    });
+
 }
