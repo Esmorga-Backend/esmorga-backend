@@ -18,6 +18,9 @@ export class RegisterService {
 
   async register(accountRegisterDto: AccountRegisterDto) {
     try {
+      const userProfile = this.accountRepository.saveUser(accountRegisterDto);
+
+      return userProfile;
     } catch (error) {
       throw error;
     }

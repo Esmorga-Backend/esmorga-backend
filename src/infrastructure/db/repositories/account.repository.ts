@@ -4,7 +4,11 @@ import { Model } from 'mongoose';
 import { plainToClass } from 'class-transformer';
 import { MongoRepository } from './mongo.repository';
 import { User as UserSchema } from '../schema';
-import { DataBaseInternalError, DataBaseUnathorizedError } from '../errors';
+import {
+  DataBaseInternalError,
+  DataBaseUnathorizedError,
+  DataBaseConflictError,
+} from '../errors';
 import { UserProfileDto } from '../../dtos';
 import { validateObjectDto, REQUIRED_FIELDS } from '../services';
 
@@ -31,6 +35,18 @@ export class AccountRepository extends MongoRepository<UserSchema> {
       return { userProfile, password: user.password };
     } catch (error) {
       if (error instanceof HttpException) throw error;
+
+      throw new DataBaseInternalError();
+    }
+  }
+
+  async saveUser(data) {
+    try {
+      const user = new this.userModel(data);
+
+      await this.save(user);
+    } catch (error) {
+      if (error.code === 11000) throw new DataBaseConflictError();
 
       throw new DataBaseInternalError();
     }

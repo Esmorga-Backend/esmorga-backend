@@ -8,23 +8,33 @@ import {
   HttpCode,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { LoginService } from '../../../application/handler/account';
+import {
+  LoginService,
+  RegisterService,
+} from '../../../application/handler/account';
 import { HttpExceptionFilter } from '../errors';
 import { AccountLoginDto, AccountRegisterDto } from '../dtos';
 import { SwaggerAccountLogin } from '../swagger/decorators/account';
+import { AccountLoggedDto } from '../../dtos';
 
 @Controller('/v1/account')
 @ApiTags('Account')
 @UseFilters(new HttpExceptionFilter())
 export class AccountController {
-  constructor(private readonly loginService: LoginService) {}
+  constructor(
+    private readonly loginService: LoginService,
+    private readonly registerService: RegisterService,
+  ) {}
 
   @Post('/login')
   @SwaggerAccountLogin()
   @HttpCode(200)
-  async login(@Body() accountLoginDto: AccountLoginDto) {
+  async login(
+    @Body() accountLoginDto: AccountLoginDto,
+  ): Promise<AccountLoggedDto> {
     try {
-      const response = await this.loginService.login(accountLoginDto);
+      const response: AccountLoggedDto =
+        await this.loginService.login(accountLoginDto);
 
       return response;
     } catch (error) {
@@ -35,9 +45,12 @@ export class AccountController {
     }
   }
 
+  @Post('/register')
   async register(@Body() accountRegisterDto: AccountRegisterDto) {
     try {
-      console.log({ accountRegisterDto });
+      const response = await this.registerService.register(accountRegisterDto);
+
+      return response;
     } catch (error) {
       if (error instanceof HttpException) {
         throw error;
