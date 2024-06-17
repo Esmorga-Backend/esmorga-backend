@@ -1,3 +1,4 @@
+import { Transform } from 'class-transformer';
 import {
   IsNotEmpty,
   IsString,
@@ -32,6 +33,13 @@ export class AccountRegisterDto {
   @IsNotEmpty()
   lastName: string;
 
+  /**
+   * Transform is executed before @IsString() decorator so if value is not a string, @Transform()
+   * returns the request body value and breaks with @IsString() decorator logic
+   */
+  @Transform(({ value }) =>
+    typeof value === 'string' ? value.toLowerCase() : value,
+  )
   @Matches(ACCOUNT_REGISTER_REGEX.EMAIL, {
     message:
       'email do not accept +, spaces and after the @ only letters (Uppercase or lowercase) and digits are allowed, _ - ',

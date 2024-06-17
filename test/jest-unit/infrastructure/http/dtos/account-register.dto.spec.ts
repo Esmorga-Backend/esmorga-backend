@@ -313,6 +313,19 @@ describe('[unit test] [AccountRegisterDto]', () => {
         expect(ACCOUNT_REGISTER_REGEX.EMAIL.test(value)).toBe(false),
       );
     });
+
+    it('Should handle the value in lower case', async () => {
+      const accountRegisterData = {
+        name: 'John',
+        lastName: "O'Donnel-Vic",
+        password: 'Password!1',
+        email: 'EVENTSLOGIN04@yopmail.com',
+      };
+
+      const data = plainToInstance(AccountRegisterDto, accountRegisterData);
+
+      expect(data.email).toBe(accountRegisterData.email.toLowerCase());
+    });
   });
 
   describe('[AccountRegisterDto] [password]', () => {
