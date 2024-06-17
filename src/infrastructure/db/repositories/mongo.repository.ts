@@ -30,7 +30,7 @@ export class MongoRepository<E> implements DBRepository<E> {
    * @returns Promise resolved with the document that matches the email provided.
    */
   async findOneByEmail(email: string): Promise<E> {
-    return this.entityModel.findOne({ email: email });
+    return this.entityModel.findOne({ email: { $eq: email } });
   }
 
   /**
