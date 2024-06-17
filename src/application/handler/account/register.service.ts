@@ -6,6 +6,8 @@ import {
   AccountRepository,
   TokensRepository,
 } from '../../../infrastructure/db/repositories';
+import { DataBaseConflictError } from '../../../infrastructure/db/errors';
+import { EmailConflictApiError } from '../../../domain/errors';
 
 @Injectable()
 export class RegisterService {
@@ -18,10 +20,17 @@ export class RegisterService {
 
   async register(accountRegisterDto: AccountRegisterDto) {
     try {
-      const userProfile = this.accountRepository.saveUser(accountRegisterDto);
+      await this.accountRepository.saveUser(accountRegisterDto);
+
+      const { userProfile } = await this.accountRepository.getUserByEmail(
+        accountRegisterDto.email,
+      );
 
       return userProfile;
     } catch (error) {
+      if (error instanceof DataBaseConflictError)
+        throw new EmailConflictApiError();
+
       throw error;
     }
   }
