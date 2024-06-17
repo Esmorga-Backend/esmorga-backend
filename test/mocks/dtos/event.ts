@@ -6,7 +6,7 @@ futureDate.setFullYear(2025);
 const oldDate: Date = new Date();
 oldDate.setFullYear(2023);
 
-export const eventMock: EventDto = {
+export const EVENT_MOCK: EventDto = {
   eventId: '6656e23640e1fdb4ceb23cc9',
   eventName: 'MobgenFest',
   eventDate: futureDate,
@@ -21,7 +21,7 @@ export const eventMock: EventDto = {
   tags: ['Meal', 'Music'],
 };
 
-export const oldEventMock: EventDto = {
+export const OLD_EVENT_MOCK: EventDto = {
   eventId: '6656e23640e1fdb4ceb23cc8',
   eventName: 'Paintball',
   eventDate: oldDate,

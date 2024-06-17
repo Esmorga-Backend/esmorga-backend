@@ -1,5 +1,6 @@
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { NestFactory } from '@nestjs/core';
+import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import { executeMigrations } from './config';
@@ -7,6 +8,7 @@ const DNS_NAME = process.env.DNS_NAME;
 
 async function main() {
   executeMigrations();
+
   const app = await NestFactory.create(AppModule);
 
   app.useGlobalPipes(
@@ -30,9 +32,12 @@ async function main() {
     .build();
 
   const document = SwaggerModule.createDocument(app, swaggerConfig);
+
   SwaggerModule.setup('swagger', app, document);
 
-  await app.listen(parseInt(process.env.APP_PORT));
+  const configService = app.get(ConfigService);
+
+  await app.listen(configService.get<number>('APP_PORT'));
 }
 
 main();
