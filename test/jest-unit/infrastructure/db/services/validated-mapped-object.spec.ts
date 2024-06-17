@@ -3,7 +3,7 @@ import {
   REQUIRED_FIELDS,
 } from '../../../../../src/infrastructure/db/services';
 import { DataBaseInternalError } from '../../../../../src/infrastructure/db/errors';
-import { EVENT_MOCK, USER_PROFILE } from '../../../../mocks/dtos';
+import { EVENT_MOCK, USER_PROFILE_MOCK } from '../../../../mocks/dtos';
 
 describe('[unit-test] [validateObjectDto]', () => {
   describe('[EventDto]', () => {
@@ -83,7 +83,7 @@ describe('[unit-test] [validateObjectDto]', () => {
   describe('[UserProfileDto]', () => {
     it('Should throw an error if uuid is missed', () => {
       try {
-        const userProfile = { ...USER_PROFILE };
+        const userProfile = { ...USER_PROFILE_MOCK };
 
         delete userProfile.uuid;
 
@@ -95,7 +95,7 @@ describe('[unit-test] [validateObjectDto]', () => {
 
     it('Should throw an error if name is missed', () => {
       try {
-        const userProfile = { ...USER_PROFILE };
+        const userProfile = { ...USER_PROFILE_MOCK };
 
         delete userProfile.name;
 
@@ -107,7 +107,7 @@ describe('[unit-test] [validateObjectDto]', () => {
 
     it('Should throw an error if lastName is missed', () => {
       try {
-        const userProfile = { ...USER_PROFILE };
+        const userProfile = { ...USER_PROFILE_MOCK };
 
         delete userProfile.lastName;
 
@@ -119,7 +119,7 @@ describe('[unit-test] [validateObjectDto]', () => {
 
     it('Should throw an error if email is missed', () => {
       try {
-        const userProfile = { ...USER_PROFILE };
+        const userProfile = { ...USER_PROFILE_MOCK };
 
         delete userProfile.email;
 
@@ -131,7 +131,7 @@ describe('[unit-test] [validateObjectDto]', () => {
 
     it('Should throw an error if role is missed', () => {
       try {
-        const userProfile = { ...USER_PROFILE };
+        const userProfile = { ...USER_PROFILE_MOCK };
 
         delete userProfile.role;
 

@@ -1,11 +1,7 @@
 import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
 import { AccountLoginDto } from '../../../../../src/infrastructure/http/dtos';
-
-const ACCOUNT_LOGIN_MOCK: AccountLoginDto = {
-  email: 'esmorga.test.01@yopmail.com',
-  password: 'Password01',
-};
+import { ACCOUNT_LOGIN_MOCK } from '../../../../mocks/dtos';
 
 describe('[unit-test] [AccountLoginDto]', () => {
   it('Should validate all fields successfully', async () => {
