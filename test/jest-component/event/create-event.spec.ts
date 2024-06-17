@@ -43,7 +43,7 @@ describe('Create a new event - [POST v1/events]', () => {
   });
 
   it('A POST request to Events API with valid data should return a success response code 201', async () => {
-    jest.spyOn(eventRepository, 'create').mockResolvedValue();
+    jest.spyOn(eventRepository, 'save').mockResolvedValue();
 
     const response = await request(app.getHttpServer())
       .post(path)
@@ -55,7 +55,7 @@ describe('Create a new event - [POST v1/events]', () => {
   });
 
   it('A POST request to Events API with valid data but without optional fields should return a success response code 201', async () => {
-    jest.spyOn(eventRepository, 'create').mockResolvedValue();
+    jest.spyOn(eventRepository, 'save').mockResolvedValue();
 
     const response = await request(app.getHttpServer())
       .post(path)
@@ -81,7 +81,7 @@ describe('Create a new event - [POST v1/events]', () => {
   });
 
   it('Should throw a 500 error if something wrong happended and it is not handled', async () => {
-    jest.spyOn(eventRepository, 'create').mockRejectedValue(new Error());
+    jest.spyOn(eventRepository, 'save').mockRejectedValue(new Error());
 
     const response = await request(app.getHttpServer())
       .post(path)

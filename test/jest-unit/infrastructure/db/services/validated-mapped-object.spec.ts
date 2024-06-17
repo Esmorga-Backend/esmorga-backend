@@ -1,77 +1,144 @@
-import { validateEventDto } from '../../../../../src/infrastructure/db/services';
+import {
+  validateObjectDto,
+  REQUIRED_FIELDS,
+} from '../../../../../src/infrastructure/db/services';
 import { DataBaseInternalError } from '../../../../../src/infrastructure/db/errors';
-import { eventMock } from '../../../../mocks/dtos/event';
+import { EVENT_MOCK, USER_PROFILE_MOCK } from '../../../../mocks/dtos';
 
-describe('[unit-test] [validateEventDto]', () => {
-  it('Should throw an error if eventId is missed', () => {
-    try {
-      const event = { ...eventMock };
+describe('[unit-test] [validateObjectDto]', () => {
+  describe('[EventDto]', () => {
+    it('Should throw an error if eventId is missed', () => {
+      try {
+        const event = { ...EVENT_MOCK };
 
-      delete event.eventId;
+        delete event.eventId;
 
-      validateEventDto(event);
-    } catch (error) {
-      expect(error).toBeInstanceOf(DataBaseInternalError);
-    }
+        validateObjectDto(event, REQUIRED_FIELDS.EVENTS);
+      } catch (error) {
+        expect(error).toBeInstanceOf(DataBaseInternalError);
+      }
+    });
+
+    it('Should throw an error if eventName is missed', () => {
+      try {
+        const event = { ...EVENT_MOCK };
+
+        delete event.eventName;
+
+        validateObjectDto(event, REQUIRED_FIELDS.EVENTS);
+      } catch (error) {
+        expect(error).toBeInstanceOf(DataBaseInternalError);
+      }
+    });
+
+    it('Should throw an error if eventDate is missed', () => {
+      try {
+        const event = { ...EVENT_MOCK };
+
+        delete event.eventDate;
+
+        validateObjectDto(event, REQUIRED_FIELDS.EVENTS);
+      } catch (error) {
+        expect(error).toBeInstanceOf(DataBaseInternalError);
+      }
+    });
+
+    it('Should throw an error if eventType is missed', () => {
+      try {
+        const event = { ...EVENT_MOCK };
+
+        delete event.eventType;
+
+        validateObjectDto(event, REQUIRED_FIELDS.EVENTS);
+      } catch (error) {
+        expect(error).toBeInstanceOf(DataBaseInternalError);
+      }
+    });
+
+    it('Should throw an error if description is missed', () => {
+      try {
+        const event = { ...EVENT_MOCK };
+
+        delete event.description;
+
+        validateObjectDto(event, REQUIRED_FIELDS.EVENTS);
+      } catch (error) {
+        expect(error).toBeInstanceOf(DataBaseInternalError);
+      }
+    });
+
+    it('Should throw an error if location.name is missed', () => {
+      try {
+        const event = JSON.parse(JSON.stringify(EVENT_MOCK));
+
+        delete event.location.name;
+
+        validateObjectDto(event, REQUIRED_FIELDS.EVENTS);
+      } catch (error) {
+        expect(error).toBeInstanceOf(DataBaseInternalError);
+      }
+    });
   });
 
-  it('Should throw an error if eventName is missed', () => {
-    try {
-      const event = { ...eventMock };
+  describe('[UserProfileDto]', () => {
+    it('Should throw an error if uuid is missed', () => {
+      try {
+        const userProfile = { ...USER_PROFILE_MOCK };
 
-      delete event.eventName;
+        delete userProfile.uuid;
 
-      validateEventDto(event);
-    } catch (error) {
-      expect(error).toBeInstanceOf(DataBaseInternalError);
-    }
-  });
+        validateObjectDto(userProfile, REQUIRED_FIELDS.USER_PROFILE);
+      } catch (error) {
+        expect(error).toBeInstanceOf(DataBaseInternalError);
+      }
+    });
 
-  it('Should throw an error if eventDate is missed', () => {
-    try {
-      const event = { ...eventMock };
+    it('Should throw an error if name is missed', () => {
+      try {
+        const userProfile = { ...USER_PROFILE_MOCK };
 
-      delete event.eventDate;
+        delete userProfile.name;
 
-      validateEventDto(event);
-    } catch (error) {
-      expect(error).toBeInstanceOf(DataBaseInternalError);
-    }
-  });
+        validateObjectDto(userProfile, REQUIRED_FIELDS.USER_PROFILE);
+      } catch (error) {
+        expect(error).toBeInstanceOf(DataBaseInternalError);
+      }
+    });
 
-  it('Should throw an error if eventType is missed', () => {
-    try {
-      const event = { ...eventMock };
+    it('Should throw an error if lastName is missed', () => {
+      try {
+        const userProfile = { ...USER_PROFILE_MOCK };
 
-      delete event.eventType;
+        delete userProfile.lastName;
 
-      validateEventDto(event);
-    } catch (error) {
-      expect(error).toBeInstanceOf(DataBaseInternalError);
-    }
-  });
+        validateObjectDto(userProfile, REQUIRED_FIELDS.USER_PROFILE);
+      } catch (error) {
+        expect(error).toBeInstanceOf(DataBaseInternalError);
+      }
+    });
 
-  it('Should throw an error if description is missed', () => {
-    try {
-      const event = { ...eventMock };
+    it('Should throw an error if email is missed', () => {
+      try {
+        const userProfile = { ...USER_PROFILE_MOCK };
 
-      delete event.description;
+        delete userProfile.email;
 
-      validateEventDto(event);
-    } catch (error) {
-      expect(error).toBeInstanceOf(DataBaseInternalError);
-    }
-  });
+        validateObjectDto(userProfile, REQUIRED_FIELDS.USER_PROFILE);
+      } catch (error) {
+        expect(error).toBeInstanceOf(DataBaseInternalError);
+      }
+    });
 
-  it('Should throw an error if location.name is missed', () => {
-    try {
-      const event = JSON.parse(JSON.stringify(eventMock));
+    it('Should throw an error if role is missed', () => {
+      try {
+        const userProfile = { ...USER_PROFILE_MOCK };
 
-      delete event.location.name;
+        delete userProfile.role;
 
-      validateEventDto(event);
-    } catch (error) {
-      expect(error).toBeInstanceOf(DataBaseInternalError);
-    }
+        validateObjectDto(userProfile, REQUIRED_FIELDS.USER_PROFILE);
+      } catch (error) {
+        expect(error).toBeInstanceOf(DataBaseInternalError);
+      }
+    });
   });
 });
