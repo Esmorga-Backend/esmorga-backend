@@ -28,7 +28,10 @@ jobs:
         run: python -c "import sys; print(sys.version)"
       - name: Install dependencies
         run: python -m pip install --upgrade pip paramiko 
-      - run: python .github/workflows/scripts/DeployToEnv.py ec2-34-254-203-250.eu-west-1.compute.amazonaws.com ${{ secrets.SSHRSA}}
+#      - name: Deploy QA to AWS
+#        run: python .github/workflows/scripts/DeployToEnv.py ec2-34-254-203-250.eu-west-1.compute.amazonaws.com ${{ secrets.SSHRSA}}
+      - name: Deploy QA to ORACLE
+        run: python .github/workflows/scripts/DeployToEnv.py 138.2.157.83 ${{ secrets.SSHRSA}}
 
   Run-e2e-on-Ubuntu:
     needs: Deploy-QA
