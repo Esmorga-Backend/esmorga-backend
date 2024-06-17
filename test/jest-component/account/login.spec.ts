@@ -89,7 +89,7 @@ describe('Login - [POST v1/account/login]', () => {
     expect(response.body.detail).toBe('some inputs are missing');
   });
 
-  it('Should throw a 400 if email or password format is wrong', async () => {
+  it('Should throw a 400 if email or password type is wrong', async () => {
     const response = await request(app.getHttpServer())
       .post(PATH)
       .set(HEADERS)
