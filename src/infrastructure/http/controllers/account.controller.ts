@@ -10,7 +10,7 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import { LoginService } from '../../../application/handler/account';
 import { HttpExceptionFilter } from '../errors';
-import { AccountLoginDto } from '../dtos';
+import { AccountLoginDto, AccountRegisterDto } from '../dtos';
 import { SwaggerAccountLogin } from '../swagger/decorators/account';
 
 @Controller('/v1/account')
@@ -27,6 +27,17 @@ export class AccountController {
       const response = await this.loginService.login(accountLoginDto);
 
       return response;
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new InternalServerErrorException();
+    }
+  }
+
+  async register(@Body() accountRegisterDto: AccountRegisterDto) {
+    try {
+      console.log({ accountRegisterDto });
     } catch (error) {
       if (error instanceof HttpException) {
         throw error;
