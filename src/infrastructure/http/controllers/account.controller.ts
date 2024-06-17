@@ -46,9 +46,12 @@ export class AccountController {
   }
 
   @Post('/register')
-  async register(@Body() accountRegisterDto: AccountRegisterDto) {
+  async register(
+    @Body() accountRegisterDto: AccountRegisterDto,
+  ): Promise<AccountLoggedDto> {
     try {
-      const response = await this.registerService.register(accountRegisterDto);
+      const response: AccountLoggedDto =
+        await this.registerService.register(accountRegisterDto);
 
       return response;
     } catch (error) {
