@@ -20,11 +20,11 @@ import {
 } from 'class-validator';
 
 export enum EventType {
-  PARTY = 'PARTY',
-  SPORT = 'SPORT',
-  FOOD = 'FOOD',
-  CHARITY = 'CHARITY',
-  GAMES = 'GAMES',
+  PARTY = 'Party',
+  SPORT = 'Sport',
+  FOOD = 'Food',
+  CHARITY = 'Charity',
+  GAMES = 'Games',
 }
 
 function isValidISODate(eventDate: string): boolean {
@@ -147,9 +147,6 @@ export class CreateEventDto {
   description: string;
 
   @ApiProperty({ example: 'Party' })
-  @Transform(({ value }) =>
-    typeof value === 'string' ? value.toUpperCase() : value,
-  )
   @IsEnum(EventType)
   @IsString()
   @IsNotEmpty()

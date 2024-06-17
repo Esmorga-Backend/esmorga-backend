@@ -80,7 +80,7 @@ describe('[unit-test] [CreateEventDto]', () => {
         eventName: 1345,
         eventDate: '2025-03-08T10:05:30.915Z',
         description: 'Hello World',
-        eventType: 'PARTY',
+        eventType: 'Party',
         imageUrl: 'img.url',
         location: {
           lat: 43.35525182148881,
@@ -172,7 +172,7 @@ describe('[unit-test] [CreateEventDto]', () => {
         eventName: 'MongoFest',
         eventDate: 123,
         description: 'Hello World',
-        eventType: 'PARTY',
+        eventType: 'Party',
         imageUrl: 'img.url',
         location: {
           lat: 43.35525182148881,
@@ -248,7 +248,7 @@ describe('[unit-test] [CreateEventDto]', () => {
         eventName: 'MongoFest',
         eventDate: '2025-03-08T10:05:30.915Z',
         description: 123,
-        eventType: 'PARTY',
+        eventType: 'Party',
         imageUrl: 'img.url',
         location: {
           lat: 43.35525182148881,
@@ -336,7 +336,7 @@ describe('[unit-test] [CreateEventDto]', () => {
       expect(errors[0].property).toEqual('eventType');
       expect(errors[0].constraints).toEqual({
         isEnum:
-          'eventType must be one of the following values: PARTY, SPORT, FOOD, CHARITY, GAMES',
+          'eventType must be one of the following values: Party, Sport, Food, Charity, Games',
       });
     });
   });
@@ -347,7 +347,7 @@ describe('[unit-test] [CreateEventDto]', () => {
         eventName: 'MongoFest',
         eventDate: '2025-03-08T10:05:30.915Z',
         description: 'Hello world',
-        eventType: 'PARTY',
+        eventType: 'Party',
         imageUrl: 123,
         location: {
           lat: 43.35525182148881,
@@ -442,7 +442,7 @@ describe('[unit-test] [CreateEventDto]', () => {
         eventName: 'Mobgen Fest',
         eventDate: '2025-03-08T10:05:30.915Z',
         description: 'Hello World',
-        eventType: 'PARTY',
+        eventType: 'Party',
         imageUrl: 'img.url',
         location: {
           lat: 43.35525182148881,
@@ -488,7 +488,7 @@ describe('[unit-test] [CreateEventDto]', () => {
         eventName: 'MobgenFest',
         eventDate: '2025-03-08T10:05:30.915Z',
         description: 'Hello World',
-        eventType: 'PARTY',
+        eventType: 'Party',
         imageUrl: 'img.url',
         location: {
           lat: 'test',
@@ -534,7 +534,7 @@ describe('[unit-test] [CreateEventDto]', () => {
         eventName: 'MobgenFest',
         eventDate: '2025-03-08T10:05:30.915Z',
         description: 'Hello World',
-        eventType: 'PARTY',
+        eventType: 'Party',
         imageUrl: 'img.url',
         location: {
           lat: -8.41937931298951,
@@ -595,7 +595,7 @@ describe('[unit-test] [CreateEventDto]', () => {
         eventName: 'MobgenFest',
         eventDate: '2025-03-08T10:05:30.915Z',
         description: 'Hello World',
-        eventType: 'PARTY',
+        eventType: 'Party',
         imageUrl: 'img.url',
         location: {
           lat: 43.35525182148881,
@@ -633,7 +633,7 @@ describe('[unit-test] [CreateEventDto]', () => {
         eventName: 'MobgenFest',
         eventDate: '2025-03-08T10:05:30.915Z',
         description: 'Hello World',
-        eventType: 'PARTY',
+        eventType: 'Party',
         imageUrl: 'img.url',
         location: {
           lat: 43.35525182148881,
@@ -659,7 +659,7 @@ describe('[unit-test] [CreateEventDto]', () => {
         eventName: 'MobgenFest',
         eventDate: '2025-03-08T10:05:30.915Z',
         description: 'Hello World',
-        eventType: 'PARTY',
+        eventType: 'Party',
         imageUrl: 'img.url',
         location: {
           lat: 43.35525182148881,
