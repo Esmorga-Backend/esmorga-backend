@@ -21,11 +21,6 @@ jobs:
       NODE_ENV: "LOCAL"
       AioToken: "${{ secrets.AoiToken }}"
     steps:
-      - name: Fail if draft PR
-        if: ${{ github.event.pull_request.draft }}
-        run: |
-          echo "Pull request is in draft state."
-          exit 1
       - name: Start MongoDB
         uses: supercharge/mongodb-github-action@1.11.0
         with:
