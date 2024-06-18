@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { plainToClass } from 'class-transformer';
 import { AccountRegisterDto } from '../../../infrastructure/http/dtos';
-import { GenerateTokenPair } from '../../../domain/services';
+import { GenerateTokenPair, encodeValue } from '../../../domain/services';
 import {
   AccountRepository,
   TokensRepository,
@@ -24,6 +24,10 @@ export class RegisterService {
     accountRegisterDto: AccountRegisterDto,
   ): Promise<AccountLoggedDto> {
     try {
+      const hashPassword = encodeValue(accountRegisterDto.password);
+
+      accountRegisterDto.password = hashPassword;
+
       await this.accountRepository.saveUser(accountRegisterDto);
 
       const { userProfile } = await this.accountRepository.getUserByEmail(
