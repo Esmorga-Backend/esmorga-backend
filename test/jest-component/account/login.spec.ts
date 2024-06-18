@@ -6,7 +6,6 @@ import {
   AccountRepository,
   TokensRepository,
 } from '../../../src/infrastructure/db/repositories';
-import { GenerateTokenPair } from '../../../src/domain/services/';
 import { USER_DB, PASSWORD } from '../../mocks/db';
 
 const TTL = parseInt(process.env.ACCESS_TOKEN_TTL);
@@ -17,11 +16,12 @@ const HEADERS = {
   'Content-Type': 'application/json',
 };
 
+const VALID_EMAIL = USER_DB.email;
+
 describe('Login - [POST v1/account/login]', () => {
   let app: INestApplication;
   let accountRepository: AccountRepository;
   let tokensRepository: TokensRepository;
-  let generateTokenPair: GenerateTokenPair;
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -36,7 +36,6 @@ describe('Login - [POST v1/account/login]', () => {
 
     accountRepository = moduleFixture.get<AccountRepository>(AccountRepository);
     tokensRepository = moduleFixture.get<TokensRepository>(TokensRepository);
-    generateTokenPair = moduleFixture.get<GenerateTokenPair>(GenerateTokenPair);
   });
 
   afterAll(async () => {
@@ -46,38 +45,45 @@ describe('Login - [POST v1/account/login]', () => {
   it('Should return a 200 with a pair of tokens and user profile data', async () => {
     jest.spyOn(accountRepository, 'findOneByEmail').mockResolvedValue(USER_DB);
 
-    jest.spyOn(generateTokenPair, 'generateTokens').mockResolvedValue({
-      accessToken: 'ACCESS_TOKEN',
-      refreshToken: 'REFRESH_TOKEN',
-    });
-
     jest.spyOn(tokensRepository, 'findByUuid').mockResolvedValue([]);
 
     jest.spyOn(tokensRepository, 'save').mockResolvedValue();
-
-    const validEmail = USER_DB.email;
 
     const response = await request(app.getHttpServer())
       .post(PATH)
       .set(HEADERS)
       .send({
-        email: validEmail,
+        email: VALID_EMAIL,
         password: PASSWORD,
       });
 
-    expect(response.status).toBe(HttpStatus.OK);
-    expect(response.body).toMatchObject({
-      accessToken: 'ACCESS_TOKEN',
-      refreshToken: 'REFRESH_TOKEN',
-      ttl: TTL,
-      profile: {
-        name: USER_DB.name,
-        email: USER_DB.email,
-      },
+    const { status, body } = response;
+
+    expect(status).toBe(HttpStatus.OK);
+    expect(body).toHaveProperty('accessToken');
+    expect(body).toHaveProperty('refreshToken');
+    expect(body).toHaveProperty('ttl', TTL);
+    expect(body).toHaveProperty('profile');
+    expect(body.profile).toMatchObject({
+      name: USER_DB.name,
+      email: USER_DB.email,
     });
   });
 
-  it('Should throw a 400 if email or password are missed', async () => {
+  it('Should throw a 400 if password is missed', async () => {
+    const response = await request(app.getHttpServer())
+      .post(PATH)
+      .set(HEADERS)
+      .send({
+        email: VALID_EMAIL,
+      });
+
+    expect(response.status).toBe(HttpStatus.BAD_REQUEST);
+    expect(response.body.detail).toBe('some inputs are missing');
+    expect(response.body.errors).toContain('password should not be empty');
+  });
+
+  it('Should throw a 400 if email is missed', async () => {
     const response = await request(app.getHttpServer())
       .post(PATH)
       .set(HEADERS)
@@ -87,9 +93,10 @@ describe('Login - [POST v1/account/login]', () => {
 
     expect(response.status).toBe(HttpStatus.BAD_REQUEST);
     expect(response.body.detail).toBe('some inputs are missing');
+    expect(response.body.errors).toContain('email should not be empty');
   });
 
-  it('Should throw a 400 if email or password type is wrong', async () => {
+  it('Should throw a 400 if email type is wrong', async () => {
     const response = await request(app.getHttpServer())
       .post(PATH)
       .set(HEADERS)
@@ -100,6 +107,35 @@ describe('Login - [POST v1/account/login]', () => {
 
     expect(response.status).toBe(HttpStatus.BAD_REQUEST);
     expect(response.body.detail).toBe('email');
+    expect(response.body.errors).toContain('email must be a string');
+  });
+
+  it('Should throw a 400 if email type is wrong', async () => {
+    const response = await request(app.getHttpServer())
+      .post(PATH)
+      .set(HEADERS)
+      .send({
+        email: VALID_EMAIL,
+        password: 123,
+      });
+
+    expect(response.status).toBe(HttpStatus.BAD_REQUEST);
+    expect(response.body.detail).toBe('password');
+    expect(response.body.errors).toContain('password must be a string');
+  });
+
+  it('Should throw a 400 if email type is wrong', async () => {
+    const response = await request(app.getHttpServer())
+      .post(PATH)
+      .set(HEADERS)
+      .send({
+        email: 123,
+        password: PASSWORD,
+      });
+
+    expect(response.status).toBe(HttpStatus.BAD_REQUEST);
+    expect(response.body.detail).toBe('email');
+    expect(response.body.errors).toContain('email must be a string');
   });
 
   it('Should throw a 401 if email does not match with an user in the db', async () => {
