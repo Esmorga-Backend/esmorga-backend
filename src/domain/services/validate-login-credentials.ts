@@ -1,5 +1,5 @@
 import { createHash } from 'crypto';
-import { InvalidCredentialsApiError } from '../errors';
+import { InvalidCredentialsLoginApiError } from '../errors';
 
 /**
  * Validate if request password match with user password store in the db.
@@ -15,6 +15,6 @@ export function validateLoginCredentials(
     userDbPassword !==
       createHash('sha256').update(requestPassword).digest('hex')
   ) {
-    throw new InvalidCredentialsApiError();
+    throw new InvalidCredentialsLoginApiError();
   }
 }

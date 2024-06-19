@@ -1,6 +1,6 @@
 import { createHash } from 'crypto';
 import { validateLoginCredentials } from '../../../../src/domain/services';
-import { InvalidCredentialsApiError } from '../../../../src/domain/errors';
+import { InvalidCredentialsLoginApiError } from '../../../../src/domain/errors';
 
 const PASSWORD = 'Password1';
 
@@ -13,13 +13,13 @@ describe('[unit-test] [validateLoginCredentials]', () => {
 
   it('Should thow an error if passowords do not match', () => {
     expect(() => validateLoginCredentials(DB_PASSWORD, 'passwordFake')).toThrow(
-      InvalidCredentialsApiError,
+      InvalidCredentialsLoginApiError,
     );
   });
 
   it('Should throw an error if database password is not defined', () => {
     expect(() => validateLoginCredentials(null, PASSWORD)).toThrow(
-      InvalidCredentialsApiError,
+      InvalidCredentialsLoginApiError,
     );
   });
 });

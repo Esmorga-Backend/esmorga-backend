@@ -16,7 +16,7 @@ import {
   getOldestPairOfTokens,
   GenerateTokenPair,
 } from '../../../domain/services';
-import { InvalidCredentialsApiError } from '../../../domain/errors';
+import { InvalidCredentialsLoginApiError } from '../../../domain/errors';
 
 @Injectable()
 export class LoginService {
@@ -68,7 +68,7 @@ export class LoginService {
       return accountLoggedDto;
     } catch (error) {
       if (error instanceof DataBaseUnathorizedError)
-        throw new InvalidCredentialsApiError();
+        throw new InvalidCredentialsLoginApiError();
 
       throw error;
     }
