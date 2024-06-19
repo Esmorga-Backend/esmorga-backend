@@ -30,5 +30,5 @@ const LOGGER_PINO_CONFIG = {
 };
 
 export function getLoggerConfig(env: string) {
-  return LOGGER_PINO_CONFIG[env] || LOGGER_PINO_CONFIG.DEFAULT;
+  return LOGGER_PINO_CONFIG[env.toUpperCase()] || LOGGER_PINO_CONFIG.DEFAULT;
 }
