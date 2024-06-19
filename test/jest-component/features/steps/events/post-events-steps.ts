@@ -3,11 +3,7 @@ import { StepDefinitions } from 'jest-cucumber';
 import { eventRepository, context } from '../../../steps-config';
 import { createEventMock } from '../../../../mocks/dtos';
 
-export const postEventsSteps: StepDefinitions = ({
-  given,
-  and,
-  then,
-}) => {
+export const postEventsSteps: StepDefinitions = ({ given, and, then }) => {
   given('the POST Events API is available', () => {
     context.path = '/v1/events';
   });
@@ -31,7 +27,7 @@ export const postEventsSteps: StepDefinitions = ({
   and(
     /^with valid data, use tags: (.*), imageUrl: (.*), location.lat(.*) and location.long:(.*)$/,
     (tags, imageUrl, lat, long) => {
-      jest.spyOn(eventRepository, 'create').mockResolvedValue();
+      jest.spyOn(eventRepository, 'save').mockResolvedValue();
       context.mock = { ...createEventMock };
 
       context.mock.location.imageUrl = imageUrl;
@@ -49,7 +45,7 @@ export const postEventsSteps: StepDefinitions = ({
     },
   );
   then(/^success response code (\d+) returned$/, (code_n) => {
-    if ((code_n = 201)) {
+    if (code_n == 201) {
       expect(context.response.status).toBe(HttpStatus.CREATED);
       expect(context.response.body).toEqual({});
     } else {
