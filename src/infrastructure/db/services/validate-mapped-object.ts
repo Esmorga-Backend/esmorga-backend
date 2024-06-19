@@ -1,24 +1,31 @@
-import { EventDto } from '../../dtos';
+import { EventDto, UserProfileDto } from '../../dtos';
 import { DataBaseInternalError } from '../errors';
 
-/**
- * This funcition validates if the object mapped contain all required events fields,
- * event if the required fied is nedted
- * @param eventDto - Event following the expected format to be returned with db data
- */
-export function validateEventDto(eventDto: EventDto) {
-  const requiredEventFields = [
+export const REQUIRED_FIELDS = {
+  EVENTS: [
     'eventId',
     'eventName',
     'eventDate',
     'eventType',
     'description',
     'location.name',
-  ];
+  ],
+  USER_PROFILE: ['uuid', 'name', 'lastName', 'email', 'role'],
+};
 
-  const missingFields = requiredEventFields.filter((field) => {
+/**
+ * This funcition validates if the object mapped contain all required dto fields,
+ * event if the required fied is nested
+ * @param objectDto - Event following the expected format to be returned with db data
+ * @param requiredFields - List of fields to check
+ */
+export function validateObjectDto(
+  objectDto: EventDto | UserProfileDto,
+  requiredFields: string[],
+) {
+  const missingFields = requiredFields.filter((field) => {
     const fieldPath = field.split('.');
-    let currentObject = eventDto;
+    let currentObject = objectDto;
 
     const isMissed = fieldPath.some((nestedField) => {
       if (

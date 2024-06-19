@@ -31,7 +31,7 @@ jobs:
 #      - name: Deploy QA to AWS
 #        run: python .github/workflows/scripts/DeployToEnv.py ec2-34-254-203-250.eu-west-1.compute.amazonaws.com ${{ secrets.SSHRSA}}
       - name: Deploy QA to ORACLE
-        run: python .github/workflows/scripts/DeployToEnv.py 158.179.222.3 ${{ secrets.SSHRSA}}
+        run: python .github/workflows/scripts/DeployToEnv.py 138.2.157.83 ${{ secrets.SSHRSA}}
 
   Run-e2e-on-Ubuntu:
     needs: Deploy-QA
