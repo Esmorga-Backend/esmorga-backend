@@ -1,9 +1,10 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { LoggerModule } from 'nestjs-pino';
-import { validateEnvVars } from './config';
+import { validateEnvVars, getLoggerConfig } from './config';
 import { EventModule, AccountModule } from './infrastructure/http/modules';
+import { RequestIdMiddleware } from './infrastructure/http/middlewares';
 
 @Module({
   imports: [
@@ -11,16 +12,10 @@ import { EventModule, AccountModule } from './infrastructure/http/modules';
       isGlobal: true,
       validate: validateEnvVars,
     }),
-    LoggerModule.forRoot({
-      pinoHttp: {
-        level: process.env.NODE_ENV === 'LOCAL' ? 'info' : 'silent',
-        transport: {
-          target: 'pino-pretty',
-          options: {
-            singleLine: true,
-            ignore: 'pid,hostname,req',
-          },
-        },
+    LoggerModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => {
+        return getLoggerConfig(configService.get('NODE_ENV'));
       },
     }),
     MongooseModule.forRootAsync({
@@ -33,4 +28,8 @@ import { EventModule, AccountModule } from './infrastructure/http/modules';
     AccountModule,
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(RequestIdMiddleware).forRoutes('*');
+  }
+}

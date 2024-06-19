@@ -11,7 +11,7 @@ const DNS_NAME = process.env.DNS_NAME;
 async function main() {
   executeMigrations();
 
-  const app = await NestFactory.create(AppModule, { bufferLogs: true });
+  const app = await NestFactory.create(AppModule);
 
   app.useLogger(app.get(Logger));
 

@@ -7,7 +7,6 @@ export async function executeMigrations() {
     const execPromise = util.promisify(exec);
 
     const scripts = {
-      PROD: 'npm run migrate:prod-up',
       QA: 'npm run migrate:qa-up',
       LOCAL: 'npm run migrate:local-up',
     };

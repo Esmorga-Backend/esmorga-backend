@@ -31,7 +31,7 @@ export class LoginService {
 
   async login(accountLoginDto: AccountLoginDto): Promise<AccountLoggedDto> {
     try {
-      this.logger.info(`[Login] Login new user: ${accountLoginDto.email}`);
+      this.logger.info(`[LoginService] [login] - ${accountLoginDto.email}`);
 
       const { email, password } = accountLoginDto;
 
@@ -71,7 +71,7 @@ export class LoginService {
 
       return accountLoggedDto;
     } catch (error) {
-      this.logger.error(`[Login] [error] ${error}`);
+      this.logger.error(`[LoginService] [login] [error] ${error}`);
 
       if (error instanceof DataBaseUnathorizedError)
         throw new InvalidCredentialsApiError();
