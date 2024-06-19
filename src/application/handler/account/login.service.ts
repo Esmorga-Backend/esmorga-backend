@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { plainToClass } from 'class-transformer';
+import { PinoLogger } from 'nestjs-pino';
 import { DataBaseUnathorizedError } from '../../../infrastructure/db/errors';
 import {
   AccountRepository,
@@ -21,6 +22,7 @@ import { InvalidCredentialsApiError } from '../../../domain/errors';
 @Injectable()
 export class LoginService {
   constructor(
+    private readonly logger: PinoLogger,
     private readonly generateTokenPair: GenerateTokenPair,
     private readonly accountRepository: AccountRepository,
     private readonly tokensRepository: TokensRepository,
@@ -29,6 +31,8 @@ export class LoginService {
 
   async login(accountLoginDto: AccountLoginDto): Promise<AccountLoggedDto> {
     try {
+      this.logger.info(`[Login] Login new user: ${accountLoginDto.email}`);
+
       const { email, password } = accountLoginDto;
 
       const { userProfile, password: userDbPassword } =
@@ -67,6 +71,8 @@ export class LoginService {
 
       return accountLoggedDto;
     } catch (error) {
+      this.logger.error(`[Login] [error] ${error}`);
+
       if (error instanceof DataBaseUnathorizedError)
         throw new InvalidCredentialsApiError();
 
