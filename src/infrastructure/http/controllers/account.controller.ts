@@ -4,10 +4,12 @@ import {
   HttpException,
   InternalServerErrorException,
   UseFilters,
+  Headers,
   Body,
   HttpCode,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { PinoLogger } from 'nestjs-pino';
 import {
   LoginService,
   RegisterService,
@@ -22,6 +24,7 @@ import { AccountLoggedDto } from '../../dtos';
 @UseFilters(new HttpExceptionFilter())
 export class AccountController {
   constructor(
+    private readonly logger: PinoLogger,
     private readonly loginService: LoginService,
     private readonly registerService: RegisterService,
   ) {}
@@ -31,13 +34,24 @@ export class AccountController {
   @HttpCode(200)
   async login(
     @Body() accountLoginDto: AccountLoginDto,
+    @Headers('x-request-id') requestId: string,
   ): Promise<AccountLoggedDto> {
     try {
-      const response: AccountLoggedDto =
-        await this.loginService.login(accountLoginDto);
+      this.logger.info(
+        `[AccountController] [login] - x-request-id:${requestId}`,
+      );
+
+      const response: AccountLoggedDto = await this.loginService.login(
+        accountLoginDto,
+        requestId,
+      );
 
       return response;
     } catch (error) {
+      this.logger.error(
+        `[AccountController] [login] - x-request-id:${requestId}, error ${error}`,
+      );
+
       if (error instanceof HttpException) {
         throw error;
       }
@@ -48,13 +62,24 @@ export class AccountController {
   @Post('/register')
   async register(
     @Body() accountRegisterDto: AccountRegisterDto,
+    @Headers('x-request-id') requestId: string,
   ): Promise<AccountLoggedDto> {
     try {
-      const response: AccountLoggedDto =
-        await this.registerService.register(accountRegisterDto);
+      this.logger.info(
+        `[AccountController] [register] - x-request-id:${requestId}`,
+      );
+
+      const response: AccountLoggedDto = await this.registerService.register(
+        accountRegisterDto,
+        requestId,
+      );
 
       return response;
     } catch (error) {
+      this.logger.error(
+        `[AccountController] [register] - x-request-id:${requestId}, error ${error}`,
+      );
+
       if (error instanceof HttpException) {
         throw error;
       }

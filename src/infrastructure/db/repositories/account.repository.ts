@@ -2,6 +2,7 @@ import { HttpException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { plainToClass } from 'class-transformer';
+import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository } from './mongo.repository';
 import { User as UserSchema } from '../schema';
 import {
@@ -16,12 +17,17 @@ import { validateObjectDto, REQUIRED_FIELDS } from '../services';
 export class AccountRepository extends MongoRepository<UserSchema> {
   constructor(
     @InjectModel(UserSchema.name) private userModel: Model<UserSchema>,
+    private readonly logger: PinoLogger,
   ) {
     super(userModel);
   }
 
-  async getUserByEmail(email: string) {
+  async getUserByEmail(email: string, requestId?: string) {
     try {
+      this.logger.info(
+        `[AccountRepository] [getUserByEmail] - x-request-id:${requestId}, email ${email}`,
+      );
+
       const user = await this.findOneByEmail(email);
 
       const userProfile: UserProfileDto = plainToClass(UserProfileDto, user, {
@@ -34,18 +40,30 @@ export class AccountRepository extends MongoRepository<UserSchema> {
 
       return { userProfile, password: user.password };
     } catch (error) {
+      this.logger.error(
+        `[AccountRepository] [getUserByEmail] - x-request-id:${requestId}, error ${error}`,
+      );
+
       if (error instanceof HttpException) throw error;
 
       throw new DataBaseInternalError();
     }
   }
 
-  async saveUser(data) {
+  async saveUser(data, requestId?: string) {
     try {
+      this.logger.info(
+        `[AccountRepository] [saveUser] - x-request-id:${requestId}, email ${data.email}`,
+      );
+
       const user = new this.userModel(data);
 
       await this.save(user);
     } catch (error) {
+      this.logger.error(
+        `[AccountRepository] [saveUser] - x-request-id:${requestId}, error ${error}`,
+      );
+
       if (error.code === 11000) throw new DataBaseConflictError();
 
       throw new DataBaseInternalError();

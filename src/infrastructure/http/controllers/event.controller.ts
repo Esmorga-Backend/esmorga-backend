@@ -1,4 +1,5 @@
 import {
+  Headers,
   Body,
   Controller,
   Get,
@@ -8,6 +9,7 @@ import {
   UseFilters,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { PinoLogger } from 'nestjs-pino';
 import {
   CreateEventService,
   GetEventListService,
@@ -25,18 +27,30 @@ import { CreateEventDto } from '../dtos';
 @UseFilters(new HttpExceptionFilter())
 export class EventController {
   constructor(
+    private readonly logger: PinoLogger,
     private readonly getEventListService: GetEventListService,
     private readonly createEventService: CreateEventService,
   ) {}
 
   @Get('/')
   @SwaggerGetEvents()
-  async getEvents(): Promise<EventListDto> {
+  async getEvents(
+    @Headers('x-request-id') requestId: string,
+  ): Promise<EventListDto> {
     try {
-      const response: EventListDto = await this.getEventListService.find();
+      this.logger.info(
+        `[EventController] [getEvents] - x-request-id:${requestId}`,
+      );
+
+      const response: EventListDto =
+        await this.getEventListService.find(requestId);
 
       return response;
     } catch (error) {
+      this.logger.error(
+        `[EventController] [getEvents] - x-request-id:${requestId}, error ${error}`,
+      );
+
       if (error instanceof HttpException) {
         throw error;
       }
@@ -48,11 +62,20 @@ export class EventController {
   @SwaggerCreateEvent()
   async createEvent(
     @Body() createEventDto: CreateEventDto,
+    @Headers('x-request-id') requestId: string,
   ): Promise<Record<string, never>> {
     try {
-      await this.createEventService.create(createEventDto);
+      this.logger.info(
+        `[EventController] [createEvent] - x-request-id:${requestId}`,
+      );
+
+      await this.createEventService.create(createEventDto, requestId);
       return {};
     } catch (error) {
+      this.logger.error(
+        `[EventController] [createEvent] - x-request-id:${requestId}, error ${error}`,
+      );
+
       if (error instanceof HttpException) {
         throw error;
       }
