@@ -24,6 +24,16 @@ export class MongoRepository<E> implements DBRepository<E> {
   }
 
   /**
+   * Find documents by refreshToken.
+   *
+   * @param refreshToken - The refresToken to find.
+   * @returns Promise resolved with the document that matches the refreshToken provided.
+   */
+  async findOneByRefreshToken(refreshToken: string): Promise<E> {
+    return this.entityModel.findOne({ refreshToken: { $eq: refreshToken } });
+  }
+
+  /**
    * Find a document by email field.
    *
    * @param email - The email value to find.

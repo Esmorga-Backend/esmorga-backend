@@ -29,7 +29,7 @@ export class TokensRepository extends MongoRepository<TokensSchema> {
     }
   }
 
-  async getAllTokensByUuid(uuid: string) {
+  async getAllTokensByUuid(uuid: string): Promise<PairOfTokensDto[]> {
     try {
       const tokensData = await this.findByUuid(uuid);
 
@@ -38,6 +38,26 @@ export class TokensRepository extends MongoRepository<TokensSchema> {
           excludeExtraneousValues: true,
         });
       });
+
+      return pairOfTokens;
+    } catch (error) {
+      throw new DataBaseInternalError();
+    }
+  }
+
+  async getPairOfTokensByRefreshToken(
+    refreshToken: string,
+  ): Promise<PairOfTokensDto> {
+    try {
+      const tokenData = await this.findOneByRefreshToken(refreshToken);
+
+      const pairOfTokens: PairOfTokensDto = plainToClass(
+        PairOfTokensDto,
+        tokenData,
+        {
+          excludeExtraneousValues: true,
+        },
+      );
 
       return pairOfTokens;
     } catch (error) {

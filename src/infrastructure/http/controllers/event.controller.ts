@@ -33,7 +33,7 @@ export class EventController {
   @SwaggerGetEvents()
   async getEvents(): Promise<EventListDto> {
     try {
-      const response: EventListDto = await this.getEventListService.find();
+      const response = await this.getEventListService.find();
 
       return response;
     } catch (error) {
