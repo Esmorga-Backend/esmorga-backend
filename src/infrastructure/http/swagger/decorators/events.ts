@@ -16,7 +16,7 @@ import {
 
 export function SwaggerCreateEvent() {
   return applyDecorators(
-    ApiOperation({ summary: 'Create a new event.' }),
+    ApiOperation({ summary: 'Create an event.' }),
     ApiHeader(CREATE_EVENT_HEADERS),
     ApiBody({ type: CreateEventDto }),
     ApiResponse(CREATE_EVENT_RESPONSES.OK),

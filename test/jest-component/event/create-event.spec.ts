@@ -4,8 +4,8 @@ import * as request from 'supertest';
 import { AppModule } from '../../../src/app.module';
 import { EventRepository } from '../../../src/infrastructure/db/repositories';
 import {
-  createEventMock,
-  createEventWithoutOptionalFieldsMock,
+  CREATE_EVENT_MOCK,
+  CREATE_EVENT_WITHOUT_OPTIONAL_FIELDS_MOCK,
 } from '../../mocks/dtos';
 
 /**
@@ -48,7 +48,7 @@ describe('Create a new event - [POST v1/events]', () => {
     const response = await request(app.getHttpServer())
       .post(path)
       .set(headers)
-      .send(createEventMock);
+      .send(CREATE_EVENT_MOCK);
 
     expect(response.status).toBe(HttpStatus.CREATED);
     expect(response.body).toEqual({});
@@ -60,14 +60,14 @@ describe('Create a new event - [POST v1/events]', () => {
     const response = await request(app.getHttpServer())
       .post(path)
       .set(headers)
-      .send(createEventWithoutOptionalFieldsMock);
+      .send(CREATE_EVENT_WITHOUT_OPTIONAL_FIELDS_MOCK);
 
     expect(response.status).toBe(HttpStatus.CREATED);
     expect(response.body).toEqual({});
   });
 
   it('A POST request to Events API with invalid data should return an errore response code 400', async () => {
-    const wrongEvent = { ...createEventMock };
+    const wrongEvent = { ...CREATE_EVENT_MOCK };
 
     delete wrongEvent.eventName;
 
@@ -86,7 +86,7 @@ describe('Create a new event - [POST v1/events]', () => {
     const response = await request(app.getHttpServer())
       .post(path)
       .set(headers)
-      .send(createEventMock);
+      .send(CREATE_EVENT_MOCK);
 
     expect(response.status).toEqual(HttpStatus.INTERNAL_SERVER_ERROR);
     expect(response.body).toEqual({
