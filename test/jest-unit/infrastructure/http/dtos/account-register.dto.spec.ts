@@ -4,12 +4,12 @@ import {
   AccountRegisterDto,
   ACCOUNT_REGISTER_REGEX,
 } from '../../../../../src/infrastructure/http/dtos';
-import { accountRegister } from '../../../../mocks/dtos';
+import { ACCOUNT_REGISTER } from '../../../../mocks/dtos';
 
 describe('[unit test] [AccountRegisterDto]', () => {
   describe('[AccountRegisterDto] [name]', () => {
     it('Should not accept an empty value', async () => {
-      const accountRegisterData = { ...accountRegister };
+      const accountRegisterData = { ...ACCOUNT_REGISTER };
 
       delete accountRegisterData.name;
 
@@ -25,7 +25,7 @@ describe('[unit test] [AccountRegisterDto]', () => {
     });
 
     it('Should not accept less than 3 characters', async () => {
-      const accountRegisterData = { ...accountRegister };
+      const accountRegisterData = { ...ACCOUNT_REGISTER };
 
       accountRegisterData.name = 'AA';
 
@@ -41,7 +41,7 @@ describe('[unit test] [AccountRegisterDto]', () => {
     });
 
     it('Should not accept more than 100 characters', async () => {
-      const accountRegisterData = { ...accountRegister };
+      const accountRegisterData = { ...ACCOUNT_REGISTER };
 
       accountRegisterData.name = 'A'.repeat(101);
 
@@ -148,7 +148,7 @@ describe('[unit test] [AccountRegisterDto]', () => {
 
   describe('[AccountRegisterDto] [lastName]', () => {
     it('Should not accept an empty value', async () => {
-      const accountRegisterData = { ...accountRegister };
+      const accountRegisterData = { ...ACCOUNT_REGISTER };
 
       delete accountRegisterData.lastName;
 
@@ -164,7 +164,7 @@ describe('[unit test] [AccountRegisterDto]', () => {
     });
 
     it('Should not accept less than 3 characters', async () => {
-      const accountRegisterData = { ...accountRegister };
+      const accountRegisterData = { ...ACCOUNT_REGISTER };
 
       accountRegisterData.lastName = 'AA';
 
@@ -180,7 +180,7 @@ describe('[unit test] [AccountRegisterDto]', () => {
     });
 
     it('Should not accept more than 100 characters', async () => {
-      const accountRegisterData = { ...accountRegister };
+      const accountRegisterData = { ...ACCOUNT_REGISTER };
 
       accountRegisterData.lastName = 'A'.repeat(101);
 
@@ -237,7 +237,7 @@ describe('[unit test] [AccountRegisterDto]', () => {
 
   describe('[AccountRegisterDto] [email]', () => {
     it('Should not accept an empty value', async () => {
-      const accountRegisterData = { ...accountRegister };
+      const accountRegisterData = { ...ACCOUNT_REGISTER };
 
       delete accountRegisterData.email;
 
@@ -253,7 +253,7 @@ describe('[unit test] [AccountRegisterDto]', () => {
     });
 
     it('Should not accept more than 100 characters', async () => {
-      const accountRegisterData = { ...accountRegister };
+      const accountRegisterData = { ...ACCOUNT_REGISTER };
 
       accountRegisterData.email = 'A'.repeat(101);
 
@@ -330,7 +330,7 @@ describe('[unit test] [AccountRegisterDto]', () => {
 
   describe('[AccountRegisterDto] [password]', () => {
     it('Should not accept an empty value', async () => {
-      const accountRegisterData = { ...accountRegister };
+      const accountRegisterData = { ...ACCOUNT_REGISTER };
 
       delete accountRegisterData.password;
 
@@ -346,7 +346,7 @@ describe('[unit test] [AccountRegisterDto]', () => {
     });
 
     it('Should not accept less than 8 characters', async () => {
-      const accountRegisterData = { ...accountRegister };
+      const accountRegisterData = { ...ACCOUNT_REGISTER };
 
       accountRegisterData.password = 'AA';
 
@@ -362,7 +362,7 @@ describe('[unit test] [AccountRegisterDto]', () => {
     });
 
     it('Should not accept more than 50 characters', async () => {
-      const accountRegisterData = { ...accountRegister };
+      const accountRegisterData = { ...ACCOUNT_REGISTER };
 
       accountRegisterData.password = 'A'.repeat(51);
 
