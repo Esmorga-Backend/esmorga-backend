@@ -26,7 +26,7 @@ const users = [
   },
 ];
 
-export class update_password_user_login_fow1718793301030
+export class change_password_users_login1718798185302
   implements MigrationInterface
 {
   public async up(db: Db): Promise<any> {

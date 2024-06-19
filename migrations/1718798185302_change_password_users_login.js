@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.update_password_user_login_fow1718793301030 = void 0;
+exports.change_password_users_login1718798185302 = void 0;
 var crypto_1 = require("crypto");
 function hash(string) {
     return (0, crypto_1.createHash)('sha256').update(string).digest('hex');
@@ -59,10 +59,10 @@ var users = [
         oldPassword: 'Password3',
     },
 ];
-var update_password_user_login_fow1718793301030 = /** @class */ (function () {
-    function update_password_user_login_fow1718793301030() {
+var change_password_users_login1718798185302 = /** @class */ (function () {
+    function change_password_users_login1718798185302() {
     }
-    update_password_user_login_fow1718793301030.prototype.up = function (db) {
+    change_password_users_login1718798185302.prototype.up = function (db) {
         return __awaiter(this, void 0, void 0, function () {
             var promises;
             return __generator(this, function (_a) {
@@ -81,7 +81,7 @@ var update_password_user_login_fow1718793301030 = /** @class */ (function () {
             });
         });
     };
-    update_password_user_login_fow1718793301030.prototype.down = function (db) {
+    change_password_users_login1718798185302.prototype.down = function (db) {
         return __awaiter(this, void 0, void 0, function () {
             var promises;
             return __generator(this, function (_a) {
@@ -100,6 +100,6 @@ var update_password_user_login_fow1718793301030 = /** @class */ (function () {
             });
         });
     };
-    return update_password_user_login_fow1718793301030;
+    return change_password_users_login1718798185302;
 }());
-exports.update_password_user_login_fow1718793301030 = update_password_user_login_fow1718793301030;
+exports.change_password_users_login1718798185302 = change_password_users_login1718798185302;
