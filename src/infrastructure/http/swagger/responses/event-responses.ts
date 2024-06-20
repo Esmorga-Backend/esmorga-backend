@@ -1,4 +1,3 @@
-import { HttpStatus } from '@nestjs/common';
 import { ApiResponseOptions } from '@nestjs/swagger';
 import { EventListDto } from '../../../dtos';
 
@@ -38,8 +37,7 @@ const PATHS = {
 };
 
 export const CREATE_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
-  OK: {
-    status: HttpStatus.CREATED,
+  CREATED: {
     description: 'Event successfully created',
     schema: {
       type: 'object',
@@ -47,7 +45,6 @@ export const CREATE_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
     },
   },
   BAD_REQUEST_ERROR: {
-    status: HttpStatus.BAD_REQUEST,
     description: 'Error for missing inputs',
     schema: {
       type: 'object',
@@ -62,7 +59,6 @@ export const CREATE_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
     },
   },
   INTERNAL_ERROR: {
-    status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Error not handled',
     schema: {
       type: 'object',
@@ -76,12 +72,10 @@ export const CREATE_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
 
 export const GET_EVENTS_RESPONSES: { [key: string]: ApiResponseOptions } = {
   OK: {
-    status: HttpStatus.OK,
     description: 'List of avaliable events',
     type: EventListDto,
   },
   INTERNAL_ERROR: {
-    status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Error not handled',
     schema: {
       type: 'object',

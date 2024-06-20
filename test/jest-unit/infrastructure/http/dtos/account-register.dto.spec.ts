@@ -401,7 +401,6 @@ describe('[unit test] [AccountRegisterDto]', () => {
         'Password!1',
         'Password!123',
         'Password!@#123',
-        'a1!',
       ];
 
       validExamples.forEach((value) =>

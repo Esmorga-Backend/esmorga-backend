@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import {
   IsNotEmpty,
@@ -22,6 +23,7 @@ export class AccountRegisterDto {
   @MaxLength(100, { message: 'name must have max 100 characters' })
   @IsString()
   @IsNotEmpty()
+  @ApiProperty({ example: 'John' })
   name: string;
 
   @Matches(ACCOUNT_REGISTER_REGEX.NAME, {
@@ -31,6 +33,7 @@ export class AccountRegisterDto {
   @MaxLength(100, { message: 'lastName must have max 100 characters' })
   @IsString()
   @IsNotEmpty()
+  @ApiProperty({ example: 'Donnel-Vic' })
   lastName: string;
 
   /**
@@ -47,6 +50,7 @@ export class AccountRegisterDto {
   @MaxLength(100, { message: 'email must have max 100 characters' })
   @IsString()
   @IsNotEmpty()
+  @ApiProperty({ example: 'eventslogin01@yopmail.com' })
   email: string;
 
   @Matches(ACCOUNT_REGISTER_REGEX.PASSWORD, {
@@ -56,5 +60,6 @@ export class AccountRegisterDto {
   @MaxLength(50, { message: 'password must have max 50 characters' })
   @IsString()
   @IsNotEmpty()
+  @ApiProperty({ example: 'SuperSecret1!' })
   password: string;
 }

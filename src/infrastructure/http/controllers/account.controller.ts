@@ -16,7 +16,10 @@ import {
 } from '../../../application/handler/account';
 import { HttpExceptionFilter } from '../errors';
 import { AccountLoginDto, AccountRegisterDto } from '../dtos';
-import { SwaggerAccountLogin } from '../swagger/decorators/account';
+import {
+  SwaggerAccountLogin,
+  SwaggerAccountRegister,
+} from '../swagger/decorators/account';
 import { AccountLoggedDto } from '../../dtos';
 
 @Controller('/v1/account')
@@ -60,6 +63,7 @@ export class AccountController {
   }
 
   @Post('/register')
+  @SwaggerAccountRegister()
   async register(
     @Body() accountRegisterDto: AccountRegisterDto,
     @Headers('x-request-id') requestId: string,
