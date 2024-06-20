@@ -39,7 +39,7 @@ describe('Refresh Token - [POST v1/account/refresh]', () => {
   it('Should return a 200 with a new pair of tokens', async () => {
     jest
       .spyOn(tokensRepository, 'getPairOfTokensByRefreshToken')
-      .mockResolvedValue(PAIR_OF_TOKENS);
+      .mockResolvedValue(PAIR_OF_TOKENS_MOCK_DB);
 
     jest.spyOn(generateTokenPair, 'generateTokens').mockResolvedValue({
       accessToken: 'ACCESS_TOKEN',
@@ -62,7 +62,7 @@ describe('Refresh Token - [POST v1/account/refresh]', () => {
     expect(response.body).toMatchObject({
       accessToken: 'ACCESS_TOKEN',
       refreshToken: 'REFRESH_TOKEN',
-      ttl: TTL,
+      ttl: TTL_MOCK_DB,
     });
   });
 
