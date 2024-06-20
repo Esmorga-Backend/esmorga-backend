@@ -51,13 +51,9 @@ export class TokensRepository extends MongoRepository<TokensSchema> {
     try {
       const tokenData = await this.findOneByRefreshToken(refreshToken);
 
-      const pairOfTokens: PairOfTokensDto = plainToClass(
-        PairOfTokensDto,
-        tokenData,
-        {
-          excludeExtraneousValues: true,
-        },
-      );
+      const pairOfTokens = plainToClass(PairOfTokensDto, tokenData, {
+        excludeExtraneousValues: true,
+      });
 
       return pairOfTokens;
     } catch (error) {

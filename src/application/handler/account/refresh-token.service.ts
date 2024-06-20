@@ -42,7 +42,7 @@ export class RefreshTokenService {
 
       const ttl = this.configService.get('ACCESS_TOKEN_TTL');
 
-      const newPairOfTokens: NewRefreshTokenDto = plainToClass(
+      const newPairOfTokens = plainToClass(
         NewRefreshTokenDto,
         {
           accessToken,
