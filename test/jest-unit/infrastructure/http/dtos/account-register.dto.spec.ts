@@ -401,6 +401,7 @@ describe('[unit test] [AccountRegisterDto]', () => {
         'Password!1',
         'Password!123',
         'Password!@#123',
+        'a1!',
       ];
 
       validExamples.forEach((value) =>
@@ -410,7 +411,10 @@ describe('[unit test] [AccountRegisterDto]', () => {
       const invalidExampls: string[] = [
         'NoDigistNoSpecialChartacters',
         'NoSpecialCharacters123',
-        'OnlySpecialChars!@#$%',
+        'SpecialChars!@#$%',
+        '!@#$%',
+        '123412234',
+        '123412234!@#$%',
       ];
 
       invalidExampls.forEach((value) =>

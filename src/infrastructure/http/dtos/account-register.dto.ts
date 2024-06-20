@@ -11,7 +11,7 @@ import {
 export const ACCOUNT_REGISTER_REGEX = {
   NAME: /^[A-Za-z\s'-]+$/,
   EMAIL: /^[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-  PASSWORD: /(?=.*[0-9])(?=.*[!@#$%^&*()_+])/,
+  PASSWORD: /(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+])/,
 };
 
 export class AccountRegisterDto {
