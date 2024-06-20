@@ -5,9 +5,6 @@ import Ajv from 'ajv';
 import addFormats from 'ajv-formats';
 import { app, schema, context } from '../../steps-config';
 
-//const Ajv = require('ajv');
-//const addFormats = require('ajv-formats');
-
 export const reusableSteps: StepDefinitions = ({ and, when, then }) => {
   const ajv = new Ajv({ strict: false });
   addFormats(ajv);
