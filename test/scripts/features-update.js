@@ -5,56 +5,58 @@ const path = require('path');
 const AdmZip = require('adm-zip');
 
 if (process.argv.length < 5) {
-    console.error('Usage: node exportAndExtract.js <output_directory> <automationStatusID> <Test type>\n \
+  console.error(
+    'Usage: node exportAndExtract.js <output_directory> <automationStatusID> <Test type>\n \
     "automationStatus": \n \
                         4 : "Automated"\n \
                         2 : "To be Automated"\n \
     "Test type" \n \
                        3 : "Backend-Cypress-E2E" \n \
                        5: "Backend-Jest-Component" \n \
-    ');
-    process.exit(1);
-  }
+    ',
+  );
+  process.exit(1);
+}
 
 const outputDir = process.argv[2];
 if (!fs.existsSync(outputDir)) {
-    process.exit(1);
+  process.exit(1);
 }
 
-const automationStatusID = process.argv[3].split(',');;
+const automationStatusID = process.argv[3].split(',');
 const Test_Type = process.argv[4].split(',');
 console.log('Value"', automationStatusID, '"');
 
-
-
-const url = "https://tcms.aiojiraapps.com/aio-tcms/api/v1/project/MOB/testcase/export/feature?type=NONE";
+const url =
+  'https://tcms.aiojiraapps.com/aio-tcms/api/v1/project/MOB/testcase/export/feature?type=NONE';
 const headers = {
-  "accept": "application/octet-stream",
-  "Authorization": `AioAuth ${process.env.AioToken}`,
-  "Content-Type": "application/json"
+  accept: 'application/octet-stream',
+  Authorization: `AioAuth ${process.env.AIO_TOKEN}`,
+  'Content-Type': 'application/json',
 };
 const data = {
-  "statusID": {
-    "comparisonType": "IN",
-    "list": [3]
+  statusID: {
+    comparisonType: 'IN',
+    list: [3],
   },
-  "automationStatusID": {
-    "comparisonType": "IN",
-    "list": automationStatusID
+  automationStatusID: {
+    comparisonType: 'IN',
+    list: automationStatusID,
   },
-  "customFields": [
+  customFields: [
     {
-      "name": "Test type",
-      "value": {
-        "comparisonType": "IN",
-        "list": Test_Type
-      }
-    }
-  ]
+      name: 'Test type',
+      value: {
+        comparisonType: 'IN',
+        list: Test_Type,
+      },
+    },
+  ],
 };
 
-axios.post(url, data, { headers, responseType: 'arraybuffer' })
-  .then(response => {
+axios
+  .post(url, data, { headers, responseType: 'arraybuffer' })
+  .then((response) => {
     const zipPath = path.resolve(__dirname, 'features.zip');
     fs.writeFileSync(zipPath, response.data);
     console.log('File saved to', zipPath);
@@ -63,8 +65,7 @@ axios.post(url, data, { headers, responseType: 'arraybuffer' })
     console.log('Files extracted to', outputDir);
     fs.unlinkSync(zipPath);
     console.log('ZIP file deleted');
-
   })
-  .catch(error => {
+  .catch((error) => {
     console.error('Error:', error);
   });
