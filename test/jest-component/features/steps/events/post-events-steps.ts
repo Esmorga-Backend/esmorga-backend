@@ -1,9 +1,8 @@
-import { HttpStatus } from '@nestjs/common';
 import { StepDefinitions } from 'jest-cucumber';
 import { eventRepository, context } from '../../../steps-config';
 import { createEventMock } from '../../../../mocks/dtos';
 
-export const postEventsSteps: StepDefinitions = ({ given, and, then }) => {
+export const postEventsSteps: StepDefinitions = ({ given, and }) => {
   given('the POST Events API is available', () => {
     context.path = '/v1/events';
   });
@@ -44,7 +43,6 @@ export const postEventsSteps: StepDefinitions = ({ given, and, then }) => {
       }
     },
   );
-
 
   and('should be created successfully', () => {
     console.log('To be developed -> should be created successfully');

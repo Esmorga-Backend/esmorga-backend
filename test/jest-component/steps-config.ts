@@ -2,21 +2,23 @@ import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { AccountRepository, EventRepository, TokensRepository } from '../../src/infrastructure/db/repositories' ;
+import {
+  AccountRepository,
+  EventRepository,
+  TokensRepository,
+} from '../../src/infrastructure/db/repositories';
 import { AppModule } from '../../src/app.module';
 import { GenerateTokenPair } from '../../src/domain/services';
-
 
 const SwaggerParser = require('swagger-parser');
 
 let app: INestApplication;
 let eventRepository: EventRepository;
-let schema:any;
-let context:any = {}
+let schema: any;
+let context: any = {};
 let accountRepository: AccountRepository;
 let tokensRepository: TokensRepository;
 let generateTokenPair: GenerateTokenPair;
-
 
 beforeEach(async () => {
   const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -25,10 +27,10 @@ beforeEach(async () => {
   app = moduleFixture.createNestApplication();
   app.useGlobalPipes(new ValidationPipe());
   const swaggerConfig = new DocumentBuilder()
-  .setTitle('Esmorga API')
-  .setDescription('Swagger for Esmorga API.')
-  .setVersion('1.0')
-  .build();
+    .setTitle('Esmorga API')
+    .setDescription('Swagger for Esmorga API.')
+    .setVersion('1.0')
+    .build();
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('swagger', app, document);
   await app.init();
@@ -38,7 +40,7 @@ beforeEach(async () => {
   generateTokenPair = moduleFixture.get<GenerateTokenPair>(GenerateTokenPair);
   jest.spyOn(eventRepository, 'find').mockRejectedValue(new Error());
   const response = await request(app.getHttpServer()).get('/swagger-json');
-  const rawSchema = response.body
+  const rawSchema = response.body;
   schema = await SwaggerParser.dereference(rawSchema);
   context = {};
   context.headers = {
@@ -48,8 +50,15 @@ beforeEach(async () => {
 });
 
 afterEach(async () => {
-  
   await app.close();
 });
 
-export { app, eventRepository, schema, context, accountRepository, tokensRepository, generateTokenPair };
+export {
+  app,
+  eventRepository,
+  schema,
+  context,
+  accountRepository,
+  tokensRepository,
+  generateTokenPair,
+};
