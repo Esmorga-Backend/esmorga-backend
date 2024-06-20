@@ -1,5 +1,4 @@
 import {
-  Headers,
   Body,
   Controller,
   Get,
@@ -21,6 +20,7 @@ import {
 } from '../swagger/decorators/events';
 import { EventListDto } from '../../dtos';
 import { CreateEventDto } from '../dtos';
+import { RequestId } from '../req-decorators';
 
 @ApiTags('Event')
 @Controller('/v1/events')
@@ -34,9 +34,7 @@ export class EventController {
 
   @Get('/')
   @SwaggerGetEvents()
-  async getEvents(
-    @Headers('x-request-id') requestId: string,
-  ): Promise<EventListDto> {
+  async getEvents(@RequestId() requestId: string): Promise<EventListDto> {
     try {
       this.logger.info(
         `[EventController] [getEvents] - x-request-id:${requestId}`,
@@ -62,7 +60,7 @@ export class EventController {
   @SwaggerCreateEvent()
   async createEvent(
     @Body() createEventDto: CreateEventDto,
-    @Headers('x-request-id') requestId: string,
+    @RequestId() requestId: string,
   ): Promise<Record<string, never>> {
     try {
       this.logger.info(

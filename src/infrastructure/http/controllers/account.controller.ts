@@ -4,7 +4,6 @@ import {
   HttpException,
   InternalServerErrorException,
   UseFilters,
-  Headers,
   Body,
   HttpCode,
 } from '@nestjs/common';
@@ -21,6 +20,7 @@ import {
   SwaggerAccountRegister,
 } from '../swagger/decorators/account';
 import { AccountLoggedDto } from '../../dtos';
+import { RequestId } from '../req-decorators';
 
 @Controller('/v1/account')
 @ApiTags('Account')
@@ -37,7 +37,7 @@ export class AccountController {
   @HttpCode(200)
   async login(
     @Body() accountLoginDto: AccountLoginDto,
-    @Headers('x-request-id') requestId: string,
+    @RequestId() requestId: string,
   ): Promise<AccountLoggedDto> {
     try {
       this.logger.info(
@@ -66,7 +66,7 @@ export class AccountController {
   @SwaggerAccountRegister()
   async register(
     @Body() accountRegisterDto: AccountRegisterDto,
-    @Headers('x-request-id') requestId: string,
+    @RequestId() requestId: string,
   ): Promise<AccountLoggedDto> {
     try {
       this.logger.info(
