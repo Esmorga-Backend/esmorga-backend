@@ -2,8 +2,9 @@ import { HttpStatus } from '@nestjs/common';
 import { StepDefinitions } from 'jest-cucumber';
 import {accountRepository, context, generateTokenPair, tokensRepository} from '../../../steps-config';
 import { USER_DB } from '../../../../mocks/db';
-  
 
+  
+const TTL = parseInt(process.env.ACCESS_TOKEN_TTL);
 
 export const getEventsSteps: StepDefinitions = ({ given, when, and, then }) => {
  given('the POST Login API is available', () => {
@@ -24,11 +25,19 @@ export const getEventsSteps: StepDefinitions = ({ given, when, and, then }) => {
     context.mock.email = email;
  });
 
- and(/^password field correctly filled with (\w+)$/, (password) => {
+ and(/^password field correctly filled with (.*)$/, (password) => {
     context.mock.password = password;
  });
 
-//  when('a POST request is made to Login', () => {});
- //   then(/^success response code (\d+) returned$/, (arg0) => {});
-    and('profile, accessToken and refreshToken are provided with correct schema', () => {});
+    and('profile, accessToken and refreshToken are provided with correct schema', () => {
+        expect(context.response.body).toMatchObject({
+            accessToken: 'ACCESS_TOKEN',
+            refreshToken: 'REFRESH_TOKEN',
+            ttl: TTL,
+            profile: {
+              name: USER_DB.name,
+              email: USER_DB.email,
+            },
+          });
+    });
 }
