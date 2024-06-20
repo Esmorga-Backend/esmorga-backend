@@ -44,14 +44,7 @@ export const postEventsSteps: StepDefinitions = ({ given, and, then }) => {
       }
     },
   );
-  then(/^success response code (\d+) returned$/, (code_n) => {
-    if (code_n == 201) {
-      expect(context.response.status).toBe(HttpStatus.CREATED);
-      expect(context.response.body).toEqual({});
-    } else {
-      expect(false).toBe(true);
-    }
-  });
+
 
   and('should be created successfully', () => {
     console.log('To be developed -> should be created successfully');

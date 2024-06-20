@@ -3,7 +3,14 @@ import { StepDefinitions } from 'jest-cucumber';
 import * as request from 'supertest';
 import Ajv from 'ajv';
 import addFormats from 'ajv-formats';
-import { app, schema, context } from '../../steps-config';
+import {
+  app, schema, accountRepository,
+  tokensRepository, generateTokenPair, context
+} from '../../steps-config';
+import { USER_DB, PASSWORD } from '../../../mocks/db';
+
+const TTL = parseInt(process.env.ACCESS_TOKEN_TTL);
+
 
 export const reusableSteps: StepDefinitions = ({ and, when, then }) => {
   const ajv = new Ajv({ strict: false });
@@ -13,7 +20,7 @@ export const reusableSteps: StepDefinitions = ({ and, when, then }) => {
   when(/^a GET request is made to (\w+) API$/, async () => {
     context.response = await request(app.getHttpServer()).get(context.path);
   });
-  when('a POST request is made to Events API', async () => {
+  when(/^a POST request is made to (\w+) API$/, async () => {
     context.response = await request(app.getHttpServer())
       .post(context.path)
       .set(context.headers)
@@ -32,7 +39,9 @@ export const reusableSteps: StepDefinitions = ({ and, when, then }) => {
     }
     expect(valid).toBe(true);
   });
-
+  then(
+    /^error response code (\d+) returned, description: (.*)$/,
+    (error, p) => {});
   then(/^error response code (\d+) returned$/, (error) => {
     if (error == 500) {
       expect(context.response.status).toBe(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -52,4 +61,26 @@ export const reusableSteps: StepDefinitions = ({ and, when, then }) => {
       expect(true).toBe(false);
     }
   });
+
+  then(/^success response code (\d+) returned$/, (code_n) => {
+    if (code_n == 201) {
+      expect(context.response.status).toBe(HttpStatus.CREATED);
+      expect(context.response.body).toEqual({});
+    } else if (code_n == 200) {
+      console.log(context.response);
+      expect(context.response.status).toBe(HttpStatus.OK);
+      expect(context.response.body).toMatchObject({
+        accessToken: 'ACCESS_TOKEN',
+        refreshToken: 'REFRESH_TOKEN',
+        ttl: TTL,
+        profile: {
+          name: USER_DB.name,
+          email: USER_DB.email,
+        },
+      });
+    } else {
+      expect(false).toBe(true);
+    }
+  });
+
 };
