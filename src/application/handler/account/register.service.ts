@@ -30,6 +30,7 @@ export class RegisterService {
       this.logger.info(
         `[RegisterService] [register] - x-request-id:${requestId}, email ${accountRegisterDto.email}`,
       );
+
       const hashPassword = encodeValue(accountRegisterDto.password);
 
       accountRegisterDto.password = hashPassword;

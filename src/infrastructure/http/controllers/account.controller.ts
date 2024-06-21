@@ -99,12 +99,23 @@ export class AccountController {
   @HttpCode(200)
   async refreshToken(
     @Body() refreshTokenDto: RefreshTokenDto,
+    @RequestId() requestId: string,
   ): Promise<NewPairOfTokensDto> {
     try {
-      const response =
-        await this.refreshTokenService.refreshToken(refreshTokenDto);
+      this.logger.info(
+        `[AccountController] [refreshToken] - x-request-id:${requestId}`,
+      );
+
+      const response = await this.refreshTokenService.refreshToken(
+        refreshTokenDto,
+        requestId,
+      );
       return response;
     } catch (error) {
+      this.logger.error(
+        `[AccountController] [refreshToken] - x-request-id:${requestId}, error ${error}`,
+      );
+
       if (error instanceof HttpException) {
         throw error;
       }

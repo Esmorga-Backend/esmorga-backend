@@ -1,6 +1,7 @@
 import { ConfigService } from '@nestjs/config';
 import { Injectable } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
+import { PinoLogger } from 'nestjs-pino';
 import { TokensRepository } from '../../../infrastructure/db/repositories';
 import { RefreshTokenDto } from '../../../infrastructure/http/dtos';
 import { NewPairOfTokensDto } from '../../../infrastructure/dtos';
@@ -11,6 +12,7 @@ import { GenerateTokenPair } from '../../../domain/services';
 @Injectable()
 export class RefreshTokenService {
   constructor(
+    private readonly logger: PinoLogger,
     private configService: ConfigService,
     private readonly generateTokenPair: GenerateTokenPair,
     private readonly tokensRepository: TokensRepository,
@@ -18,12 +20,20 @@ export class RefreshTokenService {
 
   async refreshToken(
     refreshTokenDto: RefreshTokenDto,
+    requestId?: string,
   ): Promise<NewPairOfTokensDto> {
     try {
       const { refreshToken } = refreshTokenDto;
 
+      this.logger.info(
+        `[RegisterService] [refreshToken] - x-request-id:${requestId}, refreshToken ${refreshToken}`,
+      );
+
       const pairOfTokens =
-        await this.tokensRepository.getPairOfTokensByRefreshToken(refreshToken);
+        await this.tokensRepository.getPairOfTokensByRefreshToken(
+          refreshToken,
+          requestId,
+        );
 
       const { id, uuid } = pairOfTokens;
 
@@ -34,9 +44,10 @@ export class RefreshTokenService {
         uuid,
         accessToken,
         newRefreshToken,
+        requestId,
       );
 
-      await this.tokensRepository.removeTokensById(id);
+      await this.tokensRepository.removeTokensById(id, requestId);
 
       const ttl = this.configService.get('ACCESS_TOKEN_TTL');
 
@@ -52,6 +63,10 @@ export class RefreshTokenService {
 
       return newPairOfTokens;
     } catch (error) {
+      this.logger.error(
+        `[RegisterService] [refreshToken] - x-request-id:${requestId}, error ${error}`,
+      );
+
       if (error instanceof DataBaseUnathorizedError)
         throw new InvalidCredentialsRefreshApiError();
 

@@ -73,8 +73,13 @@ export class TokensRepository extends MongoRepository<TokensSchema> {
 
   async getPairOfTokensByRefreshToken(
     refreshToken: string,
+    requestId?: string,
   ): Promise<PairOfTokensDto> {
     try {
+      this.logger.info(
+        `[TokensRepository] [getPairOfTokensByRefreshToken] - x-request-id:${requestId}, refreshToken ${refreshToken}`,
+      );
+
       const tokenData = await this.findOneByRefreshToken(refreshToken);
 
       if (!tokenData) throw new DataBaseUnathorizedError();
@@ -85,6 +90,10 @@ export class TokensRepository extends MongoRepository<TokensSchema> {
 
       return pairOfTokens;
     } catch (error) {
+      this.logger.error(
+        `[TokensRepository] [getPairOfTokensByRefreshToken] - x-request-id:${requestId}, error ${error}`,
+      );
+
       if (error instanceof HttpException) throw error;
 
       throw new DataBaseInternalError();
