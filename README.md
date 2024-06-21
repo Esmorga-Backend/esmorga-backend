@@ -19,7 +19,7 @@ $ npm install
 
 ## ✨Enviroment Configuration
 Create in the project root a file named `.env` and add inside it the environment variables.
-> [!WARNING]
+> [!IMPORTANT]
 > This file and its variables are very important because otherwise the application will not work. Request this information from any contributor to the repository.
 
 Now it's time to configure the code formatting, what is that and what is it for?<br>Basically is the way to maintain consistency of code formatting so that all developers have exactly the same working environment.<br>In order to be able to configure this, there is usually a file in the root of the project known as linter which is responsible for customising the formatting. There are different linters but in this project we use [eslint](https://eslint.org/).<br>In order to get the formatting to work and the warnings to appear in the code you must install this pluggin in vscode https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint.<br>If you want the formatting to be autocorrected when saving, you must type in the vscode search bar `>Preferences:Open User Settings(JSON)` and navigate to the file `settings.json`, then write this inside the {}:
