@@ -1,6 +1,6 @@
 import { HttpStatus } from '@nestjs/common';
 import { ApiResponseOptions } from '@nestjs/swagger';
-import { AccountLoggedDto } from '../../../dtos';
+import { AccountLoggedDto, NewPairOfTokensDto } from '../../../dtos';
 
 const INTERNAL_ERROR_COMMON_PROPERTIES = {
   title: {
@@ -21,11 +21,11 @@ const INTERNAL_ERROR_COMMON_PROPERTIES = {
 const PATHS = {
   LOGIN: '/v1/account/login',
   REGISTER: '/v1/account/register',
+  REFRESH_TOKEN: '/v1/account/refresh',
 };
 
 export const LOGIN_RESPONSES: { [key: string]: ApiResponseOptions } = {
   OK: {
-    status: HttpStatus.OK,
     description: 'User has successfully logged in',
     type: AccountLoggedDto,
   },
@@ -144,6 +144,71 @@ export const REGISTER_RESPONSES: { [key: string]: ApiResponseOptions } = {
       properties: {
         ...INTERNAL_ERROR_COMMON_PROPERTIES,
         type: { type: 'string', example: PATHS.REGISTER },
+      },
+    },
+  },
+};
+
+export const REFRESH_TOKEN_RESPONSES: { [key: string]: ApiResponseOptions } = {
+  OK: {
+    description:
+      'A new pair of accesToken and refreshToken is succesfully provided',
+    type: NewPairOfTokensDto,
+  },
+  BAD_REQUEST_ERROR: {
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Some inputs are missed or wrong',
+    schema: {
+      type: 'object',
+      properties: {
+        title: {
+          type: 'string',
+          example: 'badRequestError',
+        },
+        status: { type: 'number', example: HttpStatus.BAD_REQUEST },
+        type: { type: 'string', example: PATHS.REFRESH_TOKEN },
+        detail: {
+          type: 'string',
+          example: 'some inputs are missing',
+        },
+        errors: {
+          type: 'array',
+          example: ['refreshToken should not be empty'],
+        },
+      },
+    },
+  },
+  UNAUTHORIZED_ERROR: {
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Invalid credentials',
+    schema: {
+      type: 'object',
+      properties: {
+        title: {
+          type: 'string',
+          example: 'unauthorizedRequestError',
+        },
+        status: { type: 'number', example: HttpStatus.UNAUTHORIZED },
+        type: { type: 'string', example: PATHS.REFRESH_TOKEN },
+        detail: {
+          type: 'string',
+          example: 'unauthorized',
+        },
+        errors: {
+          type: 'array',
+          example: ['unauthorized'],
+        },
+      },
+    },
+  },
+  INTERNAL_ERROR: {
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Error not handled',
+    schema: {
+      type: 'object',
+      properties: {
+        ...INTERNAL_ERROR_COMMON_PROPERTIES,
+        type: { type: 'string', example: PATHS.REFRESH_TOKEN },
       },
     },
   },

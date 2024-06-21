@@ -5,6 +5,7 @@ import { AccountController } from '../controllers';
 import {
   LoginService,
   RegisterService,
+  RefreshTokenService,
 } from '../../../application/handler/account';
 import { AccountRepository, TokensRepository } from '../../db/repositories';
 import { UserSchema, User, TokensSchema, Tokens } from '../../db/schema';
@@ -20,6 +21,7 @@ import { GenerateTokenPair } from '../../../domain/services';
   providers: [
     LoginService,
     RegisterService,
+    RefreshTokenService,
     GenerateTokenPair,
     AccountRepository,
     TokensRepository,

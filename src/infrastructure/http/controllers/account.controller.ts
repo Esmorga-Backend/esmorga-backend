@@ -12,14 +12,16 @@ import { PinoLogger } from 'nestjs-pino';
 import {
   LoginService,
   RegisterService,
+  RefreshTokenService,
 } from '../../../application/handler/account';
 import { HttpExceptionFilter } from '../errors';
-import { AccountLoginDto, AccountRegisterDto } from '../dtos';
+import { AccountLoginDto, AccountRegisterDto, RefreshTokenDto } from '../dtos';
 import {
   SwaggerAccountLogin,
   SwaggerAccountRegister,
+  SwaggerRefreshToken,
 } from '../swagger/decorators/account';
-import { AccountLoggedDto } from '../../dtos';
+import { AccountLoggedDto, NewPairOfTokensDto } from '../../dtos';
 import { RequestId } from '../req-decorators';
 
 @Controller('/v1/account')
@@ -30,6 +32,7 @@ export class AccountController {
     private readonly logger: PinoLogger,
     private readonly loginService: LoginService,
     private readonly registerService: RegisterService,
+    private readonly refreshTokenService: RefreshTokenService,
   ) {}
 
   @Post('/login')
@@ -84,6 +87,24 @@ export class AccountController {
         `[AccountController] [register] - x-request-id:${requestId}, error ${error}`,
       );
 
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new InternalServerErrorException();
+    }
+  }
+
+  @Post('/refresh')
+  @SwaggerRefreshToken()
+  @HttpCode(200)
+  async refreshToken(
+    @Body() refreshTokenDto: RefreshTokenDto,
+  ): Promise<NewPairOfTokensDto> {
+    try {
+      const response =
+        await this.refreshTokenService.refreshToken(refreshTokenDto);
+      return response;
+    } catch (error) {
       if (error instanceof HttpException) {
         throw error;
       }
