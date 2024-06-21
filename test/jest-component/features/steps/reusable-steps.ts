@@ -29,7 +29,6 @@ export const reusableSteps: StepDefinitions = ({ and, when, then }) => {
     const valid = validate(context.response.body);
     expect(valid).toBe(true);
   });
-//  then(/^error response code (\d+) returned()$/, () => {});
   then(
     /^error response code (\d+) returned, description: (.*)$/,
     (error, description) => {
