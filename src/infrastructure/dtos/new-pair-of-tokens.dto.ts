@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNumber, IsString } from 'class-validator';
-import { Expose, Transform } from 'class-transformer';
+import { Expose } from 'class-transformer';
 
-export class NewRefreshTokenDto {
+export class NewPairOfTokensDto {
   @Expose()
   @IsString()
   @ApiProperty({
@@ -12,7 +12,6 @@ export class NewRefreshTokenDto {
   accessToken: string;
 
   @Expose()
-  @Transform(({ obj }) => obj.newRefreshToken, { toClassOnly: true })
   @IsString()
   @ApiProperty({
     example:

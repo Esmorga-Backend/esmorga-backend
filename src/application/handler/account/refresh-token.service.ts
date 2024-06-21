@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
 import { TokensRepository } from '../../../infrastructure/db/repositories';
 import { RefreshTokenDto } from '../../../infrastructure/http/dtos';
-import { NewRefreshTokenDto } from '../../../infrastructure/dtos';
+import { NewPairOfTokensDto } from '../../../infrastructure/dtos';
 import { DataBaseUnathorizedError } from '../../../infrastructure/db/errors';
 import { InvalidCredentialsRefreshApiError } from '../../../domain/errors';
 import { GenerateTokenPair } from '../../../domain/services';
@@ -18,16 +18,14 @@ export class RefreshTokenService {
 
   async refreshToken(
     refreshTokenDto: RefreshTokenDto,
-  ): Promise<NewRefreshTokenDto> {
+  ): Promise<NewPairOfTokensDto> {
     try {
       const { refreshToken } = refreshTokenDto;
 
       const pairOfTokens =
         await this.tokensRepository.getPairOfTokensByRefreshToken(refreshToken);
 
-      if (!pairOfTokens) throw new DataBaseUnathorizedError();
-
-      const { uuid } = pairOfTokens;
+      const { id, uuid } = pairOfTokens;
 
       const { accessToken, refreshToken: newRefreshToken } =
         await this.generateTokenPair.generateTokens(uuid);
@@ -38,15 +36,15 @@ export class RefreshTokenService {
         newRefreshToken,
       );
 
-      await this.tokensRepository.removeTokensById(pairOfTokens.id);
+      await this.tokensRepository.removeTokensById(id);
 
       const ttl = this.configService.get('ACCESS_TOKEN_TTL');
 
       const newPairOfTokens = plainToClass(
-        NewRefreshTokenDto,
+        NewPairOfTokensDto,
         {
           accessToken,
-          newRefreshToken,
+          refreshToken: newRefreshToken,
           ttl,
         },
         { excludeExtraneousValues: true },

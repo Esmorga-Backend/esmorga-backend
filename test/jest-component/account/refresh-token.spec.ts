@@ -38,12 +38,12 @@ describe('Refresh Token - [POST v1/account/refresh]', () => {
 
   it('Should return a 200 with a new pair of tokens', async () => {
     jest
-      .spyOn(tokensRepository, 'getPairOfTokensByRefreshToken')
+      .spyOn(tokensRepository, 'findOneByRefreshToken')
       .mockResolvedValue(PAIR_OF_TOKENS_MOCK_DB);
 
     jest.spyOn(generateTokenPair, 'generateTokens').mockResolvedValue({
-      accessToken: 'ACCESS_TOKEN',
-      refreshToken: 'REFRESH_TOKEN',
+      accessToken: 'accessToken',
+      refreshToken: 'refreshToken',
     });
 
     jest.spyOn(tokensRepository, 'save').mockResolvedValue();
@@ -60,8 +60,8 @@ describe('Refresh Token - [POST v1/account/refresh]', () => {
     expect(response.status).toBe(HttpStatus.OK);
 
     expect(response.body).toMatchObject({
-      accessToken: 'ACCESS_TOKEN',
-      refreshToken: 'REFRESH_TOKEN',
+      accessToken: 'accessToken',
+      refreshToken: 'refreshToken',
       ttl: TTL_MOCK_DB,
     });
   });
@@ -80,7 +80,7 @@ describe('Refresh Token - [POST v1/account/refresh]', () => {
 
   it('Should throw a 401 if refreshToken is not found in the db or if the field type is incorrect.', async () => {
     jest
-      .spyOn(tokensRepository, 'getPairOfTokensByRefreshToken')
+      .spyOn(tokensRepository, 'findOneByRefreshToken')
       .mockResolvedValue(null);
 
     const response = await request(app.getHttpServer())

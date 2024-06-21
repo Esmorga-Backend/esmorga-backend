@@ -10,7 +10,7 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import {
   AccountLoggedDto,
-  NewRefreshTokenDto,
+  NewPairOfTokensDto,
 } from '../../..//infrastructure/dtos';
 import {
   LoginService,
@@ -55,7 +55,7 @@ export class AccountController {
   @HttpCode(200)
   async refreshToken(
     @Body() refreshTokenDto: RefreshTokenDto,
-  ): Promise<NewRefreshTokenDto> {
+  ): Promise<NewPairOfTokensDto> {
     try {
       const response =
         await this.refreshTokenService.refreshToken(refreshTokenDto);

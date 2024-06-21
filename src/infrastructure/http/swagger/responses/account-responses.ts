@@ -1,6 +1,6 @@
 import { HttpStatus } from '@nestjs/common';
 import { ApiResponseOptions } from '@nestjs/swagger';
-import { AccountLoggedDto, NewRefreshTokenDto } from '../../../dtos';
+import { AccountLoggedDto, NewPairOfTokensDto } from '../../../dtos';
 
 const INTERNAL_ERROR_COMMON_PROPERTIES = {
   title: {
@@ -25,7 +25,6 @@ const PATHS = {
 
 export const LOGIN_RESPONSES: { [key: string]: ApiResponseOptions } = {
   OK: {
-    status: HttpStatus.OK,
     description: 'User has successfully logged in',
     type: AccountLoggedDto,
   },
@@ -90,10 +89,9 @@ export const LOGIN_RESPONSES: { [key: string]: ApiResponseOptions } = {
 
 export const REFRESH_TOKEN_RESPONSES: { [key: string]: ApiResponseOptions } = {
   OK: {
-    status: HttpStatus.OK,
     description:
       'A new pair of accesToken and refreshToken is succesfully provided',
-    type: NewRefreshTokenDto,
+    type: NewPairOfTokensDto,
   },
   BAD_REQUEST_ERROR: {
     status: HttpStatus.BAD_REQUEST,
