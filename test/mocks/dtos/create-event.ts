@@ -3,7 +3,7 @@ import {
   EventType,
 } from '../../../src/infrastructure/http/dtos';
 
-export const createEventMock: CreateEventDto = {
+export const CREATE_EVENT_MOCK: CreateEventDto = {
   eventName: 'MobgenFest',
   eventDate: '2025-03-08T10:05:30.915Z',
   description: 'Hello World',
@@ -17,7 +17,7 @@ export const createEventMock: CreateEventDto = {
   tags: ['Meal', 'Music'],
 };
 
-export const createEventWithoutOptionalFieldsMock: CreateEventDto = {
+export const CREATE_EVENT_WITHOUT_OPTIONAL_FIELDS_MOCK: CreateEventDto = {
   eventName: 'MobgenFest',
   eventDate: '2025-03-08T10:05:30.915Z',
   description: 'Hello World',

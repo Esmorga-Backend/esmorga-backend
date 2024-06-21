@@ -7,7 +7,7 @@ import {
   TokensRepository,
 } from '../../../src/infrastructure/db/repositories';
 import { GenerateTokenPair } from '../../../src/domain/services/';
-import { USER_DB, PASSWORD } from '../../mocks/db';
+import { USER_MOCK_DB, PASSWORD_MOCK_DB } from '../../mocks/db';
 
 const TTL = parseInt(process.env.ACCESS_TOKEN_TTL);
 
@@ -44,7 +44,9 @@ describe('Login - [POST v1/account/login]', () => {
   });
 
   it('Should return a 200 with a pair of tokens and user profile data', async () => {
-    jest.spyOn(accountRepository, 'findOneByEmail').mockResolvedValue(USER_DB);
+    jest
+      .spyOn(accountRepository, 'findOneByEmail')
+      .mockResolvedValue(USER_MOCK_DB);
 
     jest.spyOn(generateTokenPair, 'generateTokens').mockResolvedValue({
       accessToken: 'ACCESS_TOKEN',
@@ -55,14 +57,14 @@ describe('Login - [POST v1/account/login]', () => {
 
     jest.spyOn(tokensRepository, 'save').mockResolvedValue();
 
-    const validEmail = USER_DB.email;
+    const validEmail = USER_MOCK_DB.email;
 
     const response = await request(app.getHttpServer())
       .post(PATH)
       .set(HEADERS)
       .send({
         email: validEmail,
-        password: PASSWORD,
+        password: PASSWORD_MOCK_DB,
       });
 
     expect(response.status).toBe(HttpStatus.OK);
@@ -71,8 +73,8 @@ describe('Login - [POST v1/account/login]', () => {
       refreshToken: 'REFRESH_TOKEN',
       ttl: TTL,
       profile: {
-        name: USER_DB.name,
-        email: USER_DB.email,
+        name: USER_MOCK_DB.name,
+        email: USER_MOCK_DB.email,
       },
     });
   });
@@ -82,7 +84,7 @@ describe('Login - [POST v1/account/login]', () => {
       .post(PATH)
       .set(HEADERS)
       .send({
-        password: PASSWORD,
+        password: PASSWORD_MOCK_DB,
       });
 
     expect(response.status).toBe(HttpStatus.BAD_REQUEST);
@@ -95,7 +97,7 @@ describe('Login - [POST v1/account/login]', () => {
       .set(HEADERS)
       .send({
         email: 123,
-        password: PASSWORD,
+        password: PASSWORD_MOCK_DB,
       });
 
     expect(response.status).toBe(HttpStatus.BAD_REQUEST);
@@ -110,7 +112,7 @@ describe('Login - [POST v1/account/login]', () => {
       .set(HEADERS)
       .send({
         email: 'fakeEmail@gmail.com',
-        password: PASSWORD,
+        password: PASSWORD_MOCK_DB,
       });
 
     expect(response.status).toBe(HttpStatus.UNAUTHORIZED);
@@ -124,9 +126,11 @@ describe('Login - [POST v1/account/login]', () => {
   });
 
   it('Should throw a 401 if password is not correct', async () => {
-    jest.spyOn(accountRepository, 'findOneByEmail').mockResolvedValue(USER_DB);
+    jest
+      .spyOn(accountRepository, 'findOneByEmail')
+      .mockResolvedValue(USER_MOCK_DB);
 
-    const validEmail = USER_DB.email;
+    const validEmail = USER_MOCK_DB.email;
 
     const response = await request(app.getHttpServer())
       .post(PATH)

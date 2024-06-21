@@ -2,7 +2,10 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { JwtModule } from '@nestjs/jwt';
 import { AccountController } from '../controllers';
-import { LoginService } from '../../../application/handler/account';
+import {
+  LoginService,
+  RefreshTokenService,
+} from '../../../application/handler/account';
 import { AccountRepository, TokensRepository } from '../../db/repositories';
 import { UserSchema, User, TokensSchema, Tokens } from '../../db/schema';
 import { GenerateTokenPair } from '../../../domain/services';
@@ -16,6 +19,7 @@ import { GenerateTokenPair } from '../../../domain/services';
   controllers: [AccountController],
   providers: [
     LoginService,
+    RefreshTokenService,
     GenerateTokenPair,
     AccountRepository,
     TokensRepository,
