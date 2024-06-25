@@ -65,7 +65,6 @@ export const getEventsSteps: StepDefinitions = ({ given, and, then }) => {
         expect(context.response.body).toEqual({
           totalEvents: 0,
           events: [],
-          events: [],
         });
       } else {
         expect(false).toBe(true);

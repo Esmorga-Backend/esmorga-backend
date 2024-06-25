@@ -1,6 +1,6 @@
 import { StepDefinitions } from 'jest-cucumber';
 import { eventRepository, context } from '../../../steps-config';
-import { createEventMock } from '../../../../mocks/dtos';
+import { CREATE_EVENT_MOCK } from '../../../../mocks/dtos';
 
 export const postEventsSteps: StepDefinitions = ({ given, and }) => {
   given('the POST Events API is available', () => {
@@ -14,7 +14,7 @@ export const postEventsSteps: StepDefinitions = ({ given, and }) => {
   });
 
   and('with invalid data', () => {
-    context.mock = { ...createEventMock };
+    context.mock = { ...CREATE_EVENT_MOCK };
 
     delete context.mock.eventName;
   });
@@ -27,7 +27,7 @@ export const postEventsSteps: StepDefinitions = ({ given, and }) => {
     /^with valid data, use tags: (.*), imageUrl: (.*), location.lat(.*) and location.long:(.*)$/,
     (tags, imageUrl, lat, long) => {
       jest.spyOn(eventRepository, 'save').mockResolvedValue();
-      context.mock = { ...createEventMock };
+      context.mock = { ...CREATE_EVENT_MOCK };
 
       context.mock.location.imageUrl = imageUrl;
       context.mock.location.tags = tags;

@@ -5,14 +5,16 @@ import {
   generateTokenPair,
   tokensRepository,
 } from '../../../steps-config';
-import { USER_DB } from '../../../../mocks/db';
+import { USER_MOCK_DB } from '../../../../mocks/db';
 
 const TTL = parseInt(process.env.ACCESS_TOKEN_TTL);
 
 export const getEventsSteps: StepDefinitions = ({ given, and }) => {
   given('the POST Login API is available', () => {
     context.path = '/v1/account/login';
-    jest.spyOn(accountRepository, 'findOneByEmail').mockResolvedValue(USER_DB);
+    jest
+      .spyOn(accountRepository, 'findOneByEmail')
+      .mockResolvedValue(USER_MOCK_DB);
 
     jest.spyOn(generateTokenPair, 'generateTokens').mockResolvedValue({
       accessToken: 'ACCESS_TOKEN',
@@ -39,8 +41,8 @@ export const getEventsSteps: StepDefinitions = ({ given, and }) => {
         refreshToken: 'REFRESH_TOKEN',
         ttl: TTL,
         profile: {
-          name: USER_DB.name,
-          email: USER_DB.email,
+          name: USER_MOCK_DB.name,
+          email: USER_MOCK_DB.email,
         },
       });
     },
