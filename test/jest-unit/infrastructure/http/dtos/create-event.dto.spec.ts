@@ -2,13 +2,13 @@ import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
 import { CreateEventDto } from '../../../../../src/infrastructure/http/dtos';
 import {
-  createEventMock,
-  createEventWithoutOptionalFieldsMock,
+  CREATE_EVENT_MOCK,
+  CREATE_EVENT_WITHOUT_OPTIONAL_FIELDS_MOCK,
 } from '../../../../mocks/dtos';
 
 describe('[unit-test] [CreateEventDto]', () => {
   it('Should validate all fields successfully (required and optional)', async () => {
-    const createEventDto = plainToInstance(CreateEventDto, createEventMock);
+    const createEventDto = plainToInstance(CreateEventDto, CREATE_EVENT_MOCK);
 
     const errors = await validate(createEventDto, { stopAtFirstError: true });
 
@@ -18,7 +18,7 @@ describe('[unit-test] [CreateEventDto]', () => {
   it('Should validate all fields successfully', async () => {
     const createEventDto = plainToInstance(
       CreateEventDto,
-      createEventWithoutOptionalFieldsMock,
+      CREATE_EVENT_WITHOUT_OPTIONAL_FIELDS_MOCK,
     );
 
     const errors = await validate(createEventDto, { stopAtFirstError: true });
@@ -28,7 +28,7 @@ describe('[unit-test] [CreateEventDto]', () => {
 
   describe('[CreateEventDto] [eventName]', () => {
     it('Should not accept empty value', async () => {
-      const event = { ...createEventMock };
+      const event = { ...CREATE_EVENT_MOCK };
 
       delete event.eventName;
 
@@ -44,7 +44,7 @@ describe('[unit-test] [CreateEventDto]', () => {
     });
 
     it('Should not accept less than 3 characters', async () => {
-      const event = { ...createEventMock };
+      const event = { ...CREATE_EVENT_MOCK };
 
       event.eventName = 'AA';
 
@@ -60,7 +60,7 @@ describe('[unit-test] [CreateEventDto]', () => {
     });
 
     it('Should not accept more than 100 characters', async () => {
-      const event = { ...createEventMock };
+      const event = { ...CREATE_EVENT_MOCK };
 
       event.eventName = 'A'.repeat(300);
 
@@ -104,7 +104,7 @@ describe('[unit-test] [CreateEventDto]', () => {
 
   describe('[CreateEventDto] [eventDate]', () => {
     it('Should not accept empty value', async () => {
-      const event = { ...createEventMock };
+      const event = { ...CREATE_EVENT_MOCK };
 
       delete event.eventDate;
 
@@ -120,7 +120,7 @@ describe('[unit-test] [CreateEventDto]', () => {
     });
 
     it('Should not accept invalid dates', async () => {
-      const event = { ...createEventMock };
+      const event = { ...CREATE_EVENT_MOCK };
 
       event.eventDate = '2020-03-08T10:65:30.915Z';
 
@@ -136,7 +136,7 @@ describe('[unit-test] [CreateEventDto]', () => {
     });
 
     it('Should not accept past dates', async () => {
-      const event = { ...createEventMock };
+      const event = { ...CREATE_EVENT_MOCK };
 
       event.eventDate = '2020-03-08T10:05:30.915Z';
 
@@ -152,7 +152,7 @@ describe('[unit-test] [CreateEventDto]', () => {
     });
 
     it('Should only accept ISO format', async () => {
-      const event = { ...createEventMock };
+      const event = { ...CREATE_EVENT_MOCK };
 
       event.eventDate = '02-02-1996T03:04:05.000Z';
 
@@ -196,7 +196,7 @@ describe('[unit-test] [CreateEventDto]', () => {
 
   describe('[CreateEventDto] [description]', () => {
     it('Should not accept empty value', async () => {
-      const event = { ...createEventMock };
+      const event = { ...CREATE_EVENT_MOCK };
 
       delete event.description;
 
@@ -212,7 +212,7 @@ describe('[unit-test] [CreateEventDto]', () => {
     });
 
     it('Should not accept less than 1 characters', async () => {
-      const event = { ...createEventMock };
+      const event = { ...CREATE_EVENT_MOCK };
 
       event.description = '';
 
@@ -228,7 +228,7 @@ describe('[unit-test] [CreateEventDto]', () => {
     });
 
     it('Should not accept more than 5000 characters', async () => {
-      const event = { ...createEventMock };
+      const event = { ...CREATE_EVENT_MOCK };
 
       event.description = 'A'.repeat(5001);
 
@@ -272,7 +272,7 @@ describe('[unit-test] [CreateEventDto]', () => {
 
   describe('[CreateEventDto] [eventType]', () => {
     it('Should not accept empty value', async () => {
-      const event = { ...createEventMock };
+      const event = { ...CREATE_EVENT_MOCK };
 
       delete event.eventType;
 
@@ -369,7 +369,7 @@ describe('[unit-test] [CreateEventDto]', () => {
     });
 
     it('Should not accept more than 500 characters', async () => {
-      const event = { ...createEventMock };
+      const event = { ...CREATE_EVENT_MOCK };
 
       event.imageUrl = 'A'.repeat(600);
 
@@ -387,7 +387,7 @@ describe('[unit-test] [CreateEventDto]', () => {
 
   describe('[CreateEventDto] [location] [name]', () => {
     it('Should not accept empty value', async () => {
-      const event = JSON.parse(JSON.stringify(createEventMock));
+      const event = JSON.parse(JSON.stringify(CREATE_EVENT_MOCK));
 
       delete event.location.name;
 
@@ -404,7 +404,7 @@ describe('[unit-test] [CreateEventDto]', () => {
     });
 
     it('Should not accept less than 1 character', async () => {
-      const event = JSON.parse(JSON.stringify(createEventMock));
+      const event = JSON.parse(JSON.stringify(CREATE_EVENT_MOCK));
 
       event.location.name = '';
 
@@ -421,7 +421,7 @@ describe('[unit-test] [CreateEventDto]', () => {
     });
 
     it('Should not accept more than 100 characters', async () => {
-      const event = JSON.parse(JSON.stringify(createEventMock));
+      const event = JSON.parse(JSON.stringify(CREATE_EVENT_MOCK));
 
       event.location.name = 'A'.repeat(200);
 
@@ -467,7 +467,7 @@ describe('[unit-test] [CreateEventDto]', () => {
 
   describe('[CreateEventDto] [location] [lat]', () => {
     it('Should not accept empty value if location.long is defined', async () => {
-      const event = JSON.parse(JSON.stringify(createEventMock));
+      const event = JSON.parse(JSON.stringify(CREATE_EVENT_MOCK));
 
       delete event.location.lat;
 
@@ -513,7 +513,7 @@ describe('[unit-test] [CreateEventDto]', () => {
 
   describe('[CreateEventDto] [location] [long]', () => {
     it('Should not accept empty value if location.lat is defined', async () => {
-      const event = JSON.parse(JSON.stringify(createEventMock));
+      const event = JSON.parse(JSON.stringify(CREATE_EVENT_MOCK));
 
       delete event.location.long;
 
@@ -559,7 +559,7 @@ describe('[unit-test] [CreateEventDto]', () => {
 
   describe('[CreateEventDto] [tags]', () => {
     it('Should not accept less than 3 characters for each array field', async () => {
-      const event = { ...createEventMock };
+      const event = { ...CREATE_EVENT_MOCK };
 
       event.tags = ['AA'];
 
@@ -575,7 +575,7 @@ describe('[unit-test] [CreateEventDto]', () => {
     });
 
     it('Should not accept more than 25 characters for each array field', async () => {
-      const event = { ...createEventMock };
+      const event = { ...CREATE_EVENT_MOCK };
 
       event.tags = ['A'.repeat(30)];
 

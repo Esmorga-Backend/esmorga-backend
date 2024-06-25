@@ -1,10 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { plainToClass } from 'class-transformer';
 import { MongoRepository } from './mongo.repository';
 import { Tokens as TokensSchema } from '../schema';
-import { DataBaseInternalError } from '../errors';
+import { DataBaseInternalError, DataBaseUnathorizedError } from '../errors';
 import { PairOfTokensDto } from '../../dtos';
 
 @Injectable()
@@ -29,7 +29,7 @@ export class TokensRepository extends MongoRepository<TokensSchema> {
     }
   }
 
-  async getAllTokensByUuid(uuid: string) {
+  async getAllTokensByUuid(uuid: string): Promise<PairOfTokensDto[]> {
     try {
       const tokensData = await this.findByUuid(uuid);
 
@@ -41,6 +41,26 @@ export class TokensRepository extends MongoRepository<TokensSchema> {
 
       return pairOfTokens;
     } catch (error) {
+      throw new DataBaseInternalError();
+    }
+  }
+
+  async getPairOfTokensByRefreshToken(
+    refreshToken: string,
+  ): Promise<PairOfTokensDto> {
+    try {
+      const tokenData = await this.findOneByRefreshToken(refreshToken);
+
+      if (!tokenData) throw new DataBaseUnathorizedError();
+
+      const pairOfTokens = plainToClass(PairOfTokensDto, tokenData, {
+        excludeExtraneousValues: true,
+      });
+
+      return pairOfTokens;
+    } catch (error) {
+      if (error instanceof HttpException) throw error;
+
       throw new DataBaseInternalError();
     }
   }

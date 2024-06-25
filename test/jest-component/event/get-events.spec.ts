@@ -3,7 +3,7 @@ import { HttpStatus, INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../../../src/app.module';
 import { EventRepository } from '../../../src/infrastructure/db/repositories';
-import { futureEventMockDB, oldEventMockDB } from '../../mocks/db';
+import { FUTURE_EVENT_MOCK_DB, OLD_EVENT_MOCK_DB } from '../../mocks/db';
 
 const path: string = '/v1/events';
 
@@ -32,7 +32,9 @@ describe('Get events - [GET v1/events]', () => {
   });
 
   it('Should return a 200 with an upcoming events', async () => {
-    jest.spyOn(eventRepository, 'find').mockResolvedValue([futureEventMockDB]);
+    jest
+      .spyOn(eventRepository, 'find')
+      .mockResolvedValue([FUTURE_EVENT_MOCK_DB]);
 
     const response = await request(app.getHttpServer()).get(path).set(headers);
 
@@ -41,14 +43,14 @@ describe('Get events - [GET v1/events]', () => {
       totalEvents: 1,
       events: [
         {
-          eventId: futureEventMockDB._id,
-          eventName: futureEventMockDB.eventName,
-          eventDate: futureEventMockDB.eventDate.toISOString(),
-          description: futureEventMockDB.description,
-          eventType: futureEventMockDB.eventType,
-          imageUrl: futureEventMockDB.imageUrl,
-          location: futureEventMockDB.location,
-          tags: futureEventMockDB.tags,
+          eventId: FUTURE_EVENT_MOCK_DB._id,
+          eventName: FUTURE_EVENT_MOCK_DB.eventName,
+          eventDate: FUTURE_EVENT_MOCK_DB.eventDate.toISOString(),
+          description: FUTURE_EVENT_MOCK_DB.description,
+          eventType: FUTURE_EVENT_MOCK_DB.eventType,
+          imageUrl: FUTURE_EVENT_MOCK_DB.imageUrl,
+          location: FUTURE_EVENT_MOCK_DB.location,
+          tags: FUTURE_EVENT_MOCK_DB.tags,
         },
       ],
     });
@@ -57,7 +59,7 @@ describe('Get events - [GET v1/events]', () => {
   it('Should return a 200 with an upcoming events filtered', async () => {
     jest
       .spyOn(eventRepository, 'find')
-      .mockResolvedValue([futureEventMockDB, oldEventMockDB]);
+      .mockResolvedValue([FUTURE_EVENT_MOCK_DB, OLD_EVENT_MOCK_DB]);
 
     const response = await request(app.getHttpServer()).get(path).set(headers);
 
@@ -66,21 +68,21 @@ describe('Get events - [GET v1/events]', () => {
       totalEvents: 1,
       events: [
         {
-          eventId: futureEventMockDB._id,
-          eventName: futureEventMockDB.eventName,
-          eventDate: futureEventMockDB.eventDate.toISOString(),
-          description: futureEventMockDB.description,
-          eventType: futureEventMockDB.eventType,
-          imageUrl: futureEventMockDB.imageUrl,
-          location: futureEventMockDB.location,
-          tags: futureEventMockDB.tags,
+          eventId: FUTURE_EVENT_MOCK_DB._id,
+          eventName: FUTURE_EVENT_MOCK_DB.eventName,
+          eventDate: FUTURE_EVENT_MOCK_DB.eventDate.toISOString(),
+          description: FUTURE_EVENT_MOCK_DB.description,
+          eventType: FUTURE_EVENT_MOCK_DB.eventType,
+          imageUrl: FUTURE_EVENT_MOCK_DB.imageUrl,
+          location: FUTURE_EVENT_MOCK_DB.location,
+          tags: FUTURE_EVENT_MOCK_DB.tags,
         },
       ],
     });
   });
 
   it('Should return a 200 without event list if events are not avaliable', async () => {
-    jest.spyOn(eventRepository, 'find').mockResolvedValue([oldEventMockDB]);
+    jest.spyOn(eventRepository, 'find').mockResolvedValue([OLD_EVENT_MOCK_DB]);
 
     const response = await request(app.getHttpServer()).get(path).set(headers);
 

@@ -2,7 +2,7 @@ import { HttpStatus } from '@nestjs/common';
 import { StepDefinitions } from 'jest-cucumber';
 import { matchers } from 'jest-json-schema';
 import { eventRepository, context } from '../../../steps-config';
-import { futureEventMockDB, oldEventMockDB } from '../../../../mocks/db';
+import { FUTURE_EVENT_MOCK_DB, OLD_EVENT_MOCK_DB } from '../../../../mocks/db';
 
 export const getEventsSteps: StepDefinitions = ({ given, and, then }) => {
   given('the GET Events API is available', () => {
@@ -20,13 +20,15 @@ export const getEventsSteps: StepDefinitions = ({ given, and, then }) => {
       if (expired_events_on_db == 1 && events_on_db == 2) {
         jest
           .spyOn(eventRepository, 'find')
-          .mockResolvedValue([futureEventMockDB, oldEventMockDB]);
+          .mockResolvedValue([FUTURE_EVENT_MOCK_DB, OLD_EVENT_MOCK_DB]);
       } else if (expired_events_on_db == 1 && events_on_db == 1) {
-        jest.spyOn(eventRepository, 'find').mockResolvedValue([oldEventMockDB]);
+        jest
+          .spyOn(eventRepository, 'find')
+          .mockResolvedValue([OLD_EVENT_MOCK_DB]);
       } else if (events_on_db == 1) {
         jest
           .spyOn(eventRepository, 'find')
-          .mockResolvedValue([futureEventMockDB]);
+          .mockResolvedValue([FUTURE_EVENT_MOCK_DB]);
       } else if (expired_events_on_db == 0 && events_on_db == 0) {
         jest.spyOn(eventRepository, 'find').mockResolvedValue([]);
       } else {
@@ -48,20 +50,21 @@ export const getEventsSteps: StepDefinitions = ({ given, and, then }) => {
           totalEvents: 1,
           events: [
             {
-              eventId: futureEventMockDB._id,
-              eventName: futureEventMockDB.eventName,
-              eventDate: futureEventMockDB.eventDate.toISOString(),
-              description: futureEventMockDB.description,
-              eventType: futureEventMockDB.eventType,
-              imageUrl: futureEventMockDB.imageUrl,
-              location: futureEventMockDB.location,
-              tags: futureEventMockDB.tags,
+              eventId: FUTURE_EVENT_MOCK_DB._id,
+              eventName: FUTURE_EVENT_MOCK_DB.eventName,
+              eventDate: FUTURE_EVENT_MOCK_DB.eventDate.toISOString(),
+              description: FUTURE_EVENT_MOCK_DB.description,
+              eventType: FUTURE_EVENT_MOCK_DB.eventType,
+              imageUrl: FUTURE_EVENT_MOCK_DB.imageUrl,
+              location: FUTURE_EVENT_MOCK_DB.location,
+              tags: FUTURE_EVENT_MOCK_DB.tags,
             },
           ],
         });
       } else if (events_to_check == 0) {
         expect(context.response.body).toEqual({
           totalEvents: 0,
+          events: [],
           events: [],
         });
       } else {
