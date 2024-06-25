@@ -1,6 +1,5 @@
 import { StepDefinitions } from 'jest-cucumber';
 import {
-  accountRepository,
   context,
   generateTokenPair,
   tokensRepository,
@@ -10,10 +9,6 @@ import { PAIR_OF_TOKENS_MOCK_DB, TTL_MOCK_DB } from '../../../../mocks/db';
 export const getEventsSteps: StepDefinitions = ({ given, and }) => {
   given('the POST RefreshToken API is available', () => {
     context.path = '/v1/account/refresh';
-
-    jest
-      .spyOn(tokensRepository, 'findOneByRefreshToken')
-      .mockResolvedValue(PAIR_OF_TOKENS_MOCK_DB);
 
     jest.spyOn(generateTokenPair, 'generateTokens').mockResolvedValue({
       accessToken: 'accessToken',
@@ -27,9 +22,15 @@ export const getEventsSteps: StepDefinitions = ({ given, and }) => {
 
   and(/^use (\w+) refreshToken$/, (status) => {
     if (status == 'valid') {
+      jest
+        .spyOn(tokensRepository, 'findOneByRefreshToken')
+        .mockResolvedValue(PAIR_OF_TOKENS_MOCK_DB);
       context.mock.refreshToken = 'refreshToken';
     } else if (status == 'invalid') {
-      context.mock.refreshToken = 'invalid refreshToken';
+      jest
+        .spyOn(tokensRepository, 'findOneByRefreshToken')
+        .mockResolvedValue(null);
+      context.mock.refreshToken = 'invalid token';
     }
   });
 
