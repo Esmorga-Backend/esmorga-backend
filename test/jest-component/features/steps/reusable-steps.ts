@@ -58,12 +58,27 @@ export const reusableSteps: StepDefinitions = ({ and, when, then }) => {
           expect(context.response.body.errors[0]).toBe(
             'email should not be empty',
           );
+        } else if (context.path == '/v1/account/refresh') {
+          expect(context.response.body.errors[0]).toBe(
+            'refreshToken should not be empty',
+          );
         }
       } else if (error == 401) {
         expect(context.response.status).toBe(HttpStatus.UNAUTHORIZED);
-        expect(context.response.body.errors[0]).toBe(
-          'email password combination is not correct',
-        );
+        if (context.path == '/v1/account/login') {
+          expect(context.response.body.errors[0]).toBe(
+            'email password combination is not correct',
+          );
+        } else if (context.path == '/v1/account/refresh') {
+          console.log('*******', context.response);
+          expect(context.response.body).toMatchObject({
+            title: 'unauthorizedRequestError',
+            status: HttpStatus.UNAUTHORIZED,
+            type: context.path,
+            detail: 'unauthorized',
+            errors: ['unauthorized'],
+          });
+        }
       } else {
         expect(true).toBe(false);
       }
