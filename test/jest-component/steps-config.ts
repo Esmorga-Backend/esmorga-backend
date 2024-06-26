@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import * as request from 'supertest';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import * as request from 'supertest';
 import {
   AccountRepository,
   EventRepository,
@@ -16,6 +16,7 @@ let app: INestApplication;
 let eventRepository: EventRepository;
 let schema: any;
 let context: any = {};
+
 let accountRepository: AccountRepository;
 let tokensRepository: TokensRepository;
 let generateTokenPair: GenerateTokenPair;
