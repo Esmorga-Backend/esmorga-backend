@@ -17,8 +17,7 @@ function check_swagger() {
   expect(valid).toBe(true);
 }
 
-export const reusableSteps: StepDefinitions = ({ and, when, then }) => {
-  //Need to Talk //
+export const reusableSteps: StepDefinitions = ({ when, then }) => {
   when(/^a GET request is made to (\w+) API$/, async () => {
     context.response = await request(app.getHttpServer()).get(context.path);
   });
@@ -29,16 +28,13 @@ export const reusableSteps: StepDefinitions = ({ and, when, then }) => {
       .send(context.mock);
   });
 
-  and('response follows swagger schema', () => {
-    check_swagger();
-  });
   then(
     /^error response code (\d+) returned, description: (.*), expected result: (.*)$/,
     async (error, description, result) => {
       expect(context.response.status).toBe(parseInt(error));
       check_swagger();
-      expect(context.response.body.errors[0]).toBe(result);
       expect(context.response.body.type).toBe(context.path);
+      expect(context.response.body.errors[0]).toBe(result);
     },
   );
 

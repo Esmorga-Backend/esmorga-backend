@@ -19,10 +19,6 @@ export const postEventsSteps: StepDefinitions = ({ given, and }) => {
     delete context.mock.eventName;
   });
 
-  and('should not be created', () => {
-    console.log('To be developed -> should not be created');
-  });
-
   and(
     /^with valid data, use tags: (.*), imageUrl: (.*), location.lat(.*) and location.long:(.*)$/,
     (tags, imageUrl, lat, long) => {
