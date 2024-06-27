@@ -1,14 +1,24 @@
 class ApiBasics {
   get(url) {
-    return cy.request('GET', Cypress.config().baseUrl + url);
+    cy.request('GET', Cypress.config().baseUrl + url).as('response');
   }
-  post(url, data) {
-    return cy.request('POST', Cypress.config().baseUrl + url, data);
+  post(url, data, headers) {
+    cy.request({
+      method: 'POST',
+      url: Cypress.config().baseUrl + url,
+      body: data,
+      headers: headers,
+      failOnStatusCode: false,
+    }).as('response');
+    cy.wait(1000);
   }
-  check_response(result, code) {
-    return result.then((response) => {
-      expect(response.status).to.eq(code);
-    });
+
+  check_response(code, response) {
+    expect(code).to.eq(response.status);
+  }
+  check_error_response(code, result, response) {
+    expect(code).to.eq(response.status);
+    expect(result).to.eq(response.body.errors[0]);
   }
 }
 export default ApiBasics;
