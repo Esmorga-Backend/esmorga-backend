@@ -39,8 +39,9 @@ export const postEventsSteps: StepDefinitions = ({ given, and }) => {
       }
     },
   );
-
+  /*
   and('should be created successfully', () => {
     console.log('To be developed -> should be created successfully');
   });
+  */
 };
