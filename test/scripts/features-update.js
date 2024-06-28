@@ -1,69 +1,103 @@
-const axios = require('axios');
+require('dotenv').config();
 const fs = require('fs');
-const path = require('path');
-const AdmZip = require('adm-zip');
+const GitHelper = require('./lib/GitHelper');
+const Aio = require('./lib/Aio.js');
 
-if (process.argv.length < 5) {
-    console.error('Usage: node exportAndExtract.js <output_directory> <automationStatusID> <Test type>\n \
-    "automationStatus": \n \
-                        4 : "Automated"\n \
-                        2 : "To be Automated"\n \
-    "Test type" \n \
-                       3 : "Backend-Cypress-E2E" \n \
-                       5: "Backend-Jest-Component" \n \
-    ');
-    process.exit(1);
+git = new GitHelper();
+aio = new Aio();
+
+const testTypes = {
+  'Backend-Cypress-E2E': {
+    outputDir: 'test/cypress-e2e/cypress/e2e/features/',
+    num: 3,
+  },
+  'Backend-Jest-Component': {
+    outputDir: 'test/jest-component/features/',
+    num: 5,
+  },
+};
+const onErrorMsg =
+  'Usage: node features-update.js <Test Type> [What to get] [What to get] [...]  \n \
+  "What to get": \n \
+                      "--Test-automated"(default) : Return Test cases in state Automated \n \
+                      "--Test-branch" Just testcases inside US related to branch\n \
+  "Test Type" one of: \n \
+                     "--Backend-Cypress-E2E" \n \
+                     "--Backend-Jest-Component" \n \
+  ';
+
+function getSelectedTestTypes(testTypes) {
+  let data = {};
+  let n = 0;
+  for (const testType in testTypes) {
+    if (process.argv.includes('--' + testType)) {
+      data[testType] = testTypes[testType];
+      n = n + 1;
+    }
   }
 
-const outputDir = process.argv[2];
-if (!fs.existsSync(outputDir)) {
-    process.exit(1);
+  if (n == 0) {
+    return testTypes;
+  }
+  return data;
 }
+if (process.argv.includes('--help')) {
+  console.error(onErrorMsg);
+  process.exit(1);
+}
+selectedTestTypes = getSelectedTestTypes(testTypes);
+console.log(selectedTestTypes);
 
-const automationStatusID = process.argv[3].split(',');;
-const Test_Type = process.argv[4].split(',');
-console.log('Value"', automationStatusID, '"');
-
-
-
-const url = "https://tcms.aiojiraapps.com/aio-tcms/api/v1/project/MOB/testcase/export/feature?type=NONE";
-const headers = {
-  "accept": "application/octet-stream",
-  "Authorization": `AioAuth ${process.env.AioToken}`,
-  "Content-Type": "application/json"
-};
-const data = {
-  "statusID": {
-    "comparisonType": "IN",
-    "list": [3]
-  },
-  "automationStatusID": {
-    "comparisonType": "IN",
-    "list": automationStatusID
-  },
-  "customFields": [
-    {
-      "name": "Test type",
-      "value": {
-        "comparisonType": "IN",
-        "list": Test_Type
+async function main() {
+  for (selectedTestType in selectedTestTypes) {
+    Tests = [];
+    Data = [];
+    if (
+      process.argv.includes('--Test-branch') ||
+      process.argv.includes('--Update-branch-to-automated')
+    ) {
+      try {
+        result = await git.getBranchName();
+        data = aio.prepareDataForBranch(
+          result.branchName,
+          selectedTestTypes[selectedTestType],
+        );
+        Data.push(data);
+      } catch (err) {
+        console.error(err);
       }
     }
-  ]
-};
+    if (
+      process.argv.includes('--Test-automated') ||
+      (!process.argv.includes('--Test-branch') &&
+        !process.argv.includes('--Update-branch-to-automated'))
+    ) {
+      data = aio.prepareDataForAutomated(selectedTestTypes[selectedTestType]);
+      Data.push(data);
+    }
 
-axios.post(url, data, { headers, responseType: 'arraybuffer' })
-  .then(response => {
-    const zipPath = path.resolve(__dirname, 'features.zip');
-    fs.writeFileSync(zipPath, response.data);
-    console.log('File saved to', zipPath);
-    const zip = new AdmZip(zipPath);
-    zip.extractAllTo(outputDir, true);
-    console.log('Files extracted to', outputDir);
-    fs.unlinkSync(zipPath);
-    console.log('ZIP file deleted');
+    for (data of Data) {
+      try {
+        tests = await aio.getTests(data, onErrorMsg);
+        Tests.push(...tests);
+      } catch (err) {
+        console.error('Error getting tests:', err);
+      }
+    }
+    console.log('Test to Download Features for', selectedTestType, Tests);
+    if (
+      !process.argv.includes('--Update-branch-to-automated') &&
+      Tests.length > 0 &&
+      !process.argv.includes('--No-Features')
+    ) {
+      console.log('Download');
+      await aio.getFeatures(
+        Tests,
+        selectedTestTypes[selectedTestType]['outputDir'],
+        onErrorMsg,
+      );
+    }
+  }
+}
 
-  })
-  .catch(error => {
-    console.error('Error:', error);
-  });
+main();
