@@ -1,5 +1,5 @@
-import { createHash } from 'crypto';
+import * as argon2 from 'argon2';
 
-export function encodeValue(value: string) {
-  return createHash('sha256').update(value).digest('hex');
+export async function encodeValue(value: string) {
+  return await argon2.hash(value);
 }

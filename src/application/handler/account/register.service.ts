@@ -31,7 +31,7 @@ export class RegisterService {
         `[RegisterService] [register] - x-request-id:${requestId}, email ${accountRegisterDto.email}`,
       );
 
-      const hashPassword = encodeValue(accountRegisterDto.password);
+      const hashPassword = await encodeValue(accountRegisterDto.password);
 
       accountRegisterDto.password = hashPassword;
 
