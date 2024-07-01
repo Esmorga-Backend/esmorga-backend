@@ -23,7 +23,7 @@ export class AccountRegisterDto {
   @MaxLength(100, { message: 'name must have max 100 characters' })
   @IsString()
   @IsNotEmpty()
-  @ApiProperty({ example: 'John' })
+  @ApiProperty({ example: 'John', minLength: 3, maxLength: 100 })
   name: string;
 
   @Matches(ACCOUNT_REGISTER_REGEX.NAME, {
@@ -33,7 +33,7 @@ export class AccountRegisterDto {
   @MaxLength(100, { message: 'lastName must have max 100 characters' })
   @IsString()
   @IsNotEmpty()
-  @ApiProperty({ example: 'Donnel-Vic' })
+  @ApiProperty({ example: 'Donnel-Vic', minLength: 3, maxLength: 100 })
   lastName: string;
 
   /**
@@ -50,7 +50,7 @@ export class AccountRegisterDto {
   @MaxLength(100, { message: 'email must have max 100 characters' })
   @IsString()
   @IsNotEmpty()
-  @ApiProperty({ example: 'eventslogin01@yopmail.com' })
+  @ApiProperty({ example: 'eventslogin01@yopmail.com', maxLength: 100 })
   email: string;
 
   @Matches(ACCOUNT_REGISTER_REGEX.PASSWORD, {
@@ -60,6 +60,6 @@ export class AccountRegisterDto {
   @MaxLength(50, { message: 'password must have max 50 characters' })
   @IsString()
   @IsNotEmpty()
-  @ApiProperty({ example: 'SuperSecret1!' })
+  @ApiProperty({ example: 'SuperSecret1!', minLength: 8, maxLength: 50 })
   password: string;
 }
