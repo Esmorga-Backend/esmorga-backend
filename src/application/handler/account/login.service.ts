@@ -43,7 +43,7 @@ export class LoginService {
       const { userProfile, password: userDbPassword } =
         await this.accountRepository.getUserByEmail(email);
 
-      validateLoginCredentials(userDbPassword, password);
+      await validateLoginCredentials(userDbPassword, password);
 
       const { uuid } = userProfile;
 
@@ -85,7 +85,7 @@ export class LoginService {
       return accountLoggedDto;
     } catch (error) {
       this.logger.error(
-        `[LoginService] [login] - x-request-id:${requestId}, error ${error}`,
+        `[LoginService] [login] - x-request-id:${requestId}, error: ${error.name}, ${error.response.message}`,
       );
 
       if (error instanceof DataBaseUnathorizedError)
