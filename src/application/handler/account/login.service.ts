@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { plainToClass } from 'class-transformer';
+import { PinoLogger } from 'nestjs-pino';
 import { DataBaseUnathorizedError } from '../../../infrastructure/db/errors';
 import {
   AccountRepository,
@@ -21,14 +22,22 @@ import { InvalidCredentialsLoginApiError } from '../../../domain/errors';
 @Injectable()
 export class LoginService {
   constructor(
+    private readonly logger: PinoLogger,
     private readonly generateTokenPair: GenerateTokenPair,
     private readonly accountRepository: AccountRepository,
     private readonly tokensRepository: TokensRepository,
     private configService: ConfigService,
   ) {}
 
-  async login(accountLoginDto: AccountLoginDto): Promise<AccountLoggedDto> {
+  async login(
+    accountLoginDto: AccountLoginDto,
+    requestId?: string,
+  ): Promise<AccountLoggedDto> {
     try {
+      this.logger.info(
+        `[LoginService] [login] - x-request-id:${requestId}, email ${accountLoginDto.email}`,
+      );
+
       const { email, password } = accountLoginDto;
 
       const { userProfile, password: userDbPassword } =
@@ -42,15 +51,23 @@ export class LoginService {
         await this.generateTokenPair.generateTokens(uuid);
 
       const pairOfTokens: PairOfTokensDto[] =
-        await this.tokensRepository.getAllTokensByUuid(uuid);
+        await this.tokensRepository.getAllTokensByUuid(uuid, requestId);
 
       if (pairOfTokens.length >= this.configService.get('MAX_PAIR_OF_TOKEN')) {
         const oldestPairOfTokenId = getOldestPairOfTokens(pairOfTokens);
 
-        await this.tokensRepository.removeTokensById(oldestPairOfTokenId);
+        await this.tokensRepository.removeTokensById(
+          oldestPairOfTokenId,
+          requestId,
+        );
       }
 
-      await this.tokensRepository.saveTokens(uuid, accessToken, refreshToken);
+      await this.tokensRepository.saveTokens(
+        uuid,
+        accessToken,
+        refreshToken,
+        requestId,
+      );
 
       const ttl = this.configService.get('ACCESS_TOKEN_TTL');
 
@@ -67,6 +84,10 @@ export class LoginService {
 
       return accountLoggedDto;
     } catch (error) {
+      this.logger.error(
+        `[LoginService] [login] - x-request-id:${requestId}, error ${error}`,
+      );
+
       if (error instanceof DataBaseUnathorizedError)
         throw new InvalidCredentialsLoginApiError();
 
