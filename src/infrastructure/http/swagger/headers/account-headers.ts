@@ -7,3 +7,7 @@ export const LOGIN_HEADERS = {
 export const REGISTER_HEADER = {
   ...CONTENT_TYPE,
 };
+
+export const REFRESH_TOKEN_HEADERS = {
+  ...CONTENT_TYPE,
+};
