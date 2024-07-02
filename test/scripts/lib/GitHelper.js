@@ -14,7 +14,7 @@ class GitHelper {
           return;
         }
         const branchName = stdout.trim();
-        resolve({ branchName });
+        resolve(branchName);
       });
     });
   }
