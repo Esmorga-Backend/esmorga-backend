@@ -31,8 +31,9 @@ if (process.argv.includes('--help')) {
 
 async function main() {
   const branchName = await git.getBranchName();
-  //  const usName = features.getUsNameFromBranch(branchName);
-  const usName = 'MOB-19';
+  const usName = features.getUsNameFromBranch(branchName);
+  //Comment previous line and use nexts to force a US with tests
+  //const usName = 'MOB-19';
 
   selectedTestTypes = features.getSelectedTestTypes(testTypes);
   console.log(selectedTestTypes);
