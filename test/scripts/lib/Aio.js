@@ -150,7 +150,7 @@ class Aio {
       Authorization: `AioAuth ${process.env.AIO_TOKEN}`,
       'Content-Type': 'application/json',
     };
-    const data = {};
+    const data = { isAutomated: true };
 
     console.log(data);
     try {

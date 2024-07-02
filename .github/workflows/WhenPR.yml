@@ -35,8 +35,9 @@ jobs:
           node-version: '22.1'
       - run: echo $APP_PORT
       - run: npm ci
-      - run: npm run test:unit
-      - run: npm run test:component
+      - run: npm runtest:create:cycle
+      - run: npm run test:cov:unit
+      - run: npm run test:cov:component
         if: ${{ success() }}
       
   
