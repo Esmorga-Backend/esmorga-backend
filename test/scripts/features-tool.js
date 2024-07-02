@@ -33,7 +33,7 @@ async function main() {
   const branchName = await git.getBranchName();
   const usName = features.getUsNameFromBranch(branchName);
   //Comment previous line and use nexts to force a US with tests
-  //const usName = 'MOB-19';
+  //  const usName = 'MOB-190';
 
   selectedTestTypes = features.getSelectedTestTypes(testTypes);
   console.log(selectedTestTypes);
@@ -83,6 +83,7 @@ async function main() {
       console.log(
         "Seems Cycle is not created, create it with 'node test/scripts/features-tool --Create-Cycle-for-US",
       );
+      process.exit(1);
     } else {
       const Tests = await aio.getTestsByCy(onErrorMsg, cyKey);
       for (selectedTestType in selectedTestTypes) {
