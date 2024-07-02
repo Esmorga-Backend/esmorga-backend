@@ -85,7 +85,7 @@ export class LoginService {
       return accountLoggedDto;
     } catch (error) {
       this.logger.error(
-        `[LoginService] [login] - x-request-id:${requestId}, error: ${error.name}, ${error.response.message}`,
+        `[LoginService] [login] - x-request-id:${requestId}, error ${error}`,
       );
 
       if (error instanceof DataBaseUnathorizedError)
