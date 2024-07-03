@@ -13,6 +13,7 @@ import {
   LoginService,
   RegisterService,
   RefreshTokenService,
+  JoinEventService,
 } from '../../../application/handler/account';
 import { HttpExceptionFilter } from '../errors';
 import { AccountLoginDto, AccountRegisterDto, RefreshTokenDto } from '../dtos';
@@ -33,6 +34,7 @@ export class AccountController {
     private readonly loginService: LoginService,
     private readonly registerService: RegisterService,
     private readonly refreshTokenService: RefreshTokenService,
+    private readonly joinEventService: JoinEventService,
   ) {}
 
   @Post('/login')
@@ -114,6 +116,29 @@ export class AccountController {
     } catch (error) {
       this.logger.error(
         `[AccountController] [refreshToken] - x-request-id:${requestId}, error ${error}`,
+      );
+
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new InternalServerErrorException();
+    }
+  }
+
+  @Post('/events')
+  @SwaggerAccountLogin()
+  @HttpCode(204)
+  async joinEvent(@Body() eventId: string, @RequestId() requestId: string) {
+    try {
+      //TODO Crear middleware para validar el 401
+      this.logger.info(
+        `[AccountController] [joinEvent] - x-request-id:${requestId}`,
+      );
+
+      await this.joinEventService.joinEvent(eventId, requestId);
+    } catch (error) {
+      this.logger.error(
+        `[AccountController] [joinEvent] - x-request-id:${requestId}, error ${error}`,
       );
 
       if (error instanceof HttpException) {
