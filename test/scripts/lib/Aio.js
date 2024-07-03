@@ -2,16 +2,17 @@ const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
 const AdmZip = require('adm-zip');
-let headers = {
-  Accept: 'application/json;charset=utf-8',
-  Authorization: `AioAuth ${process.env.AIO_TOKEN}`,
-  'Content-Type': 'application/json',
-};
+let headers = {};
+headers.accept = 'application/json;charset=utf-8';
+headers.Authorization = `AioAuth ${process.env.AIO_TOKEN}`;
+headers['Content-Type'] = 'application/json';
+
 class Aio {
   constructor() {}
 
   async getTests(data, onErrorMsg) {
     const tests = [];
+    headers.accept = 'application/json;charset=utf-8';
     const url =
       'https://tcms.aiojiraapps.com/aio-tcms/api/v1/project/MOB/testcase/search';
 
@@ -31,11 +32,7 @@ class Aio {
     const num = selectedTestType['num'];
     const url =
       'https://tcms.aiojiraapps.com/aio-tcms/api/v1/project/MOB/testcase/export/feature?type=NONE';
-    headers = {
-      accept: 'application/octet-stream',
-      Authorization: `AioAuth ${process.env.AIO_TOKEN}`,
-      'Content-Type': 'application/json',
-    };
+    headers.accept = 'application/octet-stream';
     const data = {
       ID: {
         comparisonType: 'IN',
@@ -57,6 +54,7 @@ class Aio {
         headers,
         responseType: 'arraybuffer',
       });
+
       const zipPath = path.resolve(__dirname, 'features.zip');
       fs.writeFileSync(zipPath, response.data);
       const zip = new AdmZip(zipPath);
@@ -64,7 +62,11 @@ class Aio {
       fs.unlinkSync(zipPath);
       console.log('Features updated');
     } catch (error) {
-      console.error('No Features to Download');
+      if (error.response.status != 400) {
+        console.log(await error);
+      } else {
+        console.error('No Features to Download');
+      }
     }
   }
 
@@ -114,11 +116,7 @@ class Aio {
   async createCycle(onErrorMsg, usName) {
     let url =
       'https://tcms.aiojiraapps.com/aio-tcms/api/v1/project/MOB/testcycle/detail';
-    headers = {
-      Accept: 'application/json;charset=utf-8',
-      Authorization: `AioAuth ${process.env.AIO_TOKEN}`,
-      'Content-Type': 'application/json',
-    };
+    headers.accept = 'application/json;charset=utf-8';
     const data = {
       jiraTaskIDs: [usName],
       title: 'CY for ' + usName,
@@ -145,11 +143,7 @@ class Aio {
       cyKey +
       '/testcase/' +
       test;
-    headers = {
-      Accept: 'application/json;charset=utf-8',
-      Authorization: `AioAuth ${process.env.AIO_TOKEN}`,
-      'Content-Type': 'application/json',
-    };
+    headers.accept = 'application/json;charset=utf-8';
     const data = { isAutomated: true };
 
     console.log(data);
@@ -162,11 +156,7 @@ class Aio {
   async findCycleByUs(onErrorMsg, usName) {
     let url =
       'https://tcms.aiojiraapps.com/aio-tcms/api/v1/project/MOB/testcycle/search';
-    headers = {
-      Accept: 'application/json;charset=utf-8',
-      Authorization: `AioAuth ${process.env.AIO_TOKEN}`,
-      'Content-Type': 'application/json',
-    };
+    headers.accept = 'application/json;charset=utf-8';
     const data = {
       title: {
         comparisonType: 'CONTAINS',
@@ -192,12 +182,9 @@ class Aio {
     try {
       const url =
         'aio-tcms/api/v1/project/MOB/testcycle/' + cyKey + '/testcase';
+      headers.accept = 'application/json;charset=utf-8';
       const req = axios.create({
-        headers: {
-          Accept: 'application/json;charset=utf-8',
-          Authorization: `AioAuth ${process.env.AIO_TOKEN}`,
-          'Content-Type': 'application/json',
-        },
+        headers,
         baseURL: 'https://tcms.aiojiraapps.com',
       });
       const response = await req.get(url); //, data, { headers });
@@ -214,12 +201,9 @@ class Aio {
   }
   async getTest(onErrorMsg, tc) {
     const url = '/aio-tcms/api/v1/project/MOB/testcase/' + tc + '/detail';
+    headers.accept = 'application/json;charset=utf-8';
     const req = axios.create({
-      headers: {
-        Accept: 'application/json;charset=utf-8',
-        Authorization: `AioAuth ${process.env.AIO_TOKEN}`,
-        'Content-Type': 'application/json',
-      },
+      headers,
       baseURL: 'https://tcms.aiojiraapps.com',
     });
     try {
@@ -233,13 +217,10 @@ class Aio {
   }
 
   async setTest(onErrorMsg, tc, data) {
+    //Testing
     const url =
       'https://tcms.aiojiraapps.com/aio-tcms/api/v1/project/MOB/testcase/' + tc;
-    headers = {
-      Accept: 'application/json;charset=utf-8',
-      Authorization: `AioAuth ${process.env.AIO_TOKEN}`,
-      'Content-Type': 'application/json',
-    };
+    headers.accept = 'application/json;charset=utf-8';
     /*    const data = {
       automationStatus: {
         ID: 4,
