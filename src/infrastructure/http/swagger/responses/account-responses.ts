@@ -20,6 +20,7 @@ const INTERNAL_ERROR_COMMON_PROPERTIES = {
 
 const PATHS = {
   LOGIN: '/v1/account/login',
+  REGISTER: '/v1/account/register',
   REFRESH_TOKEN: '/v1/account/refresh',
 };
 
@@ -82,6 +83,67 @@ export const LOGIN_RESPONSES: { [key: string]: ApiResponseOptions } = {
       properties: {
         ...INTERNAL_ERROR_COMMON_PROPERTIES,
         type: { type: 'string', example: PATHS.LOGIN },
+      },
+    },
+  },
+};
+
+export const REGISTER_RESPONSES: { [key: string]: ApiResponseOptions } = {
+  CREATED: {
+    description: 'User has successfully created',
+    type: AccountLoggedDto,
+  },
+  BAD_REQUEST_ERROR: {
+    description: 'Some inputs are missed or wrong',
+    schema: {
+      type: 'object',
+      properties: {
+        title: {
+          type: 'string',
+          example: 'badRequestError',
+        },
+        status: { type: 'number', example: HttpStatus.BAD_REQUEST },
+        type: { type: 'string', example: PATHS.REGISTER },
+        detail: {
+          type: 'string',
+          example: 'some inputs are missing',
+        },
+        errors: {
+          type: 'array',
+          example: ['email should not be empty'],
+        },
+      },
+    },
+  },
+  CONFLICT_ERROR: {
+    description: 'User already registered',
+    schema: {
+      type: 'object',
+      properties: {
+        title: {
+          type: 'string',
+          example: 'userAlreadyRegistered',
+        },
+        status: { type: 'number', example: HttpStatus.CONFLICT },
+        type: { type: 'string', example: PATHS.REGISTER },
+        detail: {
+          type: 'string',
+          example: 'inputs are invalid',
+        },
+        errors: {
+          type: 'array',
+          example: ['user already registered'],
+        },
+      },
+    },
+  },
+  INTERNAL_ERROR: {
+    description: 'Error not handled',
+    schema: {
+      type: 'object',
+      properties: {
+        ...INTERNAL_ERROR_COMMON_PROPERTIES,
+        type: { type: 'string', example: PATHS.REGISTER },
       },
     },
   },

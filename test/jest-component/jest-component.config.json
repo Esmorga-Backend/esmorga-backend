@@ -27,5 +27,8 @@
     "json",
     "lcov",
     "clover"
+  ],
+  "setupFiles": [
+    "<rootDir>/test/mocks/test.env.ts"
   ]
 }
