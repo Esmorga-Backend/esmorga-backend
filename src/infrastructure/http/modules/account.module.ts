@@ -4,6 +4,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { AccountController } from '../controllers';
 import {
   LoginService,
+  RegisterService,
   RefreshTokenService,
 } from '../../../application/handler/account';
 import { AccountRepository, TokensRepository } from '../../db/repositories';
@@ -19,6 +20,7 @@ import { GenerateTokenPair } from '../../../domain/services';
   controllers: [AccountController],
   providers: [
     LoginService,
+    RegisterService,
     RefreshTokenService,
     GenerateTokenPair,
     AccountRepository,

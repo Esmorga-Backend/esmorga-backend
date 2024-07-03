@@ -3,7 +3,6 @@ import { Transform, Type } from 'class-transformer';
 import {
   ArrayMaxSize,
   IsArray,
-  IsDefined,
   IsEnum,
   IsNotEmpty,
   IsNumber,
@@ -82,11 +81,10 @@ function IsNotPastDate(validationOptions?: ValidationOptions) {
 }
 
 class CreateEventLocationDto {
-  @MinLength(1, { message: 'name must have min 1 character' })
   @MaxLength(100, { message: 'name must have max 100 characters' })
   @IsString()
-  @IsDefined({ message: 'name should not be empty' })
-  @ApiProperty({ example: 'A Coruña', minLength: 1, maxLength: 100 })
+  @IsNotEmpty()
+  @ApiProperty({ example: 'A Coruña', maxLength: 100 })
   name: string;
 
   @IsNumber({}, { message: 'lat must be a number' })
@@ -128,22 +126,14 @@ export class CreateEventDto {
   @IsNotEmpty()
   eventDate: string;
 
-  /**
-   * description can not use @IsNotEmpty() cause this decorator cause it
-   * checks !== '', !== null and !== undefined. With !== '', @MinLength()
-   * for 1 char will not be thrown.
-   * Message for @IsDefined() is addapted as @IsNotEmpty()
-   */
   @ApiProperty({
     example:
       'Join us for an unforgettable celebration as we dance into the apocalypse.',
-    minLength: 1,
     maxLength: 5000,
   })
-  @MinLength(1, { message: 'description must have min 1 character' })
   @MaxLength(5000, { message: 'description must have max 5000 characters' })
   @IsString()
-  @IsDefined({ message: 'description should not be empty' })
+  @IsNotEmpty()
   description: string;
 
   @ApiProperty({ example: 'Party' })
