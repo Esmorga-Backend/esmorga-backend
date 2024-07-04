@@ -364,7 +364,7 @@ describe('[unit-test] [CreateEventDto]', () => {
       expect(errors.length).toEqual(1);
       expect(errors[0].property).toEqual('imageUrl');
       expect(errors[0].constraints).toEqual({
-        maxLength: 'imageUrl description must have max 500 characters',
+        maxLength: 'imageUrl must have max 500 characters',
       });
     });
   });
