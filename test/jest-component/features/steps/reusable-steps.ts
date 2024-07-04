@@ -3,22 +3,11 @@ import * as request from 'supertest';
 import Ajv from 'ajv';
 import addFormats from 'ajv-formats';
 import { app, schema, context } from '../../steps-config';
+import { GenRand } from '../../instruments/gen-random';
+
+const genRand = new GenRand();
 const ajv = new Ajv({ strict: false });
 addFormats(ajv);
-
-function genRandString(length: number): string {
-  const chars =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let result = '';
-  const charsLength = chars.length;
-
-  for (let i = 0; i < length; i++) {
-    const randomIndex = Math.floor(Math.random() * charsLength);
-    result += chars[randomIndex];
-  }
-
-  return result;
-}
 
 function check_swagger() {
   const method = context.response.request.method.toLowerCase();
@@ -30,16 +19,14 @@ function check_swagger() {
 
   expect(valid).toBe(true);
 }
-
 export const reusableSteps: StepDefinitions = ({ when, then, and }) => {
   and(/^use row: (.*) with data length: (.*)$/, (row, data_length) => {
     if (row.split('.').length == 2) {
       context.mock[row.split('.')[0]][row.split('.')[1]] =
-        genRandString(data_length);
+        genRand.genRandString(data_length);
     } else {
-      context.mock[row] = genRandString(data_length);
+      context.mock[row] = genRand.genRandString(data_length);
     }
-    console.log(context.mock);
   });
 
   when(/^a GET request is made to (\w+) API$/, async () => {
