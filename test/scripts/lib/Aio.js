@@ -2,22 +2,23 @@ const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
 const AdmZip = require('adm-zip');
-let headers = {};
-headers.accept = 'application/json;charset=utf-8';
-headers.Authorization = `AioAuth ${process.env.AIO_TOKEN}`;
-headers['Content-Type'] = 'application/json';
 
 class Aio {
-  constructor() {}
+  constructor() {
+    this.headers = {
+      accept: 'application/json;charset=utf-8',
+      Authorization: `AioAuth ${process.env.AIO_TOKEN}`,
+      'Content-Type': 'application/json',
+    };
+  }
 
   async getTests(data, onErrorMsg) {
     const tests = [];
-    headers.accept = 'application/json;charset=utf-8';
     const url =
       'https://tcms.aiojiraapps.com/aio-tcms/api/v1/project/MOB/testcase/search';
 
     try {
-      const response = await axios.post(url, data, { headers });
+      const response = await axios.post(url, data, { headers: this.headers });
       response.data.items.forEach((item) => {
         tests.push(item.ID);
       });
@@ -32,7 +33,7 @@ class Aio {
     const num = selectedTestType['num'];
     const url =
       'https://tcms.aiojiraapps.com/aio-tcms/api/v1/project/MOB/testcase/export/feature?type=NONE';
-    headers.accept = 'application/octet-stream';
+
     const data = {
       ID: {
         comparisonType: 'IN',
@@ -48,7 +49,10 @@ class Aio {
         },
       ],
     };
-
+    const headers = {
+      ...this.headers,
+      accept: 'application/octet-stream',
+    };
     try {
       const response = await axios.post(url, data, {
         headers,
@@ -63,7 +67,7 @@ class Aio {
       console.log('Features updated');
     } catch (error) {
       if (error.response.status != 400) {
-        console.log(await error);
+        console.log(error);
       } else {
         console.error('No Features to Download');
       }
@@ -116,7 +120,7 @@ class Aio {
   async createCycle(onErrorMsg, usName) {
     let url =
       'https://tcms.aiojiraapps.com/aio-tcms/api/v1/project/MOB/testcycle/detail';
-    headers.accept = 'application/json;charset=utf-8';
+
     const data = {
       jiraTaskIDs: [usName],
       title: 'CY for ' + usName,
@@ -129,7 +133,7 @@ class Aio {
 
     console.log(data);
     try {
-      const response = await axios.post(url, data, { headers });
+      const response = await axios.post(url, data, { headers: this.headers });
       return response.data.key;
     } catch (error) {
       console.error('Error:', error);
@@ -143,12 +147,12 @@ class Aio {
       cyKey +
       '/testcase/' +
       test;
-    headers.accept = 'application/json;charset=utf-8';
+
     const data = { isAutomated: true };
 
     console.log(data);
     try {
-      await axios.post(url, data, { headers });
+      await axios.post(url, data, { headers: this.headers });
     } catch (error) {
       console.error('Is ' + test + '  already in list?');
     }
@@ -156,7 +160,7 @@ class Aio {
   async findCycleByUs(onErrorMsg, usName) {
     let url =
       'https://tcms.aiojiraapps.com/aio-tcms/api/v1/project/MOB/testcycle/search';
-    headers.accept = 'application/json;charset=utf-8';
+
     const data = {
       title: {
         comparisonType: 'CONTAINS',
@@ -164,7 +168,7 @@ class Aio {
       },
     };
     try {
-      const response = await axios.post(url, data, { headers });
+      const response = await axios.post(url, data, { headers: this.headers });
       for (const cy of response.data.items) {
         if (cy.title == 'CY for ' + usName) {
           return cy.key;
@@ -182,9 +186,9 @@ class Aio {
     try {
       const url =
         'aio-tcms/api/v1/project/MOB/testcycle/' + cyKey + '/testcase';
-      headers.accept = 'application/json;charset=utf-8';
+
       const req = axios.create({
-        headers,
+        headers: this.headers,
         baseURL: 'https://tcms.aiojiraapps.com',
       });
       const response = await req.get(url);
@@ -201,9 +205,9 @@ class Aio {
   }
   async getTest(onErrorMsg, tc) {
     const url = '/aio-tcms/api/v1/project/MOB/testcase/' + tc + '/detail';
-    headers.accept = 'application/json;charset=utf-8';
+
     const req = axios.create({
-      headers,
+      headers: this.headers,
       baseURL: 'https://tcms.aiojiraapps.com',
     });
     try {
