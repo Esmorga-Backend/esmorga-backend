@@ -187,7 +187,7 @@ class Aio {
         headers,
         baseURL: 'https://tcms.aiojiraapps.com',
       });
-      const response = await req.get(url); //, data, { headers });
+      const response = await req.get(url);
       const Tests = [];
       for (const run of response.data.items) {
         Tests.push(run.testCase.ID);
@@ -207,30 +207,8 @@ class Aio {
       baseURL: 'https://tcms.aiojiraapps.com',
     });
     try {
-      const response = await req.get(url); //, data, { headers });
+      const response = await req.get(url);
       return response.data;
-    } catch (error) {
-      console.error('Error:', error);
-      console.error(onErrorMsg);
-      process.exit(1);
-    }
-  }
-
-  async setTest(onErrorMsg, tc, data) {
-    //Testing
-    const url =
-      'https://tcms.aiojiraapps.com/aio-tcms/api/v1/project/MOB/testcase/' + tc;
-    headers.accept = 'application/json;charset=utf-8';
-    /*    const data = {
-      automationStatus: {
-        ID: 4,
-        name: 'Automated',
-        description: 'The case has been automated',
-      },
-    };*/
-    try {
-      console.log('TRY');
-      await axios.post(url, data, { headers });
     } catch (error) {
       console.error('Error:', error);
       console.error(onErrorMsg);

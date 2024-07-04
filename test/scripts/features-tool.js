@@ -1,5 +1,4 @@
 require('dotenv').config();
-const { from } = require('rxjs');
 const Aio = require('./lib/Aio.js');
 const aio = new Aio();
 const Features = require('./lib/Features.js');
@@ -21,7 +20,6 @@ const testTypes = {
 const onErrorMsg =
   'Usage: node features-update.js \n \
 --Create-Cycle-for-US\n\
---Update-Test-to-Automated\n\
 ';
 
 if (process.argv.includes('--help')) {
@@ -33,7 +31,7 @@ async function main() {
   const branchName = await git.getBranchName();
   const usName = features.getUsNameFromBranch(branchName);
   //Comment previous line and use nexts to force a US with tests
-  //  const usName = 'MOB-190';
+  //  const usName = 'MOB-80';
 
   selectedTestTypes = features.getSelectedTestTypes(testTypes);
   console.log(selectedTestTypes);
@@ -52,7 +50,6 @@ async function main() {
             name: 'Automated',
             description: 'The case has been automated',
           };
-          //          await aio.setTest(onErrorMsg, test, tc);
         }
       }
     }
