@@ -1,8 +1,8 @@
 import ApiBasics from '../api_basic';
 class ApiLogin extends ApiBasics {
   #url = 'v1/account/login';
-  #email = '';
-  #password = '';
+  #email = 'esmorga.test.01@yopmail.com';
+  #password = 'Password01';
 
   constructor() {
     super();
@@ -27,6 +27,10 @@ class ApiLogin extends ApiBasics {
         'Content-Type': 'application/json',
       },
     );
+
+    cy.get('@response').then((response) => {
+      cy.wrap(response.body.refreshToken).as('refreshToken');
+    });
   }
 }
 export default ApiLogin;

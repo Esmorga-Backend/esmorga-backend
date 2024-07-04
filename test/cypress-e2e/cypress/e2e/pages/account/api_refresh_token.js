@@ -8,20 +8,23 @@ class ApiRefreshToken extends ApiBasics {
   }
 
   post() {
-    super.post(
-      this.#url,
-      {
-        refreshToken: this.#refreshToken,
-      },
-      {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    );
-  }
+    cy.get('@refreshToken').then((refreshToken) => {
+      this.#refreshToken = refreshToken;
 
-  set_refresh_token(refresh_token) {
-    this.#refreshToken = refresh_token;
+      super.post(
+        this.#url,
+        {
+          refreshToken: this.#refreshToken,
+        },
+        {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      );
+    });
+    cy.get('@response').then((response) => {
+      cy.wrap(response.body.refreshToken).as('refreshToken');
+    });
   }
 }
 export default ApiRefreshToken;

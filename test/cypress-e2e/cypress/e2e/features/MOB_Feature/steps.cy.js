@@ -41,12 +41,19 @@ And(/^success response code (\d+) returned$/, async (code) => {
     api[use_endpoint].check_response(code, response);
   });
 });
-And('use response to know original_refreshToken', async () => {
-  cy.get('@response').then((response) => {
-    api['RefreshToken'].set_refresh_token(response.body.refreshToken);
+And(
+  'use refreshToken in response to store a variable original_refreshToken',
+  async () => {
+    cy.get('@refreshToken').then((refreshToken) => {
+      cy.wrap(refreshToken).as('original_refreshToken');
+    });
+  },
+);
+And('use variable original_refreshToken', async () => {
+  cy.get('@original_refreshToken').then((original_refreshToken) => {
+    cy.wrap(original_refreshToken).as('refreshToken');
   });
 });
-And('use refreshToken original_refreshToken', () => {});
 
 And(
   /^error response code (\d+) returned, description: (.*), expected result: (.*)$/,
