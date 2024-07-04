@@ -42,7 +42,7 @@ And(/^success response code (\d+) returned$/, async (code) => {
   });
 });
 And(
-  'use refreshToken in response to store a variable original_refreshToken',
+  'use refreshToken from response to store a variable original_refreshToken',
   async () => {
     cy.get('@refreshToken').then((refreshToken) => {
       cy.wrap(refreshToken).as('original_refreshToken');
