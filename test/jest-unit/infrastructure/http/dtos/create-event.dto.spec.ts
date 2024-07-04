@@ -227,6 +227,22 @@ describe('[unit-test] [CreateEventDto]', () => {
       });
     });
 
+    it('Should not accept less than 4 characters', async () => {
+      const event = { ...CREATE_EVENT_MOCK };
+
+      event.description = 'a';
+
+      const createEventDto = plainToInstance(CreateEventDto, event);
+
+      const errors = await validate(createEventDto, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('description');
+      expect(errors[0].constraints).toEqual({
+        minLength: 'description must have min 4 character',
+      });
+    });
+
     it('Should only accept string value', async () => {
       const event = {
         eventName: 'MongoFest',
@@ -364,7 +380,7 @@ describe('[unit-test] [CreateEventDto]', () => {
       expect(errors.length).toEqual(1);
       expect(errors[0].property).toEqual('imageUrl');
       expect(errors[0].constraints).toEqual({
-        maxLength: 'imageUrl description must have max 500 characters',
+        maxLength: 'imageUrl must have max 500 characters',
       });
     });
   });
@@ -383,7 +399,7 @@ describe('[unit-test] [CreateEventDto]', () => {
       expect(errors[0].property).toEqual('location');
       expect(errors[0].children[0].property).toEqual('name');
       expect(errors[0].children[0].constraints).toEqual({
-        isNotEmpty: 'name should not be empty',
+        isDefined: 'name should not be empty',
       });
     });
 
@@ -401,6 +417,23 @@ describe('[unit-test] [CreateEventDto]', () => {
       expect(errors[0].children[0].property).toEqual('name');
       expect(errors[0].children[0].constraints).toEqual({
         maxLength: 'name must have max 100 characters',
+      });
+    });
+
+    it('Should not accept less than 1 character', async () => {
+      const event = JSON.parse(JSON.stringify(CREATE_EVENT_MOCK));
+
+      event.location.name = '';
+
+      const createEventDto = plainToInstance(CreateEventDto, event);
+
+      const errors = await validate(createEventDto, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('location');
+      expect(errors[0].children[0].property).toEqual('name');
+      expect(errors[0].children[0].constraints).toEqual({
+        minLength: 'name must have min 1 character',
       });
     });
 
