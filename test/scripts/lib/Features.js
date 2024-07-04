@@ -18,7 +18,6 @@ class Features {
   }
   async getTestInUS(usName) {
     try {
-      //      let result = await git.getBranchName();
       let data = aio.prepareDataForBranch(
         usName,
         selectedTestTypes[selectedTestType],
