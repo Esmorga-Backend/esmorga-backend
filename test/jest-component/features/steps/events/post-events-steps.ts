@@ -5,28 +5,28 @@ import { CREATE_EVENT_MOCK } from '../../../../mocks/dtos';
 export const postEventsSteps: StepDefinitions = ({ given, and }) => {
   given('the POST Events API is available', () => {
     context.path = '/v1/events';
-  });
-
-  and('an authenticated user with admin rights is logged in', () => {
-    console.log(
-      'To be developed -> an authenticated user with admin rights is logged in',
-    );
-  });
-
-  and('with invalid data', () => {
     context.mock = { ...CREATE_EVENT_MOCK };
-
-    delete context.mock.eventName;
   });
 
+  and('an unauthenticated user', () => {});
+  and('an authenticated user without admin rights is logged in', () => {});
+  and('an authenticated user with admin rights is logged in', () => {});
   and(
-    /^with valid data, use tags: (.*), imageUrl: (.*), location.lat(.*) and location.long:(.*)$/,
+    'user creates a new event with the maximum allowed characters in all input fields',
+    () => {},
+  );
+  and(
+    'user creates a new event with the minimum allowed characters in all input fields',
+    () => {},
+  );
+  and('with valid data to create an event', () => {});
+  and(
+    /^with valid data to create an event, use tags: (.*), imageUrl: (.*), location.lat(.*) and location.long:(.*)$/,
     (tags, imageUrl, lat, long) => {
       jest.spyOn(eventRepository, 'save').mockResolvedValue();
-      context.mock = { ...CREATE_EVENT_MOCK };
-
-      context.mock.location.imageUrl = imageUrl;
-      context.mock.location.tags = tags;
+      context.mock.imageUrl = imageUrl;
+      const arr: string[] = JSON.parse(tags);
+      context.mock.tags = arr;
       if (lat != '') {
         context.mock.location.lat = parseInt(lat);
       } else {
@@ -39,9 +39,14 @@ export const postEventsSteps: StepDefinitions = ({ given, and }) => {
       }
     },
   );
+
+  /*
   /*
   and('should be created successfully', () => {
     console.log('To be developed -> should be created successfully');
   });
   */
+  /*  and('with invalid data to create an event', () => {
+    delete context.mock.eventName;
+  });*/
 };
