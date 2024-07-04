@@ -4,6 +4,7 @@ import {
   HttpException,
   InternalServerErrorException,
   UseFilters,
+  Headers,
   Body,
   HttpCode,
 } from '@nestjs/common';
@@ -128,14 +129,22 @@ export class AccountController {
   @Post('/events')
   @SwaggerAccountLogin()
   @HttpCode(204)
-  async joinEvent(@Body() eventId: string, @RequestId() requestId: string) {
+  async joinEvent(
+    @Headers() Authorization,
+    @Body() eventId: string,
+    @RequestId() requestId: string,
+  ) {
     try {
       //TODO Crear middleware para validar el 401
       this.logger.info(
         `[AccountController] [joinEvent] - x-request-id:${requestId}`,
       );
 
-      await this.joinEventService.joinEvent(eventId, requestId);
+      await this.joinEventService.joinEvent(
+        Authorization.authorization,
+        eventId,
+        requestId,
+      );
     } catch (error) {
       this.logger.error(
         `[AccountController] [joinEvent] - x-request-id:${requestId}, error ${error}`,

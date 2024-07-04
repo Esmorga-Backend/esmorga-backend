@@ -8,7 +8,11 @@ import {
   RefreshTokenService,
   JoinEventService,
 } from '../../../application/handler/account';
-import { AccountRepository, TokensRepository } from '../../db/repositories';
+import {
+  AccountRepository,
+  TokensRepository,
+  EventRepository,
+} from '../../db/repositories';
 import {
   UserSchema,
   User,
@@ -35,6 +39,7 @@ import { GenerateTokenPair } from '../../../domain/services';
     GenerateTokenPair,
     AccountRepository,
     TokensRepository,
+    EventRepository,
   ],
 })
 export class AccountModule {}

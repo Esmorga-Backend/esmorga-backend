@@ -13,7 +13,7 @@ export class JoinEventService {
     private readonly eventRepository: EventRepository,
   ) {}
 
-  async joinEvent(eventId: string, requestId?: string) {
+  async joinEvent(accessToken: string, eventId: string, requestId?: string) {
     try {
       this.logger.info(
         `[LoginService] [joinEvent] - x-request-id:${requestId}, eventId ${eventId}`,
