@@ -22,6 +22,7 @@ import {
   Event,
 } from '../../db/schema';
 import { GenerateTokenPair } from '../../../domain/services';
+import { AuthGuard } from '../guards';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { GenerateTokenPair } from '../../../domain/services';
     AccountRepository,
     TokensRepository,
     EventRepository,
+    AuthGuard,
   ],
 })
 export class AccountModule {}

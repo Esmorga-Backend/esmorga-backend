@@ -7,6 +7,7 @@ import {
   Headers,
   Body,
   HttpCode,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { PinoLogger } from 'nestjs-pino';
@@ -16,7 +17,7 @@ import {
   RefreshTokenService,
   JoinEventService,
 } from '../../../application/handler/account';
-import { HttpExceptionFilter } from '../errors';
+import { HttpExceptionFilter } from '../filters';
 import { AccountLoginDto, AccountRegisterDto, RefreshTokenDto } from '../dtos';
 import {
   SwaggerAccountLogin,
@@ -25,6 +26,7 @@ import {
 } from '../swagger/decorators/account';
 import { AccountLoggedDto, NewPairOfTokensDto } from '../../dtos';
 import { RequestId } from '../req-decorators';
+import { AuthGuard } from '../guards';
 
 @Controller('/v1/account')
 @ApiTags('Account')
@@ -127,24 +129,19 @@ export class AccountController {
   }
 
   @Post('/events')
-  @SwaggerAccountLogin()
+  @UseGuards(AuthGuard)
   @HttpCode(204)
   async joinEvent(
-    @Headers() Authorization,
+    @Headers('token') accessToken: string,
     @Body() eventId: string,
     @RequestId() requestId: string,
   ) {
     try {
-      //TODO Crear middleware para validar el 401
       this.logger.info(
         `[AccountController] [joinEvent] - x-request-id:${requestId}`,
       );
 
-      await this.joinEventService.joinEvent(
-        Authorization.authorization,
-        eventId,
-        requestId,
-      );
+      await this.joinEventService.joinEvent(accessToken, eventId, requestId);
     } catch (error) {
       this.logger.error(
         `[AccountController] [joinEvent] - x-request-id:${requestId}, error ${error}`,

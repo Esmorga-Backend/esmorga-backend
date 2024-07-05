@@ -13,7 +13,7 @@ import {
   CreateEventService,
   GetEventListService,
 } from '../../../application/handler/event';
-import { HttpExceptionFilter } from '../errors';
+import { HttpExceptionFilter } from '../filters';
 import {
   SwaggerCreateEvent,
   SwaggerGetEvents,

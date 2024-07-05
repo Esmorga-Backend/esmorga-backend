@@ -34,6 +34,16 @@ export class MongoRepository<E> implements DBRepository<E> {
   }
 
   /**
+   * Find documents by accessToken.
+   *
+   * @param accessToken - The accessToken to find.
+   * @returns Promise resolved with the document that matches the accessToken provided.
+   */
+  async findOneByAccessToken(accessToken: string): Promise<E> {
+    return this.entityModel.findOne({ accessToken: { $eq: accessToken } });
+  }
+
+  /**
    * Find a document by email field.
    *
    * @param email - The email value to find.
