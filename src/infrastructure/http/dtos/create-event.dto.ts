@@ -134,7 +134,7 @@ export class CreateEventDto {
     minLength: 4,
     maxLength: 5000,
   })
-  @MinLength(4, { message: 'description must have min 4 character' })
+  @MinLength(4, { message: 'description must have min 4 characters' })
   @MaxLength(5000, { message: 'description must have max 5000 characters' })
   @IsString()
   @IsNotEmpty()
