@@ -1,7 +1,5 @@
 const { exec } = require('child_process');
 class GitHelper {
-  constructor() {}
-
   getBranchName() {
     return new Promise((resolve, reject) => {
       exec('git rev-parse --abbrev-ref HEAD', (err, stdout, stderr) => {

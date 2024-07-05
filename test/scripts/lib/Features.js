@@ -1,7 +1,6 @@
 const Aio = require('./Aio.js');
 const aio = new Aio();
 class Features {
-  constructor() {}
   getSelectedTestTypes(testTypes) {
     let data = {};
     let n = 0;
