@@ -239,7 +239,7 @@ describe('[unit-test] [CreateEventDto]', () => {
       expect(errors.length).toEqual(1);
       expect(errors[0].property).toEqual('description');
       expect(errors[0].constraints).toEqual({
-        minLength: 'description must have min 4 character',
+        minLength: 'description must have min 4 characters',
       });
     });
 
