@@ -18,7 +18,12 @@ import {
   JoinEventService,
 } from '../../../application/handler/account';
 import { HttpExceptionFilter } from '../filters';
-import { AccountLoginDto, AccountRegisterDto, RefreshTokenDto } from '../dtos';
+import {
+  AccountLoginDto,
+  AccountRegisterDto,
+  RefreshTokenDto,
+  JoinEventDto,
+} from '../dtos';
 import {
   SwaggerAccountLogin,
   SwaggerAccountRegister,
@@ -133,7 +138,7 @@ export class AccountController {
   @HttpCode(204)
   async joinEvent(
     @Headers('token') accessToken: string,
-    @Body('eventId') eventId: string,
+    @Body() joinEventDto: JoinEventDto,
     @RequestId() requestId: string,
   ) {
     try {
@@ -141,7 +146,11 @@ export class AccountController {
         `[AccountController] [joinEvent] - x-request-id:${requestId}`,
       );
 
-      await this.joinEventService.joinEvent(accessToken, eventId, requestId);
+      await this.joinEventService.joinEvent(
+        accessToken,
+        joinEventDto.eventId,
+        requestId,
+      );
 
       return {};
     } catch (error) {
