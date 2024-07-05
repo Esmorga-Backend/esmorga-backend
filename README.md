@@ -67,8 +67,11 @@ $ npm run test:component
 $ npm run test:e2e-open-cypress
     #Run
 $ npm run test:e2e-run-cypress
-```
 
+# ADD a Cycle to the US with all tests from US and all Mareked as Automated 
+$ node test/scripts/features-tool --Create-Cycle-for-US
+
+```
 ## ✨License
 
 Nest is [MIT licensed](LICENSE).
