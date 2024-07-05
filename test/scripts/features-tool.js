@@ -57,7 +57,9 @@ async function main() {
     TESTS = [];
     for (selectedTestType in selectedTestTypes) {
       Data = [];
-      Data.push(await features.getTestInUS(usName));
+      Data.push(
+        await features.getTestInUS(usName, selectedTestTypes, selectedTestType),
+      );
       Data.push(
         aio.prepareDataForAutomated(selectedTestTypes[selectedTestType]),
       );
@@ -85,7 +87,13 @@ async function main() {
       const Tests = await aio.getTestsByCy(onErrorMsg, cyKey);
       for (selectedTestType in selectedTestTypes) {
         Data = [];
-        Data.push(await features.getTestInUS(usName));
+        Data.push(
+          await features.getTestInUS(
+            usName,
+            selectedTestTypes,
+            selectedTestType,
+          ),
+        );
         if (Tests.length > 0) {
           await aio.getFeatures(
             Tests,

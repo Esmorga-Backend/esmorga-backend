@@ -16,7 +16,7 @@ class Features {
     }
     return data;
   }
-  async getTestInUS(usName) {
+  async getTestInUS(usName, selectedTestTypes, selectedTestType) {
     try {
       let data = aio.prepareDataForBranch(
         usName,
@@ -24,7 +24,7 @@ class Features {
       );
       return data;
     } catch (err) {
-      this.printeError(err);
+      console.error(err);
     }
   }
   async getTestFromQuerys(Data, onErrorMsg) {
@@ -39,9 +39,7 @@ class Features {
     }
     return Tests;
   }
-  printeError(err) {
-    console.error(err);
-  }
+
   getUsNameFromBranch(branchName) {
     const regex = /\/([A-Z]+-\d+)/;
     const match = branchName.match(regex);
