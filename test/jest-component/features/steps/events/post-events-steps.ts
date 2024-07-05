@@ -2,7 +2,8 @@ import { StepDefinitions } from 'jest-cucumber';
 import { eventRepository, context, schema } from '../../../steps-config';
 import { CREATE_EVENT_MOCK } from '../../../../mocks/dtos';
 import { GenRand } from '../../../instruments/gen-random';
-
+import { SwagerThings } from '../../../instruments/swagger-things';
+const swagerThings = new SwagerThings();
 const genRand = new GenRand();
 
 export const postEventsSteps: StepDefinitions = ({ given, and }) => {
@@ -18,20 +19,13 @@ export const postEventsSteps: StepDefinitions = ({ given, and }) => {
   and(
     'user creates a new event with the maximum allowed characters in all input fields',
     () => {
-      for (const row in schema.paths[context.path][context.method].requestBody
-        .content['application/json'].schema.properties) {
-        const prop =
-          schema.paths[context.path][context.method].requestBody.content[
-            'application/json'
-          ].schema.properties[row];
-        if (prop.type == 'string' && prop.maxLength) {
-          const data_length = prop.maxLength;
-          if (row.split('.').length == 2) {
-            context.mock[row.split('.')[0]][row.split('.')[1]] =
-              genRand.genRandString(data_length);
-          } else {
-            context.mock[row] = genRand.genRandString(data_length);
-          }
+      const rows = swagerThings.getRowsDetail('maxLength');
+      for (const row in rows) {
+        if (row.split('.').length == 2) {
+          context.mock[row.split('.')[0]][row.split('.')[1]] =
+            genRand.genRandString(rows[row]);
+        } else {
+          context.mock[row] = genRand.genRandString(rows[row]);
         }
       }
     },
@@ -39,26 +33,18 @@ export const postEventsSteps: StepDefinitions = ({ given, and }) => {
   and(
     'user creates a new event with the minimum allowed characters in all input fields',
     () => {
-      for (const row in schema.paths[context.path][context.method].requestBody
-        .content['application/json'].schema.properties) {
-        const prop =
-          schema.paths[context.path][context.method].requestBody.content[
-            'application/json'
-          ].schema.properties[row];
-
-        if (prop.type == 'string' && prop.minLength) {
-          const data_length = prop.minLength;
-          if (row.split('.').length == 2) {
-            context.mock[row.split('.')[0]][row.split('.')[1]] =
-              genRand.genRandString(data_length);
-          } else {
-            context.mock[row] = genRand.genRandString(data_length);
-          }
+      const rows = swagerThings.getRowsDetail('minLength');
+      for (const row in rows) {
+        if (row.split('.').length == 2) {
+          context.mock[row.split('.')[0]][row.split('.')[1]] =
+            genRand.genRandString(rows[row]);
+        } else {
+          context.mock[row] = genRand.genRandString(rows[row]);
         }
       }
     },
   );
-  and('with valid data to create an event', () => {});
+
   and(
     /^with valid data to create an event, use tags: (.*), imageUrl: (.*), location.lat(.*) and location.long:(.*)$/,
     (tags, imageUrl, lat, long) => {
@@ -78,14 +64,4 @@ export const postEventsSteps: StepDefinitions = ({ given, and }) => {
       }
     },
   );
-
-  /*
-  /*
-  and('should be created successfully', () => {
-    console.log('To be developed -> should be created successfully');
-  });
-  */
-  /*  and('with invalid data to create an event', () => {
-    delete context.mock.eventName;
-  });*/
 };
