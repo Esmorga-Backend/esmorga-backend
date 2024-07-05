@@ -10,10 +10,7 @@ class Features {
         n = n + 1;
       }
     }
-    if (n == 0) {
-      return testTypes;
-    }
-    return data;
+    return n !== 0 ? data : testTypes;
   }
   async getTestInUS(usName, selectedTestTypes, selectedTestType) {
     try {
