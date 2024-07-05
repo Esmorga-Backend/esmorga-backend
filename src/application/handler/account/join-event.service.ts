@@ -12,6 +12,7 @@ import {
 import {
   BadEventIdApiError,
   InvalidTokenApiError,
+  NotAccepteableEventApiError,
 } from '../../../domain/errors';
 
 @Injectable()
@@ -35,6 +36,8 @@ export class JoinEventService {
       );
 
       const event = await this.eventRepository.getEvent(eventId, requestId);
+
+      if (event.eventDate < new Date()) throw new NotAccepteableEventApiError();
     } catch (error) {
       this.logger.error(
         `[JoinEventService] [joinEvent] - x-request-id:${requestId}, error ${error}`,
