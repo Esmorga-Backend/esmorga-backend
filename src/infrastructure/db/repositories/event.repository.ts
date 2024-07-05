@@ -64,4 +64,28 @@ export class EventRepository extends MongoRepository<EventSchema> {
       throw new DataBaseInternalError();
     }
   }
+
+  async getEvent(eventId: string, requestId?: string): Promise<EventDto> {
+    try {
+      this.logger.info(
+        `[EventRepository] [getEventList] - x-request-id:${requestId}`,
+      );
+
+      const event = await this.findById(eventId);
+
+      const eventDto: EventDto = plainToClass(EventDto, event, {
+        excludeExtraneousValues: true,
+      });
+
+      validateObjectDto(eventDto, REQUIRED_FIELDS.EVENTS);
+
+      return eventDto;
+    } catch (error) {
+      this.logger.error(
+        `[EventRepository] [getEventList] - x-request-id:${requestId}, error ${error}`,
+      );
+
+      throw new DataBaseInternalError();
+    }
+  }
 }

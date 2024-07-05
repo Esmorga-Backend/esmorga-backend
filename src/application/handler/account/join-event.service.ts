@@ -27,7 +27,8 @@ export class JoinEventService {
         accessToken,
         requestId,
       );
-      console.log({ uuid });
+
+      const event = await this.eventRepository.getEvent(eventId, requestId);
     } catch (error) {
       this.logger.error(
         `[LoginService] [joinEvent] - x-request-id:${requestId}, error ${error}`,

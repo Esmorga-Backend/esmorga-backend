@@ -133,7 +133,7 @@ export class AccountController {
   @HttpCode(204)
   async joinEvent(
     @Headers('token') accessToken: string,
-    @Body() eventId: string,
+    @Body('eventId') eventId: string,
     @RequestId() requestId: string,
   ) {
     try {
@@ -142,6 +142,8 @@ export class AccountController {
       );
 
       await this.joinEventService.joinEvent(accessToken, eventId, requestId);
+
+      return {};
     } catch (error) {
       this.logger.error(
         `[AccountController] [joinEvent] - x-request-id:${requestId}, error ${error}`,
