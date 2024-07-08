@@ -44,8 +44,7 @@ export class AccountRegisterDto {
     typeof value === 'string' ? value.toLowerCase() : value,
   )
   @Matches(ACCOUNT_REGISTER_REGEX.EMAIL, {
-    message:
-      'email do not accept +, spaces and after the @ only letters (Uppercase or lowercase) and digits are allowed, _ - ',
+    message: `email is not correctly formatted. Additionally, we do not accept '+' or ' '. After '@', we only accept letters (uppercase and lowercase), digits, '_', and '-'`,
   })
   @MaxLength(100, { message: 'email must have max 100 characters' })
   @IsString()
