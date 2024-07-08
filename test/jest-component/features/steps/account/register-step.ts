@@ -5,13 +5,13 @@ import {
   generateTokenPair,
   tokensRepository,
 } from '../../../steps-config';
-import { USER_MOCK_DB } from '../../../../mocks/db';
-import { ACCOUNT_REGISTER } from '../../../../mocks/dtos';
 
-//const TTL = parseInt(process.env.ACCESS_TOKEN_TTL);
+import { ACCOUNT_REGISTER } from '../../../../mocks/dtos';
+import { getUserMockDb } from '../../../../mocks/db';
 
 export const registerSteps: StepDefinitions = ({ given, and }) => {
-  given('the POST Register API is available', () => {
+  given('the POST Register API is available', async () => {
+    const USER_MOCK_DB = await getUserMockDb();
     context.mock = { ...ACCOUNT_REGISTER };
     context.path = '/v1/account/register';
     context.mockDb = jest.spyOn(accountRepository, 'save').mockResolvedValue();

@@ -5,12 +5,14 @@ import {
   generateTokenPair,
   tokensRepository,
 } from '../../../steps-config';
-import { USER_MOCK_DB } from '../../../../mocks/db';
+import { getUserMockDb } from '../../../../mocks/db';
 
 const TTL = parseInt(process.env.ACCESS_TOKEN_TTL);
 
 export const loginSteps: StepDefinitions = ({ given, and }) => {
-  given('the POST Login API is available', () => {
+  given('the POST Login API is available', async () => {
+    const USER_MOCK_DB = await getUserMockDb();
+
     context.path = '/v1/account/login';
     jest
       .spyOn(accountRepository, 'findOneByEmail')
@@ -28,7 +30,8 @@ export const loginSteps: StepDefinitions = ({ given, and }) => {
 
   and(
     'profile, accessToken and refreshToken are provided with correct schema',
-    () => {
+    async () => {
+      const USER_MOCK_DB = await getUserMockDb();
       expect(context.response.body).toMatchObject({
         accessToken: 'ACCESS_TOKEN',
         refreshToken: 'REFRESH_TOKEN',
