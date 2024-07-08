@@ -7,6 +7,7 @@ import {
 import {
   EventRepository,
   TokensRepository,
+  EventParticipantsRepository,
 } from '../../../infrastructure/db/repositories';
 import {
   BadEventIdApiError,
@@ -20,6 +21,7 @@ export class JoinEventService {
     private readonly logger: PinoLogger,
     private readonly eventRepository: EventRepository,
     private readonly tokensRepository: TokensRepository,
+    private readonly eventParticipantsRepository: EventParticipantsRepository,
   ) {}
 
   async joinEvent(accessToken: string, eventId: string, requestId?: string) {
@@ -39,6 +41,12 @@ export class JoinEventService {
       );
 
       if (eventDate < new Date()) throw new NotAccepteableEventApiError();
+
+      await this.eventParticipantsRepository.updateParticipantList(
+        eventId,
+        uuid,
+        requestId,
+      );
     } catch (error) {
       this.logger.error(
         `[JoinEventService] [joinEvent] - x-request-id:${requestId}, error ${error}`,

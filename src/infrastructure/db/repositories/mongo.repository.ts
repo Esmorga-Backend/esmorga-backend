@@ -54,21 +54,36 @@ export class MongoRepository<E> implements DBRepository<E> {
   }
 
   /**
-   * Create a new document in the collection.
-   *
-   * @param data - The data to create the new document.
-   */
-  async save(data) {
-    await this.entityModel.create(data);
-  }
-
-  /**
    * Find a document by ID.
    *
    * @param id - The ID of the document to update.
    */
   async findById(id: string): Promise<E> {
     return this.entityModel.findById({ _id: id });
+  }
+
+  /**
+   * Find a document with that eventId and add the userId as participant if it has not been added yet. Also
+   * if the document has not been created, create a new one with this data.
+   *
+   * @param eventId - Event identificator.
+   * @param userId - User identificator to add as participant.
+   */
+  async findAndUpdateParticipantsList(eventId: string, userId: string) {
+    await this.entityModel.findOneAndUpdate(
+      { eventId },
+      { $addToSet: { participants: userId } },
+      { new: true, upsert: true },
+    );
+  }
+
+  /**
+   * Create a new document in the collection.
+   *
+   * @param data - The data to create the new document.
+   */
+  async save(data) {
+    await this.entityModel.create(data);
   }
 
   /**
