@@ -43,7 +43,7 @@ export class LoginService {
       const { userProfile, password: userDbPassword } =
         await this.accountRepository.getUserByEmail(email, requestId);
 
-      validateLoginCredentials(userDbPassword, password);
+      await validateLoginCredentials(userDbPassword, password);
 
       const { uuid } = userProfile;
 
