@@ -45,7 +45,7 @@ export class AccountRegisterDto {
   )
   @Matches(ACCOUNT_REGISTER_REGEX.EMAIL, {
     message:
-      'email do not accept +, spaces and after the @ only letters (Uppercase or lowercase) and digits are allowed, _ - ',
+      'email do not accept +, spaces and after the @ only letters (Uppercase or lowercase) and digits are allowed, _ -',
   })
   @MaxLength(100, { message: 'email must have max 100 characters' })
   @IsString()

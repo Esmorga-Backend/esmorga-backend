@@ -41,7 +41,7 @@ export const reusableSteps: StepDefinitions = ({ when, then, and }) => {
   });
 
   then(
-    /^error response code (\d+) returned, description: (.*), expected result: (.*)$/,
+    /^well-formed error response with status code (\d+) returned, description: (.*), expected result: (.*)$/,
     async (code_n, description, result) => {
       expect(await context.response.status).toBe(parseInt(code_n));
       expect(await context.response.body.type).toBe(context.path);
@@ -50,10 +50,17 @@ export const reusableSteps: StepDefinitions = ({ when, then, and }) => {
     },
   );
 
-  then(/^success response code (\d+) returned$/, (code_n) => {
-    expect(context.response.status).toBe(parseInt(code_n));
-    check_swagger();
+  and(/^(\w+) field correctly filled with (.*)$/, (row, value) => {
+    context.mock[row] = value;
   });
+
+  then(
+    /^well-formed success response with status code (\d+) returned$/,
+    (code_n) => {
+      expect(context.response.status).toBe(parseInt(code_n));
+      check_swagger();
+    },
+  );
   and(
     /^detail in error is (.*) ,description: (.*)$/,
     async (row, description) => {

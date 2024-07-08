@@ -16,6 +16,18 @@ export const postEventsSteps: StepDefinitions = ({ given, and }) => {
   and('an unauthenticated user', () => {});
   and('an authenticated user without admin rights is logged in', () => {});
   and('an authenticated user with admin rights is logged in', () => {});
+
+  and('with invalid data', () => {
+    context.mock.eventName = 'asdda';
+  });
+  and(/^with empty data in (.*)$/, (row) => {
+    if (row.split('.').length == 2) {
+      delete context.mock[row.split('.')[0]][row.split('.')[1]];
+    } else {
+      delete context.mock[row];
+    }
+  });
+
   and(
     'user creates a new event with the maximum allowed characters in all input fields',
     () => {

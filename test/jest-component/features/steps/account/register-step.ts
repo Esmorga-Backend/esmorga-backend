@@ -6,38 +6,28 @@ import {
   tokensRepository,
 } from '../../../steps-config';
 import { USER_MOCK_DB } from '../../../../mocks/db';
+import { ACCOUNT_REGISTER } from '../../../../mocks/dtos';
 
-const TTL = parseInt(process.env.ACCESS_TOKEN_TTL);
+//const TTL = parseInt(process.env.ACCESS_TOKEN_TTL);
 
-export const loginSteps: StepDefinitions = ({ given, and }) => {
-  given('the POST Login API is available', () => {
-    context.path = '/v1/account/login';
+export const registerSteps: StepDefinitions = ({ given, and }) => {
+  given('the POST Register API is available', () => {
+    context.mock = { ...ACCOUNT_REGISTER };
+    context.path = '/v1/account/register';
+    context.mockDb = jest.spyOn(accountRepository, 'save').mockResolvedValue();
     jest
       .spyOn(accountRepository, 'findOneByEmail')
       .mockResolvedValue(USER_MOCK_DB);
-
     jest.spyOn(generateTokenPair, 'generateTokens').mockResolvedValue({
       accessToken: 'ACCESS_TOKEN',
       refreshToken: 'REFRESH_TOKEN',
     });
-
     jest.spyOn(tokensRepository, 'findByUuid').mockResolvedValue([]);
-
     jest.spyOn(tokensRepository, 'save').mockResolvedValue();
   });
 
-  and(
-    'profile, accessToken and refreshToken are provided with correct schema',
-    () => {
-      expect(context.response.body).toMatchObject({
-        accessToken: 'ACCESS_TOKEN',
-        refreshToken: 'REFRESH_TOKEN',
-        ttl: TTL,
-        profile: {
-          name: USER_MOCK_DB.name,
-          email: USER_MOCK_DB.email,
-        },
-      });
-    },
-  );
+  and('a registered user is entered', () => {
+    context.mockDb.mockRestore();
+    jest.spyOn(accountRepository, 'save').mockRejectedValue({ code: 11000 });
+  });
 };

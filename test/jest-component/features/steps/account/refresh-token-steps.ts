@@ -6,7 +6,7 @@ import {
 } from '../../../steps-config';
 import { PAIR_OF_TOKENS_MOCK_DB, TTL_MOCK_DB } from '../../../../mocks/db';
 
-export const getEventsSteps: StepDefinitions = ({ given, and }) => {
+export const refreshTokenSteps: StepDefinitions = ({ given, and }) => {
   given('the POST RefreshToken API is available', () => {
     context.path = '/v1/account/refresh';
     jest
