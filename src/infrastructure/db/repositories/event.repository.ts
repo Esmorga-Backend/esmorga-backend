@@ -8,7 +8,8 @@ import { MongoRepository } from './mongo.repository';
 import { Event as EventSchema } from '../schema';
 import { DataBaseInternalError, DataBaseNotFoundError } from '../errors';
 import { CreateEventDto } from '../../http/dtos';
-import { validateObjectDto, REQUIRED_FIELDS } from '../services';
+import { validateObjectDto } from '../services';
+import { REQUIRED_DTO_FIELDS } from '../consts';
 
 @Injectable()
 export class EventRepository extends MongoRepository<EventSchema> {
@@ -50,7 +51,7 @@ export class EventRepository extends MongoRepository<EventSchema> {
           excludeExtraneousValues: true,
         });
 
-        validateObjectDto(eventDto, REQUIRED_FIELDS.EVENTS);
+        validateObjectDto(eventDto, REQUIRED_DTO_FIELDS.EVENTS);
 
         return eventDto;
       });
@@ -79,7 +80,7 @@ export class EventRepository extends MongoRepository<EventSchema> {
         excludeExtraneousValues: true,
       });
 
-      validateObjectDto(eventDto, REQUIRED_FIELDS.EVENTS);
+      validateObjectDto(eventDto, REQUIRED_DTO_FIELDS.EVENTS);
 
       return eventDto;
     } catch (error) {

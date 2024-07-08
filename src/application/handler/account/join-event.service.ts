@@ -5,7 +5,6 @@ import {
   DataBaseNotFoundError,
 } from '../../../infrastructure/db/errors';
 import {
-  AccountRepository,
   EventRepository,
   TokensRepository,
 } from '../../../infrastructure/db/repositories';
@@ -19,7 +18,6 @@ import {
 export class JoinEventService {
   constructor(
     private readonly logger: PinoLogger,
-    private readonly accountRepository: AccountRepository,
     private readonly eventRepository: EventRepository,
     private readonly tokensRepository: TokensRepository,
   ) {}
@@ -35,9 +33,12 @@ export class JoinEventService {
         requestId,
       );
 
-      const event = await this.eventRepository.getEvent(eventId, requestId);
+      const { eventDate } = await this.eventRepository.getEvent(
+        eventId,
+        requestId,
+      );
 
-      if (event.eventDate < new Date()) throw new NotAccepteableEventApiError();
+      if (eventDate < new Date()) throw new NotAccepteableEventApiError();
     } catch (error) {
       this.logger.error(
         `[JoinEventService] [joinEvent] - x-request-id:${requestId}, error ${error}`,

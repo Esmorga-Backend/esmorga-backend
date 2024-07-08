@@ -12,6 +12,7 @@ import {
   AccountRepository,
   TokensRepository,
   EventRepository,
+  EventParticipantsRepository,
 } from '../../db/repositories';
 import {
   UserSchema,
@@ -20,6 +21,8 @@ import {
   Tokens,
   EventSchema,
   Event,
+  EventParticipantsSchema,
+  EventParticipants,
 } from '../../db/schema';
 import { GenerateTokenPair } from '../../../domain/services';
 import { AuthGuard } from '../guards';
@@ -30,6 +33,9 @@ import { AuthGuard } from '../guards';
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     MongooseModule.forFeature([{ name: Tokens.name, schema: TokensSchema }]),
     MongooseModule.forFeature([{ name: Event.name, schema: EventSchema }]),
+    MongooseModule.forFeature([
+      { name: EventParticipants.name, schema: EventParticipantsSchema },
+    ]),
   ],
   controllers: [AccountController],
   providers: [
@@ -41,6 +47,7 @@ import { AuthGuard } from '../guards';
     AccountRepository,
     TokensRepository,
     EventRepository,
+    EventParticipantsRepository,
     AuthGuard,
   ],
 })
