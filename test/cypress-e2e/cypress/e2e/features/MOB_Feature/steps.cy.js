@@ -36,11 +36,14 @@ And(/^password: (.*)$/, (password) => {
   api[use_endpoint].set_password(password);
 });
 
-And(/^success response code (\d+) returned$/, async (code) => {
-  cy.get('@response').then((response) => {
-    api[use_endpoint].check_response(code, response);
-  });
-});
+And(
+  /^well-formed success response with status code (\d+) returned$/,
+  async (code) => {
+    cy.get('@response').then((response) => {
+      api[use_endpoint].check_response(code, response);
+    });
+  },
+);
 And(
   'use refreshToken from response to store a variable original_refreshToken',
   async () => {
@@ -56,7 +59,7 @@ And('use variable original_refreshToken', async () => {
 });
 
 And(
-  /^error response code (\d+) returned, description: (.*), expected result: (.*)$/,
+  /^ well-formed error response with status code (\d+) returned, description: (.*), expected result: (.*)$/,
   async (code, description, result) => {
     cy.get('@response').then((response) => {
       api[use_endpoint].check_error_response(code, result, response);
