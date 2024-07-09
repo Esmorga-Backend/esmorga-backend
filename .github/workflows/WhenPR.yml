@@ -14,6 +14,11 @@ jobs:
   Run-tests-on-Ubuntu:
     name: Run npm test on Ubuntu
     runs-on: ubuntu-latest
+    permissions:
+      # Required to checkout the code
+      contents: read
+      # Required to put a comment into the pull-request
+      pull-requests: write
     env:
       APP_PORT: 3000
       MONGODB_URI: "mongodb://localhost:27017/"
