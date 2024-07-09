@@ -37,9 +37,9 @@ jobs:
       - run: npm ci
       - run: npm run test:create:cycle
       - run: npm run test
-      - name: Upload coverage report to Codecov
-        uses: codecov/codecov-action@v2
+      - uses: actions/checkout@v3
+      - name: Coverage report on Git Hub
+        uses: ArtiomTr/jest-coverage-report-action@v2
         with:
-          files: coverage/merged-output/merged-coverage.json
-          fail_ci_if_error: true
+          working-directory: coverage/merged-output/
   
