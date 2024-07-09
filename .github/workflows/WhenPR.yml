@@ -45,6 +45,8 @@ jobs:
       - run: npm ci
       - run: npm run test:create:cycle
       - run: npm run test
+      - name: List coverage directory
+        run: ls -la coverage/merged-output/
       - name: Coverage report on Git Hub
         uses: AthleticNet/comment-test-coverage@1.1
         with:
