@@ -41,5 +41,5 @@ jobs:
       - name: Coverage report on Git Hub
         uses: ArtiomTr/jest-coverage-report-action@v2
         with:
-          working-directory: coverage/merged-output/
+          coverage-file: coverage/merged-output/merged-coverage.json
   
