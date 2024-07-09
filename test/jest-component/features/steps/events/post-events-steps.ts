@@ -1,10 +1,8 @@
 import { StepDefinitions } from 'jest-cucumber';
 import { eventRepository, context } from '../../../steps-config';
 import { CREATE_EVENT_MOCK } from '../../../../mocks/dtos';
-import { GenRand } from '../../../instruments/gen-random';
-import { SwagerThings } from '../../../instruments/swagger-things';
-const swagerThings = new SwagerThings();
-const genRand = new GenRand();
+import { genRandString } from '../../../instruments/gen-random';
+import { getRowsDetail } from '../../../instruments/swagger-things';
 
 export const postEventsSteps: StepDefinitions = ({ given, and }) => {
   given('the POST Events API is available', () => {
@@ -31,13 +29,14 @@ export const postEventsSteps: StepDefinitions = ({ given, and }) => {
   and(
     'user creates a new event with the maximum allowed characters in all input fields',
     () => {
-      const rows = swagerThings.getRowsDetail('maxLength');
+      const rows = getRowsDetail('maxLength');
       for (const row in rows) {
         if (row.split('.').length == 2) {
-          context.mock[row.split('.')[0]][row.split('.')[1]] =
-            genRand.genRandString(rows[row]);
+          context.mock[row.split('.')[0]][row.split('.')[1]] = genRandString(
+            rows[row],
+          );
         } else {
-          context.mock[row] = genRand.genRandString(rows[row]);
+          context.mock[row] = genRandString(rows[row]);
         }
       }
     },
@@ -45,13 +44,14 @@ export const postEventsSteps: StepDefinitions = ({ given, and }) => {
   and(
     'user creates a new event with the minimum allowed characters in all input fields',
     () => {
-      const rows = swagerThings.getRowsDetail('minLength');
+      const rows = getRowsDetail('minLength');
       for (const row in rows) {
         if (row.split('.').length == 2) {
-          context.mock[row.split('.')[0]][row.split('.')[1]] =
-            genRand.genRandString(rows[row]);
+          context.mock[row.split('.')[0]][row.split('.')[1]] = genRandString(
+            rows[row],
+          );
         } else {
-          context.mock[row] = genRand.genRandString(rows[row]);
+          context.mock[row] = genRandString(rows[row]);
         }
       }
     },

@@ -3,9 +3,8 @@ import * as request from 'supertest';
 import Ajv from 'ajv';
 import addFormats from 'ajv-formats';
 import { app, schema, context } from '../../steps-config';
-import { GenRand } from '../../instruments/gen-random';
+import { genRandString } from '../../instruments/gen-random';
 
-const genRand = new GenRand();
 const ajv = new Ajv({ strict: false });
 addFormats(ajv);
 
@@ -23,9 +22,9 @@ export const reusableSteps: StepDefinitions = ({ when, then, and }) => {
   and(/^use row: (.*) with data length: (.*)$/, (row, data_length) => {
     if (row.split('.').length == 2) {
       context.mock[row.split('.')[0]][row.split('.')[1]] =
-        genRand.genRandString(data_length);
+        genRandString(data_length);
     } else {
-      context.mock[row] = genRand.genRandString(data_length);
+      context.mock[row] = genRandString(data_length);
     }
   });
 
@@ -43,9 +42,9 @@ export const reusableSteps: StepDefinitions = ({ when, then, and }) => {
   then(
     /^well-formed error response with status code (\d+) returned, description: (.*), expected result: (.*)$/,
     async (code_n, description, result) => {
-      expect(await context.response.status).toBe(parseInt(code_n));
-      expect(await context.response.body.type).toBe(context.path);
-      expect(await context.response.body.errors[0]).toBe(result);
+      expect(context.response.status).toBe(parseInt(code_n));
+      expect(context.response.body.type).toBe(context.path);
+      expect(context.response.body.errors[0]).toBe(result);
       check_swagger();
     },
   );
