@@ -41,4 +41,4 @@ jobs:
         uses: ArtiomTr/jest-coverage-report-action@v2
         with:
           coverage-file: coverage/merged-output/merged-coverage.json
-  
+          skip-step: all
