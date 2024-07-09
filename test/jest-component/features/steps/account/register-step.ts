@@ -14,7 +14,7 @@ export const registerSteps: StepDefinitions = ({ given, and }) => {
     const USER_MOCK_DB = await getUserMockDb();
     context.mock = { ...ACCOUNT_REGISTER };
     context.path = '/v1/account/register';
-    context.mockDb = jest.spyOn(accountRepository, 'save').mockResolvedValue();
+    jest.spyOn(accountRepository, 'save').mockResolvedValue();
     jest
       .spyOn(accountRepository, 'findOneByEmail')
       .mockResolvedValue(USER_MOCK_DB);
@@ -27,7 +27,6 @@ export const registerSteps: StepDefinitions = ({ given, and }) => {
   });
 
   and('a registered user is entered', () => {
-    context.mockDb.mockRestore();
     jest.spyOn(accountRepository, 'save').mockRejectedValue({ code: 11000 });
   });
 };

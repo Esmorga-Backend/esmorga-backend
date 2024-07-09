@@ -1,5 +1,5 @@
 import { StepDefinitions } from 'jest-cucumber';
-import { eventRepository, context, schema } from '../../../steps-config';
+import { eventRepository, context } from '../../../steps-config';
 import { CREATE_EVENT_MOCK } from '../../../../mocks/dtos';
 import { GenRand } from '../../../instruments/gen-random';
 import { SwagerThings } from '../../../instruments/swagger-things';

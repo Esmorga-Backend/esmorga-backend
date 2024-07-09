@@ -7,6 +7,7 @@ import { FUTURE_EVENT_MOCK_DB, OLD_EVENT_MOCK_DB } from '../../../../mocks/db';
 export const getEventsSteps: StepDefinitions = ({ given, and, then }) => {
   given('the GET Events API is available', () => {
     context.path = '/v1/events';
+    jest.spyOn(eventRepository, 'find').mockResolvedValue([]);
   });
 
   given('the GET Events API is unavailable', () => {
@@ -29,10 +30,6 @@ export const getEventsSteps: StepDefinitions = ({ given, and, then }) => {
         jest
           .spyOn(eventRepository, 'find')
           .mockResolvedValue([FUTURE_EVENT_MOCK_DB]);
-      } else if (expired_events_on_db == 0 && events_on_db == 0) {
-        jest.spyOn(eventRepository, 'find').mockResolvedValue([]);
-      } else {
-        expect(false).toBe(true);
       }
     },
   );

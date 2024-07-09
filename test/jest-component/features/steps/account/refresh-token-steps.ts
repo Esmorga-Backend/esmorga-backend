@@ -24,7 +24,7 @@ export const refreshTokenSteps: StepDefinitions = ({ given, and }) => {
 
   and(/^use refreshToken (\w+)$/, (refreshToken) => {
     context.mock.refreshToken = refreshToken;
-    if (refreshToken == 'null') {
+    if (refreshToken === 'null') {
       context.mock.refreshToken = '';
     } else if (PAIR_OF_TOKENS_MOCK_DB.refreshToken == refreshToken) {
       jest

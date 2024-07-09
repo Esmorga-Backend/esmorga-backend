@@ -61,10 +61,7 @@ export const reusableSteps: StepDefinitions = ({ when, then, and }) => {
       check_swagger();
     },
   );
-  and(
-    /^detail in error is (.*) ,description: (.*)$/,
-    async (row, description) => {
-      expect(await context.response.body.detail).toBe(row);
-    },
-  );
+  and(/^detail in error is (.*) ,description: (.*)$/, async (row) => {
+    expect(context.response.body.detail).toBe(row);
+  });
 };

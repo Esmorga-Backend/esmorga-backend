@@ -22,8 +22,6 @@ export class SwagerThings {
             rows[row + '.' + subprop] = prop.properties[subprop][length];
           }
         }
-        //      } else {
-        //        console.log(prop);
       }
     }
     return rows;

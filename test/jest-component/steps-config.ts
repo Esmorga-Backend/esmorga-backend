@@ -39,7 +39,7 @@ beforeEach(async () => {
   accountRepository = moduleFixture.get<AccountRepository>(AccountRepository);
   tokensRepository = moduleFixture.get<TokensRepository>(TokensRepository);
   generateTokenPair = moduleFixture.get<GenerateTokenPair>(GenerateTokenPair);
-  jest.spyOn(eventRepository, 'find').mockRejectedValue(new Error());
+
   const response = await request(app.getHttpServer()).get('/swagger-json');
   const rawSchema = response.body;
   schema = await SwaggerParser.dereference(rawSchema);
