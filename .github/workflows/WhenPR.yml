@@ -48,12 +48,12 @@ jobs:
       - name: List coverage directory
         run: ls -la coverage/merged-output/
       - name: Coverage report on Git Hub
-        uses: zgosalvez/github-actions-report-lcov@v3
+        uses: boris-amenitiz/lcov-pull-request-report@v1.0.0
         with:
-          coverage-files: coverage/lcov.info
-          minimum-coverage: 75
-          artifact-name: code-coverage-report
+          lcov-file: coverage/lcov.info
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          update-comment: true
-
+          comment-title:
+          all-files-minimum-coverage: 75
+          changed-files-minimum-coverage: 75
+    
         
