@@ -14,6 +14,11 @@ jobs:
   Run-tests-on-Ubuntu:
     name: Run npm test on Ubuntu
     runs-on: ubuntu-latest
+    permissions:
+      # Required to checkout the code
+      contents: read
+      # Required to put a comment into the pull-request
+      pull-requests: write
     env:
       APP_PORT: 3000
       MONGODB_URI: "mongodb://localhost:27017/"
@@ -38,7 +43,7 @@ jobs:
       - run: npm run test:create:cycle
       - run: npm run test
       - name: Coverage report on Git Hub
-        uses: ArtiomTr/jest-coverage-report-action@v2
+        uses: davelosert/vitest-coverage-report-action@v2
         with:
-          coverage-file: coverage/merged-output/merged-coverage.json
-          skip-step: all
+          json-summary-compare-path:  coverage/merged-output/merged-coverage.json
+        
