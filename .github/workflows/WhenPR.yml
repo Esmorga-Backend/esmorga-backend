@@ -45,5 +45,5 @@ jobs:
       - name: Coverage report on Git Hub
         uses: davelosert/vitest-coverage-report-action@v2
         with:
-          json-summary-compare-path:  coverage/merged-output/merged-coverage.json
+          json-summary-path:  coverage/merged-output/merged-coverage.json
         
