@@ -16,7 +16,7 @@ export const postEventsSteps: StepDefinitions = ({ given, and }) => {
   and('an authenticated user with admin rights is logged in', () => {});
 
   and('with invalid data', () => {
-    context.mock.eventName = 'asdda';
+    context.mock.eventName = 'as';
   });
   and(/^with empty data in (.*)$/, (row) => {
     if (row.split('.').length == 2) {
