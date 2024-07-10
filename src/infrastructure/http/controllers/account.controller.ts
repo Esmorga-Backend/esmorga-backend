@@ -27,6 +27,7 @@ import {
 import {
   SwaggerAccountLogin,
   SwaggerAccountRegister,
+  SwaggerJoinEvent,
   SwaggerRefreshToken,
 } from '../swagger/decorators/account';
 import { AccountLoggedDto, NewPairOfTokensDto } from '../../dtos';
@@ -135,9 +136,10 @@ export class AccountController {
 
   @Post('/events')
   @UseGuards(AuthGuard)
+  @SwaggerJoinEvent()
   @HttpCode(204)
   async joinEvent(
-    @Headers('token') accessToken: string,
+    @Headers('Authorization') accessToken: string,
     @Body() joinEventDto: JoinEventDto,
     @RequestId() requestId: string,
   ) {

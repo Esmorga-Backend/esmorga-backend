@@ -30,7 +30,7 @@ export class AuthGuard implements CanActivate {
 
       await this.jwtService.verifyAsync(token, { secret: jstSecret });
 
-      request.headers['token'] = token;
+      request.headers.authorization = token;
     } catch (error) {
       this.logger.error(
         `[AuthGuard] - x-request-id:${requestId}, error ${error}`,

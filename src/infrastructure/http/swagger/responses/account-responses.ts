@@ -22,6 +22,7 @@ const PATHS = {
   LOGIN: '/v1/account/login',
   REGISTER: '/v1/account/register',
   REFRESH_TOKEN: '/v1/account/refresh',
+  JOIN_EVENT: '/v1/account/events',
 };
 
 export const LOGIN_RESPONSES: { [key: string]: ApiResponseOptions } = {
@@ -209,6 +210,96 @@ export const REFRESH_TOKEN_RESPONSES: { [key: string]: ApiResponseOptions } = {
       properties: {
         ...INTERNAL_ERROR_COMMON_PROPERTIES,
         type: { type: 'string', example: PATHS.REFRESH_TOKEN },
+      },
+    },
+  },
+};
+
+export const JOIN_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
+  NO_CONTENT: {
+    description: 'User has successfully joined in the event',
+    schema: {
+      type: 'object',
+      example: {},
+    },
+  },
+  BAD_REQUEST_ERROR: {
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Some inputs are missed or wrong',
+    schema: {
+      type: 'object',
+      properties: {
+        title: {
+          type: 'string',
+          example: 'badRequestError',
+        },
+        status: { type: 'number', example: HttpStatus.BAD_REQUEST },
+        type: { type: 'string', example: PATHS.REFRESH_TOKEN },
+        detail: {
+          type: 'string',
+          example: 'some inputs are missing',
+        },
+        errors: {
+          type: 'array',
+          example: ['eventId should not be empty'],
+        },
+      },
+    },
+  },
+  UNAUTHORIZED_ERROR: {
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Invalid credentials',
+    schema: {
+      type: 'object',
+      properties: {
+        title: {
+          type: 'string',
+          example: 'unauthorizedRequestError',
+        },
+        status: { type: 'number', example: HttpStatus.UNAUTHORIZED },
+        type: { type: 'string', example: PATHS.JOIN_EVENT },
+        detail: {
+          type: 'string',
+          example: 'not authorized',
+        },
+        errors: {
+          type: 'array',
+          example: ['token invalid'],
+        },
+      },
+    },
+  },
+  NOT_ACCEPTABLE_ERROR: {
+    status: HttpStatus.NOT_ACCEPTABLE,
+    description: 'Invalid credentials',
+    schema: {
+      type: 'object',
+      properties: {
+        title: {
+          type: 'string',
+          example: 'unauthorizedRequestError',
+        },
+        status: { type: 'number', example: HttpStatus.NOT_ACCEPTABLE },
+        type: { type: 'string', example: PATHS.JOIN_EVENT },
+        detail: {
+          type: 'string',
+          example: 'not acceptable',
+        },
+        errors: {
+          type: 'array',
+          example: ['cannot join past events'],
+        },
+      },
+    },
+  },
+  INTERNAL_ERROR: {
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Error not handled',
+    schema: {
+      type: 'object',
+      properties: {
+        ...INTERNAL_ERROR_COMMON_PROPERTIES,
+        type: { type: 'string', example: PATHS.JOIN_EVENT },
       },
     },
   },
