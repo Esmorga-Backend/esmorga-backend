@@ -2,27 +2,19 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as request from 'supertest';
-import {
-  AccountRepository,
-  EventRepository,
-  TokensRepository,
-} from '../../src/infrastructure/db/repositories';
+
 import { AppModule } from '../../src/app.module';
-import { GenerateTokenPair } from '../../src/domain/services';
 
 const SwaggerParser = require('swagger-parser');
 
 let app: INestApplication;
-let eventRepository: EventRepository;
+
 let schema: any;
 let context: any = {};
-
-let accountRepository: AccountRepository;
-let tokensRepository: TokensRepository;
-let generateTokenPair: GenerateTokenPair;
+let moduleFixture: TestingModule;
 
 beforeEach(async () => {
-  const moduleFixture: TestingModule = await Test.createTestingModule({
+  moduleFixture = await Test.createTestingModule({
     imports: [AppModule],
   }).compile();
   app = moduleFixture.createNestApplication();
@@ -35,15 +27,12 @@ beforeEach(async () => {
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('swagger', app, document);
   await app.init();
-  eventRepository = moduleFixture.get<EventRepository>(EventRepository);
-  accountRepository = moduleFixture.get<AccountRepository>(AccountRepository);
-  tokensRepository = moduleFixture.get<TokensRepository>(TokensRepository);
-  generateTokenPair = moduleFixture.get<GenerateTokenPair>(GenerateTokenPair);
 
   const response = await request(app.getHttpServer()).get('/swagger-json');
   const rawSchema = response.body;
   schema = await SwaggerParser.dereference(rawSchema);
   context = {};
+  context.moduleFixture = moduleFixture;
   context.headers = {
     'Content-Type': 'application/json',
   };
@@ -54,12 +43,4 @@ afterEach(async () => {
   await app.close();
 });
 
-export {
-  app,
-  eventRepository,
-  schema,
-  context,
-  accountRepository,
-  tokensRepository,
-  generateTokenPair,
-};
+export { app, schema, context, moduleFixture };

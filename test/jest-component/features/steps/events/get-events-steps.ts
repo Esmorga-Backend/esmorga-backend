@@ -1,18 +1,22 @@
 import { HttpStatus } from '@nestjs/common';
 import { StepDefinitions } from 'jest-cucumber';
 import { matchers } from 'jest-json-schema';
-import { eventRepository, context } from '../../../steps-config';
+import { EventRepository } from '../../../../../src/infrastructure/db/repositories';
+import { context, moduleFixture } from '../../../steps-config';
 import { FUTURE_EVENT_MOCK_DB, OLD_EVENT_MOCK_DB } from '../../../../mocks/db';
 
 export const getEventsSteps: StepDefinitions = ({ given, and, then }) => {
   given('the GET Events API is available', () => {
     context.path = '/v1/events';
-    jest.spyOn(eventRepository, 'find').mockResolvedValue([]);
+
+    context.eventRepository =
+      moduleFixture.get<EventRepository>(EventRepository);
+    jest.spyOn(context.eventRepository, 'find').mockResolvedValue([]);
   });
 
   given('the GET Events API is unavailable', () => {
     context.path = '/v1/events';
-    jest.spyOn(eventRepository, 'find').mockRejectedValue(new Error());
+    jest.spyOn(context.eventRepository, 'find').mockRejectedValue(new Error());
   });
 
   and(
@@ -20,15 +24,15 @@ export const getEventsSteps: StepDefinitions = ({ given, and, then }) => {
     (events_on_db, expired_events_on_db) => {
       if (expired_events_on_db == 1 && events_on_db == 2) {
         jest
-          .spyOn(eventRepository, 'find')
+          .spyOn(context.eventRepository, 'find')
           .mockResolvedValue([FUTURE_EVENT_MOCK_DB, OLD_EVENT_MOCK_DB]);
       } else if (expired_events_on_db == 1 && events_on_db == 1) {
         jest
-          .spyOn(eventRepository, 'find')
+          .spyOn(context.eventRepository, 'find')
           .mockResolvedValue([OLD_EVENT_MOCK_DB]);
       } else if (events_on_db == 1) {
         jest
-          .spyOn(eventRepository, 'find')
+          .spyOn(context.eventRepository, 'find')
           .mockResolvedValue([FUTURE_EVENT_MOCK_DB]);
       }
     },
@@ -39,6 +43,9 @@ export const getEventsSteps: StepDefinitions = ({ given, and, then }) => {
     (events_to_check) => {
       expect(context.response.status).toBe(HttpStatus.OK);
       expect.extend(matchers);
+      //      if (parseInt(events_to_check) === 1) {
+      //        console.log(context.response);
+      //      }
       expect(context.response.body).toMatchObject({
         totalEvents: parseInt(events_to_check),
       });

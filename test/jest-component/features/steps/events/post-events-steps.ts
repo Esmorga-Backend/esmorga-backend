@@ -1,14 +1,20 @@
 import { StepDefinitions } from 'jest-cucumber';
-import { eventRepository, context } from '../../../steps-config';
+import { context, moduleFixture } from '../../../steps-config';
 import { CREATE_EVENT_MOCK } from '../../../../mocks/dtos';
 import { genRandString } from '../../../instruments/gen-random';
 import { getRowsDetail } from '../../../instruments/swagger-things';
+import { EventRepository } from '../../../../../src/infrastructure/db/repositories';
+let eventRepository: EventRepository;
 
 export const postEventsSteps: StepDefinitions = ({ given, and }) => {
   given('the POST Events API is available', () => {
+    context.eventRepository = eventRepository;
+    context.eventRepository =
+      moduleFixture.get<EventRepository>(EventRepository);
     context.path = '/v1/events';
     context.mock = { ...CREATE_EVENT_MOCK };
     context.method = 'post';
+    jest.spyOn(context.eventRepository, 'save').mockResolvedValue([]);
   });
 
   and('an unauthenticated user', () => {});
@@ -57,7 +63,6 @@ export const postEventsSteps: StepDefinitions = ({ given, and }) => {
   and(
     /^with valid data to create an event, use tags: (.*), imageUrl: (.*), location.lat(.*) and location.long:(.*)$/,
     (tags, imageUrl, lat, long) => {
-      jest.spyOn(eventRepository, 'save').mockResolvedValue();
       context.mock.imageUrl = imageUrl;
       const arr: string[] = JSON.parse(tags);
       context.mock.tags = arr;
