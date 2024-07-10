@@ -64,12 +64,12 @@ export const postEventsSteps: StepDefinitions = ({ given, and }) => {
       context.mock.imageUrl = imageUrl;
       const arr: string[] = JSON.parse(tags);
       context.mock.tags = arr;
-      if (lat != '') {
+      if (lat !== '') {
         context.mock.location.lat = parseInt(lat);
       } else {
         delete context.mock.location.lat;
       }
-      if (long != '') {
+      if (long !== '') {
         context.mock.location.long = parseInt(long);
       } else {
         delete context.mock.location.long;
