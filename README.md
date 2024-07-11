@@ -21,8 +21,8 @@ $ npm install
 Create in the project root a file named `.env` and add inside it the environment variables.
 > [!IMPORTANT]
 > This file and its variables are very important because otherwise the application will not work. Request this information from any contributor to the repository.
-## able to use this to run cypress on local server
-export CYPRESS_BASE_URL=http://localhost:3000/
+
+
 
 
 
