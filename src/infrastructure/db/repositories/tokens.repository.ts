@@ -25,7 +25,7 @@ export class TokensRepository extends MongoRepository<TokensSchema> {
   ) {
     try {
       this.logger.info(
-        `[TokensRepository] [saveTokens] - x-request-id:${requestId}, accessToken ${accessToken}`,
+        `[TokensRepository] [saveTokens] - x-request-id:${requestId}, uuid ${uuid}`,
       );
 
       const pairOfTokens = new this.tokensModel({

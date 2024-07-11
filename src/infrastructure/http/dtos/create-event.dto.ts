@@ -3,6 +3,7 @@ import { Transform, Type } from 'class-transformer';
 import {
   ArrayMaxSize,
   IsArray,
+  IsDefined,
   IsEnum,
   IsNotEmpty,
   IsNumber,
@@ -81,10 +82,11 @@ function IsNotPastDate(validationOptions?: ValidationOptions) {
 }
 
 class CreateEventLocationDto {
+  @MinLength(1, { message: 'name must have min 1 character' })
   @MaxLength(100, { message: 'name must have max 100 characters' })
   @IsString()
-  @IsNotEmpty()
-  @ApiProperty({ example: 'A Coruña', maxLength: 100 })
+  @IsDefined({ message: 'name should not be empty' })
+  @ApiProperty({ example: 'A Coruña', minLength: 1, maxLength: 100 })
   name: string;
 
   @IsNumber({}, { message: 'lat must be a number' })
@@ -129,8 +131,10 @@ export class CreateEventDto {
   @ApiProperty({
     example:
       'Join us for an unforgettable celebration as we dance into the apocalypse.',
+    minLength: 4,
     maxLength: 5000,
   })
+  @MinLength(4, { message: 'description must have min 4 characters' })
   @MaxLength(5000, { message: 'description must have max 5000 characters' })
   @IsString()
   @IsNotEmpty()
@@ -144,7 +148,7 @@ export class CreateEventDto {
 
   @ApiPropertyOptional({ example: 'image.url', maxLength: 500 })
   @MaxLength(500, {
-    message: 'imageUrl description must have max 500 characters',
+    message: 'imageUrl must have max 500 characters',
   })
   @IsString()
   @IsOptional()

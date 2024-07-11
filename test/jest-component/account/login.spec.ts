@@ -7,7 +7,7 @@ import {
   TokensRepository,
 } from '../../../src/infrastructure/db/repositories';
 import { GenerateTokenPair } from '../../../src/domain/services/';
-import { USER_MOCK_DB, PASSWORD_MOCK_DB } from '../../mocks/db';
+import { PASSWORD_MOCK_DB, getUserMockDb } from '../../mocks/db';
 
 const TTL = parseInt(process.env.ACCESS_TOKEN_TTL);
 
@@ -44,6 +44,8 @@ describe('Login - [POST v1/account/login]', () => {
   });
 
   it('Should return a 200 with a pair of tokens and user profile data', async () => {
+    const USER_MOCK_DB = await getUserMockDb();
+
     jest
       .spyOn(accountRepository, 'findOneByEmail')
       .mockResolvedValue(USER_MOCK_DB);
@@ -126,6 +128,8 @@ describe('Login - [POST v1/account/login]', () => {
   });
 
   it('Should throw a 401 if password is not correct', async () => {
+    const USER_MOCK_DB = await getUserMockDb();
+
     jest
       .spyOn(accountRepository, 'findOneByEmail')
       .mockResolvedValue(USER_MOCK_DB);

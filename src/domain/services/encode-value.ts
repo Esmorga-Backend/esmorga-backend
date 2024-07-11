@@ -1,5 +1,10 @@
-import { createHash } from 'crypto';
+import * as argon2 from 'argon2';
+import { ApiError } from '../errors';
 
-export function encodeValue(value: string) {
-  return createHash('sha256').update(value).digest('hex');
+export async function encodeValue(value: string) {
+  try {
+    return await argon2.hash(value);
+  } catch (error) {
+    throw new ApiError();
+  }
 }

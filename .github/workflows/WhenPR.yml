@@ -23,7 +23,7 @@ jobs:
       JWT_SECRET: "${{ secrets.JWT_SECRET }}"
       ACCESS_TOKEN_TTL: 600
       MAX_PAIR_OF_TOKEN: 5
-      AioToken: "${{ secrets.AoiToken }}"
+      AIO_TOKEN: "${{ secrets.AIO_TOKEN }}"
     steps:
       - name: Start MongoDB
         uses: supercharge/mongodb-github-action@1.11.0
@@ -35,8 +35,9 @@ jobs:
           node-version: '22.1'
       - run: echo $APP_PORT
       - run: npm ci
-      - run: npm run test:unit
-      - run: npm run test:component
+      - run: npm run test:create:cycle
+      - run: npm run test:cov:unit
+      - run: npm run test:cov:component
         if: ${{ success() }}
       
   

@@ -8,7 +8,7 @@ import {
 } from '../../../src/infrastructure/db/repositories';
 import { GenerateTokenPair } from '../../../src/domain/services/';
 import { ACCOUNT_REGISTER } from '../../mocks/dtos';
-import { USER_MOCK_DB } from '../../mocks/db';
+import { getUserMockDb } from '../../mocks/db';
 
 const TTL = parseInt(process.env.ACCESS_TOKEN_TTL);
 
@@ -45,6 +45,8 @@ describe('Register - [POST v1/account/register]', () => {
   });
 
   it('Should return a 201 with a pair of tokens and user profile data', async () => {
+    const USER_MOCK_DB = await getUserMockDb();
+
     jest.spyOn(accountRepository, 'save').mockResolvedValue();
 
     jest

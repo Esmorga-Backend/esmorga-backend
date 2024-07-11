@@ -12,7 +12,7 @@ import {
 export const ACCOUNT_REGISTER_REGEX = {
   NAME: /^[A-Za-z\s'-]+$/,
   EMAIL: /^[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-  PASSWORD: /(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+])/,
+  PASSWORD: /(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+'])/,
 };
 
 export class AccountRegisterDto {
@@ -44,8 +44,7 @@ export class AccountRegisterDto {
     typeof value === 'string' ? value.toLowerCase() : value,
   )
   @Matches(ACCOUNT_REGISTER_REGEX.EMAIL, {
-    message:
-      'email do not accept +, spaces and after the @ only letters (Uppercase or lowercase) and digits are allowed, _ - ',
+    message: `email is not correctly formatted. Additionally, we do not accept '+' or ' '. After '@', we only accept letters (uppercase and lowercase), digits, '_', and '-'`,
   })
   @MaxLength(100, { message: 'email must have max 100 characters' })
   @IsString()
@@ -54,7 +53,8 @@ export class AccountRegisterDto {
   email: string;
 
   @Matches(ACCOUNT_REGISTER_REGEX.PASSWORD, {
-    message: 'password must include at least one digit and one symbol',
+    message:
+      'password must include at least one digit, one letter and one symbol',
   })
   @MinLength(8, { message: 'password must have min 8 characters' })
   @MaxLength(50, { message: 'password must have max 50 characters' })
