@@ -36,7 +36,10 @@ async function main() {
 
     selectedTestTypes = features.getSelectedTestTypes(testTypes);
     console.log(selectedTestTypes);
-    if (process.argv.includes('--Update-Test-to-Automated')) {
+    if (process.argv.includes('--Upload-Results')) {
+      const cyKey = await aio.findCycleByUs(onErrorMsg, usName);
+      aio.UploadResults(cyKey);
+    } else if (process.argv.includes('--Update-Test-to-Automated')) {
       const cyKey = await aio.findCycleByUs(onErrorMsg, usName);
       if (cyKey != null) {
         const Tests = await aio.getTestsByCy(onErrorMsg, cyKey);
