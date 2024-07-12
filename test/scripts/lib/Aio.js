@@ -228,14 +228,14 @@ class Aio {
 
     try {
       const data = new FormData();
-      //      data.append('bddForceUpdateCase', false);
-      //      data.append('forceUpdateCase', false);
-      //      data.append('updateDatasets', false);
-      //      data.append('createNewRun', false);
-      //      data.append('examplesAsCases', true);
-      //      data.append('createCase', false);
-      //      data.append('defaultFolder', null);
-      //      data.append('addCaseToCycle', false);
+      data.append('bddForceUpdateCase', 'false');
+      data.append('forceUpdateCase', 'false');
+      data.append('updateDatasets', 'false');
+      data.append('createNewRun', 'false');
+      //      data.append('examplesAsCases', 'true');
+      data.append('createCase', 'false');
+      //      data.append('defaultFolder', );
+      data.append('addCaseToCycle', 'false');
 
       data.append('file', fs.createReadStream('report/junit-component.xml'));
 
