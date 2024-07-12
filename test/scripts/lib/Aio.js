@@ -232,11 +232,8 @@ class Aio {
       data.append('forceUpdateCase', 'false');
       data.append('updateDatasets', 'false');
       data.append('createNewRun', 'false');
-      //      data.append('examplesAsCases', 'true');
       data.append('createCase', 'false');
-      //      data.append('defaultFolder', );
       data.append('addCaseToCycle', 'false');
-
       data.append('file', fs.createReadStream('report/junit-component.xml'));
 
       var config = {
@@ -253,12 +250,7 @@ class Aio {
       axios(config).then(function (response) {
         console.log(JSON.stringify(response.data));
       });
-      //      console.log(data);
-      //      const response = await axios.post(url, data, { headers: headers });
 
-      //      response((data) => {
-      //        console.log(data);
-      //      });
       return;
     } catch (error) {
       console.error('Error:', error);
