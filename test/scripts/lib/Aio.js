@@ -175,7 +175,6 @@ class Aio {
           return cy.key;
         }
       }
-      return;
     } catch (error) {
       console.error('Error:', error);
       console.error(onErrorMsg);
@@ -250,8 +249,6 @@ class Aio {
       axios(config).then(function (response) {
         console.log(JSON.stringify(response.data));
       });
-
-      return;
     } catch (error) {
       console.error('Error:', error);
       console.error(onErrorMsg);
