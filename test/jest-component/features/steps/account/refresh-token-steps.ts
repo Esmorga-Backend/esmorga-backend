@@ -35,7 +35,7 @@ export const refreshTokenSteps: StepDefinitions = ({ given, and }) => {
     if (refreshToken === 'null') {
       context.mock.refreshToken = '';
     }
-    
+
     if (PAIR_OF_TOKENS_MOCK_DB.refreshToken == refreshToken) {
       jest
         .spyOn(context.tokensRepository, 'findOneByRefreshToken')

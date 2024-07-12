@@ -43,9 +43,6 @@ export const getEventsSteps: StepDefinitions = ({ given, and, then }) => {
     (events_to_check) => {
       expect(context.response.status).toBe(HttpStatus.OK);
       expect.extend(matchers);
-      //      if (parseInt(events_to_check) === 1) {
-      //        console.log(context.response);
-      //      }
       expect(context.response.body).toMatchObject({
         totalEvents: parseInt(events_to_check),
       });
