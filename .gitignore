@@ -58,3 +58,5 @@ jest.config.json
 
 
 report/junit-component.xml
+test/cypress-e2e/cypress/e2e/screenshots
+test/cypress-e2e/cypress/e2e/downloads
