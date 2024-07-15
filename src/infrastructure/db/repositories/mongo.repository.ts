@@ -13,6 +13,27 @@ export class MongoRepository<E> implements DBRepository<E> {
     return this.entityModel.find();
   }
 
+  //TODO: Cambiar comentarios
+  /**
+   * Find documents by accesToken.
+   *
+   * @param uuid - The uuid to find.
+   * @returns Promise resolved with the documents that match uuid provided.
+   */
+  async findOneByAccessToken(accesToken: string): Promise<E> {
+    return this.entityModel.findOne({ accesToken: { $eq: accesToken } });
+  }
+
+  /**
+   * Find a document by id field.
+   *
+   * @param id - The id to find.
+   * @returns Promise resolved with the document that matches the id provided.
+   */
+  async findOneById(id: string): Promise<E> {
+    return this.entityModel.findOne({ _id: { $eq: id } });
+  }
+
   /**
    * Find documents by uuid.
    *
@@ -24,7 +45,7 @@ export class MongoRepository<E> implements DBRepository<E> {
   }
 
   /**
-   * Find documents by refreshToken.
+   * Find a document by refreshToken field.
    *
    * @param refreshToken - The refresToken to find.
    * @returns Promise resolved with the document that matches the refreshToken provided.

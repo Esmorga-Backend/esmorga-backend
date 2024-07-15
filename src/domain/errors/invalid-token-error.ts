@@ -1,13 +1,13 @@
 import { HttpStatus } from '@nestjs/common';
 import { ApiError } from './api-error';
 
-export class InvalidCredentialsRefreshApiError extends ApiError {
+export class InvalidTokenApiError extends ApiError {
   constructor() {
     super(
-      HttpStatus.UNAUTHORIZED,
+      HttpStatus.BAD_REQUEST,
       'unauthorizedRequestError',
-      'unauthorized',
-      'unauthorized',
+      'not authorized',
+      'token invalid',
     );
   }
 }

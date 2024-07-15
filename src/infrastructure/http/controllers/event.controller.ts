@@ -2,8 +2,10 @@ import {
   Body,
   Controller,
   Get,
+  Headers,
   HttpException,
   InternalServerErrorException,
+  Patch,
   Post,
   UseFilters,
 } from '@nestjs/common';
@@ -12,14 +14,16 @@ import { PinoLogger } from 'nestjs-pino';
 import {
   CreateEventService,
   GetEventListService,
+  UpdateEventService,
 } from '../../../application/handler/event';
 import { HttpExceptionFilter } from '../errors';
 import {
   SwaggerCreateEvent,
   SwaggerGetEvents,
+  SwaggerUpdateEvent,
 } from '../swagger/decorators/events';
-import { EventListDto } from '../../dtos';
-import { CreateEventDto } from '../dtos';
+import { EventDto, EventListDto } from '../../dtos';
+import { CreateEventDto, UpdateEventDto } from '../dtos';
 import { RequestId } from '../req-decorators';
 
 @ApiTags('Event')
@@ -30,6 +34,7 @@ export class EventController {
     private readonly logger: PinoLogger,
     private readonly getEventListService: GetEventListService,
     private readonly createEventService: CreateEventService,
+    private readonly updateEventService: UpdateEventService,
   ) {}
 
   @Get('/')
@@ -72,6 +77,48 @@ export class EventController {
     } catch (error) {
       this.logger.error(
         `[EventController] [createEvent] - x-request-id:${requestId}, error ${error}`,
+      );
+
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new InternalServerErrorException();
+    }
+  }
+
+  @Patch('/')
+  @SwaggerUpdateEvent()
+  async updateEvent(
+    @Body() updateEventDto: UpdateEventDto, //TODO: meter dto
+    @Headers('Authorization') accessToken: string,
+    @RequestId() requestId: string,
+    // ): Promise<EventDto> {
+  ) {
+    try {
+      this.logger.info(
+        `[EventController] [updateEvent] - x-request-id:${requestId}`,
+      );
+      // const accessToken =
+      //   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNjY2YWMyNzBjODlmNWE1Y2FiMGI0NTM2IiwiaWF0IjoxNzE4Nzk0NjQwLCJleHAiOjE3MTg3OTUyNDB9.Kklm7nK5RgobEz_V1Eiqc5fTt33w2KNKByjU7V2M4aE';
+
+      //TODO: El accesToken validado en la pr de Abrodos
+
+      // const response: EventDto = await this.updateEventService.update(
+      //   accessToken,
+      //   updateEventDto,
+      //   requestId,
+      // );
+
+      // const response = await this.updateEventService.update(
+      //   accessToken,
+      //   updateEventDto,
+      //   requestId,
+      // );
+
+      return 'Hola';
+    } catch (error) {
+      this.logger.error(
+        `[EventController] [updateEvent] - x-request-id:${requestId}, error ${error}`,
       );
 
       if (error instanceof HttpException) {
