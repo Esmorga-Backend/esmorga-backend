@@ -12,72 +12,40 @@ on:
     
 jobs:
     Run-tests-on-Ubuntu:
-    name: Run npm test on Ubuntu
-    runs-on: ubuntu-latest
-    env:
-      APP_PORT: 3000
-      MONGODB_URI: "mongodb://localhost:27017/"
-      REDIS_HOST: "redis-10358.c6.eu-west-1-1.ec2.redns.redis-cloud.com"
-      REDIS_PORT: 10358
-      NODE_ENV: "LOCAL"
-      JWT_SECRET: "${{ secrets.JWT_SECRET }}"
-      ACCESS_TOKEN_TTL: 600
-      MAX_PAIR_OF_TOKEN: 5
-      AIO_TOKEN: "${{ secrets.AIO_TOKEN }}"
-      CYPRESS_BASE_URL: "http://localhost:3000/"
-    steps:
-      - name: Start MongoDB
-        uses: supercharge/mongodb-github-action@1.11.0
-        with:
-          mongodb-version: '6.0'
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22.1'
-      - run: echo $APP_PORT
-      - run: npm ci
-      - run: npm run test:create:cycle
-      - run: npm run test:cov:unit
-      - run: npm run test:cov:component
-      - run: npm run start &
-      - name: Sleep for 30 seconds (need to wait for start server)
-        run: sleep 30
-#      - run: npm run test:e2e-run-cypress
-      - run: postman login --with-api-key ${{ secrets.postmanToken }}
-      - run: postman collection run 34733067-3c9ab4ec-2e6e-4483-9330-44d5a30fd621 -e 34733067-4a57f5f3-ba99-4cdb-95a2-d89e4aaa24b7 -i 34733067-08bcb1d0-27fb-46d3-ae7b-d15e260e3f02 -i 34733067-58a81db3-c532-4719-803f-2ee5543a3f82 -i 34733067-de08d0be-05ec-42aa-919e-aa6c30fd1aa2 -i 34733067-639a0719-aa5a-47ce-8c90-b31cba8192ac -i 34733067-fae9f23d-5f2b-4300-9185-5d9e14b59e9c -i 34733067-1317b37c-3bac-4330-93e5-8934b61f977f -i 34733067-4b8fc290-47de-40f0-8a18-1a001d2c4b12 -i 34733067-fdf03113-6bd8-4cf3-a8b8-31cb83c7ccba -i 34733067-a156ff30-b7b2-4b43-9c0a-4cf7fae8a22e -i 34733067-c27939e0-19ec-468a-a7c4-b37c6a2a76dd -i 34733067-58444f74-9de8-443f-9488-21c229d6f8e3 -i 34733067-bb2144b8-5071-4abb-9850-34b0f1c976ae
-  
-  Run-tests-on-Ubuntu:
-    name: Run npm test on Ubuntu
-    runs-on: ubuntu-latest
-    env:
-      APP_PORT: 3000
-      MONGODB_URI: "mongodb://localhost:27017/"
-      REDIS_HOST: "redis-10358.c6.eu-west-1-1.ec2.redns.redis-cloud.com"
-      REDIS_PORT: 10358
-      NODE_ENV: "LOCAL"
-      JWT_SECRET: "${{ secrets.JWT_SECRET }}"
-      ACCESS_TOKEN_TTL: 600
-      MAX_PAIR_OF_TOKEN: 5
-      AIO_TOKEN: "${{ secrets.AIO_TOKEN }}"
-      CYPRESS_BASE_URL: "http://localhost:3000/"
-    steps:
-      - name: Start MongoDB
-        uses: supercharge/mongodb-github-action@1.11.0
-        with:
-          mongodb-version: '6.0'
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22.1'
-      - run: echo $APP_PORT
-      - run: npm ci
-      - run: npm run test:create:cycle
-      - run: npm run test:cov:unit
-      - run: npm run test:cov:component
-      - run: npm run start &
-      - name: Sleep for 30 seconds (need to wait for start server)
-        run: sleep 30
-      - run: npm run test:e2e-run-cypress
-      - run: postman login --with-api-key ${{ secrets.postmanToken }}
-      - run: postman collection run 34733067-3c9ab4ec-2e6e-4483-9330-44d5a30fd621 -e 34733067-4a57f5f3-ba99-4cdb-95a2-d89e4aaa24b7 -i 34733067-08bcb1d0-27fb-46d3-ae7b-d15e260e3f02 -i 34733067-58a81db3-c532-4719-803f-2ee5543a3f82 -i 34733067-de08d0be-05ec-42aa-919e-aa6c30fd1aa2 -i 34733067-639a0719-aa5a-47ce-8c90-b31cba8192ac -i 34733067-fae9f23d-5f2b-4300-9185-5d9e14b59e9c -i 34733067-1317b37c-3bac-4330-93e5-8934b61f977f -i 34733067-4b8fc290-47de-40f0-8a18-1a001d2c4b12 -i 34733067-fdf03113-6bd8-4cf3-a8b8-31cb83c7ccba -i 34733067-a156ff30-b7b2-4b43-9c0a-4cf7fae8a22e -i 34733067-c27939e0-19ec-468a-a7c4-b37c6a2a76dd -i 34733067-58444f74-9de8-443f-9488-21c229d6f8e3 -i 34733067-bb2144b8-5071-4abb-9850-34b0f1c976ae
-  
+      name: Run npm test on Ubuntu
+      runs-on: ubuntu-latest
+      env:
+        APP_PORT: 3000
+        MONGODB_URI: "mongodb://localhost:27017/"
+        REDIS_HOST: "redis-10358.c6.eu-west-1-1.ec2.redns.redis-cloud.com"
+        REDIS_PORT: 10358
+        NODE_ENV: "LOCAL"
+        JWT_SECRET: "${{ secrets.JWT_SECRET }}"
+        ACCESS_TOKEN_TTL: 600
+        MAX_PAIR_OF_TOKEN: 5
+        AIO_TOKEN: "${{ secrets.AIO_TOKEN }}"
+        CYPRESS_BASE_URL: "http://localhost:3000/"
+      steps:
+        - name: Start MongoDB
+          uses: supercharge/mongodb-github-action@1.11.0
+          with:
+            mongodb-version: '6.0'
+        - uses: actions/checkout@v4
+        - uses: actions/setup-node@v4
+          with:
+            node-version: '22.1'
+        - run: echo $APP_PORT
+        - run: npm ci
+        - run: npm run test:create:cycle
+        - name: Run Unit
+          uses: ./.github/actions/runTests/unit.yaml
+        #        - run: npm run test:cov:unit
+#        - run: npm run test:cov:component
+#        - run: npm run start &
+#        - name: Sleep for 30 seconds (need to wait for start server)
+#          run: sleep 30
+#  #      - run: npm run test:e2e-run-cypress
+#        - run: postman login --with-api-key ${{ secrets.postmanToken }}
+#        - run: postman collection run 34733067-3c9ab4ec-2e6e-4483-9330-44d5a30fd621 -e 34733067-4a57f5f3-ba99-4cdb-95a2-d89e4aaa24b7 -i 34733067-08bcb1d0-27fb-46d3-ae7b-d15e260e3f02 -i 34733067-58a81db3-c532-4719-803f-2ee5543a3f82 -i 34733067-de08d0be-05ec-42aa-919e-aa6c30fd1aa2 -i 34733067-639a0719-aa5a-47ce-8c90-b31cba8192ac -i 34733067-fae9f23d-5f2b-4300-9185-5d9e14b59e9c -i 34733067-1317b37c-3bac-4330-93e5-8934b61f977f -i 34733067-4b8fc290-47de-40f0-8a18-1a001d2c4b12 -i 34733067-fdf03113-6bd8-4cf3-a8b8-31cb83c7ccba -i 34733067-a156ff30-b7b2-4b43-9c0a-4cf7fae8a22e -i 34733067-c27939e0-19ec-468a-a7c4-b37c6a2a76dd -i 34733067-58444f74-9de8-443f-9488-21c229d6f8e3 -i 34733067-bb2144b8-5071-4abb-9850-34b0f1c976ae
+    
+    
