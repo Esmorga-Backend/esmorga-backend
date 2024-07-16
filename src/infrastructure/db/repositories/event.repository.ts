@@ -69,10 +69,10 @@ export class EventRepository extends MongoRepository<EventSchema> {
   async getEvent(eventId: string, requestId?: string): Promise<EventDto> {
     try {
       this.logger.info(
-        `[EventRepository] [getEventList] - x-request-id:${requestId}`,
+        `[EventRepository] [getEventList] - x-request-id: ${requestId}`,
       );
 
-      const event = await this.findById(eventId);
+      const event = await this.findByIdentifier(eventId);
 
       if (!event) throw new DataBaseNotFoundError();
 
@@ -85,7 +85,7 @@ export class EventRepository extends MongoRepository<EventSchema> {
       return eventDto;
     } catch (error) {
       this.logger.error(
-        `[EventRepository] [getEventList] - x-request-id:${requestId}, error ${error}`,
+        `[EventRepository] [getEventList] - x-request-id: ${requestId}, error: ${error}`,
       );
 
       if (error instanceof HttpException) throw error;

@@ -27,7 +27,7 @@ export class JoinEventService {
   async joinEvent(accessToken: string, eventId: string, requestId?: string) {
     try {
       this.logger.info(
-        `[JoinEventService] [joinEvent] - x-request-id:${requestId}, eventId ${eventId}`,
+        `[JoinEventService] [joinEvent] - x-request-id: ${requestId}, eventId ${eventId}`,
       );
 
       const { uuid } = await this.tokensRepository.getPairOfTokensByAccessToken(
@@ -49,7 +49,7 @@ export class JoinEventService {
       );
     } catch (error) {
       this.logger.error(
-        `[JoinEventService] [joinEvent] - x-request-id:${requestId}, error ${error}`,
+        `[JoinEventService] [joinEvent] - x-request-id: ${requestId}, error ${error}`,
       );
 
       if (error instanceof DataBaseUnathorizedError)

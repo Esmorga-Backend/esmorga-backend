@@ -22,13 +22,13 @@ export class EventParticipantsRepository extends MongoRepository<EventParticipan
   ) {
     try {
       this.logger.info(
-        `[EventParticipantsRepository] [updateParticipantList] - x-request-id:${requestId}, eventId: ${eventId}, userId: ${userId}`,
+        `[EventParticipantsRepository] [updateParticipantList] - x-request-id: ${requestId}, eventId: ${eventId}, userId: ${userId}`,
       );
 
       await this.findAndUpdateParticipantsList(eventId, userId);
     } catch (error) {
       this.logger.error(
-        `[EventParticipantsRepository] [updateParticipantList] - x-request-id:${requestId}, error: ${error}`,
+        `[EventParticipantsRepository] [updateParticipantList] - x-request-id: ${requestId}, error: ${error}`,
       );
 
       throw error;
