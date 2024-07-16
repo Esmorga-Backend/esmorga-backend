@@ -40,7 +40,7 @@ jobs:
         - name: Checkout repository
           uses: actions/checkout@v2
         - name: Run Unit
-          uses: ./../actions/runTests/unit.yaml
+          uses: ./../actions/runUnitTests/
         #        - run: npm run test:cov:unit
 #        - run: npm run test:cov:component
 #        - run: npm run start &
