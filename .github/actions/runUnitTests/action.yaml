@@ -3,5 +3,5 @@ description: "Run Unit Tests"
 runs:
   using: "composite"
   steps:
-        - run: npm ci
         - run: npm run test:cov:unit
+          shell: bash
