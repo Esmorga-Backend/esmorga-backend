@@ -3,7 +3,5 @@ description: "Run Unit Tests"
 runs:
   using: "composite"
   steps:
-      - name: Print a message
-        run: echo "${{ inputs.message }}"
         - run: npm ci
         - run: npm run test:cov:unit
