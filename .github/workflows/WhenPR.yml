@@ -46,7 +46,7 @@ jobs:
         - name: Run E2E Tests
           uses: ./.github/actions/runE2ETests
         - name: Run Reporting
-          uses: ./.github/actions/runReportig
+          uses: ./.github/actions/runReporting
 
           #        - run: npm run test:cov:unit
 
