@@ -8,4 +8,4 @@ runs:
           run: |
             npm ci
             npm run start &
-            sleep 60
+            sleep 10
