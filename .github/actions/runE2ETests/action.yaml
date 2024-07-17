@@ -6,9 +6,12 @@ runs:
         - name: Install dependencies
           run: npm ci
           shell: bash
-        - name: Merge Covergage
-          run: npm run test:merge-coverage 
+        - name: Start service
+          run: npm run start
           shell: bash
-        - name: Create Report
-          run: npm run test:report
+        - name: Run tests now
+          run: npm run test:e2e-run-cypress
+          shell: bash
+        - name: Stop service
+          run: npm run stop
           shell: bash
