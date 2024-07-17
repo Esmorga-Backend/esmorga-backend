@@ -49,6 +49,8 @@ jobs:
           uses: ./.github/actions/runComponentTests
         - name: Run Service
           uses: ./.github/actions/runService
+        - name: Run Postman
+          uses: ./.github/actions/runPostman
         - name: Run E2E Tests
           uses: ./.github/actions/runE2ETests
         - name: Run Reporting
