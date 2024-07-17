@@ -4,6 +4,7 @@ runs:
   using: "composite"
   steps:
         - name: Set TERM environment variable
+          shell: bash
           run: echo "TERM=xterm-256color" >> $GITHUB_ENV
         - name: Install dependencies & Run
           shell: bash
