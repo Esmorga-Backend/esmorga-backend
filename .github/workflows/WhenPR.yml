@@ -25,7 +25,7 @@ jobs:
         MAX_PAIR_OF_TOKEN: 5
         AIO_TOKEN: "${{ secrets.AIO_TOKEN }}"
         CYPRESS_BASE_URL: "http://localhost:3000/"
-        POSTMAN_TOKEN: ${{ secrets.postmanToken }}
+        POSTMAN_TOKEN: "${{ secrets.postmanToken }}"
       steps:
         - name: Start MongoDB
           uses: supercharge/mongodb-github-action@1.11.0
