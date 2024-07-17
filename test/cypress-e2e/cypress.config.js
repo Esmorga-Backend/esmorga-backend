@@ -1,35 +1,14 @@
-const { defineConfig } = require("cypress");
-const cucumber = require("cypress-cucumber-preprocessor").default;
+const { defineConfig } = require('cypress');
+const cucumber = require('cypress-cucumber-preprocessor').default;
 module.exports = defineConfig({
   e2e: {
+    screenshotsFolder: 'test/cypress-e2e/cypress/e2e/screenshots',
+    downloadsFolder: 'test/cypress-e2e/cypress/e2e/downloads',
     supportFile: false,
     baseUrl: 'https://qa.esmorga.canarte.org/',
     specPattern: 'test/cypress-e2e/cypress/e2e/**/*.feature',
     setupNodeEvents(on, config) {
-      on("file:preprocessor", cucumber());
+      on('file:preprocessor', cucumber());
     },
   },
 });
-
-
-
-/*
-
-module.exports = {
-  ...(on, config) => {
-    on("file:preprocessor", cucumber());
-  },
-  viewportHeight: 1080,
-  viewportWidth: 1920,
-
-  e2e: {
-    baseUrl: 'https://qa.esmorga.canarte.org/',
-    
-
-    setupNodeEvents(on, config) {
-      // implement node event listeners here
-    },
-  },
-};
-
-*/

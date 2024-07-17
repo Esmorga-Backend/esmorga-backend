@@ -65,6 +65,7 @@
     "axios": "^1.7.2",
     "cypress": "^13.9.0",
     "cypress-cucumber-preprocessor": "^4.3.1",
+    "directory-import": "^3.3.1",
     "eslint": "^8.42.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.29.1",

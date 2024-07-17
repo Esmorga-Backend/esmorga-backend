@@ -1,6 +1,6 @@
-import { HttpException } from '@nestjs/common';
 import * as argon2 from 'argon2';
-import { InvalidCredentialsLoginApiError, ApiError } from '../errors';
+import { InvalidCredentialsLoginApiError } from '../errors';
+
 /**
  * Validate if request password match with user password store in the db.
  * @param userDbPassword Password saved in the DB for this user.
@@ -15,8 +15,6 @@ export async function validateLoginCredentials(
       throw new InvalidCredentialsLoginApiError();
     }
   } catch (error) {
-    if (error instanceof HttpException) throw error;
-
-    throw new ApiError();
+    throw new InvalidCredentialsLoginApiError();
   }
 }
