@@ -1,5 +1,5 @@
-name: "Run E2E Tests"
-description: "Run E2E Tests"
+name: "Run Postman Tests"
+description: "Run Postman Tests"
 runs:
   using: "composite"
   steps:
@@ -9,5 +9,5 @@ runs:
           run: |
             curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
             postman login --with-api-key ${{ secrets.postmanToken }}
-            postman collection run 25091136-0af5bd1f-1b37-450c-b138-b961128c40ec -e 25091136-b857199d-2fd0-43c3-a231-24249d76d33f
+            postman collection run 25091136-0af5bd1f-1b37-450c-b138-b961128c40ec -e 34733067-4a57f5f3-ba99-4cdb-95a2-d89e4aaa24b7
        
