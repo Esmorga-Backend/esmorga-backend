@@ -7,7 +7,10 @@ runs:
           run: npm ci
           shell: bash
         - name: Start service
-          run: npm run start
+          run: npm run start &&
+          shell: bash
+        - name: Wait for service
+          run: sleep 30
           shell: bash
         - name: Run tests now
           run: npm run test:e2e-run-cypress
