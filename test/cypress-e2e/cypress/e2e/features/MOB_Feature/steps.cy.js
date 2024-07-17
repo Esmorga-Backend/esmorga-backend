@@ -59,7 +59,7 @@ And('use variable original_refreshToken', async () => {
 });
 
 And(
-  /^ well-formed error response with status code (\d+) returned, description: (.*), expected result: (.*)$/,
+  /^well-formed error response with status code (\d+) returned, description: (.*), expected result: (.*)$/,
   async (code, description, result) => {
     cy.get('@response').then((response) => {
       api[use_endpoint].check_error_response(code, result, response);
