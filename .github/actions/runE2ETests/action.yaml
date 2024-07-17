@@ -8,4 +8,5 @@ runs:
           run: |
            echo ${CYPRESS_BASE_URL}
            npm ci
+           sleep 60
            npm run test:e2e-run-cypress
