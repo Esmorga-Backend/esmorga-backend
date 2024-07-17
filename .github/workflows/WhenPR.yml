@@ -24,7 +24,7 @@ jobs:
         ACCESS_TOKEN_TTL: 600
         MAX_PAIR_OF_TOKEN: 5
         AIO_TOKEN: ${{ secrets.AIO_TOKEN }}
-        CYPRESS_BASE_URL: http://localhost:3000/
+#        CYPRESS_BASE_URL: http://localhost:3000/
         POSTMAN_TOKEN: ${{ secrets.postmanToken }}
         DNS_NAME: http://localhost:3000
       steps:
