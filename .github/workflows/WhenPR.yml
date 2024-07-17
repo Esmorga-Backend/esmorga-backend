@@ -37,6 +37,8 @@ jobs:
         - name: Display Branch Name
           run: |
                 echo "Current Branch: ${{ github.ref }}"
+                echo ${process.env.GITHUB_HEAD_REF}
+                echo ${process.env.GITHUB_BASE_REF}
         - run: npm ci
         - run: npm run test:create:cycle
         - name: Checkout repository

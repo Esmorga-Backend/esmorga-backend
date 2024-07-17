@@ -1,8 +1,8 @@
 const { exec } = require('child_process');
 class GitHelper {
   getBranchName() {
-    if ('GITHUB_BASE_REF' in process.env) {
-      return process.env.GITHUB_BASE_REF;
+    if ('GITHUB_HEAD_REF' in process.env) {
+      return process.env.GITHUB_HEAD_REF;
     }
     return new Promise((resolve, reject) => {
       exec('git rev-parse --abbrev-ref HEAD', (err, stdout, stderr) => {
