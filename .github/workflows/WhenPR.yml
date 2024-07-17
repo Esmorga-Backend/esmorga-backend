@@ -43,6 +43,8 @@ jobs:
           uses: ./.github/actions/runUnitTests
         - name: Run Component Tests
           uses: ./.github/actions/runComponentTests
+        - name: Run Service
+          uses: ./.github/actions/runService
         - name: Run E2E Tests
           uses: ./.github/actions/runE2ETests
         - name: Run Reporting
