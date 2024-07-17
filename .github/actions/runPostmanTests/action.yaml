@@ -8,6 +8,6 @@ runs:
           id: test-postman
           run: |
             curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
-            postman login --with-api-key ${{ secrets.postmanToken }}
+            postman login --with-api-key ${POSTMAN_TOKEN}
             postman collection run 25091136-0af5bd1f-1b37-450c-b138-b961128c40ec -e 34733067-4a57f5f3-ba99-4cdb-95a2-d89e4aaa24b7
        
