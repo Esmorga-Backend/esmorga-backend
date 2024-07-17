@@ -34,7 +34,9 @@ jobs:
         - uses: actions/setup-node@v4
           with:
             node-version: '22.1'
-
+        - name: Display Branch Name
+          run: |
+                echo "Current Branch: ${{ github.ref }}"
         - run: npm ci
         - run: npm run test:create:cycle
         - name: Checkout repository
