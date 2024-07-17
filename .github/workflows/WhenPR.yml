@@ -34,7 +34,7 @@ jobs:
         - uses: actions/setup-node@v4
           with:
             node-version: '22.1'
-        - run: echo $APP_PORT
+
         - run: npm ci
         - run: npm run test:create:cycle
         - name: Checkout repository
@@ -43,9 +43,14 @@ jobs:
           uses: ./.github/actions/runUnitTests
         - name: Run Component Tests
           uses: ./.github/actions/runComponentTests
-          
-        #        - run: npm run test:cov:unit
-#        - run: npm run test:cov:component
+        - name: Run E2E Tests
+          uses: ./.github/actions/runE2ETests
+        - name: Run Reporting
+          uses: ./.github/actions/runReportig
+
+          #        - run: npm run test:cov:unit
+
+        #        - run: npm run test:cov:component
 #        - run: npm run start &
 #        - name: Sleep for 30 seconds (need to wait for start server)
 #          run: sleep 30
