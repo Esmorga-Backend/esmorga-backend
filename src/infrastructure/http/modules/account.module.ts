@@ -24,6 +24,7 @@ import {
 import { GenerateTokenPair } from '../../../domain/services';
 import { AuthGuard } from '../guards';
 import { EventSharedModule } from './event-shared.module';
+
 @Module({
   imports: [
     JwtModule.register({}),
