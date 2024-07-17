@@ -26,7 +26,7 @@ jobs:
         AIO_TOKEN: ${{ secrets.AIO_TOKEN }}
         CYPRESS_BASE_URL: http://localhost:3000/
         POSTMAN_TOKEN: ${{ secrets.postmanToken }}
-        DNS_NAME: http://localhost:3000/
+        DNS_NAME: http://localhost:3000
       steps:
         - name: Start MongoDB
           uses: supercharge/mongodb-github-action@1.11.0
