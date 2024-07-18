@@ -7,5 +7,6 @@ runs:
           shell: bash
           run: |
             npm ci
+            npx mongo-migrate-ts up
             npm run start &
             sleep 10
