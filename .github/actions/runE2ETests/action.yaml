@@ -9,6 +9,5 @@ runs:
         - name: Install dependencies & Run
           shell: bash
           run: |
-           echo ${CYPRESS_BASE_URL}
            npm ci
            npm run test:e2e-run-cypress

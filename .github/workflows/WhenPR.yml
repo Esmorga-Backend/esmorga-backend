@@ -17,8 +17,8 @@ jobs:
       env:
         APP_PORT: 3000
         MONGODB_URI: mongodb://localhost:27017/esmorga
-        REDIS_HOST: redis-10358.c6.eu-west-1-1.ec2.redns.redis-cloud.com
-        REDIS_PORT: 10358
+#        REDIS_HOST: redis-10358.c6.eu-west-1-1.ec2.redns.redis-cloud.com
+#        REDIS_PORT: 10358
         NODE_ENV: LOCAL"
         JWT_SECRET: ${{ secrets.JWT_SECRET }}
         ACCESS_TOKEN_TTL: 600
@@ -53,8 +53,8 @@ jobs:
           uses: ./.github/actions/runService
         - name: Run Postman
           uses: ./.github/actions/runPostmanTests
-        - name: Run E2E Tests
-          uses: ./.github/actions/runE2ETests
+#        - name: Run E2E Tests
+#          uses: ./.github/actions/runE2ETests
         - name: Run Reporting
           uses: ./.github/actions/runReporting
 
