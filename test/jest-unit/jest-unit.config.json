@@ -27,5 +27,15 @@
     "json",
     "lcov",
     "clover"
+  ],
+  "reporters": [
+    "default",
+    ["jest-junit", {
+      "outputDirectory": "./report",
+      "outputName": "junit-unit.xml",
+      "suiteNameTemplate": "{filepath}",
+      "classNameTemplate": "{classname}",
+      "titleTemplate": "{title}"
+    }]
   ]
 }

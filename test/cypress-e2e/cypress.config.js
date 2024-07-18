@@ -11,4 +11,12 @@ module.exports = defineConfig({
       on('file:preprocessor', cucumber());
     },
   },
+
+  reporter: 'junit',
+  reporterOptions: {
+    mochaFile: 'report/cypress-e2e.xml',
+    toConsole: false,
+    useFullSuiteTitle: false,
+    testCaseSwitchClassnameAndName: true,
+  },
 });

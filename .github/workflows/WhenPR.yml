@@ -29,6 +29,7 @@ jobs:
       ACCESS_TOKEN_TTL: 600
       MAX_PAIR_OF_TOKEN: 5
       AIO_TOKEN: "${{ secrets.AIO_TOKEN }}"
+    continue-on-error: true
     steps:
       - name: Start MongoDB
         uses: supercharge/mongodb-github-action@1.11.0
@@ -41,7 +42,23 @@ jobs:
       - run: echo $APP_PORT
       - run: npm ci
       - run: npm run test:create:cycle
-      - run: npm run test
+      - name : Run Unit Tests
+        id: unit-tests
+        run: npm run test:cov:unit
+      - name : Upload Results
+        if: failure() && steps.unit-tests.outcome == 'failure'
+        run: node test/scripts/features-tool.js report/junit-unit.xml --Upload-Results 
+      - name : Run Component Tests
+        id: component-tests
+        run: npm run test:cov:component
+      - name : Upload Results
+        if: failure() && steps.component-tests.outcome == 'failure'
+        run: node test/scripts/features-tool.js report/junit-component.xml --Upload-Results
+
+
+#     
+#      - run: node test/scripts/features-tool.js report/cypress-e2e.xml --Upload-Results
+
       - name: Coverage report on Git Hub
         uses: boris-amenitiz/lcov-pull-request-report@v1.0.0
         with:

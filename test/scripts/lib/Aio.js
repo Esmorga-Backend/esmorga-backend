@@ -233,7 +233,7 @@ class Aio {
       data.append('createNewRun', 'false');
       data.append('createCase', 'false');
       data.append('addCaseToCycle', 'false');
-      data.append('file', fs.createReadStream('report/junit-component.xml'));
+      data.append('file', fs.createReadStream(process.argv[2]));
 
       var config = {
         method: 'post',
