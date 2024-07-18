@@ -1,0 +1,60 @@
+# I need this code for next Task
+name: "Run Unit Tests"
+description: "Run Unit Tests"
+runs:
+  using: "composite"
+  steps:
+        - name: Install dependencies
+          run: npm ci
+          shell: bash
+        - name: Run tests now
+          run: npm run test:cov:unit
+          shell: bash
+
+          Run-e2e-on-Ubuntu:
+    needs: Deploy-QA
+    name: Run E2E test on Ubuntu
+    runs-on: ubuntu-latest
+    env:
+      AIO_TOKEN: "${{ secrets.AIO_TOKEN }}"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.1'
+      - run: npm ci
+      - run: npm run test:e2e-run-cypress
+        id: test-cypress
+      - name: Send custom JSON data to Slack workflow
+        if: steps.test-cypress.outcome != 'success'
+        uses: slackapi/slack-github-action@v1.26.0
+        with:
+          payload: |
+            {
+              "msg": "Cypress Test Fail"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  Run-postman-on-Ubuntu:
+    needs: Deploy-QA
+    name: Run Postman test on Ubuntu
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sleep for 30 seconds (need to wait for start server)
+        run: sleep 30
+      - run: curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
+      - run: postman login --with-api-key ${{ secrets.postmanToken }}
+      - run: postman collection run 25091136-0af5bd1f-1b37-450c-b138-b961128c40ec -e 25091136-b857199d-2fd0-43c3-a231-24249d76d33f
+        id: test-postman
+      - name: Send custom JSON data to Slack workflow
+        if: steps.test-postman.outcome != 'success'
+        uses: slackapi/slack-github-action@v1.26.0
+        with:
+          payload: |
+            {
+              "msg": "Postman Test Fail"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      
