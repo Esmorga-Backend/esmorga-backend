@@ -1,7 +1,5 @@
 name: "Push OAS to github"
 description: "Push OAS to github"
-permissions:
-  contents: write  
 runs:
   using: "composite"
   steps:
