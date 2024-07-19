@@ -11,7 +11,7 @@ runs:
       - name: Get current branch
         id: get_branch
         shell: bash
-         run: echo "branch=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
+         run: echo "##[set-output name=branch;]$(git rev-parse --abbrev-ref HEAD)"
       - name: Push OAS to github
         shell: bash
         run: |
@@ -21,4 +21,4 @@ runs:
           git config --global user.name "Pipe"
           git add swagger.json
           git commit -m "swagger.json"
-          git push origin HEAD:refs/heads/${BRANCH_NAME}
+          git push origin HEAD:refs/heads/${{ steps.get_branch.outputs.branch }}
