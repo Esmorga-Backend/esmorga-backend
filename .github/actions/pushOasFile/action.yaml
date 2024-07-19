@@ -10,11 +10,10 @@ runs:
         with:
           fetch-depth: 0 
 
-#      - name: Get current branch
-#        id: get_branch
-#        shell: bash
-#        run: echo "##[set-output name=branch;]$(git rev-parse --abbrev-ref HEAD)"
-
+      - name: Get current branch
+        id: get_branch
+        shell: bash
+        run: echo "##[set-output name=branch;]$(git rev-parse --abbrev-ref HEAD)"
       - name: Push OAS to github
         shell: bash
         run: |
@@ -24,5 +23,5 @@ runs:
           git config --global user.name "Pipe"
           git add swagger.json
           git commit -m "swagger.json"
-          git push origin HEAD:refs/heads/${GITHUB_HEAD_REF}
+          git push origin HEAD:${{ steps.get_branch.outputs.branch }}
 
