@@ -7,6 +7,8 @@ runs:
         shell: bash
         run: |
           curl http://127.0.0.1:3000/swagger-json -o swagger.json
+          git config --global user.email "devops@esmorga.canarte.org"
+          git config --global user.name "Pipe"
           git add swagger.json
           git commit -m "swagger.json"
           git push origin main
