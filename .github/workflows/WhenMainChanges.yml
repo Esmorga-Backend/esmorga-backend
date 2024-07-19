@@ -63,8 +63,8 @@ jobs:
           uses: ./.github/actions/runPostmanTests
         - name: Run E2E Tests
           uses: ./.github/actions/runE2ETests
-        - name: Deploy to QA
-          uses: ./.github/actions/DeployToQA
+#        - name: Deploy to QA
+#          uses: ./.github/actions/DeployToQA
         - name: Set up Python "pypy3.9"
           uses: actions/setup-python@v5
           with:
