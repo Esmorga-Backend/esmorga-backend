@@ -22,5 +22,5 @@ runs:
           git config --global user.name "Pipe"
           git add swagger.json
           git commit -m "swagger.json"
-          git push origin Swagger
+          git push origin SWAGGER:refs/heads/
 
