@@ -53,18 +53,18 @@ jobs:
                 echo ${GITHUB_BASE_REF}
         - name: Checkout repository
           uses: actions/checkout@v2
-#        - name: Run Unit Tests
-#          uses: ./.github/actions/runUnitTests
-#        - name: Run Component Tests
-#          uses: ./.github/actions/runComponentTests
-#        - name: Run Service
-#          uses: ./.github/actions/runService
-#        - name: Run Postman
-#          uses: ./.github/actions/runPostmanTests
-#        - name: Run E2E Tests
-#          uses: ./.github/actions/runE2ETests
-#        - name: Deploy to QA
-#          uses: ./.github/actions/DeployToQA
+        - name: Run Unit Tests
+          uses: ./.github/actions/runUnitTests
+        - name: Run Component Tests
+          uses: ./.github/actions/runComponentTests
+        - name: Run Service
+          uses: ./.github/actions/runService
+        - name: Run Postman
+          uses: ./.github/actions/runPostmanTests
+        - name: Run E2E Tests
+          uses: ./.github/actions/runE2ETests
+        - name: Deploy to QA
+          uses: ./.github/actions/DeployToQA
         - name: Set up Python "pypy3.9"
           uses: actions/setup-python@v5
           with:
