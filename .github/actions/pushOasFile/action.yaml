@@ -3,10 +3,6 @@ description: "Push OAS to github"
 runs:
   using: "composite"
   steps:
-
-      - name: Get current branch
-        id: get_branch
-        run: echo "##[set-output name=branch;]$(git rev-parse --abbrev-ref HEAD)"
       - name: Push OAS to github
         shell: bash
         run: |
@@ -16,5 +12,5 @@ runs:
           git config --global user.name "Pipe"
           git add swagger.json
           git commit -m "swagger.json"
-          git push origin ${{ steps.get_branch.outputs.branch }}
+          git push origin ${GITHUB_HEAD_REF}
 

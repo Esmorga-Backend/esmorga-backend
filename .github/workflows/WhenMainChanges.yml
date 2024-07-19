@@ -19,13 +19,11 @@ jobs:
     Run-tests-on-Ubuntu:
       name: Run npm test on Ubuntu
       runs-on: ubuntu-latest
-      permissions:
-        contents: write  # Concede permisos de escritura al workflow
+
       env:
         APP_PORT: 3000
         MONGODB_URI: "mongodb://localhost:27017/esmorga"
-#        REDIS_HOST: redis-10358.c6.eu-west-1-1.ec2.redns.redis-cloud.com
-#        REDIS_PORT: 10358
+
         NODE_ENV: LOCAL"
         JWT_SECRET: ${{ secrets.JWT_SECRET }}
         ACCESS_TOKEN_TTL: 600
