@@ -27,6 +27,8 @@ jobs:
         CYPRESS_BASE_URL: http://localhost:3000/
         POSTMAN_TOKEN: ${{ secrets.postmanToken }}
         DNS_NAME: http://localhost:3000
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
       steps:
         - name: Start MongoDB
           uses: supercharge/mongodb-github-action@1.11.0

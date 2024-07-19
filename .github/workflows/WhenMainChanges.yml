@@ -2,12 +2,14 @@ name: Deploy QA Env & Then Test E2E & Test Postman
 run-name: ${{ github.actor }} is deploying new code to QA Env 🚀
 on:
 #Delete this , just for test
-#  pull_request:
-#    types: [opened,reopened,edited,synchronize]
-#    branches:
-#      - main
-#    paths:
-#      - '**'
+  pull_request:
+    types: [opened,reopened,edited,synchronize]
+    branches:
+      - main
+    paths:
+      - '**'
+
+
   push:
     branches:
       - main
@@ -17,6 +19,8 @@ jobs:
     Run-tests-on-Ubuntu:
       name: Run npm test on Ubuntu
       runs-on: ubuntu-latest
+      permissions:
+        contents: write  # Concede permisos de escritura al workflow
       env:
         APP_PORT: 3000
         MONGODB_URI: "mongodb://localhost:27017/esmorga"
@@ -31,6 +35,8 @@ jobs:
         POSTMAN_TOKEN: ${{ secrets.postmanToken }}
         DNS_NAME: http://localhost:3000
         SSHRSA: ${{ secrets.SSHRSA}}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       steps:
         - name: Start MongoDB
           uses: supercharge/mongodb-github-action@1.11.0
@@ -55,9 +61,12 @@ jobs:
           uses: ./.github/actions/runComponentTests
         - name: Run Service
           uses: ./.github/actions/runService
+        - name: ADD Swagger.json
+          uses: ./.github/actions/pushOasFile
+
         - name: Run Postman
           uses: ./.github/actions/runPostmanTests
         - name: Run E2E Tests
           uses: ./.github/actions/runE2ETests
-        - name: Run E2E Tests
-          uses: ./.github/actions/DeployToQA
+#        - name: Run E2E Tests
+#          uses: ./.github/actions/DeployToQA

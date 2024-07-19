@@ -1,0 +1,12 @@
+name: "Deploy to QA"
+description: "Deploy to QA"
+runs:
+  using: "composite"
+  steps:
+      - name: Install dependencies And Deploy to QA
+        shell: bash
+        run: |
+          curl http://127.0.0.1:3000/swagger-json -o swagger.json
+          git add swagger.json
+          git commit -m "swagger.json"
+          git push origin main
