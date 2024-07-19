@@ -1,11 +1,16 @@
-name: "Deploy to QA"
-description: "Deploy to QA"
+name: "Push OAS to github"
+description: "Push OAS to github"
 runs:
   using: "composite"
   steps:
-      - name: Install dependencies And Deploy to QA
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          ref: main 
+      - name: Push OAS to github
         shell: bash
         run: |
+
           curl http://127.0.0.1:3000/swagger-json -o swagger.json
           git config --global user.email "devops@esmorga.canarte.org"
           git config --global user.name "Pipe"
