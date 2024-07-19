@@ -2,12 +2,12 @@ name: Deploy QA Env & Then Test E2E & Test Postman
 run-name: ${{ github.actor }} is deploying new code to QA Env 🚀
 on:
 #Delete this , just for test
-  pull_request:
-    types: [opened,reopened,edited,synchronize]
-    branches:
-      - main
-    paths:
-      - '**'
+#  pull_request:
+#    types: [opened,reopened,edited,synchronize]
+#    branches:
+#      - main
+#    paths:
+#      - '**'
 
 
   push:
@@ -46,11 +46,15 @@ jobs:
         - uses: actions/setup-node@v4
           with:
             node-version: '22.1'
+
         - name: Display Branch Name
           run: |
                 echo "Current Branch: ${{ github.ref }}"
                 echo ${GITHUB_HEAD_REF}
                 echo ${GITHUB_BASE_REF}
+
+        - run: npm ci
+        - run: npm run test:create:cycle
         - name: Checkout repository
           uses: actions/checkout@v2
         - name: Run Unit Tests
