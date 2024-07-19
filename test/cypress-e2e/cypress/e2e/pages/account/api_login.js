@@ -1,8 +1,8 @@
 import ApiBasics from '../api_basic';
 class ApiLogin extends ApiBasics {
   #url = 'v1/account/login';
-  #email = 'esmorga.test.01@yopmail.com';
-  #password = 'Password01';
+  #email = 'esmorga.test.06@yopmail.com';
+  #password = 'Password!6';
 
   constructor() {
     super();

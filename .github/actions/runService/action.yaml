@@ -1,0 +1,12 @@
+name: "Run Service"
+description: "Run Service"
+runs:
+  using: "composite"
+  steps:
+        - name: Install dependencies
+          shell: bash
+          run: |
+            npm ci
+            npx mongo-migrate-ts up
+            npm run start &
+            sleep 10
