@@ -2,12 +2,12 @@ name: Deploy QA Env & Then Test E2E & Test Postman
 run-name: ${{ github.actor }} is deploying new code to QA Env 🚀
 on:
 #Delete this , just for test
-#  pull_request:
-#    types: [opened,reopened,edited,synchronize]
-#    branches:
-#      - main
-#    paths:
-#      - '**'
+  pull_request:
+    types: [opened,reopened,edited,synchronize]
+    branches:
+      - main
+    paths:
+      - '**'
 
 
   push:
