@@ -1,0 +1,11 @@
+name: "Run Unit Tests"
+description: "Run Unit Tests"
+runs:
+  using: "composite"
+  steps:
+        - name: Install dependencies
+          run: npm ci
+          shell: bash
+        - name: Run tests now
+          run: npm run test:cov:unit
+          shell: bash

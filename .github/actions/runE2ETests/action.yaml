@@ -1,0 +1,13 @@
+name: "Run E2E Tests"
+description: "Run E2E Tests"
+runs:
+  using: "composite"
+  steps:
+        - name: Set TERM environment variable
+          shell: bash
+          run: echo "TERM=xterm-256color" >> $GITHUB_ENV
+        - name: Install dependencies & Run
+          shell: bash
+          run: |
+           npm ci
+           npm run test:e2e-run-cypress

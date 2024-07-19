@@ -14,13 +14,21 @@ class LocationDto {
   @Expose()
   @IsNumber()
   @IsOptional()
-  @ApiPropertyOptional({ example: 43.35525182148881 })
+  @ApiPropertyOptional({
+    example: 43.35525182148881,
+    maximum: 90,
+    minimum: -90,
+  })
   lat?: number;
 
   @Expose()
   @IsNumber()
   @IsOptional()
-  @ApiPropertyOptional({ example: -8.41937931298951 })
+  @ApiPropertyOptional({
+    example: -8.41937931298951,
+    maximum: 180,
+    minimum: -180,
+  })
   long?: number;
 
   @Expose()
@@ -43,7 +51,10 @@ export class EventDto {
 
   @Expose()
   @IsDateString()
-  @ApiProperty({ example: '2024-03-08T10:05:30.915Z' })
+  @ApiProperty({
+    example: '2024-03-08T10:05:30.915Z',
+    format: 'date-time',
+  })
   eventDate: Date;
 
   @Expose()
@@ -53,7 +64,10 @@ export class EventDto {
 
   @Expose()
   @IsString()
-  @ApiProperty({ example: 'Party' })
+  @ApiProperty({
+    example: 'Party',
+    enum: ['Party', 'Sport', 'Food', 'Charity', 'Games'],
+  })
   eventType: string;
 
   @Expose()

@@ -1,0 +1,25 @@
+name: "Push OAS to github"
+description: "Push OAS to github"
+runs:
+  using: "composite"
+  steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0 
+
+      - name: Get current branch
+        id: get_branch
+        shell: bash
+        run: echo "##[set-output name=branch;]$(git rev-parse --abbrev-ref HEAD)"
+      - name: Push OAS to github
+        shell: bash
+        run: |
+
+          curl http://127.0.0.1:3000/swagger-json -o swagger.json
+          git config --global user.email "devops@esmorga.canarte.org"
+          git config --global user.name "Pipe"
+          git add swagger.json
+          git commit -m "swagger.json"
+          git push origin HEAD:refs/heads/${{ steps.get_branch.outputs.branch }}
+

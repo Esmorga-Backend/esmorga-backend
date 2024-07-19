@@ -36,7 +36,7 @@ And(/^password: (.*)$/, (password) => {
   api[use_endpoint].set_password(password);
 });
 
-And(
+Then(
   /^well-formed success response with status code (\d+) returned$/,
   async (code) => {
     cy.get('@response').then((response) => {
@@ -58,8 +58,8 @@ And('use variable original_refreshToken', async () => {
   });
 });
 
-And(
-  /^ well-formed error response with status code (\d+) returned, description: (.*), expected result: (.*)$/,
+Then(
+  /^well-formed error response with status code (\d+) returned, description: (.*), expected result: (.*)$/,
   async (code, description, result) => {
     cy.get('@response').then((response) => {
       api[use_endpoint].check_error_response(code, result, response);
