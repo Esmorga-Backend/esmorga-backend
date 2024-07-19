@@ -14,6 +14,8 @@ jobs:
     Run-tests-on-Ubuntu:
       name: Run npm test on Ubuntu
       runs-on: ubuntu-latest
+      permissions:
+        contents: write  
       env:
         APP_PORT: 3000
         MONGODB_URI: "mongodb://localhost:27017/esmorga"
@@ -39,23 +41,21 @@ jobs:
           with:
             node-version: '22.1'
         - run: npm ci
-#        - run: npm run test:create:cycle
+        - run: npm run test:create:cycle
         - name: Checkout repository
           uses: actions/checkout@v2
-#        - name: Run Unit Tests
-#          uses: ./.github/actions/runUnitTests
-#        - name: Run Component Tests
-#          uses: ./.github/actions/runComponentTests
+        - name: Run Unit Tests
+          uses: ./.github/actions/runUnitTests
+        - name: Run Component Tests
+          uses: ./.github/actions/runComponentTests
         - name: Run Service
           uses: ./.github/actions/runService
-#        - name: Run Postman
-#          uses: ./.github/actions/runPostmanTests
-#        - name: Run E2E Tests
-#          uses: ./.github/actions/runE2ETests
-#        - name: Run Reporting
-#          uses: ./.github/actions/runReporting
-        - name: ADD Swagger.json
-          uses: ./.github/actions/pushOasFile
+        - name: Run Postman
+          uses: ./.github/actions/runPostmanTests
+        - name: Run E2E Tests
+          uses: ./.github/actions/runE2ETests
+        - name: Run Reporting
+          uses: ./.github/actions/runReporting
 
 
 
