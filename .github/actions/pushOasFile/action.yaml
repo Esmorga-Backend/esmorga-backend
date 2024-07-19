@@ -3,6 +3,10 @@ description: "Push OAS to github"
 runs:
   using: "composite"
   steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0 
 
       - name: Get current branch
         id: get_branch
