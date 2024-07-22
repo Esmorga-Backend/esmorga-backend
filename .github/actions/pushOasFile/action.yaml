@@ -8,11 +8,13 @@ runs:
         with:
           fetch-depth: 0 
 
-#      - name: Get current branch
-#        id: get_branch
-#        shell: bash
+      - name: Get current branch
+        id: get_branch
+        shell: bash
 #        run: echo "##[set-output name=branch;]$(git rev-parse --abbrev-ref HEAD)"
+         run: echo echo "::set-output name=branch::$(echo ${GITHUB_HEAD_REF})"
       - name: Push OAS to github
+
         shell: bash
         run: |
 
