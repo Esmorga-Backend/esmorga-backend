@@ -9,24 +9,20 @@ class GitHelper {
     return this.branchName;
   }
   seekBranchName() {
-    if ('GITHUB_HEAD_REF' in process.env) {
-      this.branchName = process.env.GITHUB_HEAD_REF;
-    } else {
-      this.branchName = new Promise((resolve, reject) => {
-        exec('git rev-parse --abbrev-ref HEAD', (err, stdout, stderr) => {
-          if (err) {
-            reject(`Error executing git: ${err}`);
-            return;
-          }
-          if (stderr) {
-            reject(`Error in git: ${stderr}`);
-            return;
-          }
-          const branchName = stdout.trim();
-          resolve(branchName);
-        });
+    this.branchName = new Promise((resolve, reject) => {
+      exec('git rev-parse --abbrev-ref HEAD', (err, stdout, stderr) => {
+        if (err) {
+          reject(`Error executing git: ${err}`);
+          return;
+        }
+        if (stderr) {
+          reject(`Error in git: ${stderr}`);
+          return;
+        }
+        const branchName = stdout.trim();
+        resolve(branchName);
       });
-    }
+    });
   }
   fixedBranchName(count) {
     this.branchName = new Promise((resolve, reject) => {
