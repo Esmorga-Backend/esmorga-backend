@@ -47,12 +47,6 @@ jobs:
           with:
             node-version: '22.1'
 
-        - name: Display Branch Name
-          run: |
-                echo "Current Branch: ${{ github.ref }}"
-                echo ${GITHUB_HEAD_REF}
-                echo ${GITHUB_BASE_REF}
-
         - run: npm ci
         - run: npm run test:create:cycle
         - name: Checkout repository
