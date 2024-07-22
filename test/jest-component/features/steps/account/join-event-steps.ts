@@ -27,7 +27,7 @@ const BODY = {
 
 export const joinEventSteps: StepDefinitions = ({ given, and }) => {
   // ###### MOB-TC-53 ######
-  given('I am authenticated', () => {
+  given('the POST Join event API is available', () => {
     context.path = PATH;
 
     context.method = METHOD;
@@ -60,6 +60,8 @@ export const joinEventSteps: StepDefinitions = ({ given, and }) => {
       )
       .mockResolvedValue(null);
   });
+
+  and('I am authenticated', () => {});
 
   and('the accessToken is valid', () => {
     jest.spyOn(context.jwtService, 'verifyAsync').mockResolvedValue({});
