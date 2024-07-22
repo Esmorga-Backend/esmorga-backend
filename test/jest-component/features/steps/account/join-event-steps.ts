@@ -21,12 +21,20 @@ const HEADERS = {
   Authorization: 'Bearer accessToken',
 };
 
+const BODY = {
+  eventId: '6670301dfcb094d1f8f3ea8d',
+};
+
 export const joinEventSteps: StepDefinitions = ({ given, and }) => {
   // ###### MOB-TC-53 ######
-  given('I am authenticated', async () => {
+  given('I am authenticated', () => {
     context.path = PATH;
 
     context.method = METHOD;
+
+    context.headers = HEADERS;
+
+    context.mock = BODY;
 
     context.jwtService = moduleFixture.get<JwtService>(JwtService);
 
@@ -63,11 +71,76 @@ export const joinEventSteps: StepDefinitions = ({ given, and }) => {
       .mockResolvedValue(FUTURE_EVENT_MOCK_DB);
   });
 
-  // ###### MOB-TC-98 ######
-  given('I am authenticated with a valid accessToken', async () => {
+  // ###### MOB-TC-54 ######
+  given(/^I am (.*)$/, (authenticatedStatus) => {
     context.path = PATH;
 
     context.method = METHOD;
+
+    context.jwtService = moduleFixture.get<JwtService>(JwtService);
+
+    context.eventRepository =
+      moduleFixture.get<EventRepository>(EventRepository);
+
+    context.tokensRepository =
+      moduleFixture.get<TokensRepository>(TokensRepository);
+
+    context.eventParticipantsRepository =
+      moduleFixture.get<EventParticipantsRepository>(
+        EventParticipantsRepository,
+      );
+
+    if (authenticatedStatus === 'unauthenticated') {
+      jest
+        .spyOn(context.tokensRepository, 'findOneByAccessToken')
+        .mockResolvedValue(null);
+    }
+
+    if (authenticatedStatus === 'authenticated') {
+      jest
+        .spyOn(context.tokensRepository, 'findOneByAccessToken')
+        .mockResolvedValue(PAIR_OF_TOKENS_MOCK_DB);
+    }
+  });
+
+  and(/^the accessToken is (.*)$/, (accessToken) => {
+    if (accessToken === 'valid') {
+      context.headers = HEADERS;
+
+      jest.spyOn(context.jwtService, 'verifyAsync').mockResolvedValue({});
+    }
+
+    if (accessToken === 'not_exist') {
+      context.headers = { 'Content-Type': 'application/json' };
+    }
+
+    if (accessToken === 'expired') {
+      context.headers = HEADERS;
+
+      jest.spyOn(context.jwtService, 'verifyAsync').mockRejectedValue({});
+    }
+
+    if (accessToken === 'null') {
+      context.headers = {
+        'Content-Type': 'application/json',
+        Authorization: null,
+      };
+    }
+  });
+
+  and('the eventid has been provided', () => {
+    context.mock = BODY;
+  });
+
+  // ###### MOB-TC-98 ######
+  given('I am authenticated with a valid accessToken', () => {
+    context.path = PATH;
+
+    context.method = METHOD;
+
+    context.headers = HEADERS;
+
+    context.mock = BODY;
 
     context.jwtService = moduleFixture.get<JwtService>(JwtService);
 
