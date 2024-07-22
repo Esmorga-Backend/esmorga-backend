@@ -73,109 +73,109 @@ export const joinEventSteps: StepDefinitions = ({ given, and }) => {
       .mockResolvedValue(FUTURE_EVENT_MOCK_DB);
   });
 
-  // ###### MOB-TC-54 ######
-  given(/^I am (.*)$/, (authenticatedStatus) => {
-    context.path = PATH;
+  // // ###### MOB-TC-54 ######
+  // given(/^I am (.*)$/, (authenticatedStatus) => {
+  //   context.path = PATH;
 
-    context.method = METHOD;
+  //   context.method = METHOD;
 
-    context.jwtService = moduleFixture.get<JwtService>(JwtService);
+  //   context.jwtService = moduleFixture.get<JwtService>(JwtService);
 
-    context.eventRepository =
-      moduleFixture.get<EventRepository>(EventRepository);
+  //   context.eventRepository =
+  //     moduleFixture.get<EventRepository>(EventRepository);
 
-    context.tokensRepository =
-      moduleFixture.get<TokensRepository>(TokensRepository);
+  //   context.tokensRepository =
+  //     moduleFixture.get<TokensRepository>(TokensRepository);
 
-    context.eventParticipantsRepository =
-      moduleFixture.get<EventParticipantsRepository>(
-        EventParticipantsRepository,
-      );
+  //   context.eventParticipantsRepository =
+  //     moduleFixture.get<EventParticipantsRepository>(
+  //       EventParticipantsRepository,
+  //     );
 
-    if (authenticatedStatus === 'unauthenticated') {
-      jest
-        .spyOn(context.tokensRepository, 'findOneByAccessToken')
-        .mockResolvedValue(null);
-    }
+  //   if (authenticatedStatus === 'unauthenticated') {
+  //     jest
+  //       .spyOn(context.tokensRepository, 'findOneByAccessToken')
+  //       .mockResolvedValue(null);
+  //   }
 
-    if (authenticatedStatus === 'authenticated') {
-      jest
-        .spyOn(context.tokensRepository, 'findOneByAccessToken')
-        .mockResolvedValue(PAIR_OF_TOKENS_MOCK_DB);
-    }
-  });
+  //   if (authenticatedStatus === 'authenticated') {
+  //     jest
+  //       .spyOn(context.tokensRepository, 'findOneByAccessToken')
+  //       .mockResolvedValue(PAIR_OF_TOKENS_MOCK_DB);
+  //   }
+  // });
 
-  and(/^the accessToken is (.*)$/, (accessToken) => {
-    if (accessToken === 'valid') {
-      context.headers = HEADERS;
+  // and(/^the accessToken is (.*)$/, (accessToken) => {
+  //   if (accessToken === 'valid') {
+  //     context.headers = HEADERS;
 
-      jest.spyOn(context.jwtService, 'verifyAsync').mockResolvedValue({});
-    }
+  //     jest.spyOn(context.jwtService, 'verifyAsync').mockResolvedValue({});
+  //   }
 
-    if (accessToken === 'not_exist') {
-      context.headers = { 'Content-Type': 'application/json' };
-    }
+  //   if (accessToken === 'not_exist') {
+  //     context.headers = { 'Content-Type': 'application/json' };
+  //   }
 
-    if (accessToken === 'expired') {
-      context.headers = HEADERS;
+  //   if (accessToken === 'expired') {
+  //     context.headers = HEADERS;
 
-      jest.spyOn(context.jwtService, 'verifyAsync').mockRejectedValue({});
-    }
+  //     jest.spyOn(context.jwtService, 'verifyAsync').mockRejectedValue({});
+  //   }
 
-    if (accessToken === 'null') {
-      context.headers = {
-        'Content-Type': 'application/json',
-        Authorization: null,
-      };
-    }
-  });
+  //   if (accessToken === 'null') {
+  //     context.headers = {
+  //       'Content-Type': 'application/json',
+  //       Authorization: null,
+  //     };
+  //   }
+  // });
 
-  and('the eventid has been provided', () => {
-    context.mock = BODY;
-  });
+  // and('the eventid has been provided', () => {
+  //   context.mock = BODY;
+  // });
 
-  // ###### MOB-TC-98 ######
-  given('I am authenticated with a valid accessToken', () => {
-    context.path = PATH;
+  // // ###### MOB-TC-98 ######
+  // given('I am authenticated with a valid accessToken', () => {
+  //   context.path = PATH;
 
-    context.method = METHOD;
+  //   context.method = METHOD;
 
-    context.headers = HEADERS;
+  //   context.headers = HEADERS;
 
-    context.mock = BODY;
+  //   context.mock = BODY;
 
-    context.jwtService = moduleFixture.get<JwtService>(JwtService);
+  //   context.jwtService = moduleFixture.get<JwtService>(JwtService);
 
-    context.eventRepository =
-      moduleFixture.get<EventRepository>(EventRepository);
+  //   context.eventRepository =
+  //     moduleFixture.get<EventRepository>(EventRepository);
 
-    context.tokensRepository =
-      moduleFixture.get<TokensRepository>(TokensRepository);
+  //   context.tokensRepository =
+  //     moduleFixture.get<TokensRepository>(TokensRepository);
 
-    context.eventParticipantsRepository =
-      moduleFixture.get<EventParticipantsRepository>(
-        EventParticipantsRepository,
-      );
+  //   context.eventParticipantsRepository =
+  //     moduleFixture.get<EventParticipantsRepository>(
+  //       EventParticipantsRepository,
+  //     );
 
-    jest.spyOn(context.jwtService, 'verifyAsync').mockResolvedValue({});
+  //   jest.spyOn(context.jwtService, 'verifyAsync').mockResolvedValue({});
 
-    jest
-      .spyOn(context.tokensRepository, 'findOneByAccessToken')
-      .mockResolvedValue(PAIR_OF_TOKENS_MOCK_DB);
+  //   jest
+  //     .spyOn(context.tokensRepository, 'findOneByAccessToken')
+  //     .mockResolvedValue(PAIR_OF_TOKENS_MOCK_DB);
 
-    jest
-      .spyOn(
-        context.eventParticipantsRepository,
-        'findAndUpdateParticipantsList',
-      )
-      .mockResolvedValue(null);
-  });
+  //   jest
+  //     .spyOn(
+  //       context.eventParticipantsRepository,
+  //       'findAndUpdateParticipantsList',
+  //     )
+  //     .mockResolvedValue(null);
+  // });
 
-  and('i have provided a valid eventId', () => {});
+  // and('i have provided a valid eventId', () => {});
 
-  and('the eventDate has already ended', () => {
-    jest
-      .spyOn(context.eventRepository, 'findByIdentifier')
-      .mockResolvedValue(OLD_EVENT_MOCK_DB);
-  });
+  // and('the eventDate has already ended', () => {
+  //   jest
+  //     .spyOn(context.eventRepository, 'findByIdentifier')
+  //     .mockResolvedValue(OLD_EVENT_MOCK_DB);
+  // });
 };
