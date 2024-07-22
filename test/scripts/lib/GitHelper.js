@@ -27,9 +27,6 @@ class GitHelper {
         });
       });
     }
-    while (this.branchName == '') {
-      console.log('+++\n\n ' + this.branchName);
-    }
   }
   fixedBranchName() {
     this.branchName = new Promise((resolve, reject) => {
