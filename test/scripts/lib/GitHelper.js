@@ -28,10 +28,12 @@ class GitHelper {
       });
     }
   }
-  fixedBranchName() {
+  fixedBranchName(count) {
     this.branchName = new Promise((resolve, reject) => {
       exec(
-        'last_commit=$(git log -3 --format="%H"| awk "NR==2"); branches=$(git branch -r --contains $last_commit); branch_name=$(echo "$branches" | grep -v "HEAD" | head -n 1 | sed "s|origin/||"); echo $branch_name',
+        'last_commit=$(git log -3 --format="%H"| awk "NR==' +
+          count +
+          '"); branches=$(git branch -r --contains $last_commit); branch_name=$(echo "$branches" | grep -v "HEAD" | head -n 1 | sed "s|origin/||"); echo $branch_name',
         (err, stdout, stderr) => {
           if (err) {
             reject(`Error executing git: ${err}`);
