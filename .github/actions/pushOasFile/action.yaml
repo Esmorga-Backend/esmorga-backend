@@ -14,7 +14,8 @@ runs:
 #        run: echo "##[set-output name=branch;]$(git rev-parse --abbrev-ref HEAD)"
          run: echo echo "::set-output name=branch::$(echo ${GITHUB_HEAD_REF})"
       - name: Push OAS to github
-
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
         run: |
 
