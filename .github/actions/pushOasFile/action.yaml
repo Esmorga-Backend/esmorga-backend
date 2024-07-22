@@ -23,6 +23,5 @@ runs:
           git config --global user.name "Pipe"
           git add swagger.json
           git commit -m "swagger.json"
-          git push origin HEAD:${{ github.ref }}
-          #git push origin HEAD:${{ steps.get_branch.outputs.branch }}
+          git push origin HEAD:${{ steps.get_branch.outputs.branch }}
 
