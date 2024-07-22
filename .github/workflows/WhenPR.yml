@@ -56,6 +56,8 @@ jobs:
           uses: ./.github/actions/runE2ETests
         - name: Run Reporting
           uses: ./.github/actions/runReporting
+        - name: Push OAS
+          uses: ./.github/actions/pushOasFile
 
 
 
