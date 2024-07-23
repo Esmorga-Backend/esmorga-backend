@@ -61,13 +61,11 @@ export const joinEventSteps: StepDefinitions = ({ given, and }) => {
       .mockResolvedValue(null);
   });
 
-  and('I am authenticated', () => {});
-
-  and('the accessToken is valid', () => {
+  and('I am authenticated, with valid accessToken and eventId', () => {
     jest.spyOn(context.jwtService, 'verifyAsync').mockResolvedValue({});
   });
 
-  and('the eventId is valid', () => {
+  and('the eventDate has not already ended', () => {
     jest
       .spyOn(context.eventRepository, 'findByIdentifier')
       .mockResolvedValue(FUTURE_EVENT_MOCK_DB);
@@ -134,42 +132,8 @@ export const joinEventSteps: StepDefinitions = ({ given, and }) => {
   //   context.mock = BODY;
   // });
 
-  // // ###### MOB-TC-98 ######
-  // given('I am authenticated with a valid accessToken', () => {
-  //   context.path = PATH;
-
-  //   context.method = METHOD;
-
-  //   context.headers = HEADERS;
-
-  //   context.mock = BODY;
-
-  //   context.jwtService = moduleFixture.get<JwtService>(JwtService);
-
-  //   context.eventRepository =
-  //     moduleFixture.get<EventRepository>(EventRepository);
-
-  //   context.tokensRepository =
-  //     moduleFixture.get<TokensRepository>(TokensRepository);
-
-  //   context.eventParticipantsRepository =
-  //     moduleFixture.get<EventParticipantsRepository>(
-  //       EventParticipantsRepository,
-  //     );
-
-  //   jest.spyOn(context.jwtService, 'verifyAsync').mockResolvedValue({});
-
-  //   jest
-  //     .spyOn(context.tokensRepository, 'findOneByAccessToken')
-  //     .mockResolvedValue(PAIR_OF_TOKENS_MOCK_DB);
-
-  //   jest
-  //     .spyOn(
-  //       context.eventParticipantsRepository,
-  //       'findAndUpdateParticipantsList',
-  //     )
-  //     .mockResolvedValue(null);
-  // });
+  // ###### MOB-TC-98 ######
+  // and('I am authenticated with a valid accessToken', () => {});
 
   // and('i have provided a valid eventId', () => {});
 
