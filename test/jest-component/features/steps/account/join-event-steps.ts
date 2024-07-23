@@ -78,6 +78,47 @@ export const joinEventSteps: StepDefinitions = ({ given, and }) => {
       .mockResolvedValue(OLD_EVENT_MOCK_DB);
   });
 
+  // ###### MOB-TC-54 ######
+  and(
+    /^I am (.*), the accessToken is (.*) and the eventId has been provided$/,
+    (authenticatedStatus, accessToken) => {
+      if (authenticatedStatus === 'unauthenticated') {
+        jest
+          .spyOn(context.tokensRepository, 'findOneByAccessToken')
+          .mockResolvedValue(null);
+      }
+
+      if (authenticatedStatus === 'authenticated') {
+        jest
+          .spyOn(context.tokensRepository, 'findOneByAccessToken')
+          .mockResolvedValue(PAIR_OF_TOKENS_MOCK_DB);
+      }
+
+      if (accessToken === 'valid') {
+        context.headers = HEADERS;
+
+        jest.spyOn(context.jwtService, 'verifyAsync').mockResolvedValue({});
+      }
+
+      if (accessToken === 'not_exist') {
+        context.headers = { 'Content-Type': 'application/json' };
+      }
+
+      if (accessToken === 'expired') {
+        context.headers = HEADERS;
+
+        jest.spyOn(context.jwtService, 'verifyAsync').mockRejectedValue({});
+      }
+
+      if (accessToken === 'null') {
+        context.headers = {
+          'Content-Type': 'application/json',
+          Authorization: null,
+        };
+      }
+    },
+  );
+
   // // ###### MOB-TC-54 ######
   // given(/^I am (.*)$/, (authenticatedStatus) => {
   //   context.path = PATH;
