@@ -71,6 +71,13 @@ export const joinEventSteps: StepDefinitions = ({ given, and }) => {
       .mockResolvedValue(FUTURE_EVENT_MOCK_DB);
   });
 
+  // ###### MOB-TC-98 ######
+  and('the eventDate has already ended', () => {
+    jest
+      .spyOn(context.eventRepository, 'findByIdentifier')
+      .mockResolvedValue(OLD_EVENT_MOCK_DB);
+  });
+
   // // ###### MOB-TC-54 ######
   // given(/^I am (.*)$/, (authenticatedStatus) => {
   //   context.path = PATH;
@@ -130,16 +137,5 @@ export const joinEventSteps: StepDefinitions = ({ given, and }) => {
 
   // and('the eventid has been provided', () => {
   //   context.mock = BODY;
-  // });
-
-  // ###### MOB-TC-98 ######
-  // and('I am authenticated with a valid accessToken', () => {});
-
-  // and('i have provided a valid eventId', () => {});
-
-  // and('the eventDate has already ended', () => {
-  //   jest
-  //     .spyOn(context.eventRepository, 'findByIdentifier')
-  //     .mockResolvedValue(OLD_EVENT_MOCK_DB);
   // });
 };
