@@ -32,8 +32,6 @@ export const joinEventSteps: StepDefinitions = ({ given, and }) => {
 
     context.method = METHOD;
 
-    context.headers = HEADERS;
-
     context.mock = BODY;
 
     context.jwtService = moduleFixture.get<JwtService>(JwtService);
@@ -50,10 +48,6 @@ export const joinEventSteps: StepDefinitions = ({ given, and }) => {
       );
 
     jest
-      .spyOn(context.tokensRepository, 'findOneByAccessToken')
-      .mockResolvedValue(PAIR_OF_TOKENS_MOCK_DB);
-
-    jest
       .spyOn(
         context.eventParticipantsRepository,
         'findAndUpdateParticipantsList',
@@ -62,7 +56,13 @@ export const joinEventSteps: StepDefinitions = ({ given, and }) => {
   });
 
   and('I am authenticated, with valid accessToken and eventId', () => {
+    context.headers = HEADERS;
+
     jest.spyOn(context.jwtService, 'verifyAsync').mockResolvedValue({});
+
+    jest
+      .spyOn(context.tokensRepository, 'findOneByAccessToken')
+      .mockResolvedValue(PAIR_OF_TOKENS_MOCK_DB);
   });
 
   and('the eventDate has not already ended', () => {
