@@ -27,7 +27,7 @@ class GitHelper {
   fixedBranchName(count) {
     this.branchName = new Promise((resolve, reject) => {
       exec(
-        'last_commit=$(git log -3 --format="%H"| awk "NR==' +
+        'last_commit=$(git log -20 --format="%H"| awk "NR==' +
           count +
           '"); branches=$(git branch -r --contains $last_commit); branch_name=$(echo "$branches" | grep -v "HEAD" | head -n 1 | sed "s|origin/||"); echo $branch_name',
         (err, stdout, stderr) => {
