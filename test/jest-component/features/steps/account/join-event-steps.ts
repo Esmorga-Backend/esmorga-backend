@@ -71,13 +71,6 @@ export const joinEventSteps: StepDefinitions = ({ given, and }) => {
       .mockResolvedValue(FUTURE_EVENT_MOCK_DB);
   });
 
-  // ###### MOB-TC-98 ######
-  and('the eventDate has already ended', () => {
-    jest
-      .spyOn(context.eventRepository, 'findByIdentifier')
-      .mockResolvedValue(OLD_EVENT_MOCK_DB);
-  });
-
   // ###### MOB-TC-54 ######
   and(
     /^I am (.*), the accessToken is (.*) and the eventId has been provided$/,
@@ -119,64 +112,17 @@ export const joinEventSteps: StepDefinitions = ({ given, and }) => {
     },
   );
 
-  // // ###### MOB-TC-54 ######
-  // given(/^I am (.*)$/, (authenticatedStatus) => {
-  //   context.path = PATH;
+  // ###### MOB-TC-57 ######
+  and('the eventId is not in the db', () => {
+    jest
+      .spyOn(context.eventRepository, 'findByIdentifier')
+      .mockResolvedValue(null);
+  });
 
-  //   context.method = METHOD;
-
-  //   context.jwtService = moduleFixture.get<JwtService>(JwtService);
-
-  //   context.eventRepository =
-  //     moduleFixture.get<EventRepository>(EventRepository);
-
-  //   context.tokensRepository =
-  //     moduleFixture.get<TokensRepository>(TokensRepository);
-
-  //   context.eventParticipantsRepository =
-  //     moduleFixture.get<EventParticipantsRepository>(
-  //       EventParticipantsRepository,
-  //     );
-
-  //   if (authenticatedStatus === 'unauthenticated') {
-  //     jest
-  //       .spyOn(context.tokensRepository, 'findOneByAccessToken')
-  //       .mockResolvedValue(null);
-  //   }
-
-  //   if (authenticatedStatus === 'authenticated') {
-  //     jest
-  //       .spyOn(context.tokensRepository, 'findOneByAccessToken')
-  //       .mockResolvedValue(PAIR_OF_TOKENS_MOCK_DB);
-  //   }
-  // });
-
-  // and(/^the accessToken is (.*)$/, (accessToken) => {
-  //   if (accessToken === 'valid') {
-  //     context.headers = HEADERS;
-
-  //     jest.spyOn(context.jwtService, 'verifyAsync').mockResolvedValue({});
-  //   }
-
-  //   if (accessToken === 'not_exist') {
-  //     context.headers = { 'Content-Type': 'application/json' };
-  //   }
-
-  //   if (accessToken === 'expired') {
-  //     context.headers = HEADERS;
-
-  //     jest.spyOn(context.jwtService, 'verifyAsync').mockRejectedValue({});
-  //   }
-
-  //   if (accessToken === 'null') {
-  //     context.headers = {
-  //       'Content-Type': 'application/json',
-  //       Authorization: null,
-  //     };
-  //   }
-  // });
-
-  // and('the eventid has been provided', () => {
-  //   context.mock = BODY;
-  // });
+  // ###### MOB-TC-98 ######
+  and('the eventDate has already ended', () => {
+    jest
+      .spyOn(context.eventRepository, 'findByIdentifier')
+      .mockResolvedValue(OLD_EVENT_MOCK_DB);
+  });
 };
