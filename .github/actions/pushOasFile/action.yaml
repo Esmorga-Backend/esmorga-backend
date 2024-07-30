@@ -11,7 +11,7 @@ runs:
       - name: Push OAS to github
         shell: bash
         run: |
-
+          echo ${GITHUB_HEAD_REF} > .github/tmp/branch.txt
           curl http://127.0.0.1:3000/swagger-json -o /tmp/swagger.json
           if ! cmp -s "/tmp/swagger.json" "swagger.json"; then
           cp /tmp/swagger.json swagger.json
