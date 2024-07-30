@@ -26,9 +26,9 @@ export class AuthGuard implements CanActivate {
         throw new InvalidTokenApiError();
       }
 
-      const jstSecret = this.configService.get('JWT_SECRET');
+      const jwtSecret = this.configService.get('JWT_SECRET');
 
-      await this.jwtService.verifyAsync(token, { secret: jstSecret });
+      await this.jwtService.verifyAsync(token, { secret: jwtSecret });
 
       request.headers.authorization = token;
     } catch (error) {

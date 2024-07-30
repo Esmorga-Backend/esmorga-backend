@@ -10,6 +10,5 @@ import { EventSharedModule } from './event-shared.module';
   imports: [EventSharedModule],
   controllers: [EventController],
   providers: [CreateEventService, GetEventListService],
-  exports: [],
 })
 export class EventModule {}
