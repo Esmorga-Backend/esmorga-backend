@@ -22,7 +22,7 @@ runs:
           if ! cmp -s "tmp/branch.txt" ".github/tmp/branch.txt" ; then
           cp /tmp/branch.txt .github/tmp/branch.txt
           git add .github/tmp/branch.txt
-          Push = 1
+          Push=1
           fi
 
           if [ $Push -ne 0 ] ; then
