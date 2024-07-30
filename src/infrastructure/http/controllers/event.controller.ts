@@ -68,6 +68,8 @@ export class EventController {
       );
 
       await this.createEventService.create(createEventDto, requestId);
+
+      return {};
     } catch (error) {
       this.logger.error(
         `[EventController] [createEvent] - x-request-id:${requestId}, error ${error}`,
