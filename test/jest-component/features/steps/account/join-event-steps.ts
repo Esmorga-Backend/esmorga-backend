@@ -66,7 +66,7 @@ export const joinEventSteps: StepDefinitions = ({ given, and }) => {
 
   and('the eventDate has not already ended', () => {
     jest
-      .spyOn(context.eventRepository, 'findByIdentifier')
+      .spyOn(context.eventRepository, 'findById')
       .mockResolvedValue(FUTURE_EVENT_MOCK_DB);
   });
 
@@ -113,15 +113,13 @@ export const joinEventSteps: StepDefinitions = ({ given, and }) => {
 
   // ###### MOB-TC-57 ######
   and('the eventId is not in the db', () => {
-    jest
-      .spyOn(context.eventRepository, 'findByIdentifier')
-      .mockResolvedValue(null);
+    jest.spyOn(context.eventRepository, 'findById').mockResolvedValue(null);
   });
 
   // ###### MOB-TC-98 ######
   and('the eventDate has already ended', () => {
     jest
-      .spyOn(context.eventRepository, 'findByIdentifier')
+      .spyOn(context.eventRepository, 'findById')
       .mockResolvedValue(OLD_EVENT_MOCK_DB);
   });
 };

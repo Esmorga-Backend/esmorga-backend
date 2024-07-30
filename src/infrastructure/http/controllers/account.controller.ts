@@ -111,7 +111,7 @@ export class AccountController {
   async refreshToken(
     @Body() refreshTokenDto: RefreshTokenDto,
     @RequestId() requestId: string,
-  ) {
+  ): Promise<NewPairOfTokensDto> {
     try {
       this.logger.info(
         `[AccountController] [refreshToken] - x-request-id:${requestId}`,

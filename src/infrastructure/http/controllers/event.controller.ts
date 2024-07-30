@@ -61,7 +61,7 @@ export class EventController {
   async createEvent(
     @Body() createEventDto: CreateEventDto,
     @RequestId() requestId: string,
-  ): Promise<Record<string, never>> {
+  ) {
     try {
       this.logger.info(
         `[EventController] [createEvent] - x-request-id:${requestId}`,

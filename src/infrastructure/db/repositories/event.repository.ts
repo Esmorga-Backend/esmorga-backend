@@ -72,7 +72,7 @@ export class EventRepository extends MongoRepository<EventSchema> {
         `[EventRepository] [getEventList] - x-request-id: ${requestId}`,
       );
 
-      const event = await this.findByIdentifier(eventId);
+      const event = await this.findById(eventId);
 
       if (!event) throw new DataBaseNotFoundError();
 

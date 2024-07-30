@@ -59,7 +59,7 @@ export class MongoRepository<E> implements DBRepository<E> {
    * @param id - The ID of the document to update.
    * @returns Promise resolved with the document that matches the id provided.
    */
-  async findByIdentifier(id: string): Promise<E> {
+  async findById(id: string): Promise<E> {
     return this.entityModel.findById({ _id: id });
   }
 
