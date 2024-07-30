@@ -18,6 +18,7 @@ runs:
           git config --global user.email "devops@esmorga.canarte.org"
           git config --global user.name "Pipe"
           git add swagger.json
+          git add .github/tmp/branch.txt
           git commit -m "swagger.json"
           git push origin HEAD:refs/heads/${GITHUB_HEAD_REF}
           fi
