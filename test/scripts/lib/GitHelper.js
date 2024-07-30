@@ -1,4 +1,6 @@
 const { exec } = require('child_process');
+const fs = require('fs');
+
 class GitHelper {
   branchName = '';
   constructor() {
@@ -24,26 +26,14 @@ class GitHelper {
       });
     });
   }
-  fixedBranchName(count) {
-    this.branchName = new Promise((resolve, reject) => {
-      exec(
-        'last_commit=$(git log -20 --format="%H"| awk "NR==' +
-          count +
-          '"); branches=$(git branch -r --contains $last_commit); branch_name=$(echo "$branches" | grep -v "HEAD" | head -n 1 | sed "s|origin/||"); echo $branch_name',
-        (err, stdout, stderr) => {
-          if (err) {
-            reject(`Error executing git: ${err}`);
-            return;
-          }
-          if (stderr) {
-            reject(`Error in git: ${stderr}`);
-            return;
-          }
-          const branchName = stdout.trim();
-          resolve(branchName);
-        },
-      );
-    });
+  fixedBranchName() {
+    try {
+      const data = fs.readFileSync('.github/tmp/branch.txt', 'utf8');
+      console.log(data);
+      branchName = data;
+    } catch (err) {
+      console.error(err);
+    }
   }
 }
 module.exports = GitHelper;
