@@ -33,7 +33,7 @@ runs:
       - name: Push OAS to github
         shell: bash
         run: |
-          if [ $Push -ne 0 ] ; then
+          if ((Push)) ; then
           git config --global user.email "devops@esmorga.canarte.org"
           git config --global user.name "Pipe"
           git commit -m "ADD Files"
