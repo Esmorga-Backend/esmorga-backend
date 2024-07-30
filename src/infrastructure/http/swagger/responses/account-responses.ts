@@ -234,7 +234,7 @@ export const JOIN_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
           example: 'badRequestError',
         },
         status: { type: 'number', example: HttpStatus.BAD_REQUEST },
-        type: { type: 'string', example: PATHS.REFRESH_TOKEN },
+        type: { type: 'string', example: PATHS.JOIN_EVENT },
         detail: {
           type: 'string',
           example: 'some inputs are missing',

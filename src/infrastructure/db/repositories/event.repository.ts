@@ -88,6 +88,9 @@ export class EventRepository extends MongoRepository<EventSchema> {
         `[EventRepository] [getEventList] - x-request-id: ${requestId}, error: ${error}`,
       );
 
+      // In case eventId is malformed from db side for char length
+      if (error.path === '_id') throw new DataBaseNotFoundError();
+
       if (error instanceof HttpException) throw error;
 
       throw new DataBaseInternalError();

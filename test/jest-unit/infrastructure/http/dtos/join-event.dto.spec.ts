@@ -31,7 +31,7 @@ describe('[unit-test] [JoinEventDto]', () => {
       });
     });
 
-    it('Should only accept string values for email field', async () => {
+    it('Should only accept string values for eventId field', async () => {
       const joinEventData = {
         eventId: 123,
       };
