@@ -153,8 +153,6 @@ export class AccountController {
         joinEventDto.eventId,
         requestId,
       );
-
-      return {};
     } catch (error) {
       this.logger.error(
         `[AccountController] [joinEvent] - x-request-id:${requestId}, error ${error}`,
