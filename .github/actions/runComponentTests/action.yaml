@@ -16,10 +16,9 @@ runs:
         - name: Run Reporting
           uses: ./.github/actions/SlackCom
           with: 
-            msg: "Component Test Fails"
+            msg: "Backend Component Test Fails"
             SLACK_WEBHOOK_URL: ${{ inputs.SLACK_WEBHOOK_URL }}
-#          if: failure()
-          if: always()
+          if: failure()
         - name : Upload Results
           shell: bash
           if: always()

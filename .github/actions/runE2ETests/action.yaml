@@ -18,10 +18,9 @@ runs:
         - name: Run Reporting
           uses: ./.github/actions/SlackCom
           with: 
-            msg: "E2E Test Fails"
+            msg: "Backend  E2E Test Fails"
             SLACK_WEBHOOK_URL: ${{ inputs.SLACK_WEBHOOK_URL }}
-#          if: failure()
-          if: always()
+          if: failure()
         - name : Upload Results
           shell: bash
           if: always()
