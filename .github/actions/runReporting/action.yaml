@@ -1,7 +1,7 @@
 name: "Run Component Tests"
 description: "Run Component Tests"
 inputs:
-  token:
+  GITHUB_TOKEN:
     description: 'A Github PAT'
     required: true
 runs:
