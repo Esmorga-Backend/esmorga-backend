@@ -4,6 +4,11 @@ on:
 #Delete this , just for test
 #  pull_request:
 #    types: [opened,reopened,edited,synchronize]
+#    branches:
+#      - main
+#    paths:
+#      - '**'
+
 
   push:
     branches:
@@ -11,74 +16,59 @@ on:
   workflow_dispatch:
   
 jobs:
-  Deploy-QA:
-    name: Run Deploy to QA
-# This filter works, delete it 
-#    if: github.event.pull_request.merged == true
-    runs-on: ubuntu-latest
+    Run-tests-on-Ubuntu:
+      name: Run npm test on Ubuntu
+      runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up Python "pypy3.9"
-        uses: actions/setup-python@v5
-        with:
-          python-version: "pypy3.9"
-      # You can test your matrix by printing the current Python version
-      - name: Display Python version
-        run: python -c "import sys; print(sys.version)"
-      - name: Install dependencies
-        run: python -m pip install --upgrade pip paramiko 
-#      - name: Deploy QA to AWS
-#        run: python .github/workflows/scripts/DeployToEnv.py ec2-34-254-203-250.eu-west-1.compute.amazonaws.com ${{ secrets.SSHRSA}}
-      - name: Deploy QA to ORACLE
-        run: python .github/workflows/scripts/DeployToEnv.py 138.2.157.83 ${{ secrets.SSHRSA}}
+      env:
+        APP_PORT: 3000
+        MONGODB_URI: "mongodb://localhost:27017/esmorga"
 
-  Run-e2e-on-Ubuntu:
-    needs: Deploy-QA
-    name: Run E2E test on Ubuntu
-    runs-on: ubuntu-latest
-    env:
-      AIO_TOKEN: "${{ secrets.AIO_TOKEN }}"
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22.1'
-      - run: npm ci
-      - run: npm run test:e2e-run-cypress
-        id: test-cypress
-      - name: Send custom JSON data to Slack workflow
-        if: steps.test-cypress.outcome != 'success'
-        uses: slackapi/slack-github-action@v1.26.0
-        with:
-          # This data can be any valid JSON from a previous step in the GitHub Action
-          payload: |
-            {
-              "msg": "Cypress Test Fail"
-            }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        NODE_ENV: LOCAL"
+        JWT_SECRET: ${{ secrets.JWT_SECRET }}
+        ACCESS_TOKEN_TTL: 600
+        MAX_PAIR_OF_TOKEN: 5
+        AIO_TOKEN: ${{ secrets.AIO_TOKEN }}
+        CYPRESS_BASE_URL: http://localhost:3000/
+        POSTMAN_TOKEN: ${{ secrets.postmanToken }}
+        DNS_NAME: http://localhost:3000
+        SSHRSA: ${{ secrets.SSHRSA}}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  Run-postman-on-Ubuntu:
-    needs: Deploy-QA
-    name: Run Postman test on Ubuntu
-    runs-on: ubuntu-latest
-    steps:
-      - name: Sleep for 30 seconds (need to wait for start server)
-        run: sleep 30
-      - run: curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
-      - run: postman login --with-api-key ${{ secrets.postmanToken }}
-      - run: postman collection run 25091136-0af5bd1f-1b37-450c-b138-b961128c40ec -e 25091136-b857199d-2fd0-43c3-a231-24249d76d33f
-        id: test-postman
-      - name: Send custom JSON data to Slack workflow
-        if: steps.test-postman.outcome != 'success'
-        uses: slackapi/slack-github-action@v1.26.0
-        with:
-          # This data can be any valid JSON from a previous step in the GitHub Action
-          payload: |
-            {
-              "msg": "Postman Test Fail"
-            }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-      
+      steps:
+        - name: Start MongoDB
+          uses: supercharge/mongodb-github-action@1.11.0
+          with:
+            mongodb-version: '7.0'
+            mongodb-db: esmorga
+            mongodb-port: 27017
+        - uses: actions/checkout@v4
+        - uses: actions/setup-node@v4
+          with:
+            node-version: '22.1'
+
+        - run: npm ci
+        - run: npm run test:create:cycle
+        - name: Checkout repository
+          uses: actions/checkout@v2
+        - name: Run Unit Tests
+          uses: ./.github/actions/runUnitTests
+        - name: Run Component Tests
+          uses: ./.github/actions/runComponentTests
+        - name: Run Service
+          uses: ./.github/actions/runService
+        - name: Run Postman
+          uses: ./.github/actions/runPostmanTests
+        - name: Run E2E Tests
+          uses: ./.github/actions/runE2ETests
+#        - name: Deploy to QA
+#          uses: ./.github/actions/DeployToQA
+        - name: Set up Python "pypy3.9"
+          uses: actions/setup-python@v5
+          with:
+            python-version: "pypy3.9"
+        - name: Install dependencies And Deploy to QA
+          shell: bash
+          run: |
+            python -m pip install --upgrade pip paramiko 
+            python .github/workflows/scripts/DeployToEnv.py qa.esmorga.canarte.org ${{ secrets.SSHRSA}}
