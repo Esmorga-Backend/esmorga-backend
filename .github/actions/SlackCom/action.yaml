@@ -22,4 +22,4 @@ runs:
               "msg": ${{ inputs.msg }}
             }
         env:
-          SLACK_WEBHOOK_URL: ${{ input.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_URL: ${{ inputs.SLACK_WEBHOOK_URL }}

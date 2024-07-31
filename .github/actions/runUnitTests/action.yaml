@@ -17,7 +17,7 @@ runs:
           uses: ./.github/actions/SlackCom
           with: 
             msg: "Unit Test Fails"
-            SLACK_WEBHOOK_URL: ${{ input.SLACK_WEBHOOK_URL }}
+            SLACK_WEBHOOK_URL: ${{ inputs.SLACK_WEBHOOK_URL }}
 #          if: failure()
           if: always()
 
