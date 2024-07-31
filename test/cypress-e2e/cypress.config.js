@@ -14,7 +14,7 @@ module.exports = defineConfig({
 
   reporter: 'junit',
   reporterOptions: {
-    mochaFile: 'report/cypress-e2e.xml',
+    mochaFile: 'report/junit-e2e.xml',
     toConsole: false,
     useFullSuiteTitle: false,
     testCaseSwitchClassnameAndName: true,

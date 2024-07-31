@@ -11,3 +11,7 @@ runs:
           run: |
            npm ci
            npm run test:e2e-run-cypress
+        - name : Upload Results
+          shell: bash
+          if: always()
+          run: node test/scripts/features-tool.js report/junit-e2e.xml --Upload-Results 
