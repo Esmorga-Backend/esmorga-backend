@@ -74,6 +74,7 @@
     "jest": "^29.5.0",
     "jest-cucumber": "^4.4.0",
     "jest-json-schema": "^6.1.0",
+    "jest-junit": "^16.0.0",
     "mongo-migrate-ts": "^1.4.0",
     "nyc": "^15.1.0",
     "prettier": "^3.0.0",

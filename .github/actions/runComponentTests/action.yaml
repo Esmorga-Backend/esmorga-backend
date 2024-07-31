@@ -1,5 +1,9 @@
 name: "Run Component Tests"
 description: "Run Component Tests"
+inputs:
+  SLACK_WEBHOOK_URL:
+    description: 'URL'
+    required: true
 runs:
   using: "composite"
   steps:
@@ -9,3 +13,13 @@ runs:
         - name: Run tests now
           run: npm run test:cov:component
           shell: bash
+        - name: Run Reporting
+          uses: ./.github/actions/SlackCom
+          with: 
+            msg: "Backend Component Test Fails"
+            SLACK_WEBHOOK_URL: ${{ inputs.SLACK_WEBHOOK_URL }}
+          if: failure()
+        - name : Upload Results
+          shell: bash
+          if: always()
+          run: node test/scripts/features-tool.js report/junit-component.xml --Upload-Results

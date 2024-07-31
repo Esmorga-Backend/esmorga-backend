@@ -6,6 +6,11 @@ inputs:
     description: 'What to send'
     required: true
     default: 'Is this an error?'
+  SLACK_WEBHOOK_URL:
+    description: 'URL'
+    required: true
+
+
 runs:
   using: "composite"
   steps:
@@ -14,7 +19,7 @@ runs:
         with:
           payload: |
             {
-              "msg": ${{ inputs.msg }}
+              "msg": "${{ inputs.msg }}"
             }
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_URL: ${{ inputs.SLACK_WEBHOOK_URL }}

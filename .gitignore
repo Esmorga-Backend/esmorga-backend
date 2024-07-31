@@ -57,5 +57,7 @@ test/cypress-e2e/cypress/e2e/features/MOB_Feature.feature
 jest.config.json
 
 
+report/junit-component.xml
 test/cypress-e2e/cypress/e2e/screenshots
 test/cypress-e2e/cypress/e2e/downloads
+report/*

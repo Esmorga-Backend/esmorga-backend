@@ -30,7 +30,7 @@ class GitHelper {
     try {
       const data = fs.readFileSync('.github/tmp/branch.txt', 'utf8');
       console.log(data);
-      branchName = data;
+      this.branchName = data;
     } catch (err) {
       console.error(err);
     }

@@ -2,6 +2,7 @@ const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
 const AdmZip = require('adm-zip');
+const FormData = require('form-data');
 
 class Aio {
   constructor() {
@@ -174,7 +175,6 @@ class Aio {
           return cy.key;
         }
       }
-      return;
     } catch (error) {
       console.error('Error:', error);
       console.error(onErrorMsg);
@@ -213,6 +213,42 @@ class Aio {
     try {
       const response = await req.get(url);
       return response.data;
+    } catch (error) {
+      console.error('Error:', error);
+      console.error(onErrorMsg);
+      process.exit(1);
+    }
+  }
+  async UploadResults(cyKey, onErrorMsg) {
+    const url =
+      'https://tcms.aiojiraapps.com/aio-tcms/api/v1/project/MOB/testcycle/' +
+      cyKey +
+      '/import/results?type=JUnit';
+
+    try {
+      const data = new FormData();
+      data.append('bddForceUpdateCase', 'false');
+      data.append('forceUpdateCase', 'false');
+      data.append('updateDatasets', 'false');
+      data.append('createNewRun', 'false');
+      data.append('createCase', 'false');
+      data.append('addCaseToCycle', 'false');
+      data.append('file', fs.createReadStream(process.argv[2]));
+
+      var config = {
+        method: 'post',
+        url: url,
+        headers: {
+          accept: 'application/json;charset=utf-8',
+          Authorization: `AioAuth ${process.env.AIO_TOKEN}`,
+          'Content-Type': 'multipart/form-data',
+          ...data.getHeaders(),
+        },
+        data: data,
+      };
+      axios(config).then(function (response) {
+        console.log(JSON.stringify(response.data));
+      });
     } catch (error) {
       console.error('Error:', error);
       console.error(onErrorMsg);
