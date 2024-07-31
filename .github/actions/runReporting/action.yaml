@@ -1,7 +1,5 @@
 name: "Run Component Tests"
 description: "Run Component Tests"
-permissions:
-  contents: write  
 inputs:
   GITHUB_TOKEN:
     description: 'A Github PAT'
@@ -9,10 +7,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-        - name: Checkout repository
-          uses: actions/checkout@v2
-          with:
-            fetch-depth: 0 
         - name: Install dependencies
           run: npm ci
           shell: bash

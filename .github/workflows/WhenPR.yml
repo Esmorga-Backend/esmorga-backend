@@ -15,7 +15,8 @@ jobs:
       name: Run npm test on Ubuntu
       runs-on: ubuntu-latest
       permissions:
-        contents: write  
+        contents: write
+        pull-requests: write
       env:
         APP_PORT: 3000
         MONGODB_URI: "mongodb://localhost:27017/esmorga"
