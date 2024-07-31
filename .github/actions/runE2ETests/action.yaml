@@ -1,5 +1,9 @@
 name: "Run E2E Tests"
 description: "Run E2E Tests"
+inputs:
+  SLACK_WEBHOOK_URL:
+    description: 'URL'
+    required: true
 runs:
   using: "composite"
   steps:
@@ -11,6 +15,13 @@ runs:
           run: |
            npm ci
            npm run test:e2e-run-cypress
+        - name: Run Reporting
+          uses: ./.github/actions/SlackCom
+          with: 
+            msg: "E2E Test Fails"
+            SLACK_WEBHOOK_URL: ${{ inputs.SLACK_WEBHOOK_URL }}
+#          if: failure()
+          if: always()
         - name : Upload Results
           shell: bash
           if: always()
