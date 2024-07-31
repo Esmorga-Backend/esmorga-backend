@@ -47,6 +47,8 @@ jobs:
           uses: actions/checkout@v2
         - name: Run Unit Tests
           uses: ./.github/actions/runUnitTests
+          with:
+            SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         - name: Run Component Tests
           uses: ./.github/actions/runComponentTests
         - name: Run Service

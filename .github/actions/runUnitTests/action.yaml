@@ -1,5 +1,9 @@
 name: "Run Unit Tests"
 description: "Run Unit Tests"
+inputs:
+  SLACK_WEBHOOK_URL:
+    description: 'URL'
+    required: true
 runs:
   using: "composite"
   steps:
@@ -9,7 +13,15 @@ runs:
         - name: Run tests now
           run: npm run test:cov:unit
           shell: bash
+        - name: Run Reporting
+          uses: ./.github/actions/SlackCom
+          with: 
+            msg: "Unit Test Fails"
+            SLACK_WEBHOOK_URL: ${{ input.SLACK_WEBHOOK_URL }}
+#          if: failure()
+          if: always()
+
         - name : Upload Results
           shell: bash
           if: always()
-          run: node test/scripts/features-tool.js report/junit-unit.xml --Upload-Results 
+          run: node test/scripts/features-tool.js report/junit-unit.xml --Upload-Results
