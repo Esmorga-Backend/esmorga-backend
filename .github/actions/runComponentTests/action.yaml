@@ -9,3 +9,6 @@ runs:
         - name: Run tests now
           run: npm run test:cov:component
           shell: bash
+        - name : Upload Results
+          if: failure() && steps.component-tests.outcome == 'failure'
+          run: node test/scripts/features-tool.js report/junit-component.xml --Upload-Results
