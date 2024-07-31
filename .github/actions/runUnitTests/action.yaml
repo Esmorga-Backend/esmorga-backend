@@ -9,3 +9,7 @@ runs:
         - name: Run tests now
           run: npm run test:cov:unit
           shell: bash
+        - name : Upload Results
+          shell: bash
+          if: always()
+          run: node test/scripts/features-tool.js report/junit-unit.xml --Upload-Results 

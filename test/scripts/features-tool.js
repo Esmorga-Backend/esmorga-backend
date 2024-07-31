@@ -29,9 +29,12 @@ if (process.argv.includes('--help')) {
 
 async function main() {
   try {
-    let branchName = await git.getBranchName();
-    let counter = 0;
-
+    let branchName = '';
+    if (process.env.GITHUB_HEAD_REF) {
+      branchName = process.env.GITHUB_HEAD_REF;
+    } else {
+      branchName = await git.getBranchName();
+    }
     if (branchName == 'main') {
       git.fixedBranchName(counter);
       branchName = await git.getBranchName();
