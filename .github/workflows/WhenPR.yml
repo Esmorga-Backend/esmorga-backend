@@ -1,5 +1,5 @@
 name: Run  Unit & Component Tests
-run-name: ${{ github.actor }} is testing PR new code 🚀
+run-name: ${{ github.actor }} is testing PR ${{ github.ref }} new code 🚀
 on:
   pull_request:
     types: [opened,reopened,edited,synchronize]
