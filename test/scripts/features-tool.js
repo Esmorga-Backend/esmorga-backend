@@ -36,7 +36,7 @@ async function main() {
       branchName = await git.getBranchName();
     }
     if (branchName == 'main') {
-      git.fixedBranchName(counter);
+      git.fixedBranchName();
       branchName = await git.getBranchName();
       console.log(branchName);
     }
