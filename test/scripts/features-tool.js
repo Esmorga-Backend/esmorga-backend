@@ -31,8 +31,8 @@ async function main() {
   try {
     let branchName = await git.getBranchName();
     let counter = 0;
-    while (branchName == 'main' && counter < 20) {
-      counter = counter + 1;
+
+    if (branchName == 'main') {
       git.fixedBranchName(counter);
       branchName = await git.getBranchName();
       console.log(branchName);
