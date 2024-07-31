@@ -1,5 +1,7 @@
 name: "Run Component Tests"
 description: "Run Component Tests"
+permissions:
+  contents: write  
 inputs:
   GITHUB_TOKEN:
     description: 'A Github PAT'
