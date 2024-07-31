@@ -35,7 +35,6 @@ async function main() {
     if (branchName == 'main') {
       git.fixedBranchName(counter);
       branchName = await git.getBranchName();
-      console.log(branchName);
     }
     const usName = features.getUsNameFromBranch(branchName);
 
