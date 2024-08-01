@@ -18,14 +18,7 @@ import {
   ValidationOptions,
   registerDecorator,
 } from 'class-validator';
-
-export enum EventType {
-  PARTY = 'Party',
-  SPORT = 'Sport',
-  FOOD = 'Food',
-  CHARITY = 'Charity',
-  GAMES = 'Games',
-}
+import { EVENT_TYPE } from '../../../domain/consts';
 
 function isValidISODate(eventDate: string): boolean {
   const [datePart, timePartWithZ] = eventDate.split('T');
@@ -152,12 +145,12 @@ export class CreateEventDto {
 
   @ApiProperty({
     example: 'Party',
-    enum: EventType,
+    enum: EVENT_TYPE,
   })
-  @IsEnum(EventType)
+  @IsEnum(EVENT_TYPE)
   @IsString()
   @IsNotEmpty()
-  eventType: EventType;
+  eventType: EVENT_TYPE;
 
   @ApiPropertyOptional({ example: 'image.url', maxLength: 500 })
   @MaxLength(500, {

@@ -9,6 +9,7 @@ import {
   IsOptional,
 } from 'class-validator';
 import { Expose, Transform, Type } from 'class-transformer';
+import { EVENT_TYPE } from '../../domain/consts';
 
 class LocationDto {
   @Expose()
@@ -72,7 +73,7 @@ export class EventDto {
   @IsString()
   @ApiProperty({
     example: 'Party',
-    enum: ['Party', 'Sport', 'Food', 'Charity', 'Games'],
+    enum: EVENT_TYPE,
   })
   eventType: string;
 
