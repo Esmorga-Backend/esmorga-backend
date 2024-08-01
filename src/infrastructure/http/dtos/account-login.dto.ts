@@ -12,11 +12,11 @@ export class AccountLoginDto {
   )
   @IsString()
   @IsNotEmpty()
-  @ApiProperty({ example: 'esmorga.test.01@yopmail.com' })
+  @ApiProperty({ example: 'esmorga.test.01@yopmail.com', maxLength: 100 })
   email: string;
 
   @IsString()
   @IsNotEmpty()
-  @ApiProperty({ example: 'Password01' })
+  @ApiProperty({ example: 'Password01', minLength: 8, maxLength: 50 })
   password: string;
 }
