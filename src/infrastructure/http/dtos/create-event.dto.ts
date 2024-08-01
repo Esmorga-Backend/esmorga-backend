@@ -94,7 +94,12 @@ class CreateEventLocationDto {
     message: 'lat must be defined if long is already define',
   })
   @ValidateIf((location) => location.long)
-  @ApiPropertyOptional({ example: 43.35525182148881 })
+  @ApiPropertyOptional({
+    example: 43.35525182148881,
+    maximum: 90,
+    minimum: -90,
+    description: 'GPS Latitude',
+  })
   lat?: number;
 
   @IsNumber({}, { message: 'long must be a number' })
@@ -102,7 +107,12 @@ class CreateEventLocationDto {
     message: 'long must be defined if lat is already define',
   })
   @ValidateIf((location) => location.lat)
-  @ApiPropertyOptional({ example: -8.41937931298951 })
+  @ApiPropertyOptional({
+    example: -8.41937931298951,
+    maximum: 180,
+    minimum: -180,
+    description: 'GPS Longitude',
+  })
   long?: number;
 }
 
@@ -118,7 +128,7 @@ export class CreateEventDto {
   @IsNotEmpty()
   eventName: string;
 
-  @ApiProperty({ example: '2025-03-08T10:05:30.915Z' })
+  @ApiProperty({ example: '2025-03-08T10:05:30.915Z', format: 'date-time' })
   @IsNotPastDate({ message: 'eventDate cannot be in the past' })
   @IsValidDate({ message: 'eventDate must be valid' })
   @Matches(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/, {
@@ -140,7 +150,10 @@ export class CreateEventDto {
   @IsNotEmpty()
   description: string;
 
-  @ApiProperty({ example: 'Party' })
+  @ApiProperty({
+    example: 'Party',
+    enum: EventType,
+  })
   @IsEnum(EventType)
   @IsString()
   @IsNotEmpty()
