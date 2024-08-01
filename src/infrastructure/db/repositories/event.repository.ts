@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { plainToClass } from 'class-transformer';
@@ -6,9 +6,10 @@ import { PinoLogger } from 'nestjs-pino';
 import { EventDto } from '../../dtos';
 import { MongoRepository } from './mongo.repository';
 import { Event as EventSchema } from '../schema';
-import { DataBaseInternalError } from '../errors';
+import { DataBaseInternalError, DataBaseNotFoundError } from '../errors';
 import { CreateEventDto } from '../../http/dtos';
-import { validateObjectDto, REQUIRED_FIELDS } from '../services';
+import { validateObjectDto } from '../services';
+import { REQUIRED_DTO_FIELDS } from '../consts';
 
 @Injectable()
 export class EventRepository extends MongoRepository<EventSchema> {
@@ -50,7 +51,7 @@ export class EventRepository extends MongoRepository<EventSchema> {
           excludeExtraneousValues: true,
         });
 
-        validateObjectDto(eventDto, REQUIRED_FIELDS.EVENTS);
+        validateObjectDto(eventDto, REQUIRED_DTO_FIELDS.EVENTS);
 
         return eventDto;
       });
@@ -60,6 +61,37 @@ export class EventRepository extends MongoRepository<EventSchema> {
       this.logger.error(
         `[EventRepository] [getEventList] - x-request-id:${requestId}, error ${error}`,
       );
+
+      throw new DataBaseInternalError();
+    }
+  }
+
+  async getEvent(eventId: string, requestId?: string): Promise<EventDto> {
+    try {
+      this.logger.info(
+        `[EventRepository] [getEventList] - x-request-id: ${requestId}`,
+      );
+
+      const event = await this.findById(eventId);
+
+      if (!event) throw new DataBaseNotFoundError();
+
+      const eventDto: EventDto = plainToClass(EventDto, event, {
+        excludeExtraneousValues: true,
+      });
+
+      validateObjectDto(eventDto, REQUIRED_DTO_FIELDS.EVENTS);
+
+      return eventDto;
+    } catch (error) {
+      this.logger.error(
+        `[EventRepository] [getEventList] - x-request-id: ${requestId}, error: ${error}`,
+      );
+
+      // In case eventId is malformed from db side for char length
+      if (error.path === '_id') throw new DataBaseNotFoundError();
+
+      if (error instanceof HttpException) throw error;
 
       throw new DataBaseInternalError();
     }

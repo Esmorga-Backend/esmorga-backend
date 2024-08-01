@@ -34,6 +34,16 @@ export class MongoRepository<E> implements DBRepository<E> {
   }
 
   /**
+   * Find documents by accessToken.
+   *
+   * @param accessToken - The accessToken to find.
+   * @returns Promise resolved with the document that matches the accessToken provided.
+   */
+  async findOneByAccessToken(accessToken: string): Promise<E> {
+    return this.entityModel.findOne({ accessToken: { $eq: accessToken } });
+  }
+
+  /**
    * Find a document by email field.
    *
    * @param email - The email value to find.
@@ -41,6 +51,31 @@ export class MongoRepository<E> implements DBRepository<E> {
    */
   async findOneByEmail(email: string): Promise<E> {
     return this.entityModel.findOne({ email: { $eq: email } });
+  }
+
+  /**
+   * Find a document by ID.
+   *
+   * @param id - The ID of the document to update.
+   * @returns Promise resolved with the document that matches the id provided.
+   */
+  async findById(id: string): Promise<E> {
+    return this.entityModel.findById({ _id: id });
+  }
+
+  /**
+   * Find a document with that eventId and add the userId as participant if it has not been added yet. Also
+   * if the document has not been created, create a new one with this data.
+   *
+   * @param eventId - Event identificator.
+   * @param userId - User identificator to add as participant.
+   */
+  async findAndUpdateParticipantsList(eventId: string, userId: string) {
+    await this.entityModel.findOneAndUpdate(
+      { eventId },
+      { $addToSet: { participants: userId } },
+      { new: true, upsert: true },
+    );
   }
 
   /**

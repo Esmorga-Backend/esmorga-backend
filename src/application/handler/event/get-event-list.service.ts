@@ -19,7 +19,7 @@ export class GetEventListService {
   async find(requestId?: string): Promise<EventListDto> {
     try {
       this.logger.info(
-        '[GetEventListService] [find] - x-request-id:${requestId}',
+        `[GetEventListService] [find] - x-request-id: ${requestId}`,
       );
 
       const events: EventDto[] = await this.eventRepository.getEventList();
@@ -32,7 +32,7 @@ export class GetEventListService {
       };
     } catch (error) {
       this.logger.error(
-        `[GetEventListService] [find] - x-request-id:${requestId}, error ${error}`,
+        `[GetEventListService] [find] - x-request-id: ${requestId}, error: ${error}`,
       );
 
       throw error;

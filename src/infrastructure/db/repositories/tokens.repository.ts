@@ -100,6 +100,35 @@ export class TokensRepository extends MongoRepository<TokensSchema> {
     }
   }
 
+  async getPairOfTokensByAccessToken(
+    acessToken: string,
+    requestId?: string,
+  ): Promise<PairOfTokensDto> {
+    try {
+      this.logger.info(
+        `[TokensRepository] [getPairOfTokensByAcessToken] - x-request-id: ${requestId}`,
+      );
+
+      const tokenData = await this.findOneByAccessToken(acessToken);
+
+      if (!tokenData) throw new DataBaseUnathorizedError();
+
+      const pairOfTokens = plainToClass(PairOfTokensDto, tokenData, {
+        excludeExtraneousValues: true,
+      });
+
+      return pairOfTokens;
+    } catch (error) {
+      this.logger.error(
+        `[TokensRepository] [getPairOfTokensByAcessToken] - x-request-id: ${requestId}, error: ${error}`,
+      );
+
+      if (error instanceof HttpException) throw error;
+
+      throw new DataBaseInternalError();
+    }
+  }
+
   async removeTokensById(id: string, requestId?: string) {
     try {
       this.logger.info(
