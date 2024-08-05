@@ -1,10 +1,8 @@
 import ApiBasics from '../api_basic';
-import ApiLogin from './api_login';
-const api_login = new ApiLogin();
 
 class ApiJoinEvent extends ApiBasics {
   #url = 'v1/account/events';
-  #eventId = '66697f9a3c001d5dfd76bd4d';
+  #eventId = '66b0adc97e30c9228d2b36e3';
   #accessToken = '';
   constructor() {
     super();
