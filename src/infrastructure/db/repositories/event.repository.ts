@@ -4,11 +4,12 @@ import { Model } from 'mongoose';
 import { plainToClass } from 'class-transformer';
 import { PinoLogger } from 'nestjs-pino';
 import { EventDto } from '../../dtos';
+import { CreateEventDto } from '../../http/dtos';
 import { MongoRepository } from './mongo.repository';
 import { Event as EventSchema } from '../schema';
 import { DataBaseBadRequestError, DataBaseInternalError } from '../errors';
-import { CreateEventDto } from '../../http/dtos';
 import { validateObjectDto, REQUIRED_FIELDS } from '../services';
+import { getNullFields } from '../../../domain/services';
 
 @Injectable()
 export class EventRepository extends MongoRepository<EventSchema> {
@@ -62,6 +63,8 @@ export class EventRepository extends MongoRepository<EventSchema> {
         `[EventRepository] [findOneByEventId] - x-request-id: ${requestId}, error: ${error}`,
       );
 
+      if (error.path === '_id') throw new DataBaseBadRequestError();
+
       if (error instanceof HttpException) throw error;
 
       throw new DataBaseInternalError();
@@ -96,30 +99,41 @@ export class EventRepository extends MongoRepository<EventSchema> {
     }
   }
 
-  //TODO: Cambiar TODO
   async updateEvent(
-    eventToUpdate, //TODO: UpdateEventDto,
+    uuid: string,
+    eventId: string,
+    fieldsToUpdate: object,
     requestId?: string,
-    // ): Promise<EventDto> {
-  ) {
+  ): Promise<EventDto> {
     try {
       this.logger.info(
-        `[EventRepository] [getEventList] - x-request-id: ${requestId}`,
+        `[EventRepository] [updateEvent] - x-request-id: ${requestId}, eventId: ${eventId}`,
       );
 
-      // const event = await this.findOneById(eventToUpdate);
+      const nullFields = getNullFields(fieldsToUpdate);
 
-      // const adaptedEvents: EventDto = plainToClass(EventDto, event, {
-      //   excludeExtraneousValues: true,
-      // });
+      if (Object.keys(nullFields).length > 0) {
+        await this.removeFieldsById(eventId, nullFields);
+        Object.keys(nullFields).forEach((key) => {
+          delete fieldsToUpdate[key];
+        });
+      }
 
-      // validateObjectDto(adaptedEvents, REQUIRED_FIELDS.EVENTS);
+      const updatedEvent = await this.updateById(eventId, {
+        ...fieldsToUpdate,
+        updatedBy: uuid,
+      });
 
-      // return adaptedEvents;
-      return 'hola';
+      const adaptedEvent: EventDto = plainToClass(EventDto, updatedEvent, {
+        excludeExtraneousValues: true,
+      });
+
+      validateObjectDto(adaptedEvent, REQUIRED_FIELDS.EVENTS);
+
+      return adaptedEvent;
     } catch (error) {
       this.logger.error(
-        `[EventRepository] [getEventList] - x-request-id: ${requestId}, error: ${error}`,
+        `[EventRepository] [updateEvent] - x-request-id: ${requestId}, error: ${error}`,
       );
 
       throw new DataBaseInternalError();

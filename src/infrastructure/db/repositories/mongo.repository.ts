@@ -13,15 +13,14 @@ export class MongoRepository<E> implements DBRepository<E> {
     return this.entityModel.find();
   }
 
-  //TODO: Cambiar comentarios
   /**
    * Find documents by accesToken.
    *
-   * @param uuid - The uuid to find.
-   * @returns Promise resolved with the documents that match uuid provided.
+   * @param accessToken - The accesToken to find.
+   * @returns Promise resolved with the document that match accesToken provided.
    */
-  async findOneByAccessToken(accesToken: string): Promise<E> {
-    return this.entityModel.findOne({ accesToken: { $eq: accesToken } });
+  async findOneByAccessToken(accessToken: string): Promise<E> {
+    return this.entityModel.findOne({ accessToken: { $eq: accessToken } });
   }
 
   /**
@@ -31,7 +30,7 @@ export class MongoRepository<E> implements DBRepository<E> {
    * @returns Promise resolved with the document that matches the id provided.
    */
   async findOneById(id: string): Promise<E> {
-    return this.entityModel.findOne({ _id: { $eq: id } });
+    return this.entityModel.findById({ _id: id });
   }
 
   /**
@@ -74,13 +73,32 @@ export class MongoRepository<E> implements DBRepository<E> {
   }
 
   /**
+   * Remove document fields by ID.
+   *
+   * @param id - The ID of the document to remove fields.
+   * @param data - The data to remove.
+   */
+  async removeFieldsById(id: string, data: object): Promise<E> {
+    return this.entityModel.findOneAndUpdate(
+      { _id: id },
+      { $unset: data },
+      { new: true },
+    );
+  }
+
+  /**
    * Update a document by ID.
    *
    * @param id - The ID of the document to update.
    * @param data - The data to update the document.
    */
-  async updateById(id: string, data) {
-    await this.entityModel.updateOne({ _id: id }, data);
+  async updateById(id: string, data: object): Promise<E> {
+    const evento = await this.entityModel.findOneAndUpdate(
+      { _id: id },
+      { $set: data },
+      { new: true },
+    );
+    return evento;
   }
 
   /**

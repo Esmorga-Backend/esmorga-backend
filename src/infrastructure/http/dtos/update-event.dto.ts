@@ -48,22 +48,6 @@ function isValidISODate(eventDate: string): boolean {
   );
 }
 
-function IsNotNull(validationOptions?: ValidationOptions) {
-  return function (target: object, propertyName: string) {
-    registerDecorator({
-      target: target.constructor,
-      propertyName: propertyName,
-      options: validationOptions,
-      constraints: [],
-      validator: {
-        validate(value: any) {
-          return typeof value === 'string' && isValidISODate(value);
-        },
-      },
-    });
-  };
-}
-
 function IsValidDate(validationOptions?: ValidationOptions) {
   return function (target: object, propertyName: string) {
     registerDecorator({
@@ -155,7 +139,6 @@ export class UpdateEventDto {
   })
   @MaxLength(5000, { message: 'description must have max 5000 characters' })
   @IsString()
-  @IsNotEmpty()
   @IsOptional()
   description: string;
 

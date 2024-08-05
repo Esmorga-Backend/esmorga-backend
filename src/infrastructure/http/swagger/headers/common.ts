@@ -1,6 +1,6 @@
 export const ACCESS_TOKEN = {
   name: 'Authorization',
-  description: 'Bearer {{accessToken}}',
+  description: 'Bearer accessToken',
 };
 
 export const CONTENT_TYPE = {

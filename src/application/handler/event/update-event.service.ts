@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { PinoLogger } from 'nestjs-pino';
+import { EventDto } from '../../../infrastructure/dtos';
 import { UpdateEventDto } from '../../../infrastructure/http/dtos';
+import { USER_ROLE } from '../../../domain/user-const';
 import {
   DataBaseBadRequestError,
-  DataBaseForbiddenError,
   DataBaseUnathorizedError,
 } from '../../../infrastructure/db/errors';
 import {
@@ -11,7 +12,6 @@ import {
   EventRepository,
   TokensRepository,
 } from '../../../infrastructure/db/repositories';
-import { EventDto } from '../../../infrastructure/dtos';
 import {
   InvalidEventIdApiError,
   InvalidRoleApiError,
@@ -38,33 +38,33 @@ export class UpdateEventService {
     accessToken: string,
     updateEventDto: UpdateEventDto,
     requestId?: string,
-    // ): Promise<EventDto> {
-  ) {
+  ): Promise<EventDto> {
     try {
       this.logger.info(
         `[UpdateEventService] [update] - x-request-id:${requestId}`,
       );
 
-      const { eventId } = updateEventDto;
-
-      //TODO - El evento existe ✅
-      const eventToUpdate = await this.eventRepository.findOneByEventId(
-        eventId,
-        requestId,
-      );
-
-      //TODO - El accessToken existe ✅
-      const { uuid } = await this.tokensRepository.getTokenDataByAccessToken(
+      const { uuid } = await this.tokensRepository.getPairOfTokensByAccessToken(
         accessToken,
         requestId,
       );
 
-      //TODO - Si es admin o que ✅
-      await this.accountRepository.checkRoleById(uuid, requestId);
+      const { role } = await this.accountRepository.getUserById(
+        uuid,
+        requestId,
+      );
 
-      //TODO - Mandar la info del nuevo evento
-      const updatedEvent =
-        await this.eventRepository.updateEvent(eventToUpdate);
+      if (role !== USER_ROLE.ADMIN) throw new InvalidRoleApiError();
+
+      const { eventId } = updateEventDto;
+
+      await this.eventRepository.findOneByEventId(eventId, requestId);
+
+      const updatedEvent = await this.eventRepository.updateEvent(
+        uuid,
+        eventId,
+        updateEventDto,
+      );
       return updatedEvent;
     } catch (error) {
       this.logger.error(
@@ -72,11 +72,7 @@ export class UpdateEventService {
       );
 
       if (error instanceof DataBaseBadRequestError)
-        //TODO: este luego lo cambio por el que tiene Abrodos hecho
         throw new InvalidEventIdApiError();
-
-      if (error instanceof DataBaseForbiddenError)
-        throw new InvalidRoleApiError();
 
       if (error instanceof DataBaseUnathorizedError)
         throw new InvalidTokenApiError();

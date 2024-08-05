@@ -100,14 +100,13 @@ export class TokensRepository extends MongoRepository<TokensSchema> {
     }
   }
 
-  //TODO: cambiar todo
-  async getTokenDataByAccessToken(
+  async getPairOfTokensByAccessToken(
     accessToken: string,
     requestId?: string,
   ): Promise<PairOfTokensDto> {
     try {
       this.logger.info(
-        `[TokensRepository] [getTokenDataByAccesToken] - x-request-id: ${requestId}, accessToken: ${accessToken}`,
+        `[TokensRepository] [getPairOfTokensByAccessToken] - x-request-id: ${requestId}, accessToken: ${accessToken}`,
       );
 
       const tokenData = await this.findOneByAccessToken(accessToken);
@@ -121,7 +120,7 @@ export class TokensRepository extends MongoRepository<TokensSchema> {
       return pairOfTokens;
     } catch (error) {
       this.logger.error(
-        `[TokensRepository] [getTokenDataByAccesToken] - x-request-id: ${requestId}, error: ${error}`,
+        `[TokensRepository] [getPairOfTokensByAccessToken] - x-request-id: ${requestId}, error: ${error}`,
       );
 
       throw new DataBaseInternalError();

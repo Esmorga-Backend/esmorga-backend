@@ -1,6 +1,7 @@
 import {
   ApiBadRequestResponse,
   ApiBody,
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiForbiddenResponse,
   ApiHeader,
@@ -10,7 +11,7 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { applyDecorators } from '@nestjs/common';
-import { CreateEventDto } from '../../dtos';
+import { CreateEventDto, UpdateEventDto } from '../../dtos';
 import {
   CREATE_EVENT_HEADERS,
   GET_EVENTS_HEADERS,
@@ -44,12 +45,15 @@ export function SwaggerGetEvents() {
 
 export function SwaggerUpdateEvent() {
   return applyDecorators(
+    ApiBearerAuth(),
     ApiOperation({ summary: 'Update an event.' }),
-    ApiHeader(UPDATE_EVENT_HEADERS),
-    ApiOkResponse(UPDATE_EVENT_RESPONSES.OK), //200
-    ApiBadRequestResponse(UPDATE_EVENT_RESPONSES.BAD_REQUEST_ERROR), //400
-    ApiUnauthorizedResponse(UPDATE_EVENT_RESPONSES.UNAUTHORIZED_ERROR), //401
-    ApiForbiddenResponse(UPDATE_EVENT_RESPONSES.FORBIDDEN_ERROR), //403
-    ApiInternalServerErrorResponse(UPDATE_EVENT_RESPONSES.INTERNAL_ERROR), //500
+    ApiBody({ type: UpdateEventDto }),
+    ApiHeader(UPDATE_EVENT_HEADERS.ACCESS_TOKEN),
+    ApiHeader(UPDATE_EVENT_HEADERS.CONTENT_TYPE),
+    ApiOkResponse(UPDATE_EVENT_RESPONSES.OK),
+    ApiBadRequestResponse(UPDATE_EVENT_RESPONSES.BAD_REQUEST_ERROR),
+    ApiUnauthorizedResponse(UPDATE_EVENT_RESPONSES.UNAUTHORIZED_ERROR),
+    ApiForbiddenResponse(UPDATE_EVENT_RESPONSES.FORBIDDEN_ERROR),
+    ApiInternalServerErrorResponse(UPDATE_EVENT_RESPONSES.INTERNAL_ERROR),
   );
 }

@@ -22,10 +22,10 @@ export class AccountRepository extends MongoRepository<UserSchema> {
     super(userModel);
   }
 
-  async checkRoleById(id: string, requestId?: string) {
+  async getUserById(id: string, requestId?: string) {
     try {
       this.logger.info(
-        `[AccountRepository] [checkRoleById] - x-request-id: ${requestId}, id: ${id}`,
+        `[AccountRepository] [getUserById] - x-request-id: ${requestId}, id: ${id}`,
       );
 
       const user = await this.findOneById(id);
@@ -34,16 +34,14 @@ export class AccountRepository extends MongoRepository<UserSchema> {
         excludeExtraneousValues: true,
       });
 
-      const { role } = userProfile;
-
-      if (role !== 'ADMIN') throw new DataBaseUnathorizedError();
+      if (!userProfile) throw new DataBaseUnathorizedError();
 
       validateObjectDto(userProfile, REQUIRED_FIELDS.USER_PROFILE);
 
-      return { userProfile };
+      return userProfile;
     } catch (error) {
       this.logger.error(
-        `[AccountRepository] [checkRoleById] - x-request-id: ${requestId}, error: ${error}`,
+        `[AccountRepository] [getUserById] - x-request-id: ${requestId}, error: ${error}`,
       );
 
       if (error instanceof HttpException) throw error;

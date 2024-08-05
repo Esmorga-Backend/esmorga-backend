@@ -15,7 +15,7 @@ export class Event {
   @Prop({ required: true })
   description: string;
 
-  @Prop({ type: [String], required: false })
+  @Prop({ type: [String], required: false, default: undefined })
   tags: string[];
 
   @Prop({ type: LocationSchema, required: true })
@@ -23,6 +23,9 @@ export class Event {
 
   @Prop({ required: false })
   imageUrl: string;
+
+  @Prop({ required: false, default: undefined })
+  updatedBy: string;
 }
 
 export const EventSchema = SchemaFactory.createForClass(Event);

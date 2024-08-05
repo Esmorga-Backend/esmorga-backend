@@ -8,6 +8,7 @@ import {
   Patch,
   Post,
   UseFilters,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { PinoLogger } from 'nestjs-pino';
@@ -25,6 +26,8 @@ import {
 import { EventDto, EventListDto } from '../../dtos';
 import { CreateEventDto, UpdateEventDto } from '../dtos';
 import { RequestId } from '../req-decorators';
+import { AuthGuard } from '../guards';
+import { validateNotNullableFields } from '../services';
 
 @ApiTags('Event')
 @Controller('/v1/events')
@@ -87,40 +90,48 @@ export class EventController {
   }
 
   @Patch('/')
+  @UseGuards(AuthGuard)
   @SwaggerUpdateEvent()
   async updateEvent(
-    @Body() updateEventDto: UpdateEventDto, //TODO: meter dto
+    @Body() updateEventDto: UpdateEventDto,
     @Headers('Authorization') accessToken: string,
     @RequestId() requestId: string,
-    // ): Promise<EventDto> {
   ) {
     try {
       this.logger.info(
         `[EventController] [updateEvent] - x-request-id:${requestId}`,
       );
-      // const accessToken =
-      //   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNjY2YWMyNzBjODlmNWE1Y2FiMGI0NTM2IiwiaWF0IjoxNzE4Nzk0NjQwLCJleHAiOjE3MTg3OTUyNDB9.Kklm7nK5RgobEz_V1Eiqc5fTt33w2KNKByjU7V2M4aE';
+      const {
+        eventName,
+        eventDate,
+        description,
+        eventType,
+        location,
+        location: { name },
+      } = updateEventDto;
 
-      //TODO: El accesToken validado en la pr de Abrodos
+      const fieldsToValidate = {
+        eventName,
+        eventDate,
+        description,
+        eventType,
+        location,
+        name,
+      };
 
-      // const response: EventDto = await this.updateEventService.update(
-      //   accessToken,
-      //   updateEventDto,
-      //   requestId,
-      // );
+      validateNotNullableFields(fieldsToValidate);
 
-      // const response = await this.updateEventService.update(
-      //   accessToken,
-      //   updateEventDto,
-      //   requestId,
-      // );
+      const response: EventDto = await this.updateEventService.update(
+        accessToken,
+        updateEventDto,
+        requestId,
+      );
 
-      return 'Hola';
+      return response;
     } catch (error) {
       this.logger.error(
         `[EventController] [updateEvent] - x-request-id:${requestId}, error ${error}`,
       );
-
       if (error instanceof HttpException) {
         throw error;
       }
