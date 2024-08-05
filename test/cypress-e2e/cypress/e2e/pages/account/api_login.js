@@ -30,6 +30,7 @@ class ApiLogin extends ApiBasics {
 
     cy.get('@response').then((response) => {
       cy.wrap(response.body.refreshToken).as('refreshToken');
+      cy.wrap(response.body.accessToken).as('accessToken');
     });
   }
 }
