@@ -1,10 +1,12 @@
 import {
+  Headers,
   Body,
   Controller,
   Get,
+  Post,
+  Delete,
   HttpException,
   InternalServerErrorException,
-  Post,
   UseFilters,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
@@ -19,7 +21,7 @@ import {
   SwaggerGetEvents,
 } from '../swagger/decorators/events';
 import { EventListDto } from '../../dtos';
-import { CreateEventDto } from '../dtos';
+import { CreateEventDto, JoinEventDto } from '../dtos';
 import { RequestId } from '../req-decorators';
 
 @ApiTags('Event')
@@ -73,6 +75,30 @@ export class EventController {
     } catch (error) {
       this.logger.error(
         `[EventController] [createEvent] - x-request-id:${requestId}, error ${error}`,
+      );
+
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new InternalServerErrorException();
+    }
+  }
+
+  @Delete('/')
+  @SwaggerCreateEvent()
+  async deleteEvent(
+    @Headers('Authorization') accessToken: string,
+    @Body() joinEventDto: JoinEventDto,
+    @RequestId() requestId: string,
+  ) {
+    try {
+      // TODO change JoinEventDto
+      this.logger.info(
+        `[EventController] [deleteEvent] - x-request-id:${requestId}`,
+      );
+    } catch (error) {
+      this.logger.error(
+        `[EventController] [deleteEvent] - x-request-id:${requestId}, error ${error}`,
       );
 
       if (error instanceof HttpException) {
