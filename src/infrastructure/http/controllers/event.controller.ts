@@ -104,7 +104,7 @@ export class EventController {
 
       await this.deleteEventService.delete(
         accessToken,
-        joinEventDto,
+        joinEventDto.eventId,
         requestId,
       );
 

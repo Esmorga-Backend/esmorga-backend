@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { PinoLogger } from 'nestjs-pino';
-import { JoinEventDto } from '../../../infrastructure/http/dtos';
 import {
   EventRepository,
   AccountRepository,
@@ -18,11 +17,7 @@ export class DeleteEventService {
     private readonly tokensRepository: TokensRepository,
   ) {}
 
-  async delete(
-    accessToken: string,
-    joinEventDto: JoinEventDto,
-    requestId?: string,
-  ) {
+  async delete(accessToken: string, eventId: string, requestId?: string) {
     try {
       this.logger.info(
         `[DeleteEventService] [delete] - x-request-id:${requestId}`,
@@ -39,6 +34,10 @@ export class DeleteEventService {
       );
 
       if (role !== USER_ROLES.ADMIN) throw new NotAdminAccountApiError();
+
+      await this.eventRepository.removeEvent(eventId, requestId);
+
+      // TODO Remove event participants
     } catch (error) {
       this.logger.error(
         `[DeleteEventService] [delete] - x-request-id:${requestId}, error ${error}`,
