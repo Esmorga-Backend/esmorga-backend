@@ -17,7 +17,7 @@ import {
   GetEventListService,
   UpdateEventService,
 } from '../../../application/handler/event';
-import { HttpExceptionFilter } from '../filters';
+import { HttpExceptionFilter } from '../errors';
 import {
   SwaggerCreateEvent,
   SwaggerGetEvents,

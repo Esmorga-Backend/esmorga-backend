@@ -37,7 +37,7 @@ export class AccountRepository extends MongoRepository<UserSchema> {
 
       if (!userProfile) throw new DataBaseUnathorizedError();
 
-      validateObjectDto(userProfile, REQUIRED_FIELDS.USER_PROFILE);
+      validateObjectDto(userProfile, REQUIRED_DTO_FIELDS.USER_PROFILE);
 
       return userProfile;
     } catch (error) {

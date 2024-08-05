@@ -17,7 +17,7 @@ export class MongoRepository<E> implements DBRepository<E> {
    * Find documents by accesToken.
    *
    * @param accessToken - The accesToken to find.
-   * @returns Promise resolved with the document that match accesToken provided.
+   * @returns Promise resolved with the document that matches the accessToken provided.
    */
   async findOneByAccessToken(accessToken: string): Promise<E> {
     return this.entityModel.findOne({ accessToken: { $eq: accessToken } });
@@ -54,16 +54,6 @@ export class MongoRepository<E> implements DBRepository<E> {
   }
 
   /**
-   * Find documents by accessToken.
-   *
-   * @param accessToken - The accessToken to find.
-   * @returns Promise resolved with the document that matches the accessToken provided.
-   */
-  async findOneByAccessToken(accessToken: string): Promise<E> {
-    return this.entityModel.findOne({ accessToken: { $eq: accessToken } });
-  }
-
-  /**
    * Find a document by email field.
    *
    * @param email - The email value to find.
@@ -71,16 +61,6 @@ export class MongoRepository<E> implements DBRepository<E> {
    */
   async findOneByEmail(email: string): Promise<E> {
     return this.entityModel.findOne({ email: { $eq: email } });
-  }
-
-  /**
-   * Find a document by ID.
-   *
-   * @param id - The ID of the document to update.
-   * @returns Promise resolved with the document that matches the id provided.
-   */
-  async findById(id: string): Promise<E> {
-    return this.entityModel.findById({ _id: id });
   }
 
   /**

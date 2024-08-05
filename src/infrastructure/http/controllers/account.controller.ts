@@ -17,7 +17,7 @@ import {
   RefreshTokenService,
   JoinEventService,
 } from '../../../application/handler/account';
-import { HttpExceptionFilter } from '../filters';
+import { HttpExceptionFilter } from '../errors';
 import {
   AccountLoginDto,
   AccountRegisterDto,
