@@ -25,6 +25,13 @@ export class DeleteEventService {
       this.logger.info(
         `[DeleteEventService] [delete] - x-request-id:${requestId}`,
       );
+
+      const { uuid } = await this.tokensRepository.getPairOfTokensByAccessToken(
+        accessToken,
+        requestId,
+      );
+
+      console.log({ uuid });
     } catch (error) {
       this.logger.error(
         `[DeleteEventService] [delete] - x-request-id:${requestId}, error ${error}`,
