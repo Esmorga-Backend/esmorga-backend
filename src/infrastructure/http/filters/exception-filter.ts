@@ -36,20 +36,23 @@ export class HttpExceptionFilter implements ExceptionFilter {
       });
     }
 
+    // DTO scenario
     if (exception instanceof BadRequestException) {
-      if (message[0].includes('should not be empty'))
+      const firstErrorMessage = message[0];
+
+      if (firstErrorMessage.includes('should not be empty'))
         return response.status(status).json({
           ...errorResponse,
           title: 'badRequestError',
           detail: 'some inputs are missing',
-          errors: message,
+          errors: [firstErrorMessage],
         });
 
       return response.status(status).json({
         ...errorResponse,
         title: 'badRequestError',
-        detail: message[0].split(' ')[0],
-        errors: message,
+        detail: firstErrorMessage.split(' ')[0],
+        errors: [firstErrorMessage],
       });
     }
 

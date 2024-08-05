@@ -41,9 +41,9 @@ export class LoginService {
       const { email, password } = accountLoginDto;
 
       const { userProfile, password: userDbPassword } =
-        await this.accountRepository.getUserByEmail(email);
+        await this.accountRepository.getUserByEmail(email, requestId);
 
-      validateLoginCredentials(userDbPassword, password);
+      await validateLoginCredentials(userDbPassword, password);
 
       const { uuid } = userProfile;
 

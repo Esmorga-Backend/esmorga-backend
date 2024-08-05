@@ -1,7 +1,5 @@
-import {
-  validateObjectDto,
-  REQUIRED_FIELDS,
-} from '../../../../../src/infrastructure/db/services';
+import { validateObjectDto } from '../../../../../src/infrastructure/db/services';
+import { REQUIRED_DTO_FIELDS } from '../../../../../src/infrastructure/db/consts';
 import { DataBaseInternalError } from '../../../../../src/infrastructure/db/errors';
 import { EVENT_MOCK, USER_PROFILE_MOCK } from '../../../../mocks/dtos';
 
@@ -13,7 +11,7 @@ describe('[unit-test] [validateObjectDto]', () => {
 
         delete event.eventId;
 
-        validateObjectDto(event, REQUIRED_FIELDS.EVENTS);
+        validateObjectDto(event, REQUIRED_DTO_FIELDS.EVENTS);
       } catch (error) {
         expect(error).toBeInstanceOf(DataBaseInternalError);
       }
@@ -25,7 +23,7 @@ describe('[unit-test] [validateObjectDto]', () => {
 
         delete event.eventName;
 
-        validateObjectDto(event, REQUIRED_FIELDS.EVENTS);
+        validateObjectDto(event, REQUIRED_DTO_FIELDS.EVENTS);
       } catch (error) {
         expect(error).toBeInstanceOf(DataBaseInternalError);
       }
@@ -37,7 +35,7 @@ describe('[unit-test] [validateObjectDto]', () => {
 
         delete event.eventDate;
 
-        validateObjectDto(event, REQUIRED_FIELDS.EVENTS);
+        validateObjectDto(event, REQUIRED_DTO_FIELDS.EVENTS);
       } catch (error) {
         expect(error).toBeInstanceOf(DataBaseInternalError);
       }
@@ -49,7 +47,7 @@ describe('[unit-test] [validateObjectDto]', () => {
 
         delete event.eventType;
 
-        validateObjectDto(event, REQUIRED_FIELDS.EVENTS);
+        validateObjectDto(event, REQUIRED_DTO_FIELDS.EVENTS);
       } catch (error) {
         expect(error).toBeInstanceOf(DataBaseInternalError);
       }
@@ -61,7 +59,7 @@ describe('[unit-test] [validateObjectDto]', () => {
 
         delete event.description;
 
-        validateObjectDto(event, REQUIRED_FIELDS.EVENTS);
+        validateObjectDto(event, REQUIRED_DTO_FIELDS.EVENTS);
       } catch (error) {
         expect(error).toBeInstanceOf(DataBaseInternalError);
       }
@@ -73,7 +71,7 @@ describe('[unit-test] [validateObjectDto]', () => {
 
         delete event.location.name;
 
-        validateObjectDto(event, REQUIRED_FIELDS.EVENTS);
+        validateObjectDto(event, REQUIRED_DTO_FIELDS.EVENTS);
       } catch (error) {
         expect(error).toBeInstanceOf(DataBaseInternalError);
       }
@@ -87,7 +85,7 @@ describe('[unit-test] [validateObjectDto]', () => {
 
         delete userProfile.uuid;
 
-        validateObjectDto(userProfile, REQUIRED_FIELDS.USER_PROFILE);
+        validateObjectDto(userProfile, REQUIRED_DTO_FIELDS.USER_PROFILE);
       } catch (error) {
         expect(error).toBeInstanceOf(DataBaseInternalError);
       }
@@ -99,7 +97,7 @@ describe('[unit-test] [validateObjectDto]', () => {
 
         delete userProfile.name;
 
-        validateObjectDto(userProfile, REQUIRED_FIELDS.USER_PROFILE);
+        validateObjectDto(userProfile, REQUIRED_DTO_FIELDS.USER_PROFILE);
       } catch (error) {
         expect(error).toBeInstanceOf(DataBaseInternalError);
       }
@@ -111,7 +109,7 @@ describe('[unit-test] [validateObjectDto]', () => {
 
         delete userProfile.lastName;
 
-        validateObjectDto(userProfile, REQUIRED_FIELDS.USER_PROFILE);
+        validateObjectDto(userProfile, REQUIRED_DTO_FIELDS.USER_PROFILE);
       } catch (error) {
         expect(error).toBeInstanceOf(DataBaseInternalError);
       }
@@ -123,7 +121,7 @@ describe('[unit-test] [validateObjectDto]', () => {
 
         delete userProfile.email;
 
-        validateObjectDto(userProfile, REQUIRED_FIELDS.USER_PROFILE);
+        validateObjectDto(userProfile, REQUIRED_DTO_FIELDS.USER_PROFILE);
       } catch (error) {
         expect(error).toBeInstanceOf(DataBaseInternalError);
       }
@@ -135,7 +133,7 @@ describe('[unit-test] [validateObjectDto]', () => {
 
         delete userProfile.role;
 
-        validateObjectDto(userProfile, REQUIRED_FIELDS.USER_PROFILE);
+        validateObjectDto(userProfile, REQUIRED_DTO_FIELDS.USER_PROFILE);
       } catch (error) {
         expect(error).toBeInstanceOf(DataBaseInternalError);
       }

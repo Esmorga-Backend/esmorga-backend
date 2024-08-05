@@ -11,7 +11,8 @@ import {
   DataBaseConflictError,
 } from '../errors';
 import { UserProfileDto } from '../../dtos';
-import { validateObjectDto, REQUIRED_FIELDS } from '../services';
+import { validateObjectDto } from '../services';
+import { REQUIRED_DTO_FIELDS } from '../consts';
 
 @Injectable()
 export class AccountRepository extends MongoRepository<UserSchema> {
@@ -64,7 +65,7 @@ export class AccountRepository extends MongoRepository<UserSchema> {
 
       if (!userProfile) throw new DataBaseUnathorizedError();
 
-      validateObjectDto(userProfile, REQUIRED_FIELDS.USER_PROFILE);
+      validateObjectDto(userProfile, REQUIRED_DTO_FIELDS.USER_PROFILE);
 
       return { userProfile, password: user.password };
     } catch (error) {

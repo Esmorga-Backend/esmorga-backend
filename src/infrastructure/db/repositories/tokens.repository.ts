@@ -25,7 +25,7 @@ export class TokensRepository extends MongoRepository<TokensSchema> {
   ) {
     try {
       this.logger.info(
-        `[TokensRepository] [saveTokens] - x-request-id: ${requestId}, accessToken: ${accessToken}`,
+        `[TokensRepository] [saveTokens] - x-request-id: ${requestId}, uuid: ${uuid}`,
       );
 
       const pairOfTokens = new this.tokensModel({
@@ -77,7 +77,7 @@ export class TokensRepository extends MongoRepository<TokensSchema> {
   ): Promise<PairOfTokensDto> {
     try {
       this.logger.info(
-        `[TokensRepository] [getPairOfTokensByRefreshToken] - x-request-id: ${requestId}, refreshToken: ${refreshToken}`,
+        `[TokensRepository] [getPairOfTokensByRefreshToken] - x-request-id:${requestId}, refreshToken ${refreshToken}`,
       );
 
       const tokenData = await this.findOneByRefreshToken(refreshToken);
@@ -101,15 +101,15 @@ export class TokensRepository extends MongoRepository<TokensSchema> {
   }
 
   async getPairOfTokensByAccessToken(
-    accessToken: string,
+    acessToken: string,
     requestId?: string,
   ): Promise<PairOfTokensDto> {
     try {
       this.logger.info(
-        `[TokensRepository] [getPairOfTokensByAccessToken] - x-request-id: ${requestId}, accessToken: ${accessToken}`,
+        `[TokensRepository] [getPairOfTokensByAcessToken] - x-request-id: ${requestId}`,
       );
 
-      const tokenData = await this.findOneByAccessToken(accessToken);
+      const tokenData = await this.findOneByAccessToken(acessToken);
 
       if (!tokenData) throw new DataBaseUnathorizedError();
 
@@ -120,8 +120,10 @@ export class TokensRepository extends MongoRepository<TokensSchema> {
       return pairOfTokens;
     } catch (error) {
       this.logger.error(
-        `[TokensRepository] [getPairOfTokensByAccessToken] - x-request-id: ${requestId}, error: ${error}`,
+        `[TokensRepository] [getPairOfTokensByAcessToken] - x-request-id: ${requestId}, error: ${error}`,
       );
+
+      if (error instanceof HttpException) throw error;
 
       throw new DataBaseInternalError();
     }

@@ -8,14 +8,12 @@ import {
   GetEventListService,
   UpdateEventService,
 } from '../../../application/handler/event';
+import { EventSharedModule } from './event-shared.module';
 import {
   AccountRepository,
-  EventRepository,
   TokensRepository,
 } from '../../../infrastructure/db/repositories';
 import {
-  EventSchema,
-  Event,
   UserSchema,
   User,
   TokensSchema,
@@ -25,7 +23,7 @@ import {
 @Module({
   imports: [
     JwtModule.register({}),
-    MongooseModule.forFeature([{ name: Event.name, schema: EventSchema }]),
+    EventSharedModule,
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     MongooseModule.forFeature([{ name: Tokens.name, schema: TokensSchema }]),
   ],
@@ -36,7 +34,6 @@ import {
     GetEventListService,
     UpdateEventService,
     AccountRepository,
-    EventRepository,
     TokensRepository,
   ],
 })

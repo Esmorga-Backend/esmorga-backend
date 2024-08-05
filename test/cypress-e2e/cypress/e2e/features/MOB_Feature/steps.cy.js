@@ -1,33 +1,68 @@
 /// <reference types="cypress" />
-import { Given, When, Then, And } from "cypress-cucumber-preprocessor/steps";
-import ApiEvents from "../../pages/api_events"
+import { Given, When, Then, And } from 'cypress-cucumber-preprocessor/steps';
+import ApiEvents from '../../pages/events/api_events';
+import ApiRefreshToken from '../../pages/account/api_refresh_token';
+import ApiLogin from '../../pages/account/api_login';
 
-const api_events = new ApiEvents()
-var use_endpoint=""
-const api={
-  "Events": api_events
-}
+const api_events = new ApiEvents();
+const api_refresh_token = new ApiRefreshToken();
+const api_login = new ApiLogin();
+var use_endpoint = '';
+const api = {
+  Events: api_events,
+  RefreshToken: api_refresh_token,
+  Login: api_login,
+};
 
 Given(/^the GET (\w+) API is available$/, (endpoint) => {
-  use_endpoint=endpoint
+  use_endpoint = endpoint;
 });
-
-And(/^(-?\d+) (\w+) in DB, (-?\d+) are in the past$/, (events_on_db,endpoint,expired_events_on_db) => {
-  console.log("Need to be deploy add"+events_on_db+" and "+expired_events_on_db+" to DB for "+endpoint)
+Given(/^the POST (\w+) API is available$/, (endpoint) => {
+  use_endpoint = endpoint;
 });
 
 When(/^a GET request is made to (\w+) API$/, (endpoint) => {
   api[endpoint].get();
 });
-
-Then(/^the response should contain (-?\d+) upcoming (\w+)$/, (events_to_check,endpoint) => {
-  api[endpoint].check_response(events_to_check)
-//  api[endpoint].check_data_response(events_to_check)
+When(/^a POST request is made to (\w+) API$/, (endpoint) => {
+  api[endpoint].post();
 });
 
-And("the response should following swagger schema", () => {
-  console.log("Need to be deploy swager check for "+use_endpoint)
+And(/^email: (.*)$/, (email) => {
+  api[use_endpoint].set_email(email);
 });
 
+And(/^password: (.*)$/, (password) => {
+  api[use_endpoint].set_password(password);
+});
 
+Then(
+  /^well-formed success response with status code (\d+) returned$/,
+  async (code) => {
+    cy.get('@response').then((response) => {
+      api[use_endpoint].check_response(code, response);
+    });
+  },
+);
+And(
+  'use refreshToken from response to store a variable original_refreshToken',
+  async () => {
+    cy.get('@refreshToken').then((refreshToken) => {
+      cy.wrap(refreshToken).as('original_refreshToken');
+    });
+  },
+);
+And('use variable original_refreshToken', async () => {
+  cy.get('@original_refreshToken').then((original_refreshToken) => {
+    cy.wrap(original_refreshToken).as('refreshToken');
+  });
+});
 
+Then(
+  /^well-formed error response with status code (\d+) returned, description: (.*), expected result: (.*)$/,
+  async (code, description, result) => {
+    cy.get('@response').then((response) => {
+      api[use_endpoint].check_error_response(code, result, response);
+    });
+  },
+);

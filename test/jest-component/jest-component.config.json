@@ -5,7 +5,7 @@
     "ts"
   ],
   "rootDir": "../..",
-  "testRegex": ".*\\.spec\\.ts$",
+  "testRegex": ".*\\jest-cucumber-setup\\.ts$",
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
   },
@@ -30,5 +30,15 @@
   ],
   "setupFiles": [
     "<rootDir>/test/mocks/test.env.ts"
-  ]
+  ],
+  "reporters": [
+  "default",
+  ["jest-junit", {
+    "outputDirectory": "./report",
+    "outputName": "junit-component.xml",
+    "suiteNameTemplate": "{filepath}",
+    "classNameTemplate": "{classname}",
+    "titleTemplate": "{title}"
+  }]
+]
 }

@@ -1,4 +1,4 @@
-import { createHash } from 'crypto';
+import * as argon2 from 'argon2';
 import { InvalidCredentialsLoginApiError } from '../errors';
 
 /**
@@ -6,15 +6,15 @@ import { InvalidCredentialsLoginApiError } from '../errors';
  * @param userDbPassword Password saved in the DB for this user.
  * @param requestPassword Password provided by the request.
  */
-export function validateLoginCredentials(
+export async function validateLoginCredentials(
   userDbPassword: string,
   requestPassword: string,
 ) {
-  if (
-    !userDbPassword ||
-    userDbPassword !==
-      createHash('sha256').update(requestPassword).digest('hex')
-  ) {
+  try {
+    if (!(await argon2.verify(userDbPassword, requestPassword))) {
+      throw new InvalidCredentialsLoginApiError();
+    }
+  } catch (error) {
     throw new InvalidCredentialsLoginApiError();
   }
 }

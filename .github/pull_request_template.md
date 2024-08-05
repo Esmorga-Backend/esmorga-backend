@@ -5,7 +5,6 @@
 - [ ] **Link PR to US**
 - [ ] **Add Tests**
 - [ ] **Add ENV Variables and Validations**
-- [ ] **Check Story Points**
 - [ ] **Documentation Updates**
 - [ ] **Swagger Updates**
 

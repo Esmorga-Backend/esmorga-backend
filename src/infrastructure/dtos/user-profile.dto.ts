@@ -11,26 +11,30 @@ export class UserProfileDto {
 
   @Expose()
   @IsString()
-  @ApiProperty({ example: 'John' })
+  @ApiProperty({ example: 'John', maxLength: 100, minLength: 1 })
   name: string;
 
   @Expose()
   @IsString()
-  @ApiProperty({ example: 'Donnel-Vic' })
+  @ApiProperty({ example: 'Donnel-Vic', maxLength: 100, minLength: 1 })
   lastName: string;
 
   @Expose()
   @IsString()
-  @ApiProperty({ example: 'esmorga.test.01@yopmail.com' })
+  @ApiProperty({
+    example: 'esmorga.test.01@yopmail.com',
+    maxLength: 100,
+    minLength: 1,
+  })
   email: string;
 
   @Expose()
   @IsString()
-  @ApiProperty({ example: 'USER' })
+  @ApiProperty({ example: 'USER', maxLength: 100, minLength: 1 })
   role: string;
 
   @Expose()
   @IsDateString()
-  @ApiProperty({ example: '2024-03-08T10:05:30.915Z' })
+  @ApiProperty({ example: '2024-03-08T10:05:30.915Z', format: 'date-time' })
   createdAt: Date;
 }
