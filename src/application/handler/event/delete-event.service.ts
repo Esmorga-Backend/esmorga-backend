@@ -6,6 +6,8 @@ import {
   AccountRepository,
   TokensRepository,
 } from '../../../infrastructure/db/repositories';
+import { USER_ROLES } from '../../../domain/const';
+import { NotAdminAccountApiError } from '../../../domain/errors';
 
 @Injectable()
 export class DeleteEventService {
@@ -31,10 +33,12 @@ export class DeleteEventService {
         requestId,
       );
 
-      const { rol } = await this.accountRepository.getUserByUuid(
+      const { role } = await this.accountRepository.getUserByUuid(
         uuid,
         requestId,
       );
+
+      if (role !== USER_ROLES.ADMIN) throw new NotAdminAccountApiError();
     } catch (error) {
       this.logger.error(
         `[DeleteEventService] [delete] - x-request-id:${requestId}, error ${error}`,
