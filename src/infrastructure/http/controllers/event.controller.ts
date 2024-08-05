@@ -14,6 +14,7 @@ import { PinoLogger } from 'nestjs-pino';
 import {
   CreateEventService,
   GetEventListService,
+  DeleteEventService,
 } from '../../../application/handler/event';
 import { HttpExceptionFilter } from '../filters';
 import {
@@ -32,6 +33,7 @@ export class EventController {
     private readonly logger: PinoLogger,
     private readonly getEventListService: GetEventListService,
     private readonly createEventService: CreateEventService,
+    private readonly deleteEventService: DeleteEventService,
   ) {}
 
   @Get('/')
@@ -96,6 +98,14 @@ export class EventController {
       this.logger.info(
         `[EventController] [deleteEvent] - x-request-id:${requestId}`,
       );
+
+      await this.deleteEventService.delete(
+        accessToken,
+        joinEventDto,
+        requestId,
+      );
+
+      return {};
     } catch (error) {
       this.logger.error(
         `[EventController] [deleteEvent] - x-request-id:${requestId}, error ${error}`,
