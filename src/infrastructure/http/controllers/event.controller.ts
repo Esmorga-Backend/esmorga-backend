@@ -8,6 +8,7 @@ import {
   HttpException,
   InternalServerErrorException,
   UseFilters,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { PinoLogger } from 'nestjs-pino';
@@ -24,6 +25,7 @@ import {
 import { EventListDto } from '../../dtos';
 import { CreateEventDto, JoinEventDto } from '../dtos';
 import { RequestId } from '../req-decorators';
+import { AuthGuard } from '../guards';
 
 @ApiTags('Event')
 @Controller('/v1/events')
@@ -87,6 +89,7 @@ export class EventController {
   }
 
   @Delete('/')
+  @UseGuards(AuthGuard)
   @SwaggerCreateEvent()
   async deleteEvent(
     @Headers('Authorization') accessToken: string,

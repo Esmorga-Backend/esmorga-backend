@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { JwtModule } from '@nestjs/jwt';
 import { AccountController } from '../controllers';
 import {
   LoginService,
@@ -17,7 +16,6 @@ import { AccountSharedModule } from './account-shared.module';
 
 @Module({
   imports: [
-    JwtModule.register({}),
     MongooseModule.forFeature([
       { name: EventParticipants.name, schema: EventParticipantsSchema },
     ]),
