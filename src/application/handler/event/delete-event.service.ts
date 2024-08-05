@@ -31,7 +31,10 @@ export class DeleteEventService {
         requestId,
       );
 
-      console.log({ uuid });
+      const { rol } = await this.accountRepository.getUserByUuid(
+        uuid,
+        requestId,
+      );
     } catch (error) {
       this.logger.error(
         `[DeleteEventService] [delete] - x-request-id:${requestId}, error ${error}`,
