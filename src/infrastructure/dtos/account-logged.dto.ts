@@ -45,9 +45,18 @@ export class AccountLoggedDto {
   @ApiProperty({
     type: 'object',
     properties: {
-      name: { type: 'string', example: 'John' },
-      lastName: { type: 'string', example: 'Donnel-Vic' },
-      email: { type: 'string', example: 'eventslogin01@yopmail.com' },
+      name: { type: 'string', example: 'John', minLength: 3, maxLength: 100 },
+      lastName: {
+        type: 'string',
+        example: 'Donnel-Vic',
+        minLength: 3,
+        maxLength: 100,
+      },
+      email: {
+        type: 'string',
+        example: 'eventslogin01@yopmail.com',
+        maxLength: 100,
+      },
     },
   })
   profile: Profile;
