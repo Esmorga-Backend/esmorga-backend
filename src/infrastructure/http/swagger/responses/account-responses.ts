@@ -31,7 +31,6 @@ export const LOGIN_RESPONSES: { [key: string]: ApiResponseOptions } = {
     type: AccountLoggedDto,
   },
   BAD_REQUEST_ERROR: {
-    status: HttpStatus.BAD_REQUEST,
     description: 'Some inputs are missed or wrong',
     schema: {
       type: 'object',
@@ -54,7 +53,6 @@ export const LOGIN_RESPONSES: { [key: string]: ApiResponseOptions } = {
     },
   },
   UNAUTHORIZED_ERROR: {
-    status: HttpStatus.UNAUTHORIZED,
     description: 'Invalid credentials',
     schema: {
       type: 'object',
@@ -77,7 +75,6 @@ export const LOGIN_RESPONSES: { [key: string]: ApiResponseOptions } = {
     },
   },
   INTERNAL_ERROR: {
-    status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Error not handled',
     schema: {
       type: 'object',
@@ -157,7 +154,6 @@ export const REFRESH_TOKEN_RESPONSES: { [key: string]: ApiResponseOptions } = {
     type: NewPairOfTokensDto,
   },
   BAD_REQUEST_ERROR: {
-    status: HttpStatus.BAD_REQUEST,
     description: 'Some inputs are missed or wrong',
     schema: {
       type: 'object',
@@ -180,7 +176,6 @@ export const REFRESH_TOKEN_RESPONSES: { [key: string]: ApiResponseOptions } = {
     },
   },
   UNAUTHORIZED_ERROR: {
-    status: HttpStatus.UNAUTHORIZED,
     description: 'Invalid credentials',
     schema: {
       type: 'object',
@@ -203,7 +198,6 @@ export const REFRESH_TOKEN_RESPONSES: { [key: string]: ApiResponseOptions } = {
     },
   },
   INTERNAL_ERROR: {
-    status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Error not handled',
     schema: {
       type: 'object',
@@ -218,13 +212,8 @@ export const REFRESH_TOKEN_RESPONSES: { [key: string]: ApiResponseOptions } = {
 export const JOIN_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
   NO_CONTENT: {
     description: 'User has successfully joined in the event',
-    schema: {
-      type: 'object',
-      example: {},
-    },
   },
   BAD_REQUEST_ERROR: {
-    status: HttpStatus.BAD_REQUEST,
     description: 'Some inputs are missed or wrong',
     schema: {
       type: 'object',
@@ -247,7 +236,6 @@ export const JOIN_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
     },
   },
   UNAUTHORIZED_ERROR: {
-    status: HttpStatus.UNAUTHORIZED,
     description: 'Invalid credentials',
     schema: {
       type: 'object',
@@ -270,7 +258,6 @@ export const JOIN_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
     },
   },
   NOT_ACCEPTABLE_ERROR: {
-    status: HttpStatus.NOT_ACCEPTABLE,
     description: 'Invalid credentials',
     schema: {
       type: 'object',
@@ -293,7 +280,6 @@ export const JOIN_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
     },
   },
   INTERNAL_ERROR: {
-    status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Error not handled',
     schema: {
       type: 'object',

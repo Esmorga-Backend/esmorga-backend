@@ -22,6 +22,7 @@ import { HttpExceptionFilter } from '../filters';
 import {
   SwaggerCreateEvent,
   SwaggerGetEvents,
+  SwaggerDEleteEvents,
 } from '../swagger/decorators/events';
 import { EventListDto } from '../../dtos';
 import { CreateEventDto, JoinEventDto } from '../dtos';
@@ -92,6 +93,7 @@ export class EventController {
   @Delete('/')
   @UseGuards(AuthGuard)
   @HttpCode(204)
+  @SwaggerDEleteEvents()
   async deleteEvent(
     @Headers('Authorization') accessToken: string,
     @Body() joinEventDto: JoinEventDto,
