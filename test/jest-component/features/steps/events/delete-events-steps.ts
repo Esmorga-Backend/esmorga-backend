@@ -78,8 +78,14 @@ export const deleteEventStep: StepDefinitions = ({ given, and }) => {
       .mockResolvedValue(FUTURE_EVENT_MOCK_DB);
   });
 
+  // ###### MOB-TC-37 ######
+  and('use accessToken invalid and eventId event_exist', () => {
+    jest.spyOn(context.jwtService, 'verifyAsync').mockRejectedValue({});
+  });
+
+  // ###### MOB-TC-38 ######
   and(
-    'use accessToken without privileges and eventId event_exist',
+    'use accessToken without enough privileges and eventId event_exist',
     async () => {
       const USER = await getUserMockDb();
 
