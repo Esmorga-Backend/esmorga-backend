@@ -4,6 +4,7 @@ import {
   EventRepository,
   AccountRepository,
   TokensRepository,
+  EventParticipantsRepository,
 } from '../../../infrastructure/db/repositories';
 import { USER_ROLES } from '../../../domain/const';
 import { NotAdminAccountApiError } from '../../../domain/errors';
@@ -15,6 +16,7 @@ export class DeleteEventService {
     private readonly eventRepository: EventRepository,
     private readonly accountRepository: AccountRepository,
     private readonly tokensRepository: TokensRepository,
+    private readonly eventParticipantsRepository: EventParticipantsRepository,
   ) {}
 
   async delete(accessToken: string, eventId: string, requestId?: string) {
@@ -37,7 +39,10 @@ export class DeleteEventService {
 
       await this.eventRepository.removeEvent(eventId, requestId);
 
-      // TODO Remove event participants
+      await this.eventParticipantsRepository.removeEventParticipantByEventId(
+        eventId,
+        requestId,
+      );
     } catch (error) {
       this.logger.error(
         `[DeleteEventService] [delete] - x-request-id:${requestId}, error ${error}`,
