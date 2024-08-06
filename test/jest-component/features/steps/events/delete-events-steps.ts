@@ -11,6 +11,7 @@ import {
   FUTURE_EVENT_MOCK_DB,
   PAIR_OF_TOKENS_MOCK_DB,
   getAdminUserMockDb,
+  getUserMockDb,
 } from '../../../../mocks/db';
 import { JOIN_EVENT_MOCK } from '../../../../mocks/dtos';
 
@@ -76,4 +77,23 @@ export const deleteEventStep: StepDefinitions = ({ given, and }) => {
       .spyOn(context.eventRepository, 'findById')
       .mockResolvedValue(FUTURE_EVENT_MOCK_DB);
   });
+
+  and(
+    'use accessToken without privileges and eventId event_exist',
+    async () => {
+      const USER = await getUserMockDb();
+
+      jest.spyOn(context.jwtService, 'verifyAsync').mockResolvedValue({});
+
+      jest
+        .spyOn(context.tokensRepository, 'findOneByAccessToken')
+        .mockResolvedValue(PAIR_OF_TOKENS_MOCK_DB);
+
+      jest.spyOn(context.accountRepository, 'findById').mockResolvedValue(USER);
+
+      jest
+        .spyOn(context.eventRepository, 'findById')
+        .mockResolvedValue(FUTURE_EVENT_MOCK_DB);
+    },
+  );
 };

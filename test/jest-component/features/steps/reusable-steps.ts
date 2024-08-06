@@ -65,6 +65,7 @@ export const reusableSteps: StepDefinitions = ({ when, then, and }) => {
     /^well-formed success response with status code (\d+) returned$/,
     (code_n) => {
       expect(context.response.status).toBe(parseInt(code_n));
+
       if (context.response.status !== HttpStatus.NO_CONTENT) check_swagger();
     },
   );
