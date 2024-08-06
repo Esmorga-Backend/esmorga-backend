@@ -25,7 +25,7 @@ import {
   SwaggerDEleteEvents,
 } from '../swagger/decorators/events';
 import { EventListDto } from '../../dtos';
-import { CreateEventDto, JoinEventDto } from '../dtos';
+import { CreateEventDto, EventIdDto } from '../dtos';
 import { RequestId } from '../req-decorators';
 import { AuthGuard } from '../guards';
 
@@ -96,11 +96,11 @@ export class EventController {
   @SwaggerDEleteEvents()
   async deleteEvent(
     @Headers('Authorization') accessToken: string,
-    @Body() joinEventDto: JoinEventDto,
+    @Body() joinEventDto: EventIdDto,
     @RequestId() requestId: string,
   ) {
     try {
-      // TODO change JoinEventDto
+      // TODO change EventIdDto
       this.logger.info(
         `[EventController] [deleteEvent] - x-request-id:${requestId}`,
       );
