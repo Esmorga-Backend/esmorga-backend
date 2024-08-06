@@ -9,6 +9,7 @@ import {
   InternalServerErrorException,
   UseFilters,
   UseGuards,
+  HttpCode,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { PinoLogger } from 'nestjs-pino';
@@ -90,7 +91,7 @@ export class EventController {
 
   @Delete('/')
   @UseGuards(AuthGuard)
-  @SwaggerCreateEvent()
+  @HttpCode(204)
   async deleteEvent(
     @Headers('Authorization') accessToken: string,
     @Body() joinEventDto: JoinEventDto,
