@@ -7,7 +7,11 @@ import {
   EventParticipantsRepository,
 } from '../../../infrastructure/db/repositories';
 import { USER_ROLES } from '../../../domain/const';
-import { NotAdminAccountApiError } from '../../../domain/errors';
+import {
+  NotAdminAccountApiError,
+  BadEventIdApiError,
+} from '../../../domain/errors';
+import { DataBaseNotFoundError } from '../../../infrastructure/db/errors';
 
 @Injectable()
 export class DeleteEventService {
@@ -24,6 +28,8 @@ export class DeleteEventService {
       this.logger.info(
         `[DeleteEventService] [delete] - x-request-id:${requestId}`,
       );
+
+      await this.eventRepository.getEvent(eventId, requestId);
 
       const { uuid } = await this.tokensRepository.getPairOfTokensByAccessToken(
         accessToken,
@@ -47,6 +53,9 @@ export class DeleteEventService {
       this.logger.error(
         `[DeleteEventService] [delete] - x-request-id:${requestId}, error ${error}`,
       );
+
+      if (error instanceof DataBaseNotFoundError)
+        throw new BadEventIdApiError();
 
       throw error;
     }
