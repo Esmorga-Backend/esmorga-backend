@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PinoLogger } from 'nestjs-pino';
 import {
   DataBaseUnathorizedError,
-  DataBaseBadRequestError,
+  DataBaseNotFoundError,
 } from '../../../infrastructure/db/errors';
 import {
   EventRepository,
@@ -55,7 +55,7 @@ export class JoinEventService {
       if (error instanceof DataBaseUnathorizedError)
         throw new InvalidTokenApiError();
 
-      if (error instanceof DataBaseBadRequestError)
+      if (error instanceof DataBaseNotFoundError)
         throw new InvalidEventIdApiError();
 
       throw error;
