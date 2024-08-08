@@ -102,14 +102,8 @@ export class EventController {
       this.logger.info(
         `[EventController] [updateEvent] - x-request-id:${requestId}`,
       );
-      const {
-        eventName,
-        eventDate,
-        description,
-        eventType,
-        location,
-        location: { name },
-      } = updateEventDto;
+      const { eventName, eventDate, description, eventType, location } =
+        updateEventDto;
 
       const fieldsToValidate = {
         eventName,
@@ -117,7 +111,6 @@ export class EventController {
         description,
         eventType,
         location,
-        name,
       };
 
       validateNotNullableFields(fieldsToValidate);

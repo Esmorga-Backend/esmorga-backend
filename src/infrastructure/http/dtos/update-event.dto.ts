@@ -85,6 +85,7 @@ class UpdateEventLocationDto {
   @IsString()
   @IsNotEmpty()
   @ApiProperty({ example: 'A Coruña', maxLength: 100 })
+  @IsOptional()
   name: string;
 
   @IsNumber({}, { message: 'lat must be a number' })
@@ -93,6 +94,7 @@ class UpdateEventLocationDto {
   })
   @ValidateIf((location) => location.long)
   @ApiPropertyOptional({ example: 43.35525182148881 })
+  @IsOptional()
   lat?: number;
 
   @IsNumber({}, { message: 'long must be a number' })
@@ -101,6 +103,7 @@ class UpdateEventLocationDto {
   })
   @ValidateIf((location) => location.lat)
   @ApiPropertyOptional({ example: -8.41937931298951 })
+  @IsOptional()
   long?: number;
 }
 
@@ -127,9 +130,9 @@ export class UpdateEventDto {
   @Matches(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/, {
     message: 'eventDate must be in ISO format (yyyy-MM-ddTHH:mm:ss.SSSZ)',
   })
-  @IsOptional()
   @IsString()
   @IsNotEmpty()
+  @IsOptional()
   eventDate?: string;
 
   @ApiProperty({
@@ -171,7 +174,6 @@ export class UpdateEventDto {
     minLength: 3,
     maxLength: 25,
   })
-  @IsOptional()
   @MinLength(3, {
     each: true,
     message: 'tags must have min 3 characters for each tag',
@@ -194,5 +196,6 @@ export class UpdateEventDto {
         ]
       : value,
   )
+  @IsOptional()
   tags?: string[];
 }

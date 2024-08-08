@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PinoLogger } from 'nestjs-pino';
 import { EventDto } from '../../../infrastructure/dtos';
 import { UpdateEventDto } from '../../../infrastructure/http/dtos';
-import { USER_ROLE } from '../../../domain/user-const';
+import { USER_ROLES } from '../../../domain/const';
 import {
   DataBaseBadRequestError,
   DataBaseUnathorizedError,
@@ -54,17 +54,28 @@ export class UpdateEventService {
         requestId,
       );
 
-      if (role !== USER_ROLE.ADMIN) throw new InvalidRoleApiError();
+      if (role !== USER_ROLES.ADMIN) throw new InvalidRoleApiError();
 
       const { eventId } = updateEventDto;
 
-      await this.eventRepository.findOneByEventId(eventId, requestId);
+      const existingEvent = await this.eventRepository.findOneByEventId(
+        eventId,
+        requestId,
+      );
+
+      if (updateEventDto.location) {
+        updateEventDto.location = {
+          ...existingEvent.location,
+          ...updateEventDto.location,
+        };
+      }
 
       const updatedEvent = await this.eventRepository.updateEvent(
         uuid,
         eventId,
         updateEventDto,
       );
+
       return updatedEvent;
     } catch (error) {
       this.logger.error(
