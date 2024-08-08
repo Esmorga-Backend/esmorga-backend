@@ -8,6 +8,7 @@ import {
   Body,
   HttpCode,
   UseGuards,
+  Delete,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { PinoLogger } from 'nestjs-pino';
@@ -16,6 +17,7 @@ import {
   RegisterService,
   RefreshTokenService,
   JoinEventService,
+  DisJoinEventService,
 } from '../../../application/handler/account';
 import { HttpExceptionFilter } from '../filters';
 import {
@@ -44,6 +46,7 @@ export class AccountController {
     private readonly registerService: RegisterService,
     private readonly refreshTokenService: RefreshTokenService,
     private readonly joinEventService: JoinEventService,
+    private readonly disJoinEventService: DisJoinEventService,
   ) {}
 
   @Post('/login')
@@ -156,6 +159,37 @@ export class AccountController {
     } catch (error) {
       this.logger.error(
         `[AccountController] [joinEvent] - x-request-id:${requestId}, error ${error}`,
+      );
+
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new InternalServerErrorException();
+    }
+  }
+
+  @Delete('/events')
+  @UseGuards(AuthGuard)
+  @SwaggerJoinEvent()
+  @HttpCode(204)
+  async disJoinEvent(
+    @Headers('Authorization') accessToken: string,
+    @Body() joinEventDto: JoinEventDto,
+    @RequestId() requestId: string,
+  ) {
+    try {
+      this.logger.info(
+        `[AccountController] [disJoinEvent] - x-request-id:${requestId}`,
+      );
+
+      await this.disJoinEventService.disJoinEvent(
+        accessToken,
+        joinEventDto.eventId,
+        requestId,
+      );
+    } catch (error) {
+      this.logger.error(
+        `[AccountController] [disJoinEvent] - x-request-id:${requestId}, error ${error}`,
       );
 
       if (error instanceof HttpException) {

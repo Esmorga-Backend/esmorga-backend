@@ -7,6 +7,7 @@ import {
   RegisterService,
   RefreshTokenService,
   JoinEventService,
+  DisJoinEventService,
 } from '../../../application/handler/account';
 import {
   AccountRepository,
@@ -41,6 +42,7 @@ import { EventSharedModule } from './event-shared.module';
     RegisterService,
     RefreshTokenService,
     JoinEventService,
+    DisJoinEventService,
     GenerateTokenPair,
     AccountRepository,
     TokensRepository,
