@@ -52,7 +52,7 @@ export const disjoinEventSteps: StepDefinitions = ({ given, and }) => {
       .mockResolvedValue(null);
   });
 
-  // TC-99 TC-101
+  // TC-99 TC-101 TC-103
   and('I am authenticated with a valid accessToken', () => {
     jest.spyOn(context.jwtService, 'verifyAsync').mockResolvedValue({});
 
@@ -68,6 +68,13 @@ export const disjoinEventSteps: StepDefinitions = ({ given, and }) => {
 
   // TC-99
   and('i have provided a valid eventId', () => {
+    jest
+      .spyOn(context.eventRepository, 'findById')
+      .mockResolvedValue(FUTURE_EVENT_MOCK_DB);
+  });
+
+  // TC-103
+  and('i provide a valid eventId for an event I am not joined', () => {
     jest
       .spyOn(context.eventRepository, 'findById')
       .mockResolvedValue(FUTURE_EVENT_MOCK_DB);
