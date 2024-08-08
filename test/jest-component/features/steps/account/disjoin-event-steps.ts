@@ -52,7 +52,7 @@ export const disjoinEventSteps: StepDefinitions = ({ given, and }) => {
       .mockResolvedValue(null);
   });
 
-  // TC-99 TC-101 TC-103
+  // TC-99 TC-101 TC-103 TC-140
   and('I am authenticated with a valid accessToken', () => {
     jest.spyOn(context.jwtService, 'verifyAsync').mockResolvedValue({});
 
@@ -83,5 +83,12 @@ export const disjoinEventSteps: StepDefinitions = ({ given, and }) => {
   // TC-101
   and('i have provided a eventId that do not exist in the DB', () => {
     jest.spyOn(context.eventRepository, 'findById').mockResolvedValue(null);
+  });
+
+  // TC-140
+  and('i have provided a valid eventId that has a past date', () => {
+    jest
+      .spyOn(context.eventRepository, 'findById')
+      .mockResolvedValue(OLD_EVENT_MOCK_DB);
   });
 };
