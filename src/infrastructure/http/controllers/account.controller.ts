@@ -30,6 +30,7 @@ import {
   SwaggerAccountLogin,
   SwaggerAccountRegister,
   SwaggerJoinEvent,
+  SwaggerDisjoinEvent,
   SwaggerRefreshToken,
 } from '../swagger/decorators/account';
 import { AccountLoggedDto, NewPairOfTokensDto } from '../../dtos';
@@ -170,6 +171,7 @@ export class AccountController {
 
   @Delete('/events')
   @UseGuards(AuthGuard)
+  @SwaggerDisjoinEvent()
   @HttpCode(204)
   async disJoinEvent(
     @Headers('Authorization') accessToken: string,
