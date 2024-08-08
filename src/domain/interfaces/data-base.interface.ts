@@ -8,5 +8,6 @@ export interface DBRepository<E> {
   findAndUpdateParticipantsList(eventId: string, userId: string);
   save(data);
   updateById(id: string, data);
+  removePartipantFromList(eventId: string, userId: string);
   removeById(id: string);
 }

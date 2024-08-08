@@ -43,6 +43,12 @@ export class DisjoinEventService {
       if (eventDate < new Date()) {
         throw new NotAccepteableDisjoinEventApiError();
       }
+
+      await this.eventParticipantsRepository.disjoinParticipantList(
+        eventId,
+        uuid,
+        requestId,
+      );
     } catch (error) {
       this.logger.error(
         `[DisjoinEventService] [disJoinEvent] - x-request-id: ${requestId}, error ${error}`,
