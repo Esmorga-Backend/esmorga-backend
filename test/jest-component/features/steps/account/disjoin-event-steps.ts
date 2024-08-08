@@ -50,6 +50,7 @@ export const disjoinEventSteps: StepDefinitions = ({ given, and }) => {
       .mockResolvedValue(null);
   });
 
+  // TC-99 TC-101
   and('I am authenticated with a valid accessToken', () => {
     context.headers = HEADERS;
 
@@ -60,9 +61,15 @@ export const disjoinEventSteps: StepDefinitions = ({ given, and }) => {
       .mockResolvedValue(PAIR_OF_TOKENS_MOCK_DB);
   });
 
+  // TC-99
   and('i have provided a valid eventId', () => {
     jest
       .spyOn(context.eventRepository, 'findById')
       .mockResolvedValue(FUTURE_EVENT_MOCK_DB);
+  });
+
+  // TC-101
+  and('i have provided a eventId that do not exist in the DB', () => {
+    jest.spyOn(context.eventRepository, 'findById').mockResolvedValue(null);
   });
 };
