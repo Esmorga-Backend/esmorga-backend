@@ -1,26 +1,26 @@
 import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
-import { JoinEventDto } from '../../../../../src/infrastructure/http/dtos';
+import { EventIdDto } from '../../../../../src/infrastructure/http/dtos';
 import { JOIN_EVENT_MOCK } from '../../../../mocks/dtos';
 
-describe('[unit-test] [JoinEventDto]', () => {
+describe('[unit-test] [EventIdDto]', () => {
   it('Should validate all fields successfully', async () => {
-    const joinEventDto = plainToInstance(JoinEventDto, JOIN_EVENT_MOCK);
+    const eventIdDto = plainToInstance(EventIdDto, JOIN_EVENT_MOCK);
 
-    const errors = await validate(joinEventDto, { stopAtFirstError: true });
+    const errors = await validate(eventIdDto, { stopAtFirstError: true });
 
     expect(errors.length).toBe(0);
   });
 
-  describe('[JoinEventDto] [eventId]', () => {
+  describe('[EventIdDto] [eventId]', () => {
     it('Should not accept an empty eventId', async () => {
       const joinEventData = { ...JOIN_EVENT_MOCK };
 
       delete joinEventData.eventId;
 
-      const joinEventDto = plainToInstance(JoinEventDto, joinEventData);
+      const eventIdDto = plainToInstance(EventIdDto, joinEventData);
 
-      const errors = await validate(joinEventDto, {
+      const errors = await validate(eventIdDto, {
         stopAtFirstError: true,
       });
 
@@ -36,9 +36,9 @@ describe('[unit-test] [JoinEventDto]', () => {
         eventId: 123,
       };
 
-      const joinEventDto = plainToInstance(JoinEventDto, joinEventData);
+      const eventIdDto = plainToInstance(EventIdDto, joinEventData);
 
-      const errors = await validate(joinEventDto, {
+      const errors = await validate(eventIdDto, {
         stopAtFirstError: true,
       });
 

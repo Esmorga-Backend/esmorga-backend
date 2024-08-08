@@ -24,7 +24,7 @@ import {
   AccountLoginDto,
   AccountRegisterDto,
   RefreshTokenDto,
-  JoinEventDto,
+  EventIdDto,
 } from '../dtos';
 import {
   SwaggerAccountLogin,
@@ -143,7 +143,7 @@ export class AccountController {
   @HttpCode(204)
   async joinEvent(
     @Headers('Authorization') accessToken: string,
-    @Body() joinEventDto: JoinEventDto,
+    @Body() eventIdDto: EventIdDto,
     @RequestId() requestId: string,
   ) {
     try {
@@ -153,7 +153,7 @@ export class AccountController {
 
       await this.joinEventService.joinEvent(
         accessToken,
-        joinEventDto.eventId,
+        eventIdDto.eventId,
         requestId,
       );
     } catch (error) {
@@ -170,11 +170,10 @@ export class AccountController {
 
   @Delete('/events')
   @UseGuards(AuthGuard)
-  @SwaggerJoinEvent()
   @HttpCode(204)
   async disJoinEvent(
     @Headers('Authorization') accessToken: string,
-    @Body() joinEventDto: JoinEventDto,
+    @Body() eventIdDto: EventIdDto,
     @RequestId() requestId: string,
   ) {
     try {
@@ -184,7 +183,7 @@ export class AccountController {
 
       await this.disjoinEventService.disJoinEvent(
         accessToken,
-        joinEventDto.eventId,
+        eventIdDto.eventId,
         requestId,
       );
     } catch (error) {
