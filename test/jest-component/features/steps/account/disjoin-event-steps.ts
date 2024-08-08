@@ -30,6 +30,8 @@ export const disjoinEventSteps: StepDefinitions = ({ given, and }) => {
 
     context.method = METHOD;
 
+    context.headers = HEADERS;
+
     context.mock = BODY;
 
     context.jwtService = moduleFixture.get<JwtService>(JwtService);
@@ -52,13 +54,16 @@ export const disjoinEventSteps: StepDefinitions = ({ given, and }) => {
 
   // TC-99 TC-101
   and('I am authenticated with a valid accessToken', () => {
-    context.headers = HEADERS;
-
     jest.spyOn(context.jwtService, 'verifyAsync').mockResolvedValue({});
 
     jest
       .spyOn(context.tokensRepository, 'findOneByAccessToken')
       .mockResolvedValue(PAIR_OF_TOKENS_MOCK_DB);
+  });
+
+  // TC-102
+  and('I am not authenticated', () => {
+    jest.spyOn(context.jwtService, 'verifyAsync').mockRejectedValue({});
   });
 
   // TC-99
