@@ -17,7 +17,7 @@ import {
   RegisterService,
   RefreshTokenService,
   JoinEventService,
-  DisJoinEventService,
+  DisjoinEventService,
 } from '../../../application/handler/account';
 import { HttpExceptionFilter } from '../filters';
 import {
@@ -46,7 +46,7 @@ export class AccountController {
     private readonly registerService: RegisterService,
     private readonly refreshTokenService: RefreshTokenService,
     private readonly joinEventService: JoinEventService,
-    private readonly disJoinEventService: DisJoinEventService,
+    private readonly disjoinEventService: DisjoinEventService,
   ) {}
 
   @Post('/login')
@@ -182,7 +182,7 @@ export class AccountController {
         `[AccountController] [disJoinEvent] - x-request-id:${requestId}`,
       );
 
-      await this.disJoinEventService.disJoinEvent(
+      await this.disjoinEventService.disJoinEvent(
         accessToken,
         joinEventDto.eventId,
         requestId,
