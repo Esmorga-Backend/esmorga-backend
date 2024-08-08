@@ -98,6 +98,18 @@ export class MongoRepository<E> implements DBRepository<E> {
   }
 
   /**
+   * Find a document with that eventId and update it removing the userId from the particpant list.
+   * @param eventId - Event identificator.
+   * @param userId - User identificator to add as participant.
+   */
+  async removePartipantFromList(eventId: string, userId: string) {
+    await this.entityModel.updateOne(
+      { eventId },
+      { $pull: { participants: userId } },
+    );
+  }
+
+  /**
    * Remove a document by its ID.
    *
    * @param id - The ID of the document to remove.

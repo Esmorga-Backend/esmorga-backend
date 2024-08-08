@@ -1,13 +1,13 @@
 import { HttpStatus } from '@nestjs/common';
 import { ApiError } from './api-error';
 
-export class NotAccepteableEventApiError extends ApiError {
+export class NotAccepteableDisjoinEventApiError extends ApiError {
   constructor() {
     super(
       HttpStatus.NOT_ACCEPTABLE,
       'notAcceptable',
       'not Acceptable',
-      'cannot join past events',
+      'cannot disjoin past events',
     );
   }
 }
