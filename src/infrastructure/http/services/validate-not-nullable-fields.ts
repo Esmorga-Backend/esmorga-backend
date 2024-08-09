@@ -9,5 +9,8 @@ export function validateNotNullableFields(fieldsToValidate: object) {
     if (value === null && value !== undefined) {
       throw new InvalidNullFieldApiError(key);
     }
+    if (typeof value === 'object' && value !== null) {
+      validateNotNullableFields(value);
+    }
   });
 }

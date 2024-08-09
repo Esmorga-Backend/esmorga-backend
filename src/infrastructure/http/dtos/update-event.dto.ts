@@ -3,6 +3,7 @@ import { Transform, Type } from 'class-transformer';
 import {
   ArrayMaxSize,
   IsArray,
+  IsDefined,
   IsEnum,
   IsNotEmpty,
   IsNumber,
@@ -81,12 +82,13 @@ function IsNotPastDate(validationOptions?: ValidationOptions) {
 }
 
 class UpdateEventLocationDto {
+  @MinLength(1, { message: 'name must have min 1 character' })
   @MaxLength(100, { message: 'name must have max 100 characters' })
   @IsString()
-  @IsNotEmpty()
-  @ApiProperty({ example: 'A Coruña', maxLength: 100 })
+  @IsDefined({ message: 'name should not be empty' })
+  @ApiPropertyOptional({ example: 'A Coruña', minLength: 1, maxLength: 100 })
   @IsOptional()
-  name: string;
+  name?: string;
 
   @IsNumber({}, { message: 'lat must be a number' })
   @IsNotEmpty({
@@ -113,7 +115,7 @@ export class UpdateEventDto {
   @ApiProperty({ example: 'eventId' })
   eventId: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     example: 'End of the World Party',
     minLength: 3,
     maxLength: 100,
@@ -124,7 +126,7 @@ export class UpdateEventDto {
   @IsOptional()
   eventName?: string;
 
-  @ApiProperty({ example: '2025-03-08T10:05:30.915Z' })
+  @ApiPropertyOptional({ example: '2025-03-08T10:05:30.915Z' })
   @IsNotPastDate({ message: 'eventDate cannot be in the past' })
   @IsValidDate({ message: 'eventDate must be valid' })
   @Matches(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/, {
@@ -135,17 +137,19 @@ export class UpdateEventDto {
   @IsOptional()
   eventDate?: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     example:
       'Join us for an unforgettable celebration as we dance into the apocalypse.',
+    minLength: 4,
     maxLength: 5000,
   })
+  @MinLength(4, { message: 'description must have min 4 characters' })
   @MaxLength(5000, { message: 'description must have max 5000 characters' })
   @IsString()
   @IsOptional()
   description: string;
 
-  @ApiProperty({ example: 'Party' })
+  @ApiPropertyOptional({ example: 'Party' })
   @IsEnum(UpdateEventType)
   @IsString()
   @IsNotEmpty()
@@ -154,20 +158,20 @@ export class UpdateEventDto {
 
   @ApiPropertyOptional({ example: 'image.url', maxLength: 500 })
   @MaxLength(500, {
-    message: 'imageUrl description must have max 500 characters',
+    message: 'imageUrl must have max 500 characters',
   })
   @IsString()
   @IsNotEmpty()
   @IsOptional()
   imageUrl?: string;
 
-  @ApiProperty({ type: UpdateEventLocationDto })
+  @ApiPropertyOptional({ type: UpdateEventLocationDto })
   @IsNotEmpty()
   @IsObject()
   @ValidateNested()
   @Type(() => UpdateEventLocationDto)
   @IsOptional()
-  location: UpdateEventLocationDto;
+  location?: UpdateEventLocationDto;
 
   @ApiPropertyOptional({
     example: ['Dance', 'Music'],

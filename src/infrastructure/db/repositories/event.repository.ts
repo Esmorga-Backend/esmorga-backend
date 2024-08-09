@@ -12,7 +12,7 @@ import {
   DataBaseInternalError,
   DataBaseNotFoundError,
 } from '../errors';
-import { validateObjectDto } from '../services';
+import { validateObjectDto, removeNullObjectFields } from '../services';
 import { getNullFields } from '../../../domain/services';
 import { REQUIRED_DTO_FIELDS } from '../consts';
 
@@ -119,9 +119,7 @@ export class EventRepository extends MongoRepository<EventSchema> {
 
       if (Object.keys(nullFields).length > 0) {
         await this.removeFieldsById(eventId, nullFields);
-        Object.keys(nullFields).forEach((key) => {
-          delete fieldsToUpdate[key];
-        });
+        fieldsToUpdate = removeNullObjectFields(fieldsToUpdate, nullFields);
       }
 
       const updatedEvent = await this.updateById(eventId, {
