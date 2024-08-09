@@ -1,5 +1,6 @@
 import {
   Controller,
+  Get,
   Post,
   HttpException,
   InternalServerErrorException,
@@ -16,6 +17,7 @@ import {
   RegisterService,
   RefreshTokenService,
   JoinEventService,
+  GetMyEventsService,
 } from '../../../application/handler/account';
 import { HttpExceptionFilter } from '../filters';
 import {
@@ -44,6 +46,7 @@ export class AccountController {
     private readonly registerService: RegisterService,
     private readonly refreshTokenService: RefreshTokenService,
     private readonly joinEventService: JoinEventService,
+    private readonly getMyEventsService: GetMyEventsService,
   ) {}
 
   @Post('/login')
@@ -156,6 +159,36 @@ export class AccountController {
     } catch (error) {
       this.logger.error(
         `[AccountController] [joinEvent] - x-request-id:${requestId}, error ${error}`,
+      );
+
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new InternalServerErrorException();
+    }
+  }
+
+  @Get('/events')
+  @UseGuards(AuthGuard)
+  async getMyEvents(
+    @Headers('Authorization') accessToken: string,
+    @RequestId() requestId: string,
+  ) {
+    try {
+      this.logger.info(
+        `[AccountController] [getMyEvents] - x-request-id:${requestId}`,
+      );
+
+      // TODO add type to response
+      const repsonse = await this.getMyEventsService.getEvents(
+        accessToken,
+        requestId,
+      );
+
+      return response;
+    } catch (error) {
+      this.logger.error(
+        `[AccountController] [getMyEvents] - x-request-id:${requestId}, error ${error}`,
       );
 
       if (error instanceof HttpException) {
