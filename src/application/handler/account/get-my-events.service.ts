@@ -16,7 +16,7 @@ export class GetMyEventsService {
   async getEvents(accessToken: string, requestId: string) {
     try {
       this.logger.info(
-        `[GetMyEventsService] [getEvents] - x-request-id: ${requestId}, eventId ${eventId}`,
+        `[GetMyEventsService] [getEvents] - x-request-id: ${requestId}`,
       );
     } catch (error) {
       this.logger.error(

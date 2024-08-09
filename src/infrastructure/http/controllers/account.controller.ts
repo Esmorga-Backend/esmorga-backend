@@ -180,7 +180,7 @@ export class AccountController {
       );
 
       // TODO add type to response
-      const repsonse = await this.getMyEventsService.getEvents(
+      const response = await this.getMyEventsService.getEvents(
         accessToken,
         requestId,
       );
