@@ -39,6 +39,13 @@ export const reusableSteps: StepDefinitions = ({ when, then, and }) => {
       .send(context.mock);
   });
 
+  when(/^a PATCH request is made to (.*) API$/, async () => {
+    context.response = await request(app.getHttpServer())
+      .patch(context.path)
+      .set(context.headers)
+      .send(context.mock);
+  });
+
   then(
     /^well-formed error response with status code (\d+) returned, description: (.*), expected result: (.*)$/,
     async (code_n, description, result) => {
