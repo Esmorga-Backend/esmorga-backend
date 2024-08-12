@@ -32,7 +32,7 @@ import {
   SwaggerJoinEvent,
   SwaggerRefreshToken,
 } from '../swagger/decorators/account';
-import { AccountLoggedDto, NewPairOfTokensDto } from '../../dtos';
+import { AccountLoggedDto, NewPairOfTokensDto, EventListDto } from '../../dtos';
 import { RequestId } from '../req-decorators';
 import { AuthGuard } from '../guards';
 
@@ -173,14 +173,13 @@ export class AccountController {
   async getMyEvents(
     @Headers('Authorization') accessToken: string,
     @RequestId() requestId: string,
-  ) {
+  ): Promise<EventListDto> {
     try {
       this.logger.info(
         `[AccountController] [getMyEvents] - x-request-id:${requestId}`,
       );
 
-      // TODO add type to response
-      const response = await this.getMyEventsService.getEvents(
+      const response: EventListDto = await this.getMyEventsService.getEvents(
         accessToken,
         requestId,
       );
