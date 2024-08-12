@@ -379,6 +379,22 @@ describe('[unit-test] [UpdateEventDto]', () => {
         customValidation: 'location should not be empty',
       });
     });
+
+    it('Should only accept an object', async () => {
+      const event = JSON.parse(
+        JSON.stringify({ ...UPDATE_EVENT_MOCK, location: 123 }),
+      );
+
+      const updateEventDto = plainToInstance(UpdateEventDto, event);
+
+      const errors = await validate(updateEventDto, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('location');
+      expect(errors[0].constraints).toEqual({
+        isObject: 'location must be an object',
+      });
+    });
   });
 
   describe('[UpdateEventDto] [location] [name]', () => {

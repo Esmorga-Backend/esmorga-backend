@@ -15,9 +15,9 @@ import {
   MinLength,
   ValidateIf,
   ValidateNested,
-  ValidationOptions,
-  registerDecorator,
 } from 'class-validator';
+
+import { IsValidDate, IsNotPastDate } from './custom-decorators';
 
 export enum EventType {
   PARTY = 'Party',
@@ -25,60 +25,6 @@ export enum EventType {
   FOOD = 'Food',
   CHARITY = 'Charity',
   GAMES = 'Games',
-}
-
-function isValidISODate(eventDate: string): boolean {
-  const [datePart, timePartWithZ] = eventDate.split('T');
-  const timePart = timePartWithZ.replace('Z', '');
-  const [year, month, day] = datePart.split('-').map(Number);
-  const [hour, minute, second, millisecond] = timePart
-    .split(/[:.]/)
-    .map(Number);
-  const date = new Date(
-    Date.UTC(year, month - 1, day, hour, minute, second, millisecond),
-  );
-
-  return (
-    date.getUTCFullYear() === year &&
-    date.getUTCMonth() === month - 1 &&
-    date.getUTCDate() === day &&
-    date.getUTCHours() === hour &&
-    date.getUTCMinutes() === minute &&
-    date.getUTCSeconds() === second &&
-    date.getUTCMilliseconds() === millisecond
-  );
-}
-
-function IsValidDate(validationOptions?: ValidationOptions) {
-  return function (target: object, propertyName: string) {
-    registerDecorator({
-      target: target.constructor,
-      propertyName: propertyName,
-      options: validationOptions,
-      constraints: [],
-      validator: {
-        validate(value: any) {
-          return typeof value === 'string' && isValidISODate(value);
-        },
-      },
-    });
-  };
-}
-
-function IsNotPastDate(validationOptions?: ValidationOptions) {
-  return function (target: object, propertyName: string) {
-    registerDecorator({
-      target: target.constructor,
-      propertyName: propertyName,
-      options: validationOptions,
-      validator: {
-        validate(value: any) {
-          const date = new Date(value);
-          return date > new Date();
-        },
-      },
-    });
-  };
 }
 
 class CreateEventLocationDto {
