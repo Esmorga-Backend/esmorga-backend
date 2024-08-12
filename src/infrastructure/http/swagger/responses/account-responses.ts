@@ -1,6 +1,10 @@
 import { HttpStatus } from '@nestjs/common';
 import { ApiResponseOptions } from '@nestjs/swagger';
-import { AccountLoggedDto, NewPairOfTokensDto } from '../../../dtos';
+import {
+  AccountLoggedDto,
+  NewPairOfTokensDto,
+  EventListDto,
+} from '../../../dtos';
 
 const INTERNAL_ERROR_COMMON_PROPERTIES = {
   title: {
@@ -288,6 +292,47 @@ export const JOIN_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
         errors: {
           type: 'array',
           example: ['cannot join past events'],
+        },
+      },
+    },
+  },
+  INTERNAL_ERROR: {
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Error not handled',
+    schema: {
+      type: 'object',
+      properties: {
+        ...INTERNAL_ERROR_COMMON_PROPERTIES,
+        type: { type: 'string', example: PATHS.JOIN_EVENT },
+      },
+    },
+  },
+};
+
+export const GET_MY_EVENTS_RESPONSES: { [key: string]: ApiResponseOptions } = {
+  OK: {
+    description: 'List of avaliable events user joined',
+    type: EventListDto,
+  },
+  UNAUTHORIZED_ERROR: {
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Invalid credentials',
+    schema: {
+      type: 'object',
+      properties: {
+        title: {
+          type: 'string',
+          example: 'unauthorizedRequestError',
+        },
+        status: { type: 'number', example: HttpStatus.UNAUTHORIZED },
+        type: { type: 'string', example: PATHS.JOIN_EVENT },
+        detail: {
+          type: 'string',
+          example: 'not authorized',
+        },
+        errors: {
+          type: 'array',
+          example: ['token invalid'],
         },
       },
     },

@@ -31,6 +31,7 @@ import {
   SwaggerAccountRegister,
   SwaggerJoinEvent,
   SwaggerRefreshToken,
+  SwaggetGetMyEvents,
 } from '../swagger/decorators/account';
 import { AccountLoggedDto, NewPairOfTokensDto, EventListDto } from '../../dtos';
 import { RequestId } from '../req-decorators';
@@ -48,6 +49,36 @@ export class AccountController {
     private readonly joinEventService: JoinEventService,
     private readonly getMyEventsService: GetMyEventsService,
   ) {}
+
+  @Get('/events')
+  @UseGuards(AuthGuard)
+  @SwaggetGetMyEvents()
+  async getMyEvents(
+    @Headers('Authorization') accessToken: string,
+    @RequestId() requestId: string,
+  ): Promise<EventListDto> {
+    try {
+      this.logger.info(
+        `[AccountController] [getMyEvents] - x-request-id:${requestId}`,
+      );
+
+      const response: EventListDto = await this.getMyEventsService.getEvents(
+        accessToken,
+        requestId,
+      );
+
+      return response;
+    } catch (error) {
+      this.logger.error(
+        `[AccountController] [getMyEvents] - x-request-id:${requestId}, error ${error}`,
+      );
+
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new InternalServerErrorException();
+    }
+  }
 
   @Post('/login')
   @SwaggerAccountLogin()
@@ -159,35 +190,6 @@ export class AccountController {
     } catch (error) {
       this.logger.error(
         `[AccountController] [joinEvent] - x-request-id:${requestId}, error ${error}`,
-      );
-
-      if (error instanceof HttpException) {
-        throw error;
-      }
-      throw new InternalServerErrorException();
-    }
-  }
-
-  @Get('/events')
-  @UseGuards(AuthGuard)
-  async getMyEvents(
-    @Headers('Authorization') accessToken: string,
-    @RequestId() requestId: string,
-  ): Promise<EventListDto> {
-    try {
-      this.logger.info(
-        `[AccountController] [getMyEvents] - x-request-id:${requestId}`,
-      );
-
-      const response: EventListDto = await this.getMyEventsService.getEvents(
-        accessToken,
-        requestId,
-      );
-
-      return response;
-    } catch (error) {
-      this.logger.error(
-        `[AccountController] [getMyEvents] - x-request-id:${requestId}, error ${error}`,
       );
 
       if (error instanceof HttpException) {

@@ -17,12 +17,14 @@ import {
   REGISTER_HEADER,
   REFRESH_TOKEN_HEADERS,
   JOIN_EVENT_HEADERS,
+  GET_MY_EVENT_HEADERS,
 } from '../headers';
 import {
   LOGIN_RESPONSES,
   REGISTER_RESPONSES,
   REFRESH_TOKEN_RESPONSES,
   JOIN_EVENT_RESPONSES,
+  GET_MY_EVENTS_RESPONSES,
 } from '../responses';
 
 export function SwaggerAccountLogin() {
@@ -71,5 +73,18 @@ export function SwaggerJoinEvent() {
     ApiUnauthorizedResponse(JOIN_EVENT_RESPONSES.UNAUTHORIZED_ERROR),
     ApiNotAcceptableResponse(JOIN_EVENT_RESPONSES.NOT_ACCEPTABLE_ERROR),
     ApiInternalServerErrorResponse(JOIN_EVENT_RESPONSES.INTERNAL_ERROR),
+  );
+}
+
+export function SwaggetGetMyEvents() {
+  return applyDecorators(
+    ApiOperation({
+      summary:
+        'Return a list of events the user joined and have not been celebrated',
+    }),
+    ApiHeader(GET_MY_EVENT_HEADERS.AUTHORIZATION_BEARER),
+    ApiOkResponse(GET_MY_EVENTS_RESPONSES.OK),
+    ApiUnauthorizedResponse(GET_MY_EVENTS_RESPONSES.UNAUTHORIZED_ERROR),
+    ApiInternalServerErrorResponse(GET_MY_EVENTS_RESPONSES.INTERNAL_ERROR),
   );
 }
