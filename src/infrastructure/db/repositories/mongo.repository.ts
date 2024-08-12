@@ -108,12 +108,11 @@ export class MongoRepository<E> implements DBRepository<E> {
    * @param data - The data to update the document.
    */
   async updateById(id: string, data: object): Promise<E> {
-    const evento = await this.entityModel.findOneAndUpdate(
+    return this.entityModel.findOneAndUpdate(
       { _id: id },
       { $set: data },
       { new: true },
     );
-    return evento;
   }
 
   /**

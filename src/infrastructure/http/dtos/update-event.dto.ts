@@ -81,6 +81,40 @@ function IsNotPastDate(validationOptions?: ValidationOptions) {
   };
 }
 
+export function IsNotEmptyObject(validationOptions?: ValidationOptions) {
+  return function (object: object, propertyName: string) {
+    registerDecorator({
+      target: object.constructor,
+      propertyName: propertyName,
+      options: validationOptions,
+      validator: {
+        validate(value: any) {
+          return (
+            typeof value === 'object' &&
+            value !== null &&
+            Object.keys(value).length > 0
+          );
+        },
+      },
+    });
+  };
+}
+
+export function IsNotEmptyArray(validationOptions?: ValidationOptions) {
+  return function (object: object, propertyName: string) {
+    registerDecorator({
+      target: object.constructor,
+      propertyName: propertyName,
+      options: validationOptions,
+      validator: {
+        validate(value: any) {
+          return Array.isArray(value) && value !== null && value.length > 0;
+        },
+      },
+    });
+  };
+}
+
 class UpdateEventLocationDto {
   @MinLength(1, { message: 'name must have min 1 character' })
   @MaxLength(100, { message: 'name must have max 100 characters' })
@@ -168,6 +202,7 @@ export class UpdateEventDto {
   @ApiPropertyOptional({ type: UpdateEventLocationDto })
   @IsNotEmpty()
   @IsObject()
+  @IsNotEmptyObject({ message: 'location should not be empty' })
   @ValidateNested()
   @Type(() => UpdateEventLocationDto)
   @IsOptional()
@@ -178,6 +213,7 @@ export class UpdateEventDto {
     minLength: 3,
     maxLength: 25,
   })
+  @IsOptional()
   @MinLength(3, {
     each: true,
     message: 'tags must have min 3 characters for each tag',
@@ -188,9 +224,14 @@ export class UpdateEventDto {
   })
   @IsString({ each: true })
   @ArrayMaxSize(10, { message: 'tags must have max 10 elements' })
+  @IsNotEmptyArray({ message: 'tags should not be empty' })
   @IsArray({ message: 'tags must be an array' })
-  @Transform(({ value }) =>
-    Array.isArray(value)
+  @Transform(({ value }) => {
+    if (value === null) {
+      return null;
+    }
+
+    return Array.isArray(value)
       ? [
           ...new Set(
             value.map((tag) =>
@@ -198,8 +239,7 @@ export class UpdateEventDto {
             ),
           ),
         ]
-      : value,
-  )
-  @IsOptional()
+      : value;
+  })
   tags?: string[];
 }

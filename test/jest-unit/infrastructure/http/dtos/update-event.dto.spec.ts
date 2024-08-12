@@ -347,6 +347,40 @@ describe('[unit-test] [UpdateEventDto]', () => {
     });
   });
 
+  describe('[UpdateEventDto] [location]', () => {
+    it('Should not accept null value', async () => {
+      const event = JSON.parse(
+        JSON.stringify({ ...UPDATE_EVENT_MOCK, location: null }),
+      );
+
+      const updateEventDto = plainToInstance(UpdateEventDto, event);
+
+      try {
+        validateNotNullableFields(updateEventDto);
+        fail('Expected InvalidNullFieldApiError to be thrown');
+      } catch (error) {
+        expect(error).toBeInstanceOf(InvalidNullFieldApiError);
+        expect(error.message).toBe('location should not be empty');
+      }
+    });
+
+    it('Should not accept an empty object', async () => {
+      const event = JSON.parse(
+        JSON.stringify({ ...UPDATE_EVENT_MOCK, location: {} }),
+      );
+
+      const updateEventDto = plainToInstance(UpdateEventDto, event);
+
+      const errors = await validate(updateEventDto, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('location');
+      expect(errors[0].constraints).toEqual({
+        customValidation: 'location should not be empty',
+      });
+    });
+  });
+
   describe('[UpdateEventDto] [location] [name]', () => {
     it('Should not accept null value', async () => {
       const event = JSON.parse(
@@ -502,6 +536,19 @@ describe('[unit-test] [UpdateEventDto]', () => {
   });
 
   describe('[CreateEventDto] [tags]', () => {
+    it('Should not accept an empty array', async () => {
+      const event = { ...UPDATE_EVENT_MOCK, tags: [] };
+
+      const updateEventDto = plainToInstance(UpdateEventDto, event);
+
+      const errors = await validate(updateEventDto, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('tags');
+      expect(errors[0].constraints).toEqual({
+        customValidation: 'tags should not be empty',
+      });
+    });
     it('Should not accept less than 3 characters for each array field', async () => {
       const event = { ...UPDATE_EVENT_MOCK };
 

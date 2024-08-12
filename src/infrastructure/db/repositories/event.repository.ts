@@ -60,7 +60,7 @@ export class EventRepository extends MongoRepository<EventSchema> {
         excludeExtraneousValues: true,
       });
 
-      validateObjectDto(adaptedEvent, REQUIRED_DTO_FIELDS.EVENTS);
+      validateObjectDto(adaptedEvent, REQUIRED_DTO_FIELDS.UPDATE_EVENT);
 
       return adaptedEvent;
     } catch (error) {
@@ -118,8 +118,8 @@ export class EventRepository extends MongoRepository<EventSchema> {
       const nullFields = getNullFields(fieldsToUpdate);
 
       if (Object.keys(nullFields).length > 0) {
-        await this.removeFieldsById(eventId, nullFields);
         fieldsToUpdate = removeNullObjectFields(fieldsToUpdate, nullFields);
+        await this.removeFieldsById(eventId, nullFields);
       }
 
       const updatedEvent = await this.updateById(eventId, {

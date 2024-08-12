@@ -105,9 +105,12 @@ export class EventController {
       const { eventName, eventDate, description, eventType, location } =
         updateEventDto;
 
-      const updatedLocation = {
-        location: location?.name ?? undefined,
-      };
+      const updatedLocation =
+        location !== null
+          ? {
+              name: location?.name === null ? null : location?.name,
+            }
+          : null;
 
       const fieldsToValidate = {
         eventName,

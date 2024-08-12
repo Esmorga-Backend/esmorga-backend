@@ -84,7 +84,9 @@ export class EventDto {
   location: LocationDto;
 
   @Expose()
-  @Transform(({ value }) => (value.length > 0 ? value : undefined))
+  @Transform(({ value }) =>
+    Array.isArray(value) && value.length > 0 ? value : undefined,
+  )
   @IsArray()
   @IsString({ each: true })
   @Type(() => String)
