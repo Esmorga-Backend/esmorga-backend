@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { PinoLogger } from 'nestjs-pino';
+import { EventDto } from '../../../infrastructure/dtos';
 import {
   TokensRepository,
+  EventRepository,
   EventParticipantsRepository,
 } from '../../../infrastructure/db/repositories';
 
@@ -10,10 +12,14 @@ export class GetMyEventsService {
   constructor(
     private readonly logger: PinoLogger,
     private readonly tokensRepository: TokensRepository,
+    private readonly eventRepository: EventRepository,
     private readonly eventParticipantsRepository: EventParticipantsRepository,
   ) {}
 
-  async getEvents(accessToken: string, requestId: string) {
+  async getEvents(
+    accessToken: string,
+    requestId?: string,
+  ): Promise<EventDto[]> {
     try {
       this.logger.info(
         `[GetMyEventsService] [getEvents] - x-request-id: ${requestId}`,
@@ -27,7 +33,10 @@ export class GetMyEventsService {
       const eventIds: string[] =
         await this.eventParticipantsRepository.getEventsJoined(uuid, requestId);
 
-      console.log({ eventIds });
+      const events: EventDto[] =
+        await this.eventRepository.getEventListByEventsIds(eventIds, requestId);
+
+      return events;
     } catch (error) {
       this.logger.error(
         `[GetMyEventsService] [getEvents] - x-request-id: ${requestId}, error ${error}`,

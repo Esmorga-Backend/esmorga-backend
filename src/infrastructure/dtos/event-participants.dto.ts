@@ -5,6 +5,10 @@ export class EventParticipantsDto {
   @Transform((value) => value.obj._id.toString())
   @Expose({ name: '_id' })
   @IsString()
+  id: string;
+
+  @Expose()
+  @IsString()
   eventId: string;
 
   @Expose()

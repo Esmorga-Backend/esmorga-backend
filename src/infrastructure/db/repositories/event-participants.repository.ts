@@ -45,8 +45,8 @@ export class EventParticipantsRepository extends MongoRepository<EventParticipan
 
   /**
    * Return the event IDs the user has joined as participant
-   * @param userId User identifier
-   * @param requestId Request identifier for API logger
+   * @param userId - User identifier
+   * @param requestId - Request identifier for API logger
    * @returns Array of strings with the event IDs the user joined
    */
   async getEventsJoined(userId: string, requestId?: string): Promise<string[]> {

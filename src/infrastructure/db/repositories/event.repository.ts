@@ -20,6 +20,11 @@ export class EventRepository extends MongoRepository<EventSchema> {
     super(eventModel);
   }
 
+  /**
+   * Store a new event document
+   * @param createEventDto - Event data provided
+   * @param requestId - Request identifier for API logger
+   */
   async createEvent(createEventDto: CreateEventDto, requestId?: string) {
     try {
       this.logger.info(
@@ -38,6 +43,11 @@ export class EventRepository extends MongoRepository<EventSchema> {
     }
   }
 
+  /**
+   * Return all events stored in the DB
+   * @param requestId - Request identifier for API logger
+   * @returns Promise of EventDto array
+   */
   async getEventList(requestId?: string): Promise<EventDto[]> {
     try {
       this.logger.info(
@@ -66,6 +76,49 @@ export class EventRepository extends MongoRepository<EventSchema> {
     }
   }
 
+  /**
+   * Return events list related to IDs provided in string format
+   * @param eventIds - Array of event indentifiers in string format
+   * @param requestId - Request identifier for API logger
+   * @returns Promise of EventDto array
+   */
+  async getEventListByEventsIds(
+    eventIds: string[],
+    requestId?: string,
+  ): Promise<EventDto[]> {
+    try {
+      this.logger.info(
+        `[EventRepository] [getEventList] - x-request-id:${requestId}`,
+      );
+
+      const events = await this.findByEventIds(eventIds);
+
+      const adaptedEvents: EventDto[] = events.map((event) => {
+        const eventDto = plainToClass(EventDto, event, {
+          excludeExtraneousValues: true,
+        });
+
+        validateObjectDto(eventDto, REQUIRED_DTO_FIELDS.EVENTS);
+
+        return eventDto;
+      });
+
+      return adaptedEvents;
+    } catch (error) {
+      this.logger.error(
+        `[EventRepository] [getEventList] - x-request-id:${requestId}, error ${error}`,
+      );
+
+      throw new DataBaseInternalError();
+    }
+  }
+
+  /**
+   * Return single event related to ID provided
+   * @param eventId - Event identifier
+   * @param requestId - Request identifier for API logger
+   * @returns Promise of EventDto
+   */
   async getEvent(eventId: string, requestId?: string): Promise<EventDto> {
     try {
       this.logger.info(
