@@ -55,13 +55,13 @@ export const updateEventSteps: StepDefinitions = ({ given, and }) => {
       .spyOn(context.eventRepository, 'updateById')
       .mockResolvedValue(UPDATED_EVENT_MOCK_DB);
   });
-
+  // ###### MOB-TC-75 ######
   and('use accessToken invalid and eventId event_exist', async () => {
     jest
       .spyOn(context.tokensRepository, 'findOneByAccessToken')
       .mockResolvedValue(null);
   });
-
+  // ###### MOB-TC-76 ######
   and(
     'use accessToken without enough privileges and eventId event_exist',
     async () => {
