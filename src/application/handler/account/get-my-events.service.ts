@@ -18,6 +18,16 @@ export class GetMyEventsService {
       this.logger.info(
         `[GetMyEventsService] [getEvents] - x-request-id: ${requestId}`,
       );
+
+      const { uuid } = await this.tokensRepository.getPairOfTokensByAccessToken(
+        accessToken,
+        requestId,
+      );
+
+      const eventIds: string[] =
+        await this.eventParticipantsRepository.getEventsJoined(uuid, requestId);
+
+      console.log({ eventIds });
     } catch (error) {
       this.logger.error(
         `[GetMyEventsService] [getEvents] - x-request-id: ${requestId}, error ${error}`,

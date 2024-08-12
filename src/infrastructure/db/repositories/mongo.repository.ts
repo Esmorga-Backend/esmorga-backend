@@ -64,6 +64,15 @@ export class MongoRepository<E> implements DBRepository<E> {
   }
 
   /**
+   * Find the documents where user joined as participant
+   * @param userId - User identifier
+   * @returns Promise resolved the the documents that has the userId in the participant list
+   */
+  async findEventParticipant(userId: string): Promise<E[]> {
+    return this.entityModel.find({ participants: { $in: [userId] } });
+  }
+
+  /**
    * Find a document with that eventId and add the userId as participant if it has not been added yet. Also
    * if the document has not been created, create a new one with this data.
    *
