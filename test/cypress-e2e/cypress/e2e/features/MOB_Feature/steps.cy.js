@@ -20,12 +20,18 @@ Given(/^the GET (\w+) API is available$/, (endpoint) => {
 Given(/^the POST (\w+) API is available$/, (endpoint) => {
   use_endpoint = endpoint;
 });
+Given(/^the PATCH (\w+) API is available$/, (endpoint) => {
+  use_endpoint = endpoint;
+});
 
 When(/^a GET request is made to (\w+) API$/, (endpoint) => {
   api[endpoint].get();
 });
 When(/^a POST request is made to (\w+) API$/, (endpoint) => {
   api[endpoint].post();
+});
+When(/^a PATCH request is made to (\w+) API$/, (endpoint) => {
+  api[endpoint].patch();
 });
 
 And(/^email: (.*)$/, (email) => {
