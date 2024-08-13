@@ -12,7 +12,7 @@ import {
 import {
   BadEventIdApiError,
   InvalidTokenApiError,
-  NotAccepteableEventApiError,
+  NotAcceptableEventApiError,
 } from '../../../domain/errors';
 
 @Injectable()
@@ -40,7 +40,7 @@ export class JoinEventService {
         requestId,
       );
 
-      if (eventDate < new Date()) throw new NotAccepteableEventApiError();
+      if (eventDate < new Date()) throw new NotAcceptableEventApiError();
 
       await this.eventParticipantsRepository.updateParticipantList(
         eventId,

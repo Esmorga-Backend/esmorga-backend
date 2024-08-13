@@ -22,7 +22,7 @@ import { HttpExceptionFilter } from '../filters';
 import {
   SwaggerCreateEvent,
   SwaggerGetEvents,
-  SwaggerDEleteEvents,
+  SwaggerDeleteEvents,
 } from '../swagger/decorators/events';
 import { EventListDto } from '../../dtos';
 import { CreateEventDto, EventIdDto } from '../dtos';
@@ -93,14 +93,13 @@ export class EventController {
   @Delete('/')
   @UseGuards(AuthGuard)
   @HttpCode(204)
-  @SwaggerDEleteEvents()
+  @SwaggerDeleteEvents()
   async deleteEvent(
     @Headers('Authorization') accessToken: string,
     @Body() joinEventDto: EventIdDto,
     @RequestId() requestId: string,
   ) {
     try {
-      // TODO change EventIdDto
       this.logger.info(
         `[EventController] [deleteEvent] - x-request-id:${requestId}`,
       );
@@ -110,8 +109,6 @@ export class EventController {
         joinEventDto.eventId,
         requestId,
       );
-
-      return {};
     } catch (error) {
       this.logger.error(
         `[EventController] [deleteEvent] - x-request-id:${requestId}, error ${error}`,

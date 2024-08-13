@@ -26,7 +26,7 @@ export class DeleteEventService {
   async delete(accessToken: string, eventId: string, requestId?: string) {
     try {
       this.logger.info(
-        `[DeleteEventService] [delete] - x-request-id:${requestId}`,
+        `[DeleteEventService] [delete] - x-request-id: ${requestId}, eventId: ${eventId}`,
       );
 
       await this.eventRepository.getEvent(eventId, requestId);

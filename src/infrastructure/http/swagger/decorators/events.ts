@@ -44,7 +44,7 @@ export function SwaggerGetEvents() {
   );
 }
 
-export function SwaggerDEleteEvents() {
+export function SwaggerDeleteEvents() {
   return applyDecorators(
     ApiOperation({ summary: 'Delete event and the participant list related' }),
     ApiBearerAuth(),

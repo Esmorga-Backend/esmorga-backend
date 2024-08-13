@@ -1,36 +1,11 @@
 import { ApiResponseOptions } from '@nestjs/swagger';
 import { HttpStatus } from '@nestjs/common';
 import { EventListDto } from '../../../dtos';
-
-const BAD_REQUEST_ERROR_COMMON_PROPERTIES = {
-  title: {
-    type: 'string',
-    example: 'badRequestError',
-  },
-  status: { type: 'number', example: 400 },
-  type: { type: 'string', example: '' },
-  detail: {
-    type: 'string',
-    example: 'some inputs are missing',
-  },
-};
-
-const INTERNAL_ERROR_COMMON_PROPERTIES = {
-  title: {
-    type: 'string',
-    example: 'internalServerError',
-  },
-  status: { type: 'number', example: 500 },
-  type: { type: 'string', example: '' },
-  detail: {
-    type: 'string',
-    example: 'unexpected error',
-  },
-  errors: {
-    type: 'array',
-    example: [],
-  },
-};
+import {
+  BAD_REQUEST_ERROR_COMMON_PROPERTIES,
+  UNAUTHORIZED_INVALID_TOKEN_COMMON_PROPERTIES,
+  INTERNAL_ERROR_COMMON_PROPERTIES,
+} from './common-response-properties';
 
 const PATHS = {
   GET_EVENTS: '/v1/events',
@@ -47,7 +22,7 @@ export const CREATE_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
     },
   },
   BAD_REQUEST_ERROR: {
-    description: 'Error for missing inputs',
+    description: 'Some inputs are missed or wrong',
     schema: {
       type: 'object',
       properties: {
@@ -98,16 +73,8 @@ export const DELETE_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
     schema: {
       type: 'object',
       properties: {
-        title: {
-          type: 'string',
-          example: 'badRequestError',
-        },
-        status: { type: 'number', example: HttpStatus.BAD_REQUEST },
-        type: { type: 'string', example: PATHS.DELETE_EVENT },
-        detail: {
-          type: 'string',
-          example: 'some inputs are missing',
-        },
+        ...BAD_REQUEST_ERROR_COMMON_PROPERTIES,
+        type: { example: PATHS.DELETE_EVENT },
         errors: {
           type: 'array',
           example: ['eventId should not be empty'],
@@ -120,20 +87,8 @@ export const DELETE_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
     schema: {
       type: 'object',
       properties: {
-        title: {
-          type: 'string',
-          example: 'unauthorizedRequestError',
-        },
-        status: { type: 'number', example: HttpStatus.UNAUTHORIZED },
+        ...UNAUTHORIZED_INVALID_TOKEN_COMMON_PROPERTIES,
         type: { type: 'string', example: PATHS.DELETE_EVENT },
-        detail: {
-          type: 'string',
-          example: 'not authorized',
-        },
-        errors: {
-          type: 'array',
-          example: ['token invalid'],
-        },
       },
     },
   },
