@@ -11,7 +11,7 @@ import {
   OLD_EVENT_MOCK_DB,
   PAIR_OF_TOKENS_MOCK_DB,
 } from '../../../../mocks/db';
-import { JOIN_EVENT_MOCK } from '../../../../mocks/dtos';
+import { EVENT_ID_MOCK } from '../../../../mocks/dtos';
 
 const PATH = '/v1/account/events';
 
@@ -22,7 +22,7 @@ const HEADERS = {
   Authorization: 'Bearer accessToken',
 };
 
-const BODY = { ...JOIN_EVENT_MOCK };
+const BODY = { ...EVENT_ID_MOCK };
 
 export const joinEventSteps: StepDefinitions = ({ given, and }) => {
   // ###### MOB-TC-53 ######

@@ -1,59 +1,58 @@
 import { Injectable } from '@nestjs/common';
 import { PinoLogger } from 'nestjs-pino';
 import {
-  DataBaseUnathorizedError,
-  DataBaseNotFoundError,
-} from '../../../infrastructure/db/errors';
-import {
   EventRepository,
+  AccountRepository,
   TokensRepository,
   EventParticipantsRepository,
 } from '../../../infrastructure/db/repositories';
+import { USER_ROLES } from '../../../domain/const';
 import {
+  NotAdminAccountApiError,
   BadEventIdApiError,
-  InvalidTokenApiError,
-  NotAcceptableEventApiError,
 } from '../../../domain/errors';
+import { DataBaseNotFoundError } from '../../../infrastructure/db/errors';
 
 @Injectable()
-export class JoinEventService {
+export class DeleteEventService {
   constructor(
     private readonly logger: PinoLogger,
     private readonly eventRepository: EventRepository,
+    private readonly accountRepository: AccountRepository,
     private readonly tokensRepository: TokensRepository,
     private readonly eventParticipantsRepository: EventParticipantsRepository,
   ) {}
 
-  async joinEvent(accessToken: string, eventId: string, requestId?: string) {
+  async delete(accessToken: string, eventId: string, requestId?: string) {
     try {
       this.logger.info(
-        `[JoinEventService] [joinEvent] - x-request-id: ${requestId}, eventId ${eventId}`,
+        `[DeleteEventService] [delete] - x-request-id: ${requestId}, eventId: ${eventId}`,
       );
+
+      await this.eventRepository.getEvent(eventId, requestId);
 
       const { uuid } = await this.tokensRepository.getPairOfTokensByAccessToken(
         accessToken,
         requestId,
       );
 
-      const { eventDate } = await this.eventRepository.getEvent(
-        eventId,
+      const { role } = await this.accountRepository.getUserByUuid(
+        uuid,
         requestId,
       );
 
-      if (eventDate < new Date()) throw new NotAcceptableEventApiError();
+      if (role !== USER_ROLES.ADMIN) throw new NotAdminAccountApiError();
 
-      await this.eventParticipantsRepository.updateParticipantList(
+      await this.eventRepository.removeEvent(eventId, requestId);
+
+      await this.eventParticipantsRepository.removeEventParticipantByEventId(
         eventId,
-        uuid,
         requestId,
       );
     } catch (error) {
       this.logger.error(
-        `[JoinEventService] [joinEvent] - x-request-id: ${requestId}, error ${error}`,
+        `[DeleteEventService] [delete] - x-request-id:${requestId}, error ${error}`,
       );
-
-      if (error instanceof DataBaseUnathorizedError)
-        throw new InvalidTokenApiError();
 
       if (error instanceof DataBaseNotFoundError)
         throw new BadEventIdApiError();
