@@ -8,8 +8,8 @@ import {
 } from '../../../../../src/infrastructure/db/repositories';
 import {
   FUTURE_EVENT_MOCK_DB,
-  OLD_EVENT_MOCK_DB,
   PAIR_OF_TOKENS_MOCK_DB,
+  EVENT_PARTICIPANT_MOCK_DB,
 } from '../../../../mocks/db';
 
 const PATH = '/v1/account/events';
@@ -54,5 +54,13 @@ export const getMyEventsSteps: StepDefinitions = ({ given, and }) => {
   });
 
   // TC-104
-  and('there are upcoming events that I have joined', () => {});
+  and('there are upcoming events that I have joined', () => {
+    jest
+      .spyOn(context.eventParticipantsRepository, 'findEventParticipant')
+      .mockResolvedValue([EVENT_PARTICIPANT_MOCK_DB]);
+
+    jest
+      .spyOn(context.eventRepository, 'findByEventIds')
+      .mockResolvedValue(FUTURE_EVENT_MOCK_DB);
+  });
 };

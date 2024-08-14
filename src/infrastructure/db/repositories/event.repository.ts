@@ -91,7 +91,7 @@ export class EventRepository extends MongoRepository<EventSchema> {
         `[EventRepository] [getEventListByEventsIds] - x-request-id:${requestId}`,
       );
 
-      const events = await this.findByEventIds(eventIds);
+      const events: EventSchema[] = await this.findByEventIds(eventIds);
 
       const adaptedEvents: EventDto[] = events.map((event) => {
         const eventDto = plainToClass(EventDto, event, {

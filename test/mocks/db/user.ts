@@ -1,9 +1,10 @@
 import * as argon2 from 'argon2';
+import { USER_MOCK_DB_ID } from './common';
 
 export const PASSWORD_MOCK_DB = 'Password3';
 
 const USER_MOCK_DB = {
-  _id: '665f019c17331ebee550b2ff',
+  _id: USER_MOCK_DB_ID,
   name: 'Scottie',
   lastName: 'Pippen',
   email: 'esmorga.test.03@yopmail.com',

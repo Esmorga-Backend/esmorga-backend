@@ -1,3 +1,5 @@
+import { FUTURE_EVENT_MOCK_DB_ID, OLD_EVENT_MOCK_DB_ID } from './common';
+
 const currentDate: Date = new Date();
 
 const futureDate: Date = new Date();
@@ -7,7 +9,7 @@ const oldDate: Date = new Date();
 oldDate.setFullYear(2023);
 
 export const FUTURE_EVENT_MOCK_DB = {
-  _id: '6656e23640e1fdb4ceb23cc9',
+  _id: FUTURE_EVENT_MOCK_DB_ID,
   eventName: 'MobgenFest',
   eventDate: futureDate,
   description: 'Hello World',
@@ -25,7 +27,7 @@ export const FUTURE_EVENT_MOCK_DB = {
 
 // Event celebrated
 export const OLD_EVENT_MOCK_DB = {
-  _id: '6656e23640e1fdb4ceb23cc9',
+  _id: OLD_EVENT_MOCK_DB_ID,
   eventName: 'Paintball',
   eventDate: oldDate,
   description: 'Hello World',
