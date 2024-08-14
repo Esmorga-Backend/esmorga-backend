@@ -55,9 +55,10 @@ export class EventParticipantsRepository extends MongoRepository<EventParticipan
         `[EventParticipantsRepository] [getEventParticipant] - x-request-id: ${requestId}, userId: ${userId}`,
       );
 
-      const eventParticipantsDb = await this.findEventParticipant(userId);
+      const eventParticipantsDb: EventParticipantschema[] =
+        await this.findEventParticipant(userId);
 
-      const eventIdJoined = eventParticipantsDb.map(
+      const eventIdJoined: string[] = eventParticipantsDb.map(
         (singleEventParticipanstDb) => {
           const eventParticipants: EventParticipantsDto = plainToClass(
             EventParticipantsDto,

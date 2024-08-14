@@ -88,7 +88,7 @@ export class EventRepository extends MongoRepository<EventSchema> {
   ): Promise<EventDto[]> {
     try {
       this.logger.info(
-        `[EventRepository] [getEventList] - x-request-id:${requestId}`,
+        `[EventRepository] [getEventListByEventsIds] - x-request-id:${requestId}`,
       );
 
       const events = await this.findByEventIds(eventIds);
@@ -106,7 +106,7 @@ export class EventRepository extends MongoRepository<EventSchema> {
       return adaptedEvents;
     } catch (error) {
       this.logger.error(
-        `[EventRepository] [getEventList] - x-request-id:${requestId}, error ${error}`,
+        `[EventRepository] [getEventListByEventsIds] - x-request-id:${requestId}, error ${error}`,
       );
 
       throw new DataBaseInternalError();
@@ -122,7 +122,7 @@ export class EventRepository extends MongoRepository<EventSchema> {
   async getEvent(eventId: string, requestId?: string): Promise<EventDto> {
     try {
       this.logger.info(
-        `[EventRepository] [getEventList] - x-request-id: ${requestId}`,
+        `[EventRepository] [getEvent] - x-request-id: ${requestId}`,
       );
 
       const event = await this.findById(eventId);
@@ -138,7 +138,7 @@ export class EventRepository extends MongoRepository<EventSchema> {
       return eventDto;
     } catch (error) {
       this.logger.error(
-        `[EventRepository] [getEventList] - x-request-id: ${requestId}, error: ${error}`,
+        `[EventRepository] [getEvent] - x-request-id: ${requestId}, error: ${error}`,
       );
 
       // In case eventId is malformed from db side for char length
