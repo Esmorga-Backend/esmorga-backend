@@ -1,3 +1,4 @@
+import { HttpStatus } from '@nestjs/common';
 import { StepDefinitions } from 'jest-cucumber';
 import * as request from 'supertest';
 import Ajv from 'ajv';
@@ -39,6 +40,13 @@ export const reusableSteps: StepDefinitions = ({ when, then, and }) => {
       .send(context.mock);
   });
 
+  when(/^a DELETE request is made to (.*) API$/, async () => {
+    context.response = await request(app.getHttpServer())
+      .delete(context.path)
+      .set(context.headers)
+      .send(context.mock);
+  });
+
   then(
     /^well-formed error response with status code (\d+) returned, description: (.*), expected result: (.*)$/,
     async (code_n, description, result) => {
@@ -57,7 +65,8 @@ export const reusableSteps: StepDefinitions = ({ when, then, and }) => {
     /^well-formed success response with status code (\d+) returned$/,
     (code_n) => {
       expect(context.response.status).toBe(parseInt(code_n));
-      check_swagger();
+
+      if (context.response.status !== HttpStatus.NO_CONTENT) check_swagger();
     },
   );
   and(/^detail in error is (.*) ,description: (.*)$/, async (row) => {

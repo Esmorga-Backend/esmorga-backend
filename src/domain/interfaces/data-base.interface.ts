@@ -11,4 +11,5 @@ export interface DBRepository<E> {
   save(data);
   updateById(id: string, data);
   removeById(id: string);
+  removeByEventId(eventId: string);
 }

@@ -1,26 +1,33 @@
 import {
+  Headers,
   Body,
   Controller,
   Get,
+  Post,
+  Delete,
   HttpException,
   InternalServerErrorException,
-  Post,
   UseFilters,
+  UseGuards,
+  HttpCode,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { PinoLogger } from 'nestjs-pino';
 import {
   CreateEventService,
   GetEventListService,
+  DeleteEventService,
 } from '../../../application/handler/event';
 import { HttpExceptionFilter } from '../filters';
 import {
   SwaggerCreateEvent,
   SwaggerGetEvents,
+  SwaggerDeleteEvents,
 } from '../swagger/decorators/events';
 import { EventListDto } from '../../dtos';
-import { CreateEventDto } from '../dtos';
+import { CreateEventDto, EventIdDto } from '../dtos';
 import { RequestId } from '../req-decorators';
+import { AuthGuard } from '../guards';
 
 @ApiTags('Event')
 @Controller('/v1/events')
@@ -30,6 +37,7 @@ export class EventController {
     private readonly logger: PinoLogger,
     private readonly getEventListService: GetEventListService,
     private readonly createEventService: CreateEventService,
+    private readonly deleteEventService: DeleteEventService,
   ) {}
 
   @Get('/')
@@ -73,6 +81,37 @@ export class EventController {
     } catch (error) {
       this.logger.error(
         `[EventController] [createEvent] - x-request-id:${requestId}, error ${error}`,
+      );
+
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new InternalServerErrorException();
+    }
+  }
+
+  @Delete('/')
+  @UseGuards(AuthGuard)
+  @HttpCode(204)
+  @SwaggerDeleteEvents()
+  async deleteEvent(
+    @Headers('Authorization') accessToken: string,
+    @Body() joinEventDto: EventIdDto,
+    @RequestId() requestId: string,
+  ) {
+    try {
+      this.logger.info(
+        `[EventController] [deleteEvent] - x-request-id:${requestId}`,
+      );
+
+      await this.deleteEventService.delete(
+        accessToken,
+        joinEventDto.eventId,
+        requestId,
+      );
+    } catch (error) {
+      this.logger.error(
+        `[EventController] [deleteEvent] - x-request-id:${requestId}, error ${error}`,
       );
 
       if (error instanceof HttpException) {

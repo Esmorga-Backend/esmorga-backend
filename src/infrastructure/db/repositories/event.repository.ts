@@ -149,4 +149,20 @@ export class EventRepository extends MongoRepository<EventSchema> {
       throw new DataBaseInternalError();
     }
   }
+
+  async removeEvent(eventId: string, requestId?: string) {
+    try {
+      this.logger.info(
+        `[EventRepository] [removeEvent] - x-request-id:${requestId}, eventId ${eventId}`,
+      );
+
+      await this.removeById(eventId);
+    } catch (error) {
+      this.logger.error(
+        `[EventRepository] [removeEvent] - x-request-id:${requestId}, error ${error}`,
+      );
+
+      throw new DataBaseInternalError();
+    }
+  }
 }

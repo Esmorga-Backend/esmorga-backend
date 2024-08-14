@@ -1,8 +1,3 @@
-export const USER_ROLES = {
-  USER: 'USER',
-  ADMIN: 'ADMIN',
-};
-
 export const REQUIRED_DTO_FIELDS = {
   EVENTS: [
     'eventId',
