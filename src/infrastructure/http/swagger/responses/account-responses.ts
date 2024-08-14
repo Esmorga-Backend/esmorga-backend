@@ -1,6 +1,10 @@
 import { HttpStatus } from '@nestjs/common';
 import { ApiResponseOptions } from '@nestjs/swagger';
-import { AccountLoggedDto, NewPairOfTokensDto } from '../../../dtos';
+import {
+  AccountLoggedDto,
+  NewPairOfTokensDto,
+  EventListDto,
+} from '../../../dtos';
 import {
   BAD_REQUEST_ERROR_COMMON_PROPERTIES,
   UNAUTHORIZED_INVALID_TOKEN_COMMON_PROPERTIES,
@@ -247,20 +251,8 @@ export const GET_MY_EVENTS_RESPONSES: { [key: string]: ApiResponseOptions } = {
     schema: {
       type: 'object',
       properties: {
-        title: {
-          type: 'string',
-          example: 'unauthorizedRequestError',
-        },
-        status: { type: 'number', example: HttpStatus.UNAUTHORIZED },
+        ...UNAUTHORIZED_INVALID_TOKEN_COMMON_PROPERTIES,
         type: { type: 'string', example: PATHS.JOIN_EVENT },
-        detail: {
-          type: 'string',
-          example: 'not authorized',
-        },
-        errors: {
-          type: 'array',
-          example: ['token invalid'],
-        },
       },
     },
   },
