@@ -1,7 +1,7 @@
 import { HttpStatus } from '@nestjs/common';
 import { ApiError } from './api-error';
 
-export class NotAccepteableEventApiError extends ApiError {
+export class NotAcceptableEventApiError extends ApiError {
   constructor() {
     super(
       HttpStatus.NOT_ACCEPTABLE,

@@ -1,22 +1,11 @@
 import { HttpStatus } from '@nestjs/common';
 import { ApiResponseOptions } from '@nestjs/swagger';
 import { AccountLoggedDto, NewPairOfTokensDto } from '../../../dtos';
-
-const INTERNAL_ERROR_COMMON_PROPERTIES = {
-  title: {
-    type: 'string',
-    example: 'internalServerError',
-  },
-  status: { type: 'number', example: 500 },
-  detail: {
-    type: 'string',
-    example: 'unexpected error',
-  },
-  errors: {
-    type: 'array',
-    example: [],
-  },
-};
+import {
+  BAD_REQUEST_ERROR_COMMON_PROPERTIES,
+  UNAUTHORIZED_INVALID_TOKEN_COMMON_PROPERTIES,
+  INTERNAL_ERROR_COMMON_PROPERTIES,
+} from './common-response-properties';
 
 const PATHS = {
   LOGIN: '/v1/account/login',
@@ -31,21 +20,12 @@ export const LOGIN_RESPONSES: { [key: string]: ApiResponseOptions } = {
     type: AccountLoggedDto,
   },
   BAD_REQUEST_ERROR: {
-    status: HttpStatus.BAD_REQUEST,
     description: 'Some inputs are missed or wrong',
     schema: {
       type: 'object',
       properties: {
-        title: {
-          type: 'string',
-          example: 'badRequestError',
-        },
-        status: { type: 'number', example: HttpStatus.BAD_REQUEST },
+        ...BAD_REQUEST_ERROR_COMMON_PROPERTIES,
         type: { type: 'string', example: PATHS.LOGIN },
-        detail: {
-          type: 'string',
-          example: 'some inputs are missing',
-        },
         errors: {
           type: 'array',
           example: ['email should not be empty'],
@@ -54,7 +34,6 @@ export const LOGIN_RESPONSES: { [key: string]: ApiResponseOptions } = {
     },
   },
   UNAUTHORIZED_ERROR: {
-    status: HttpStatus.UNAUTHORIZED,
     description: 'Invalid credentials',
     schema: {
       type: 'object',
@@ -77,7 +56,6 @@ export const LOGIN_RESPONSES: { [key: string]: ApiResponseOptions } = {
     },
   },
   INTERNAL_ERROR: {
-    status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Error not handled',
     schema: {
       type: 'object',
@@ -99,16 +77,8 @@ export const REGISTER_RESPONSES: { [key: string]: ApiResponseOptions } = {
     schema: {
       type: 'object',
       properties: {
-        title: {
-          type: 'string',
-          example: 'badRequestError',
-        },
-        status: { type: 'number', example: HttpStatus.BAD_REQUEST },
+        ...BAD_REQUEST_ERROR_COMMON_PROPERTIES,
         type: { type: 'string', example: PATHS.REGISTER },
-        detail: {
-          type: 'string',
-          example: 'some inputs are missing',
-        },
         errors: {
           type: 'array',
           example: ['email should not be empty'],
@@ -157,21 +127,12 @@ export const REFRESH_TOKEN_RESPONSES: { [key: string]: ApiResponseOptions } = {
     type: NewPairOfTokensDto,
   },
   BAD_REQUEST_ERROR: {
-    status: HttpStatus.BAD_REQUEST,
     description: 'Some inputs are missed or wrong',
     schema: {
       type: 'object',
       properties: {
-        title: {
-          type: 'string',
-          example: 'badRequestError',
-        },
-        status: { type: 'number', example: HttpStatus.BAD_REQUEST },
+        ...BAD_REQUEST_ERROR_COMMON_PROPERTIES,
         type: { type: 'string', example: PATHS.REFRESH_TOKEN },
-        detail: {
-          type: 'string',
-          example: 'some inputs are missing',
-        },
         errors: {
           type: 'array',
           example: ['refreshToken should not be empty'],
@@ -180,7 +141,6 @@ export const REFRESH_TOKEN_RESPONSES: { [key: string]: ApiResponseOptions } = {
     },
   },
   UNAUTHORIZED_ERROR: {
-    status: HttpStatus.UNAUTHORIZED,
     description: 'Invalid credentials',
     schema: {
       type: 'object',
@@ -203,7 +163,6 @@ export const REFRESH_TOKEN_RESPONSES: { [key: string]: ApiResponseOptions } = {
     },
   },
   INTERNAL_ERROR: {
-    status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Error not handled',
     schema: {
       type: 'object',
@@ -220,21 +179,12 @@ export const JOIN_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
     description: 'User has successfully joined in the event',
   },
   BAD_REQUEST_ERROR: {
-    status: HttpStatus.BAD_REQUEST,
     description: 'Some inputs are missed or wrong',
     schema: {
       type: 'object',
       properties: {
-        title: {
-          type: 'string',
-          example: 'badRequestError',
-        },
-        status: { type: 'number', example: HttpStatus.BAD_REQUEST },
+        ...BAD_REQUEST_ERROR_COMMON_PROPERTIES,
         type: { type: 'string', example: PATHS.JOIN_EVENT },
-        detail: {
-          type: 'string',
-          example: 'some inputs are missing',
-        },
         errors: {
           type: 'array',
           example: ['eventId should not be empty'],
@@ -243,30 +193,16 @@ export const JOIN_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
     },
   },
   UNAUTHORIZED_ERROR: {
-    status: HttpStatus.UNAUTHORIZED,
     description: 'Invalid credentials',
     schema: {
       type: 'object',
       properties: {
-        title: {
-          type: 'string',
-          example: 'unauthorizedRequestError',
-        },
-        status: { type: 'number', example: HttpStatus.UNAUTHORIZED },
+        ...UNAUTHORIZED_INVALID_TOKEN_COMMON_PROPERTIES,
         type: { type: 'string', example: PATHS.JOIN_EVENT },
-        detail: {
-          type: 'string',
-          example: 'not authorized',
-        },
-        errors: {
-          type: 'array',
-          example: ['token invalid'],
-        },
       },
     },
   },
   NOT_ACCEPTABLE_ERROR: {
-    status: HttpStatus.NOT_ACCEPTABLE,
     description: 'Invalid credentials',
     schema: {
       type: 'object',
@@ -289,7 +225,6 @@ export const JOIN_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
     },
   },
   INTERNAL_ERROR: {
-    status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Error not handled',
     schema: {
       type: 'object',

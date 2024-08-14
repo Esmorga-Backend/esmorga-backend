@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository } from './mongo.repository';
 import { EventParticipants as EventParticipantschema } from '../schema';
+import { DataBaseInternalError } from '../errors';
 
 @Injectable()
 export class EventParticipantsRepository extends MongoRepository<EventParticipantschema> {
@@ -31,7 +32,23 @@ export class EventParticipantsRepository extends MongoRepository<EventParticipan
         `[EventParticipantsRepository] [updateParticipantList] - x-request-id: ${requestId}, error: ${error}`,
       );
 
-      throw error;
+      throw new DataBaseInternalError();
+    }
+  }
+
+  async removeEventParticipantByEventId(eventId: string, requestId?: string) {
+    try {
+      this.logger.info(
+        `[EventParticipantsRepository] [removeEventParticipant] - x-request-id:${requestId}, eventId ${eventId}`,
+      );
+
+      await this.removeByEventId(eventId);
+    } catch (error) {
+      this.logger.error(
+        `[EventParticipantsRepository] [removeEventParticipant] - x-request-id:${requestId}, error ${error}`,
+      );
+
+      throw new DataBaseInternalError();
     }
   }
 

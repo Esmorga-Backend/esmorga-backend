@@ -6,3 +6,4 @@ export * from './invalid-token-error';
 export * from './bad-event-id-error';
 export * from './not-acceptable-event-error';
 export * from './not-acceptable-disjoin-event-error';
+export * from './not-admin-account-error';

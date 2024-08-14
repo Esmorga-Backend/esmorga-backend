@@ -10,4 +10,5 @@ export interface DBRepository<E> {
   updateById(id: string, data);
   removePartipantFromList(eventId: string, userId: string);
   removeById(id: string);
+  removeByEventId(eventId: string);
 }
