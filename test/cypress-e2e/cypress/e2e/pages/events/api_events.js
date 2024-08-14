@@ -8,6 +8,9 @@ class ApiEvents extends ApiBasics {
 
   get() {
     super.get(this.#url);
+    cy.get('@response').then((response) => {
+      cy.wrap(response.body.events[0].eventId).as('eventId');
+    });
   }
 }
 export default ApiEvents;

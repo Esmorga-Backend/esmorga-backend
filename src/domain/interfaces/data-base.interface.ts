@@ -9,5 +9,5 @@ export interface DBRepository<E> {
   save(data);
   updateById(id: string, data: object): Promise<E>;
   removeById(id: string);
-  removeFieldsById(id: string, data: object): Promise<E>;
+  removeByEventId(eventId: string);
 }

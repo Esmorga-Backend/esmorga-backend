@@ -3,12 +3,14 @@ import {
   Controller,
   Get,
   Headers,
+  Post,
+  Delete,
   HttpException,
   InternalServerErrorException,
   Patch,
-  Post,
   UseFilters,
   UseGuards,
+  HttpCode,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { PinoLogger } from 'nestjs-pino';
@@ -16,15 +18,17 @@ import {
   CreateEventService,
   GetEventListService,
   UpdateEventService,
+  DeleteEventService,
 } from '../../../application/handler/event';
 import { HttpExceptionFilter } from '../errors';
 import {
   SwaggerCreateEvent,
   SwaggerGetEvents,
   SwaggerUpdateEvent,
+  SwaggerDeleteEvents,
 } from '../swagger/decorators/events';
 import { EventDto, EventListDto } from '../../dtos';
-import { CreateEventDto, UpdateEventDto } from '../dtos';
+import { CreateEventDto, UpdateEventDto, EventIdDto } from '../dtos';
 import { RequestId } from '../req-decorators';
 import { AuthGuard } from '../guards';
 import { validateNotNullableFields } from '../services';
@@ -38,6 +42,7 @@ export class EventController {
     private readonly getEventListService: GetEventListService,
     private readonly createEventService: CreateEventService,
     private readonly updateEventService: UpdateEventService,
+    private readonly deleteEventService: DeleteEventService,
   ) {}
 
   @Get('/')
@@ -133,6 +138,37 @@ export class EventController {
       this.logger.error(
         `[EventController] [updateEvent] - x-request-id:${requestId}, error ${error}`,
       );
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new InternalServerErrorException();
+    }
+  }
+
+  @Delete('/')
+  @UseGuards(AuthGuard)
+  @HttpCode(204)
+  @SwaggerDeleteEvents()
+  async deleteEvent(
+    @Headers('Authorization') accessToken: string,
+    @Body() joinEventDto: EventIdDto,
+    @RequestId() requestId: string,
+  ) {
+    try {
+      this.logger.info(
+        `[EventController] [deleteEvent] - x-request-id:${requestId}`,
+      );
+
+      await this.deleteEventService.delete(
+        accessToken,
+        joinEventDto.eventId,
+        requestId,
+      );
+    } catch (error) {
+      this.logger.error(
+        `[EventController] [deleteEvent] - x-request-id:${requestId}, error ${error}`,
+      );
+
       if (error instanceof HttpException) {
         throw error;
       }

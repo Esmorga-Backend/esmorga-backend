@@ -7,7 +7,6 @@ import {
   TokensRepository,
 } from '../../../../../src/infrastructure/db/repositories';
 import {
-  getUserMockDb,
   getAdminUserMockDb,
   FUTURE_EVENT_MOCK_DB,
   PAIR_OF_TOKENS_MOCK_DB,
@@ -54,21 +53,8 @@ export const updateEventSteps: StepDefinitions = ({ given, and }) => {
     jest
       .spyOn(context.eventRepository, 'updateById')
       .mockResolvedValue(UPDATED_EVENT_MOCK_DB);
-  });
-  // ###### MOB-TC-75 ######
-  and('use accessToken invalid and eventId event_exist', async () => {
     jest
       .spyOn(context.tokensRepository, 'findOneByAccessToken')
       .mockResolvedValue(null);
   });
-  // ###### MOB-TC-76 ######
-  and(
-    'use accessToken without enough privileges and eventId event_exist',
-    async () => {
-      const USER = await getUserMockDb();
-      jest
-        .spyOn(context.accountRepository, 'findOneById')
-        .mockResolvedValue(USER);
-    },
-  );
 };

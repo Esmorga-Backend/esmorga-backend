@@ -6,3 +6,4 @@ export * from './invalid-eventId-error';
 export * from './invalid-role-error';
 export * from './invalid-token-error';
 export * from './not-acceptable-event-error';
+export * from './not-admin-account-error';

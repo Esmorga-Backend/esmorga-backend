@@ -3,6 +3,7 @@ import { EventController } from '../controllers/event.controller';
 import { AuthGuard } from '../guards';
 import {
   CreateEventService,
+  DeleteEventService,
   GetEventListService,
   UpdateEventService,
 } from '../../../application/handler/event';
@@ -15,6 +16,7 @@ import { AccountSharedModule } from './account-shared.module';
   providers: [
     AuthGuard,
     CreateEventService,
+    DeleteEventService,
     GetEventListService,
     UpdateEventService,
   ],

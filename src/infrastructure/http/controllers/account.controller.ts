@@ -22,7 +22,7 @@ import {
   AccountLoginDto,
   AccountRegisterDto,
   RefreshTokenDto,
-  JoinEventDto,
+  EventIdDto,
 } from '../dtos';
 import {
   SwaggerAccountLogin,
@@ -138,7 +138,7 @@ export class AccountController {
   @HttpCode(204)
   async joinEvent(
     @Headers('Authorization') accessToken: string,
-    @Body() joinEventDto: JoinEventDto,
+    @Body() joinEventDto: EventIdDto,
     @RequestId() requestId: string,
   ) {
     try {

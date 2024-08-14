@@ -1,4 +1,4 @@
-import { ACCESS_TOKEN, CONTENT_TYPE } from './common';
+import { CONTENT_TYPE, AUTHORIZATION_BEARER } from './common';
 
 export const GET_EVENTS_HEADERS = {
   ...CONTENT_TYPE,
@@ -8,4 +8,9 @@ export const CREATE_EVENT_HEADERS = {
   ...CONTENT_TYPE,
 };
 
-export const UPDATE_EVENT_HEADERS = { CONTENT_TYPE, ACCESS_TOKEN };
+export const UPDATE_EVENT_HEADERS = { CONTENT_TYPE, AUTHORIZATION_BEARER };
+
+export const DELETE_EVENT_HEADERS = {
+  CONTENT_TYPE,
+  AUTHORIZATION_BEARER,
+};

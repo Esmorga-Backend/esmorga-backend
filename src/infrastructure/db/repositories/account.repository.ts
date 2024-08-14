@@ -79,6 +79,34 @@ export class AccountRepository extends MongoRepository<UserSchema> {
     }
   }
 
+  async getUserByUuid(uuid: string, requestId?: string) {
+    try {
+      this.logger.info(
+        `[AccountRepository] [getUserByUuid] - x-request-id:${requestId}, uuid ${uuid}`,
+      );
+
+      const user = await this.findOneById(uuid);
+
+      const userProfile: UserProfileDto = plainToClass(UserProfileDto, user, {
+        excludeExtraneousValues: true,
+      });
+
+      if (!userProfile) throw new DataBaseUnathorizedError();
+
+      validateObjectDto(userProfile, REQUIRED_DTO_FIELDS.USER_PROFILE);
+
+      return userProfile;
+    } catch (error) {
+      this.logger.error(
+        `[AccountRepository] [getUserByUuid] - x-request-id:${requestId}, error ${error}`,
+      );
+
+      if (error instanceof HttpException) throw error;
+
+      throw new DataBaseInternalError();
+    }
+  }
+
   async saveUser(data, requestId?: string) {
     try {
       this.logger.info(

@@ -123,4 +123,13 @@ export class MongoRepository<E> implements DBRepository<E> {
   async removeById(id: string) {
     await this.entityModel.findOneAndDelete({ _id: id });
   }
+
+  /**
+   * Remove a document by eventId field.
+   *
+   * @param eventId - The eventId of the document to remove.
+   */
+  async removeByEventId(eventId: string) {
+    await this.entityModel.findOneAndDelete({ eventId: { $eq: eventId } });
+  }
 }
