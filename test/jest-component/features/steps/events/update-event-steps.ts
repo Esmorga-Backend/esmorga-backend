@@ -19,7 +19,7 @@ const HEADERS = {
   Authorization: 'Bearer accessToken',
 };
 
-export const updateEventSteps: StepDefinitions = ({ given, and }) => {
+export const updateEventSteps: StepDefinitions = ({ given }) => {
   // ###### MOB-TC-73 ######
   given('the PATCH Update Event API is available', async () => {
     context.path = '/v1/events';
