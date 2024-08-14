@@ -21,7 +21,6 @@ export class AuthGuard implements CanActivate {
 
     try {
       const [type, token] = authorization.split(' ');
-
       if (!token || type !== 'Bearer') {
         throw new InvalidTokenApiError();
       }
