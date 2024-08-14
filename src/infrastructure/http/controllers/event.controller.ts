@@ -97,7 +97,7 @@ export class EventController {
     @Body() updateEventDto: UpdateEventDto,
     @Headers('Authorization') accessToken: string,
     @RequestId() requestId: string,
-  ) {
+  ): Promise<EventDto> {
     try {
       this.logger.info(
         `[EventController] [updateEvent] - x-request-id:${requestId}`,

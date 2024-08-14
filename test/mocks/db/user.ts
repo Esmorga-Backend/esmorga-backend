@@ -1,5 +1,5 @@
 import * as argon2 from 'argon2';
-import { USER_ROLES } from '../../../src/domain/const';
+import { USER_ROLES } from '../../../src/domain/consts';
 
 export const PASSWORD_MOCK_DB = 'Password3';
 

@@ -19,13 +19,7 @@ import {
 
 import { IsValidDate, IsNotPastDate } from './custom-decorators';
 
-export enum EventType {
-  PARTY = 'Party',
-  SPORT = 'Sport',
-  FOOD = 'Food',
-  CHARITY = 'Charity',
-  GAMES = 'Games',
-}
+import { EVENT_TYPE } from '../../../domain/consts';
 
 class CreateEventLocationDto {
   @MinLength(1, { message: 'name must have min 1 character' })
@@ -87,10 +81,10 @@ export class CreateEventDto {
   description: string;
 
   @ApiProperty({ example: 'Party' })
-  @IsEnum(EventType)
+  @IsEnum(EVENT_TYPE)
   @IsString()
   @IsNotEmpty()
-  eventType: EventType;
+  eventType: EVENT_TYPE;
 
   @ApiPropertyOptional({ example: 'image.url', maxLength: 500 })
   @MaxLength(500, {

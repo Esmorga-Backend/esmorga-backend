@@ -24,13 +24,7 @@ import {
   IsNotEmptyObject,
 } from './custom-decorators';
 
-export enum UpdateEventType {
-  PARTY = 'Party',
-  SPORT = 'Sport',
-  FOOD = 'Food',
-  CHARITY = 'Charity',
-  GAMES = 'Games',
-}
+import { EVENT_TYPE } from '../../../domain/consts';
 
 class UpdateEventLocationDto {
   @MinLength(1, { message: 'name must have min 1 character' })
@@ -46,7 +40,12 @@ class UpdateEventLocationDto {
     message: 'lat must be defined if long is already define',
   })
   @ValidateIf((location) => location.long)
-  @ApiPropertyOptional({ example: 43.35525182148881 })
+  @ApiPropertyOptional({
+    example: 43.35525182148881,
+    maximum: 90,
+    minimum: -90,
+    description: 'GPS Latitude',
+  })
   @IsOptional()
   lat?: number;
 
@@ -55,15 +54,24 @@ class UpdateEventLocationDto {
     message: 'long must be defined if lat is already define',
   })
   @ValidateIf((location) => location.lat)
-  @ApiPropertyOptional({ example: -8.41937931298951 })
+  @ApiPropertyOptional({
+    example: -8.41937931298951,
+    maximum: 180,
+    minimum: -180,
+    description: 'GPS Longitude',
+  })
   @IsOptional()
   long?: number;
 }
 
 export class UpdateEventDto {
+  @ApiProperty({
+    example: '6656e23640e1fdb4ceb23cc9',
+    minLength: 24,
+    maxLength: 24,
+  })
   @IsString()
   @IsNotEmpty()
-  @ApiProperty({ example: 'eventId' })
   eventId: string;
 
   @ApiPropertyOptional({
@@ -77,7 +85,10 @@ export class UpdateEventDto {
   @IsOptional()
   eventName?: string;
 
-  @ApiPropertyOptional({ example: '2025-03-08T10:05:30.915Z' })
+  @ApiPropertyOptional({
+    example: '2025-03-08T10:05:30.915Z',
+    format: 'date-time',
+  })
   @IsNotPastDate({ message: 'eventDate cannot be in the past' })
   @IsValidDate({ message: 'eventDate must be valid' })
   @Matches(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/, {
@@ -98,14 +109,14 @@ export class UpdateEventDto {
   @MaxLength(5000, { message: 'description must have max 5000 characters' })
   @IsString()
   @IsOptional()
-  description: string;
+  description?: string;
 
-  @ApiPropertyOptional({ example: 'Party' })
-  @IsEnum(UpdateEventType)
+  @ApiPropertyOptional({ example: 'Party', enum: EVENT_TYPE })
+  @IsEnum(EVENT_TYPE)
   @IsString()
   @IsNotEmpty()
   @IsOptional()
-  eventType: UpdateEventType;
+  eventType?: EVENT_TYPE;
 
   @ApiPropertyOptional({ example: 'image.url', maxLength: 500 })
   @MaxLength(500, {
