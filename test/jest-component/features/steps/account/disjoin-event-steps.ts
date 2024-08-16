@@ -6,11 +6,7 @@ import {
   TokensRepository,
   EventParticipantsRepository,
 } from '../../../../../src/infrastructure/db/repositories';
-import {
-  FUTURE_EVENT_MOCK_DB,
-  OLD_EVENT_MOCK_DB,
-  PAIR_OF_TOKENS_MOCK_DB,
-} from '../../../../mocks/db';
+import { FUTURE_EVENT_MOCK_DB, OLD_EVENT_MOCK_DB } from '../../../../mocks/db';
 import { EVENT_ID_MOCK } from '../../../../mocks/dtos';
 
 const PATH = '/v1/account/events';
@@ -48,29 +44,17 @@ export const disjoinEventSteps: StepDefinitions = ({ given, and }) => {
       );
 
     jest
-      .spyOn(context.eventParticipantsRepository, 'removePartipantFromList')
-      .mockResolvedValue(null);
-  });
-
-  // TC-99 TC-101 TC-103 TC-140
-  and('I am authenticated with a valid accessToken', () => {
-    jest.spyOn(context.jwtService, 'verifyAsync').mockResolvedValue({});
+      .spyOn(context.eventRepository, 'findOneById')
+      .mockResolvedValue(FUTURE_EVENT_MOCK_DB);
 
     jest
-      .spyOn(context.tokensRepository, 'findOneByAccessToken')
-      .mockResolvedValue(PAIR_OF_TOKENS_MOCK_DB);
+      .spyOn(context.eventParticipantsRepository, 'removePartipantFromList')
+      .mockResolvedValue(null);
   });
 
   // TC-102
   and('I am not authenticated', () => {
     jest.spyOn(context.jwtService, 'verifyAsync').mockRejectedValue({});
-  });
-
-  // TC-99
-  and('i have provided a valid eventId', () => {
-    jest
-      .spyOn(context.eventRepository, 'findOneById')
-      .mockResolvedValue(FUTURE_EVENT_MOCK_DB);
   });
 
   // TC-103
