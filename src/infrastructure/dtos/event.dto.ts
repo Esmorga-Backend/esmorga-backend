@@ -9,6 +9,7 @@ import {
   IsOptional,
 } from 'class-validator';
 import { Expose, Transform, Type } from 'class-transformer';
+import { EVENT_TYPE } from '../../domain/consts';
 
 class LocationDto {
   @Expose()
@@ -19,6 +20,7 @@ class LocationDto {
     example: 43.35525182148881,
     maximum: 90,
     minimum: -90,
+    description: 'GPS Latitude',
   })
   lat?: number;
 
@@ -30,12 +32,13 @@ class LocationDto {
     example: -8.41937931298951,
     maximum: 180,
     minimum: -180,
+    description: 'GPS Longitude',
   })
   long?: number;
 
   @Expose()
   @IsString()
-  @ApiProperty({ example: 'A Coruña' })
+  @ApiProperty({ example: 'A Coruña', minLength: 1, maxLength: 100 })
   name: string;
 }
 
@@ -43,12 +46,16 @@ export class EventDto {
   @Expose({ name: '_id' })
   @Transform((value) => value.obj._id.toString())
   @IsString()
-  @ApiProperty({ example: '6656e23640e1fdb4ceb23cc9' })
+  @ApiProperty({
+    example: '6656e23640e1fdb4ceb23cc9',
+    minLength: 24,
+    maxLength: 24,
+  })
   eventId: string;
 
   @Expose()
   @IsString()
-  @ApiProperty({ example: 'MobgenFest' })
+  @ApiProperty({ example: 'MobgenFest', minLength: 3, maxLength: 100 })
   eventName: string;
 
   @Expose()
@@ -61,14 +68,14 @@ export class EventDto {
 
   @Expose()
   @IsString()
-  @ApiProperty({ example: 'Hello World' })
+  @ApiProperty({ example: 'Hello World', minLength: 4, maxLength: 5000 })
   description: string;
 
   @Expose()
   @IsString()
   @ApiProperty({
     example: 'Party',
-    enum: ['Party', 'Sport', 'Food', 'Charity', 'Games'],
+    enum: EVENT_TYPE,
   })
   eventType: string;
 
@@ -76,7 +83,7 @@ export class EventDto {
   @Transform(({ value }) => (value ? value : undefined))
   @IsString()
   @IsOptional()
-  @ApiPropertyOptional({ example: 'img.url' })
+  @ApiPropertyOptional({ example: 'img.url', maxLength: 500 })
   imageUrl?: string;
 
   @Expose()
@@ -92,6 +99,10 @@ export class EventDto {
   @IsString({ each: true })
   @Type(() => String)
   @IsOptional()
-  @ApiPropertyOptional({ example: '["Meal", "Music"]' })
+  @ApiPropertyOptional({
+    example: ['Dance', 'Music'],
+    minLength: 3,
+    maxLength: 25,
+  })
   tags?: string[];
 }
