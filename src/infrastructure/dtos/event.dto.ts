@@ -13,6 +13,7 @@ import { EVENT_TYPE } from '../../domain/consts';
 
 class LocationDto {
   @Expose()
+  @Transform(({ value }) => (value === null ? undefined : value))
   @IsNumber()
   @IsOptional()
   @ApiPropertyOptional({
@@ -24,6 +25,7 @@ class LocationDto {
   lat?: number;
 
   @Expose()
+  @Transform(({ value }) => (value === null ? undefined : value))
   @IsNumber()
   @IsOptional()
   @ApiPropertyOptional({
@@ -78,9 +80,10 @@ export class EventDto {
   eventType: string;
 
   @Expose()
+  @Transform(({ value }) => (value === null ? undefined : value))
   @IsString()
   @IsOptional()
-  @ApiPropertyOptional({ example: 'img.url' })
+  @ApiPropertyOptional({ example: 'img.url', maxLength: 500 })
   imageUrl?: string;
 
   @Expose()
@@ -91,7 +94,9 @@ export class EventDto {
   location: LocationDto;
 
   @Expose()
-  @Transform(({ value }) => (value.length > 0 ? value : undefined))
+  @Transform(({ value }) =>
+    Array.isArray(value) && value.length > 0 ? value : undefined,
+  )
   @IsArray()
   @IsString({ each: true })
   @Type(() => String)

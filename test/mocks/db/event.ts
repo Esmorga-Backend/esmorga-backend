@@ -6,6 +6,24 @@ futureDate.setFullYear(2025);
 const oldDate: Date = new Date();
 oldDate.setFullYear(2023);
 
+export const UPDATED_EVENT_MOCK_DB = {
+  _id: '6656e23640e1fdb4ceb23cc9',
+  eventName: 'MobgenFest',
+  eventDate: futureDate,
+  description: 'Hello World',
+  eventType: 'Party',
+  imageUrl: 'img.url',
+  location: {
+    lat: 43.35525182148881,
+    long: -8.41937931298951,
+    name: 'A Coruña',
+  },
+  tags: ['Meal', 'Music'],
+  createdAt: currentDate,
+  updatedAt: currentDate,
+  updatedBy: '665f019c17331ebee550b2f5',
+};
+
 export const FUTURE_EVENT_MOCK_DB = {
   _id: '6656e23640e1fdb4ceb23cc9',
   eventName: 'MobgenFest',

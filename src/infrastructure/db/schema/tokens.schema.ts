@@ -1,12 +1,11 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
-//TODO implement index for each token
 @Schema({ timestamps: true })
 export class Tokens {
   @Prop({ required: true })
   uuid: string;
 
-  @Prop({ required: true, unique: true })
+  @Prop({ required: true, unique: true, index: true })
   accessToken: string;
 
   @Prop({ required: true, unique: true })

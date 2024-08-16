@@ -4,8 +4,11 @@ import {
   HttpException,
   InternalServerErrorException,
   UseFilters,
+  Headers,
   Body,
   HttpCode,
+  UseGuards,
+  Delete,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { PinoLogger } from 'nestjs-pino';
@@ -13,16 +16,26 @@ import {
   LoginService,
   RegisterService,
   RefreshTokenService,
+  JoinEventService,
+  DisjoinEventService,
 } from '../../../application/handler/account';
 import { HttpExceptionFilter } from '../errors';
-import { AccountLoginDto, AccountRegisterDto, RefreshTokenDto } from '../dtos';
+import {
+  AccountLoginDto,
+  AccountRegisterDto,
+  RefreshTokenDto,
+  EventIdDto,
+} from '../dtos';
 import {
   SwaggerAccountLogin,
   SwaggerAccountRegister,
+  SwaggerJoinEvent,
+  SwaggerDisjoinEvent,
   SwaggerRefreshToken,
 } from '../swagger/decorators/account';
 import { AccountLoggedDto, NewPairOfTokensDto } from '../../dtos';
 import { RequestId } from '../req-decorators';
+import { AuthGuard } from '../guards';
 
 @Controller('/v1/account')
 @ApiTags('Account')
@@ -33,6 +46,8 @@ export class AccountController {
     private readonly loginService: LoginService,
     private readonly registerService: RegisterService,
     private readonly refreshTokenService: RefreshTokenService,
+    private readonly joinEventService: JoinEventService,
+    private readonly disjoinEventService: DisjoinEventService,
   ) {}
 
   @Post('/login')
@@ -106,14 +121,74 @@ export class AccountController {
         `[AccountController] [refreshToken] - x-request-id:${requestId}`,
       );
 
-      const response = await this.refreshTokenService.refreshToken(
-        refreshTokenDto,
-        requestId,
-      );
+      const response: NewPairOfTokensDto =
+        await this.refreshTokenService.refreshToken(refreshTokenDto, requestId);
       return response;
     } catch (error) {
       this.logger.error(
         `[AccountController] [refreshToken] - x-request-id:${requestId}, error ${error}`,
+      );
+
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new InternalServerErrorException();
+    }
+  }
+
+  @Post('/events')
+  @UseGuards(AuthGuard)
+  @SwaggerJoinEvent()
+  @HttpCode(204)
+  async joinEvent(
+    @Headers('Authorization') accessToken: string,
+    @Body() eventIdDto: EventIdDto,
+    @RequestId() requestId: string,
+  ) {
+    try {
+      this.logger.info(
+        `[AccountController] [joinEvent] - x-request-id:${requestId}`,
+      );
+
+      await this.joinEventService.joinEvent(
+        accessToken,
+        eventIdDto.eventId,
+        requestId,
+      );
+    } catch (error) {
+      this.logger.error(
+        `[AccountController] [joinEvent] - x-request-id:${requestId}, error ${error}`,
+      );
+
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new InternalServerErrorException();
+    }
+  }
+
+  @Delete('/events')
+  @UseGuards(AuthGuard)
+  @SwaggerDisjoinEvent()
+  @HttpCode(204)
+  async disJoinEvent(
+    @Headers('Authorization') accessToken: string,
+    @Body() eventIdDto: EventIdDto,
+    @RequestId() requestId: string,
+  ) {
+    try {
+      this.logger.info(
+        `[AccountController] [disJoinEvent] - x-request-id:${requestId}`,
+      );
+
+      await this.disjoinEventService.disJoinEvent(
+        accessToken,
+        eventIdDto.eventId,
+        requestId,
+      );
+    } catch (error) {
+      this.logger.error(
+        `[AccountController] [disJoinEvent] - x-request-id:${requestId}, error ${error}`,
       );
 
       if (error instanceof HttpException) {

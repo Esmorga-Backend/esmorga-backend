@@ -1,6 +1,7 @@
 class ApiBasics {
   get(url) {
     cy.request('GET', Cypress.config().baseUrl + url).as('response');
+    cy.wait(1000);
   }
   post(url, data, headers) {
     cy.request({

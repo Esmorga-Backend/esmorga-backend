@@ -1,18 +1,6 @@
 import { EventDto, UserProfileDto } from '../../dtos';
 import { DataBaseInternalError } from '../errors';
 
-export const REQUIRED_FIELDS = {
-  EVENTS: [
-    'eventId',
-    'eventName',
-    'eventDate',
-    'eventType',
-    'description',
-    'location.name',
-  ],
-  USER_PROFILE: ['uuid', 'name', 'lastName', 'email', 'role'],
-};
-
 /**
  * This funcition validates if the object mapped contain all required dto fields,
  * event if the required fied is nested

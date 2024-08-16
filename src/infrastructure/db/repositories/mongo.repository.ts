@@ -14,6 +14,26 @@ export class MongoRepository<E> implements DBRepository<E> {
   }
 
   /**
+   * Find documents by accesToken.
+   *
+   * @param accessToken - The accesToken to find.
+   * @returns Promise resolved with the document that matches the accessToken provided.
+   */
+  async findOneByAccessToken(accessToken: string): Promise<E> {
+    return this.entityModel.findOne({ accessToken: { $eq: accessToken } });
+  }
+
+  /**
+   * Find a document by id field.
+   *
+   * @param id - The id to find.
+   * @returns Promise resolved with the document that matches the id provided.
+   */
+  async findOneById(id: string): Promise<E> {
+    return this.entityModel.findById({ _id: id });
+  }
+
+  /**
    * Find documents by uuid.
    *
    * @param uuid - The uuid to find.
@@ -24,7 +44,7 @@ export class MongoRepository<E> implements DBRepository<E> {
   }
 
   /**
-   * Find documents by refreshToken.
+   * Find a document by refreshToken field.
    *
    * @param refreshToken - The refresToken to find.
    * @returns Promise resolved with the document that matches the refreshToken provided.
@@ -44,6 +64,21 @@ export class MongoRepository<E> implements DBRepository<E> {
   }
 
   /**
+   * Find a document with that eventId and add the userId as participant if it has not been added yet. Also
+   * if the document has not been created, create a new one with this data.
+   *
+   * @param eventId - Event identificator.
+   * @param userId - User identificator to add as participant.
+   */
+  async findAndUpdateParticipantsList(eventId: string, userId: string) {
+    await this.entityModel.findOneAndUpdate(
+      { eventId },
+      { $addToSet: { participants: userId } },
+      { new: true, upsert: true },
+    );
+  }
+
+  /**
    * Create a new document in the collection.
    *
    * @param data - The data to create the new document.
@@ -53,13 +88,43 @@ export class MongoRepository<E> implements DBRepository<E> {
   }
 
   /**
+   * Remove document fields by ID.
+   *
+   * @param id - The ID of the document to remove fields.
+   * @param data - The data to remove.
+   */
+  async removeFieldsById(id: string, data: object): Promise<E> {
+    return this.entityModel.findOneAndUpdate(
+      { _id: id },
+      { $unset: data },
+      { new: true },
+    );
+  }
+
+  /**
    * Update a document by ID.
    *
    * @param id - The ID of the document to update.
    * @param data - The data to update the document.
    */
-  async updateById(id: string, data) {
-    await this.entityModel.updateOne({ _id: id }, data);
+  async updateById(id: string, data: object): Promise<E> {
+    return this.entityModel.findOneAndUpdate(
+      { _id: id },
+      { $set: data },
+      { new: true },
+    );
+  }
+
+  /**
+   * Find a document with that eventId and update it removing the userId from the particpant list.
+   * @param eventId - Event identificator.
+   * @param userId - User identificator to add as participant.
+   */
+  async removePartipantFromList(eventId: string, userId: string) {
+    await this.entityModel.updateOne(
+      { eventId },
+      { $pull: { participants: userId } },
+    );
   }
 
   /**
@@ -69,5 +134,14 @@ export class MongoRepository<E> implements DBRepository<E> {
    */
   async removeById(id: string) {
     await this.entityModel.findOneAndDelete({ _id: id });
+  }
+
+  /**
+   * Remove a document by eventId field.
+   *
+   * @param eventId - The eventId of the document to remove.
+   */
+  async removeByEventId(eventId: string) {
+    await this.entityModel.findOneAndDelete({ eventId: { $eq: eventId } });
   }
 }

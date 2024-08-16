@@ -1,30 +1,28 @@
 import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
-import { JwtModule } from '@nestjs/jwt';
 import { AccountController } from '../controllers';
 import {
   LoginService,
   RegisterService,
   RefreshTokenService,
+  JoinEventService,
+  DisjoinEventService,
 } from '../../../application/handler/account';
-import { AccountRepository, TokensRepository } from '../../db/repositories';
-import { UserSchema, User, TokensSchema, Tokens } from '../../db/schema';
 import { GenerateTokenPair } from '../../../domain/services';
+import { AuthGuard } from '../guards';
+import { EventSharedModule } from './event-shared.module';
+import { AccountSharedModule } from './account-shared.module';
 
 @Module({
-  imports: [
-    JwtModule.register({}),
-    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
-    MongooseModule.forFeature([{ name: Tokens.name, schema: TokensSchema }]),
-  ],
+  imports: [AccountSharedModule, EventSharedModule],
   controllers: [AccountController],
   providers: [
     LoginService,
     RegisterService,
     RefreshTokenService,
+    JoinEventService,
+    DisjoinEventService,
     GenerateTokenPair,
-    AccountRepository,
-    TokensRepository,
+    AuthGuard,
   ],
 })
 export class AccountModule {}

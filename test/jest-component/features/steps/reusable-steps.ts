@@ -1,3 +1,4 @@
+import { HttpStatus } from '@nestjs/common';
 import { StepDefinitions } from 'jest-cucumber';
 import * as request from 'supertest';
 import Ajv from 'ajv';
@@ -28,13 +29,27 @@ export const reusableSteps: StepDefinitions = ({ when, then, and }) => {
     }
   });
 
-  when(/^a GET request is made to (\w+) API$/, async () => {
+  when(/^a GET request is made to (.*) API$/, async () => {
     context.response = await request(app.getHttpServer()).get(context.path);
   });
 
-  when(/^a POST request is made to (\w+) API$/, async () => {
+  when(/^a POST request is made to (.*) API$/, async () => {
     context.response = await request(app.getHttpServer())
       .post(context.path)
+      .set(context.headers)
+      .send(context.mock);
+  });
+
+  when(/^a PATCH request is made to (.*) API$/, async () => {
+    context.response = await request(app.getHttpServer())
+      .patch(context.path)
+      .set(context.headers)
+      .send(context.mock);
+  });
+
+  when(/^a DELETE request is made to (.*) API$/, async () => {
+    context.response = await request(app.getHttpServer())
+      .delete(context.path)
       .set(context.headers)
       .send(context.mock);
   });
@@ -57,7 +72,8 @@ export const reusableSteps: StepDefinitions = ({ when, then, and }) => {
     /^well-formed success response with status code (\d+) returned$/,
     (code_n) => {
       expect(context.response.status).toBe(parseInt(code_n));
-      check_swagger();
+
+      if (context.response.status !== HttpStatus.NO_CONTENT) check_swagger();
     },
   );
   and(/^detail in error is (.*) ,description: (.*)$/, async (row) => {
