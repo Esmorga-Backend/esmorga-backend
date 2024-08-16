@@ -22,7 +22,7 @@ const HEADERS = {
 };
 
 export const getMyEventsStepts: StepDefinitions = ({ given, and }) => {
-  // TC-104 TC-106
+  // TC-104 TC-105 TC-106
   given('the GET My events API is available', () => {
     context.path = PATH;
 
@@ -44,7 +44,7 @@ export const getMyEventsStepts: StepDefinitions = ({ given, and }) => {
       );
   });
 
-  // TC-104
+  // TC-104 TC-105
   and('I am authenticated with a valid accessToken', () => {
     jest.spyOn(context.jwtService, 'verifyAsync').mockResolvedValue({});
 
@@ -58,6 +58,15 @@ export const getMyEventsStepts: StepDefinitions = ({ given, and }) => {
     jest.spyOn(context.jwtService, 'verifyAsync').mockRejectedValue({});
   });
 
+  // TC-105
+  and('there are not upcoming events that I have joined', () => {
+    jest
+      .spyOn(context.eventParticipantsRepository, 'findEventParticipant')
+      .mockResolvedValue([]);
+
+    jest.spyOn(context.eventRepository, 'findByEventIds').mockResolvedValue([]);
+  });
+
   // TC-104
   and('there are upcoming events that I have joined', () => {
     jest
@@ -67,5 +76,13 @@ export const getMyEventsStepts: StepDefinitions = ({ given, and }) => {
     jest
       .spyOn(context.eventRepository, 'findByEventIds')
       .mockResolvedValue([FUTURE_EVENT_MOCK_DB]);
+  });
+
+  // TC-105
+  and('the response must include a empty array', () => {
+    expect(context.response.body).toEqual({
+      totalEvents: 0,
+      events: [],
+    });
   });
 };
