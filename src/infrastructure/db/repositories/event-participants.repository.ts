@@ -19,10 +19,11 @@ export class EventParticipantsRepository extends MongoRepository<EventParticipan
   }
 
   /**
-   * Add the user ID to the event participant list
-   * @param eventId - Event identifier
-   * @param userId - User identifier
-   * @param requestId - Request identifier for API logger
+   * Add the user ID to the event participant list.
+   *
+   * @param eventId - Event identifier.
+   * @param userId - User identifier.
+   * @param requestId - Request identifier for API logger.
    */
   async updateParticipantList(
     eventId: string,
@@ -44,6 +45,12 @@ export class EventParticipantsRepository extends MongoRepository<EventParticipan
     }
   }
 
+  /**
+   * Remove document by id
+   *
+   * @param eventId - Event identifier.
+   * @param requestId - Request identifier for API logger.
+   */
   async removeEventParticipantByEventId(eventId: string, requestId?: string) {
     try {
       this.logger.info(
@@ -61,10 +68,11 @@ export class EventParticipantsRepository extends MongoRepository<EventParticipan
   }
 
   /**
-   * Return the event IDs the user has joined as participant
-   * @param userId - User identifier
-   * @param requestId - Request identifier for API logger
-   * @returns Array of strings with the event IDs the user joined
+   * Return the event IDs the user has joined as participant.
+   *
+   * @param userId - User identifier.
+   * @param requestId - Request identifier for API logger.
+   * @returns Array of strings with the event IDs the user joined.
    */
   async getEventsJoined(userId: string, requestId?: string): Promise<string[]> {
     try {
@@ -97,6 +105,13 @@ export class EventParticipantsRepository extends MongoRepository<EventParticipan
     }
   }
 
+  /**
+   *  Remove user from the event participant list.
+   *
+   * @param eventId - Event identifier.
+   * @param userId - User identifier.
+   * @param requestId - Request identifier for API logger.
+   */
   async disjoinParticipantList(
     eventId: string,
     userId: string,

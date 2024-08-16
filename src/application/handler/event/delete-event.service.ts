@@ -45,7 +45,7 @@ export class DeleteEventService {
         requestId,
       );
 
-      const { role } = await this.accountRepository.getUserByUuid(
+      const { role } = await this.accountRepository.getUserById(
         uuid,
         requestId,
       );

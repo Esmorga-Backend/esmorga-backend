@@ -25,9 +25,10 @@ export class EventRepository extends MongoRepository<EventSchema> {
   }
 
   /**
-   * Store a new event document
-   * @param createEventDto - Event data provided
-   * @param requestId - Request identifier for API logger
+   * Store a new event document.
+   *
+   * @param createEventDto - Event data provided.
+   * @param requestId - Request identifier for API logger.
    */
   async createEvent(createEventDto: CreateEventDto, requestId?: string) {
     try {
@@ -47,6 +48,14 @@ export class EventRepository extends MongoRepository<EventSchema> {
     }
   }
 
+  /**
+   * Find a event by ID, validate the data stores and return it following business schema.
+   *
+   * @param eventId - Event identifier.
+   * @param requestId - Request identifier.
+   * @returns EventDto - Event object following business schema after validate DB document.
+   * @throws DataBaseBadRequestError - ID malformed or not found
+   */
   async findOneByEventId(
     eventId: string,
     requestId?: string,
@@ -81,9 +90,10 @@ export class EventRepository extends MongoRepository<EventSchema> {
   }
 
   /**
-   * Return all events stored in the DB
-   * @param requestId - Request identifier for API logger
-   * @returns Promise of EventDto array
+   * Return all events stored in the DB.
+   *
+   * @param requestId - Request identifier for API logger.
+   * @returns Promise of EventDto array.
    */
   async getEventList(requestId?: string): Promise<EventDto[]> {
     try {
@@ -113,6 +123,15 @@ export class EventRepository extends MongoRepository<EventSchema> {
     }
   }
 
+  /**
+   * Update event found by eventId.
+   *
+   * @param uuid - User identifier.
+   * @param eventId - Event identifier.
+   * @param fieldsToUpdate - Event fields to update.
+   * @param requestId - Request identifier for API logger.
+   * @returns EventDto - Event object following business schema after validate DB document.
+   */
   async updateEvent(
     uuid: string,
     eventId: string,
@@ -219,6 +238,11 @@ export class EventRepository extends MongoRepository<EventSchema> {
     }
   }
 
+  /**
+   * Remove the event document matches with the ID provided
+   * @param eventId - Event identifier
+   * @param requestId - Request identifier for API logger
+   */
   async removeEvent(eventId: string, requestId?: string) {
     try {
       this.logger.info(
