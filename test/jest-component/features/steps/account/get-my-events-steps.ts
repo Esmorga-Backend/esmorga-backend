@@ -9,6 +9,7 @@ import {
 import {
   FUTURE_EVENT_MOCK_DB,
   OLD_EVENT_MOCK_DB,
+  EVENT_CORE_FIELDS_MOCK_DB,
   PAIR_OF_TOKENS_MOCK_DB,
   EVENT_PARTICIPANT_MOCK_DB,
 } from '../../../../mocks/db';
@@ -23,7 +24,7 @@ const HEADERS = {
 };
 
 export const getMyEventsStepts: StepDefinitions = ({ given, and }) => {
-  // TC-104 TC-105 TC-106 TC-107
+  // TC-104 TC-105 TC-106 TC-107 TC-108
   given('the GET My events API is available', () => {
     context.path = PATH;
 
@@ -49,7 +50,7 @@ export const getMyEventsStepts: StepDefinitions = ({ given, and }) => {
       .mockResolvedValue([EVENT_PARTICIPANT_MOCK_DB]);
   });
 
-  // TC-104 TC-105 TC-107
+  // TC-104 TC-105 TC-107 TC-108
   and('I am authenticated with a valid accessToken', () => {
     jest.spyOn(context.jwtService, 'verifyAsync').mockResolvedValue({});
 
@@ -86,11 +87,29 @@ export const getMyEventsStepts: StepDefinitions = ({ given, and }) => {
       .mockResolvedValue([OLD_EVENT_MOCK_DB]);
   });
 
-  // TC-105 107
+  // TC-108
+  and('there are upcoming events I have joined that are missing data', () => {
+    jest
+      .spyOn(context.eventRepository, 'findByEventIds')
+      .mockResolvedValue([EVENT_CORE_FIELDS_MOCK_DB]);
+  });
+
+  // TC-105 TC-107
   and('the response must include a empty array', () => {
     expect(context.response.body).toEqual({
       totalEvents: 0,
       events: [],
     });
+  });
+
+  // TC-108
+  and('the response should exclude any event field with missing data', () => {
+    const event = context.response.body.events[0];
+
+    expect(context.response.body.totalEvents).toBe(1);
+    expect(event.imageUrl).not.toBeDefined();
+    expect(event.location.lat).not.toBeDefined();
+    expect(event.location.long).not.toBeDefined();
+    expect(event.tags).not.toBeDefined();
   });
 };

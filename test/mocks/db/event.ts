@@ -1,4 +1,8 @@
-import { FUTURE_EVENT_MOCK_DB_ID, OLD_EVENT_MOCK_DB_ID } from './common';
+import {
+  FUTURE_EVENT_MOCK_DB_ID,
+  EVENT_CORE_FIELDS_MOCK_DB_ID,
+  OLD_EVENT_MOCK_DB_ID,
+} from './common';
 
 const currentDate: Date = new Date();
 
@@ -21,6 +25,20 @@ export const FUTURE_EVENT_MOCK_DB = {
     name: 'A Coruña',
   },
   tags: ['Meal', 'Music'],
+  createdAt: currentDate,
+  updatedAt: currentDate,
+};
+
+// Event with only mandatory fields
+export const EVENT_CORE_FIELDS_MOCK_DB = {
+  _id: EVENT_CORE_FIELDS_MOCK_DB_ID,
+  eventName: 'MobgenFest',
+  eventDate: futureDate,
+  description: 'Hello World',
+  eventType: 'Party',
+  location: {
+    name: 'A Coruña',
+  },
   createdAt: currentDate,
   updatedAt: currentDate,
 };

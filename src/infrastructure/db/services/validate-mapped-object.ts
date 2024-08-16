@@ -30,8 +30,6 @@ export function validateObjectDto(
   });
 
   if (missingFields.length > 0) {
-    //TODO add a trace with the missingFields
-
     throw new DataBaseInternalError();
   }
 }
