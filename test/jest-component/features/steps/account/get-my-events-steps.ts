@@ -22,14 +22,13 @@ const HEADERS = {
 };
 
 export const getMyEventsStepts: StepDefinitions = ({ given, and }) => {
+  // TC-104 TC-106
   given('the GET My events API is available', () => {
     context.path = PATH;
 
     context.method = METHOD;
 
     context.headers = HEADERS;
-
-    //console.log(context);
 
     context.jwtService = moduleFixture.get<JwtService>(JwtService);
 
@@ -45,6 +44,7 @@ export const getMyEventsStepts: StepDefinitions = ({ given, and }) => {
       );
   });
 
+  // TC-104
   and('I am authenticated with a valid accessToken', () => {
     jest.spyOn(context.jwtService, 'verifyAsync').mockResolvedValue({});
 
@@ -53,6 +53,12 @@ export const getMyEventsStepts: StepDefinitions = ({ given, and }) => {
       .mockResolvedValue(PAIR_OF_TOKENS_MOCK_DB);
   });
 
+  // TC-106
+  and('I am using an invalid accessToken', () => {
+    jest.spyOn(context.jwtService, 'verifyAsync').mockRejectedValue({});
+  });
+
+  // TC-104
   and('there are upcoming events that I have joined', () => {
     jest
       .spyOn(context.eventParticipantsRepository, 'findEventParticipant')
