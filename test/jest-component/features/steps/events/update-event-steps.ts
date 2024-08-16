@@ -13,11 +13,7 @@ import {
   UPDATED_EVENT_MOCK_DB,
 } from '../../../../mocks/db';
 import { EVENT_MOCK } from '../../../../mocks/dtos';
-
-const HEADERS = {
-  'Content-Type': 'application/json',
-  Authorization: 'Bearer accessToken',
-};
+import { HEADERS } from '../../../../mocks/common-data';
 
 export const updateEventSteps: StepDefinitions = ({ given }) => {
   // ###### MOB-TC-73 ######

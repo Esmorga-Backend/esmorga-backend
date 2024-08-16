@@ -13,15 +13,11 @@ import {
   PAIR_OF_TOKENS_MOCK_DB,
   EVENT_PARTICIPANT_MOCK_DB,
 } from '../../../../mocks/db';
+import { HEADERS } from '../../../../mocks/common-data';
 
 const PATH = '/v1/account/events';
 
 const METHOD = 'get';
-
-const HEADERS = {
-  'Content-Type': 'application/json',
-  Authorization: 'Bearer accessToken',
-};
 
 export const getMyEventsStepts: StepDefinitions = ({ given, and }) => {
   // TC-104 TC-105 TC-106 TC-107 TC-108

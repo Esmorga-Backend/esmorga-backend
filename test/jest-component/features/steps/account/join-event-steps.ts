@@ -12,15 +12,11 @@ import {
   PAIR_OF_TOKENS_MOCK_DB,
 } from '../../../../mocks/db';
 import { EVENT_ID_MOCK } from '../../../../mocks/dtos';
+import { HEADERS } from '../../../../mocks/common-data';
 
 const PATH = '/v1/account/events';
 
 const METHOD = 'post';
-
-const HEADERS = {
-  'Content-Type': 'application/json',
-  Authorization: 'Bearer accessToken',
-};
 
 const BODY = { ...EVENT_ID_MOCK };
 
