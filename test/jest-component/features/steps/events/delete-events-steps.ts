@@ -104,10 +104,12 @@ export const deleteEventStep: StepDefinitions = ({ given, and }) => {
         .spyOn(context.tokensRepository, 'findOneByAccessToken')
         .mockResolvedValue(PAIR_OF_TOKENS_MOCK_DB);
 
-      jest.spyOn(context.accountRepository, 'findById').mockResolvedValue(USER);
+      jest
+        .spyOn(context.accountRepository, 'findOneById')
+        .mockResolvedValue(USER);
 
       jest
-        .spyOn(context.eventRepository, 'findById')
+        .spyOn(context.eventRepository, 'findOneById')
         .mockResolvedValue(FUTURE_EVENT_MOCK_DB);
     },
   );

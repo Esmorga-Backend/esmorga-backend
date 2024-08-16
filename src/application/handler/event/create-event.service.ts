@@ -21,7 +21,7 @@ export class CreateEventService {
         `[CreateEventService] [create] - x-request-id:${requestId}`,
       );
 
-      await this.eventRepository.createEvent(createEventDto);
+      await this.eventRepository.createEvent(createEventDto, requestId);
     } catch (error) {
       this.logger.error(
         `[CreateEventService] [create] - x-request-id:${requestId}, error ${error}`,

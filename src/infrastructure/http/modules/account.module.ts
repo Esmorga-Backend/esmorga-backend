@@ -12,15 +12,15 @@ import { EventSharedModule } from './event-shared.module';
 import { AccountSharedModule } from './account-shared.module';
 
 @Module({
-  imports: [EventSharedModule, AccountSharedModule],
+  imports: [AccountSharedModule, EventSharedModule],
   controllers: [AccountController],
   providers: [
-    LoginService,
-    RegisterService,
-    RefreshTokenService,
-    JoinEventService,
-    GenerateTokenPair,
     AuthGuard,
+    GenerateTokenPair,
+    JoinEventService,
+    LoginService,
+    RefreshTokenService,
+    RegisterService,
   ],
 })
 export class AccountModule {}

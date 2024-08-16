@@ -17,7 +17,7 @@ import {
   RefreshTokenService,
   JoinEventService,
 } from '../../../application/handler/account';
-import { HttpExceptionFilter } from '../filters';
+import { HttpExceptionFilter } from '../errors';
 import {
   AccountLoginDto,
   AccountRegisterDto,
@@ -117,10 +117,8 @@ export class AccountController {
         `[AccountController] [refreshToken] - x-request-id:${requestId}`,
       );
 
-      const response = await this.refreshTokenService.refreshToken(
-        refreshTokenDto,
-        requestId,
-      );
+      const response: NewPairOfTokensDto =
+        await this.refreshTokenService.refreshToken(refreshTokenDto, requestId);
       return response;
     } catch (error) {
       this.logger.error(

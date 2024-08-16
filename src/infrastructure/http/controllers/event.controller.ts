@@ -1,12 +1,13 @@
 import {
-  Headers,
   Body,
   Controller,
   Get,
+  Headers,
   Post,
   Delete,
   HttpException,
   InternalServerErrorException,
+  Patch,
   UseFilters,
   UseGuards,
   HttpCode,
@@ -16,18 +17,21 @@ import { PinoLogger } from 'nestjs-pino';
 import {
   CreateEventService,
   GetEventListService,
+  UpdateEventService,
   DeleteEventService,
 } from '../../../application/handler/event';
-import { HttpExceptionFilter } from '../filters';
+import { HttpExceptionFilter } from '../errors';
 import {
   SwaggerCreateEvent,
   SwaggerGetEvents,
+  SwaggerUpdateEvent,
   SwaggerDeleteEvents,
 } from '../swagger/decorators/events';
-import { EventListDto } from '../../dtos';
-import { CreateEventDto, EventIdDto } from '../dtos';
+import { EventDto, EventListDto } from '../../dtos';
+import { CreateEventDto, UpdateEventDto, EventIdDto } from '../dtos';
 import { RequestId } from '../req-decorators';
 import { AuthGuard } from '../guards';
+import { validateNotNullableFields } from '../services';
 
 @ApiTags('Event')
 @Controller('/v1/events')
@@ -37,6 +41,7 @@ export class EventController {
     private readonly logger: PinoLogger,
     private readonly getEventListService: GetEventListService,
     private readonly createEventService: CreateEventService,
+    private readonly updateEventService: UpdateEventService,
     private readonly deleteEventService: DeleteEventService,
   ) {}
 
@@ -83,6 +88,56 @@ export class EventController {
         `[EventController] [createEvent] - x-request-id:${requestId}, error ${error}`,
       );
 
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new InternalServerErrorException();
+    }
+  }
+
+  @Patch('/')
+  @UseGuards(AuthGuard)
+  @SwaggerUpdateEvent()
+  async updateEvent(
+    @Body() updateEventDto: UpdateEventDto,
+    @Headers('Authorization') accessToken: string,
+    @RequestId() requestId: string,
+  ): Promise<EventDto> {
+    try {
+      this.logger.info(
+        `[EventController] [updateEvent] - x-request-id:${requestId}`,
+      );
+      const { eventName, eventDate, description, eventType, location } =
+        updateEventDto;
+
+      const updatedLocation =
+        location !== null
+          ? {
+              name: location?.name === null ? null : location?.name,
+            }
+          : null;
+
+      const fieldsToValidate = {
+        eventName,
+        eventDate,
+        description,
+        eventType,
+        location: updatedLocation,
+      };
+
+      validateNotNullableFields(fieldsToValidate);
+
+      const response: EventDto = await this.updateEventService.update(
+        accessToken,
+        updateEventDto,
+        requestId,
+      );
+
+      return response;
+    } catch (error) {
+      this.logger.error(
+        `[EventController] [updateEvent] - x-request-id:${requestId}, error ${error}`,
+      );
       if (error instanceof HttpException) {
         throw error;
       }
