@@ -18,6 +18,13 @@ export class RefreshTokenService {
     private readonly tokensRepository: TokensRepository,
   ) {}
 
+  /**
+   * Consume the refreshToken provided to generate a new pair.
+   * @param refreshTokenDto - DTO contain the refresh token.
+   * @param requestId - Request identifier.
+   * @returns NewPairOfTokensDto - New pair of tokens.
+   * @throws InvalidCredentialsRefreshApiError - If the refresh token is invalid or unauthorized.
+   */
   async refreshToken(
     refreshTokenDto: RefreshTokenDto,
     requestId?: string,

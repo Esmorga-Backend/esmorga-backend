@@ -17,6 +17,13 @@ export class GetMyEventsService {
     private readonly eventParticipantsRepository: EventParticipantsRepository,
   ) {}
 
+  /**
+   * Provide a list of not celebrated events user authenticated joined as participant.
+   *
+   * @param accessToken - Token allows user a method to authenticate.
+   * @param requestId - Request identifier.
+   * @returns EventListDto - Object containing the total number of available events and the list of available events.
+   */
   async getEvents(
     accessToken: string,
     requestId?: string,
