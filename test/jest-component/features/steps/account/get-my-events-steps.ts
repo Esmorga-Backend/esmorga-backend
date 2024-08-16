@@ -8,6 +8,7 @@ import {
 } from '../../../../../src/infrastructure/db/repositories';
 import {
   FUTURE_EVENT_MOCK_DB,
+  OLD_EVENT_MOCK_DB,
   PAIR_OF_TOKENS_MOCK_DB,
   EVENT_PARTICIPANT_MOCK_DB,
 } from '../../../../mocks/db';
@@ -22,7 +23,7 @@ const HEADERS = {
 };
 
 export const getMyEventsStepts: StepDefinitions = ({ given, and }) => {
-  // TC-104 TC-105 TC-106
+  // TC-104 TC-105 TC-106 TC-107
   given('the GET My events API is available', () => {
     context.path = PATH;
 
@@ -42,9 +43,13 @@ export const getMyEventsStepts: StepDefinitions = ({ given, and }) => {
       moduleFixture.get<EventParticipantsRepository>(
         EventParticipantsRepository,
       );
+
+    jest
+      .spyOn(context.eventParticipantsRepository, 'findEventParticipant')
+      .mockResolvedValue([EVENT_PARTICIPANT_MOCK_DB]);
   });
 
-  // TC-104 TC-105
+  // TC-104 TC-105 TC-107
   and('I am authenticated with a valid accessToken', () => {
     jest.spyOn(context.jwtService, 'verifyAsync').mockResolvedValue({});
 
@@ -70,15 +75,18 @@ export const getMyEventsStepts: StepDefinitions = ({ given, and }) => {
   // TC-104
   and('there are upcoming events that I have joined', () => {
     jest
-      .spyOn(context.eventParticipantsRepository, 'findEventParticipant')
-      .mockResolvedValue([EVENT_PARTICIPANT_MOCK_DB]);
-
-    jest
       .spyOn(context.eventRepository, 'findByEventIds')
       .mockResolvedValue([FUTURE_EVENT_MOCK_DB]);
   });
 
-  // TC-105
+  // TC-107
+  and('I only joined celebrated events', () => {
+    jest
+      .spyOn(context.eventRepository, 'findByEventIds')
+      .mockResolvedValue([OLD_EVENT_MOCK_DB]);
+  });
+
+  // TC-105 107
   and('the response must include a empty array', () => {
     expect(context.response.body).toEqual({
       totalEvents: 0,
