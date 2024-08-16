@@ -1,13 +1,11 @@
-import {
-  CreateEventDto,
-  EventType,
-} from '../../../src/infrastructure/http/dtos';
+import { CreateEventDto } from '../../../src/infrastructure/http/dtos';
+import { EVENT_TYPE } from '../../../src/domain/consts';
 
 export const CREATE_EVENT_MOCK: CreateEventDto = {
   eventName: 'MobgenFest',
   eventDate: '2025-03-08T10:05:30.915Z',
   description: 'Hello World',
-  eventType: EventType.PARTY,
+  eventType: EVENT_TYPE.PARTY,
   imageUrl: 'img.url',
   location: {
     lat: 43.35525182148881,
@@ -21,7 +19,7 @@ export const CREATE_EVENT_WITHOUT_OPTIONAL_FIELDS_MOCK: CreateEventDto = {
   eventName: 'MobgenFest',
   eventDate: '2025-03-08T10:05:30.915Z',
   description: 'Hello World',
-  eventType: EventType.PARTY,
+  eventType: EVENT_TYPE.PARTY,
   location: {
     name: 'A Coruña',
   },

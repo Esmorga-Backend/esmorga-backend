@@ -1,4 +1,5 @@
 import { EventDto } from '../../../src/infrastructure/dtos';
+import { EVENT_TYPE } from '../../../src/domain/consts';
 
 const futureDate: Date = new Date();
 futureDate.setFullYear(2025);
@@ -11,7 +12,7 @@ export const EVENT_MOCK: EventDto = {
   eventName: 'MobgenFest',
   eventDate: futureDate,
   description: 'Hello World',
-  eventType: 'Party',
+  eventType: EVENT_TYPE.PARTY,
   imageUrl: 'img.url',
   location: {
     lat: 43.35525182148881,
@@ -26,7 +27,7 @@ export const OLD_EVENT_MOCK: EventDto = {
   eventName: 'Paintball',
   eventDate: oldDate,
   description: 'Hello World',
-  eventType: 'Sport',
+  eventType: EVENT_TYPE.SPORT,
   imageUrl: 'img.url',
   location: {
     lat: 43.35525182148881,

@@ -240,6 +240,49 @@ export const JOIN_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
   },
 };
 
+export const DISJOIN_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
+  NO_CONTENT: {
+    description: 'User has successfully joined in the event',
+  },
+  BAD_REQUEST_ERROR: {
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Some inputs are missed or wrong',
+    schema: {
+      type: 'object',
+      properties: {
+        ...BAD_REQUEST_ERROR_COMMON_PROPERTIES,
+        type: { type: 'string', example: PATHS.JOIN_EVENT },
+        errors: {
+          type: 'array',
+          example: ['eventId should not be empty'],
+        },
+      },
+    },
+  },
+  UNAUTHORIZED_ERROR: {
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Invalid credentials',
+    schema: {
+      type: 'object',
+      properties: {
+        ...UNAUTHORIZED_INVALID_TOKEN_COMMON_PROPERTIES,
+        type: { type: 'string', example: PATHS.JOIN_EVENT },
+      },
+    },
+  },
+  INTERNAL_ERROR: {
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Error not handled',
+    schema: {
+      type: 'object',
+      properties: {
+        ...INTERNAL_ERROR_COMMON_PROPERTIES,
+        type: { type: 'string', example: PATHS.JOIN_EVENT },
+      },
+    },
+  },
+};
+
 export const GET_MY_EVENTS_RESPONSES: { [key: string]: ApiResponseOptions } = {
   OK: {
     description: 'List of avaliable events user joined',

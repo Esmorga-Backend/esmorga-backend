@@ -9,7 +9,7 @@ import {
 import { USER_ROLES } from '../../../domain/const';
 import {
   NotAdminAccountApiError,
-  BadEventIdApiError,
+  InvalidEventIdApiError,
 } from '../../../domain/errors';
 import { DataBaseNotFoundError } from '../../../infrastructure/db/errors';
 
@@ -55,7 +55,7 @@ export class DeleteEventService {
       );
 
       if (error instanceof DataBaseNotFoundError)
-        throw new BadEventIdApiError();
+        throw new InvalidEventIdApiError();
 
       throw error;
     }

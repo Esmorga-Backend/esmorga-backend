@@ -94,6 +94,24 @@ export class EventParticipantsRepository extends MongoRepository<EventParticipan
       this.logger.error(
         `[EventParticipantsRepository] [getEventParticipant] - x-request-id: ${requestId}, error: ${error}`,
       );
+    }
+  }
+
+  async disjoinParticipantList(
+    eventId: string,
+    userId: string,
+    requestId?: string,
+  ) {
+    try {
+      this.logger.info(
+        `[EventParticipantsRepository] [disjoinParticipantList] - x-request-id: ${requestId}, eventId: ${eventId}, userId: ${userId}`,
+      );
+
+      await this.removePartipantFromList(eventId, userId);
+    } catch (error) {
+      this.logger.error(
+        `[EventParticipantsRepository] [disjoinParticipantList] - x-request-id: ${requestId}, error: ${error}`,
+      );
 
       throw error;
     }

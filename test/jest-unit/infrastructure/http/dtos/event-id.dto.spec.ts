@@ -5,9 +5,9 @@ import { EVENT_ID_MOCK } from '../../../../mocks/dtos';
 
 describe('[unit-test] [EventIdDto]', () => {
   it('Should validate all fields successfully', async () => {
-    const joinEventDto = plainToInstance(EventIdDto, EVENT_ID_MOCK);
+    const eventIdDto = plainToInstance(EventIdDto, EVENT_ID_MOCK);
 
-    const errors = await validate(joinEventDto, { stopAtFirstError: true });
+    const errors = await validate(eventIdDto, { stopAtFirstError: true });
 
     expect(errors.length).toBe(0);
   });
@@ -18,9 +18,9 @@ describe('[unit-test] [EventIdDto]', () => {
 
       delete joinEventData.eventId;
 
-      const joinEventDto = plainToInstance(EventIdDto, joinEventData);
+      const eventIdDto = plainToInstance(EventIdDto, joinEventData);
 
-      const errors = await validate(joinEventDto, {
+      const errors = await validate(eventIdDto, {
         stopAtFirstError: true,
       });
 
@@ -36,9 +36,9 @@ describe('[unit-test] [EventIdDto]', () => {
         eventId: 123,
       };
 
-      const joinEventDto = plainToInstance(EventIdDto, joinEventData);
+      const eventIdDto = plainToInstance(EventIdDto, joinEventData);
 
-      const errors = await validate(joinEventDto, {
+      const errors = await validate(eventIdDto, {
         stopAtFirstError: true,
       });
 

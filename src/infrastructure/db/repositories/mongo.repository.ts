@@ -14,6 +14,26 @@ export class MongoRepository<E> implements DBRepository<E> {
   }
 
   /**
+   * Find documents by accesToken.
+   *
+   * @param accessToken - The accesToken to find.
+   * @returns Promise resolved with the document that matches the accessToken provided.
+   */
+  async findOneByAccessToken(accessToken: string): Promise<E> {
+    return this.entityModel.findOne({ accessToken: { $eq: accessToken } });
+  }
+
+  /**
+   * Find a document by id field.
+   *
+   * @param id - The id to find.
+   * @returns Promise resolved with the document that matches the id provided.
+   */
+  async findOneById(id: string): Promise<E> {
+    return this.entityModel.findById({ _id: id });
+  }
+
+  /**
    * Find documents by uuid.
    *
    * @param uuid - The uuid to find.
@@ -24,23 +44,13 @@ export class MongoRepository<E> implements DBRepository<E> {
   }
 
   /**
-   * Find documents by refreshToken.
+   * Find a document by refreshToken field.
    *
    * @param refreshToken - The refresToken to find.
    * @returns Promise resolved with the document that matches the refreshToken provided.
    */
   async findOneByRefreshToken(refreshToken: string): Promise<E> {
     return this.entityModel.findOne({ refreshToken: { $eq: refreshToken } });
-  }
-
-  /**
-   * Find documents by accessToken.
-   *
-   * @param accessToken - The accessToken to find.
-   * @returns Promise resolved with the document that matches the accessToken provided.
-   */
-  async findOneByAccessToken(accessToken: string): Promise<E> {
-    return this.entityModel.findOne({ accessToken: { $eq: accessToken } });
   }
 
   /**
@@ -110,13 +120,43 @@ export class MongoRepository<E> implements DBRepository<E> {
   }
 
   /**
+   * Remove document fields by ID.
+   *
+   * @param id - The ID of the document to remove fields.
+   * @param data - The data to remove.
+   */
+  async removeFieldsById(id: string, data: object): Promise<E> {
+    return this.entityModel.findOneAndUpdate(
+      { _id: id },
+      { $unset: data },
+      { new: true },
+    );
+  }
+
+  /**
    * Update a document by ID.
    *
    * @param id - The ID of the document to update.
    * @param data - The data to update the document.
    */
-  async updateById(id: string, data) {
-    await this.entityModel.updateOne({ _id: id }, data);
+  async updateById(id: string, data: object): Promise<E> {
+    return this.entityModel.findOneAndUpdate(
+      { _id: id },
+      { $set: data },
+      { new: true },
+    );
+  }
+
+  /**
+   * Find a document with that eventId and update it removing the userId from the particpant list.
+   * @param eventId - Event identificator.
+   * @param userId - User identificator to add as participant.
+   */
+  async removePartipantFromList(eventId: string, userId: string) {
+    await this.entityModel.updateOne(
+      { eventId },
+      { $pull: { participants: userId } },
+    );
   }
 
   /**

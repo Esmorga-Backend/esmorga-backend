@@ -12,11 +12,11 @@ import {
 import {
   InvalidEventIdApiError,
   InvalidTokenApiError,
-  NotAcceptableEventApiError,
+  NotAccepteableDisjoinEventApiError,
 } from '../../../domain/errors';
 
 @Injectable()
-export class JoinEventService {
+export class DisjoinEventService {
   constructor(
     private readonly logger: PinoLogger,
     private readonly eventRepository: EventRepository,
@@ -24,10 +24,10 @@ export class JoinEventService {
     private readonly eventParticipantsRepository: EventParticipantsRepository,
   ) {}
 
-  async joinEvent(accessToken: string, eventId: string, requestId?: string) {
+  async disJoinEvent(accessToken: string, eventId: string, requestId: string) {
     try {
       this.logger.info(
-        `[JoinEventService] [joinEvent] - x-request-id: ${requestId}, eventId ${eventId}`,
+        `[DisjoinEventService] [disJoinEvent] - x-request-id: ${requestId}, eventId ${eventId}`,
       );
 
       const { uuid } = await this.tokensRepository.getPairOfTokensByAccessToken(
@@ -40,16 +40,18 @@ export class JoinEventService {
         requestId,
       );
 
-      if (eventDate < new Date()) throw new NotAcceptableEventApiError();
+      if (eventDate < new Date()) {
+        throw new NotAccepteableDisjoinEventApiError();
+      }
 
-      await this.eventParticipantsRepository.updateParticipantList(
+      await this.eventParticipantsRepository.disjoinParticipantList(
         eventId,
         uuid,
         requestId,
       );
     } catch (error) {
       this.logger.error(
-        `[JoinEventService] [joinEvent] - x-request-id: ${requestId}, error ${error}`,
+        `[DisjoinEventService] [disJoinEvent] - x-request-id: ${requestId}, error ${error}`,
       );
 
       if (error instanceof DataBaseUnathorizedError)

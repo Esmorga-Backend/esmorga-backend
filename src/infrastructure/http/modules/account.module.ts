@@ -6,6 +6,7 @@ import {
   RefreshTokenService,
   JoinEventService,
   GetMyEventsService,
+  DisjoinEventService,
 } from '../../../application/handler/account';
 import { GenerateTokenPair } from '../../../domain/services';
 import { AuthGuard } from '../guards';
@@ -13,7 +14,7 @@ import { EventSharedModule } from './event-shared.module';
 import { AccountSharedModule } from './account-shared.module';
 
 @Module({
-  imports: [EventSharedModule, AccountSharedModule],
+  imports: [AccountSharedModule, EventSharedModule],
   controllers: [AccountController],
   providers: [
     LoginService,
@@ -21,6 +22,7 @@ import { AccountSharedModule } from './account-shared.module';
     RefreshTokenService,
     JoinEventService,
     GetMyEventsService,
+    DisjoinEventService,
     GenerateTokenPair,
     AuthGuard,
   ],
