@@ -25,7 +25,7 @@ export class TokensRepository extends MongoRepository<TokensSchema> {
   ) {
     try {
       this.logger.info(
-        `[TokensRepository] [saveTokens] - x-request-id:${requestId}, uuid ${uuid}`,
+        `[TokensRepository] [saveTokens] - x-request-id: ${requestId}, uuid: ${uuid}`,
       );
 
       const pairOfTokens = new this.tokensModel({
@@ -37,7 +37,7 @@ export class TokensRepository extends MongoRepository<TokensSchema> {
       await this.save(pairOfTokens);
     } catch (error) {
       this.logger.error(
-        `[TokensRepository] [saveTokens] - x-request-id:${requestId}, error ${error}`,
+        `[TokensRepository] [saveTokens] - x-request-id: ${requestId}, error: ${error}`,
       );
 
       throw new DataBaseInternalError();
@@ -50,7 +50,7 @@ export class TokensRepository extends MongoRepository<TokensSchema> {
   ): Promise<PairOfTokensDto[]> {
     try {
       this.logger.info(
-        `[TokensRepository] [getAllTokensByUuid] - x-request-id:${requestId}, uuid ${uuid}`,
+        `[TokensRepository] [getAllTokensByUuid] - x-request-id: ${requestId}, uuid: ${uuid}`,
       );
 
       const tokensData = await this.findByUuid(uuid);
@@ -64,7 +64,7 @@ export class TokensRepository extends MongoRepository<TokensSchema> {
       return pairOfTokens;
     } catch (error) {
       this.logger.error(
-        `[TokensRepository] [getAllTokensByUuid] - x-request-id:${requestId}, error ${error}`,
+        `[TokensRepository] [getAllTokensByUuid] - x-request-id: ${requestId}, error: ${error}`,
       );
 
       throw new DataBaseInternalError();
@@ -77,7 +77,7 @@ export class TokensRepository extends MongoRepository<TokensSchema> {
   ): Promise<PairOfTokensDto> {
     try {
       this.logger.info(
-        `[TokensRepository] [getPairOfTokensByRefreshToken] - x-request-id:${requestId}`,
+        `[TokensRepository] [getPairOfTokensByRefreshToken] - x-request-id:${requestId}, refreshToken ${refreshToken}`,
       );
 
       const tokenData = await this.findOneByRefreshToken(refreshToken);
@@ -91,7 +91,7 @@ export class TokensRepository extends MongoRepository<TokensSchema> {
       return pairOfTokens;
     } catch (error) {
       this.logger.error(
-        `[TokensRepository] [getPairOfTokensByRefreshToken] - x-request-id:${requestId}, error ${error}`,
+        `[TokensRepository] [getPairOfTokensByRefreshToken] - x-request-id: ${requestId}, error: ${error}`,
       );
 
       if (error instanceof HttpException) throw error;
@@ -132,13 +132,13 @@ export class TokensRepository extends MongoRepository<TokensSchema> {
   async removeTokensById(id: string, requestId?: string) {
     try {
       this.logger.info(
-        `[TokensRepository] [removeTokensById] - x-request-id:${requestId}, tokensId ${id}`,
+        `[TokensRepository] [removeTokensById] - x-request-id: ${requestId}, tokensId: ${id}`,
       );
 
       await this.removeById(id);
     } catch (error) {
       this.logger.error(
-        `[TokensRepository] [removeTokensById] - x-request-id:${requestId}, error ${error}`,
+        `[TokensRepository] [removeTokensById] - x-request-id: ${requestId}, error: ${error}`,
       );
 
       throw new DataBaseInternalError();

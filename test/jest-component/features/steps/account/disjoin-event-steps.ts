@@ -69,26 +69,26 @@ export const disjoinEventSteps: StepDefinitions = ({ given, and }) => {
   // TC-99
   and('i have provided a valid eventId', () => {
     jest
-      .spyOn(context.eventRepository, 'findById')
+      .spyOn(context.eventRepository, 'findOneById')
       .mockResolvedValue(FUTURE_EVENT_MOCK_DB);
   });
 
   // TC-103
   and('i provide a valid eventId for an event I am not joined', () => {
     jest
-      .spyOn(context.eventRepository, 'findById')
+      .spyOn(context.eventRepository, 'findOneById')
       .mockResolvedValue(FUTURE_EVENT_MOCK_DB);
   });
 
   // TC-101
   and('i have provided a eventId that do not exist in the DB', () => {
-    jest.spyOn(context.eventRepository, 'findById').mockResolvedValue(null);
+    jest.spyOn(context.eventRepository, 'findOneById').mockResolvedValue(null);
   });
 
   // TC-140
   and('i have provided a valid eventId that has a past date', () => {
     jest
-      .spyOn(context.eventRepository, 'findById')
+      .spyOn(context.eventRepository, 'findOneById')
       .mockResolvedValue(OLD_EVENT_MOCK_DB);
   });
 };

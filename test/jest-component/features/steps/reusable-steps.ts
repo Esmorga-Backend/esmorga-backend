@@ -40,6 +40,13 @@ export const reusableSteps: StepDefinitions = ({ when, then, and }) => {
       .send(context.mock);
   });
 
+  when(/^a PATCH request is made to (.*) API$/, async () => {
+    context.response = await request(app.getHttpServer())
+      .patch(context.path)
+      .set(context.headers)
+      .send(context.mock);
+  });
+
   when(/^a DELETE request is made to (.*) API$/, async () => {
     context.response = await request(app.getHttpServer())
       .delete(context.path)

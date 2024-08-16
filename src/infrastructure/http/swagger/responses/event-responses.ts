@@ -1,16 +1,14 @@
 import { ApiResponseOptions } from '@nestjs/swagger';
-import { HttpStatus } from '@nestjs/common';
-import { EventListDto } from '../../../dtos';
+import { EventListDto, EventDto } from '../../../dtos';
 import {
   BAD_REQUEST_ERROR_COMMON_PROPERTIES,
-  UNAUTHORIZED_INVALID_TOKEN_COMMON_PROPERTIES,
+  FORBIDDEN_INVALID_ROLE_COMMON_PROPERTIES,
   INTERNAL_ERROR_COMMON_PROPERTIES,
+  UNAUTHORIZED_INVALID_TOKEN_COMMON_PROPERTIES,
 } from './common-response-properties';
 
 const PATHS = {
-  GET_EVENTS: '/v1/events',
-  POST_EVENT: '/v1/events',
-  DELETE_EVENT: '/v1/events',
+  EVENTS: '/v1/events',
 };
 
 export const CREATE_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
@@ -27,7 +25,7 @@ export const CREATE_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
       type: 'object',
       properties: {
         ...BAD_REQUEST_ERROR_COMMON_PROPERTIES,
-        type: { example: PATHS.POST_EVENT },
+        type: { example: PATHS.EVENTS },
         errors: {
           type: 'array',
           example: ['location.name should not be empty'],
@@ -41,7 +39,7 @@ export const CREATE_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
       type: 'object',
       properties: {
         ...INTERNAL_ERROR_COMMON_PROPERTIES,
-        type: { example: PATHS.POST_EVENT },
+        type: { example: PATHS.EVENTS },
       },
     },
   },
@@ -58,7 +56,56 @@ export const GET_EVENTS_RESPONSES: { [key: string]: ApiResponseOptions } = {
       type: 'object',
       properties: {
         ...INTERNAL_ERROR_COMMON_PROPERTIES,
-        type: { example: PATHS.GET_EVENTS },
+        type: { example: PATHS.EVENTS },
+      },
+    },
+  },
+};
+
+export const UPDATE_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
+  OK: {
+    description: 'Event successfully updated',
+    type: EventDto,
+  },
+  BAD_REQUEST_ERROR: {
+    description: 'Error for not existing event',
+    schema: {
+      type: 'object',
+      properties: {
+        ...BAD_REQUEST_ERROR_COMMON_PROPERTIES,
+        type: { example: PATHS.EVENTS },
+        detail: { example: 'eventId' },
+        errors: { example: ['eventId invalid'] },
+      },
+    },
+  },
+  FORBIDDEN_ERROR: {
+    description: 'Error for not have enough privileges',
+    schema: {
+      type: 'object',
+      properties: {
+        ...FORBIDDEN_INVALID_ROLE_COMMON_PROPERTIES,
+        type: { example: PATHS.EVENTS },
+      },
+    },
+  },
+  INTERNAL_ERROR: {
+    description: 'Error not handled',
+    schema: {
+      type: 'object',
+      properties: {
+        ...INTERNAL_ERROR_COMMON_PROPERTIES,
+        type: { example: PATHS.EVENTS },
+      },
+    },
+  },
+  UNAUTHORIZED_ERROR: {
+    description: 'Error for invalid token',
+    schema: {
+      type: 'object',
+      properties: {
+        ...UNAUTHORIZED_INVALID_TOKEN_COMMON_PROPERTIES,
+        type: { example: PATHS.EVENTS },
       },
     },
   },
@@ -74,7 +121,7 @@ export const DELETE_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
       type: 'object',
       properties: {
         ...BAD_REQUEST_ERROR_COMMON_PROPERTIES,
-        type: { example: PATHS.DELETE_EVENT },
+        type: { example: PATHS.EVENTS },
         errors: {
           type: 'array',
           example: ['eventId should not be empty'],
@@ -88,7 +135,7 @@ export const DELETE_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
       type: 'object',
       properties: {
         ...UNAUTHORIZED_INVALID_TOKEN_COMMON_PROPERTIES,
-        type: { type: 'string', example: PATHS.DELETE_EVENT },
+        type: { type: 'string', example: PATHS.EVENTS },
       },
     },
   },
@@ -97,20 +144,8 @@ export const DELETE_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
     schema: {
       type: 'object',
       properties: {
-        title: {
-          type: 'string',
-          example: 'unauthorizedRequestError',
-        },
-        status: { type: 'number', example: HttpStatus.FORBIDDEN },
-        type: { type: 'string', example: PATHS.DELETE_EVENT },
-        detail: {
-          type: 'string',
-          example: 'not authorized',
-        },
-        errors: {
-          type: 'array',
-          example: ['not enough privileges'],
-        },
+        ...FORBIDDEN_INVALID_ROLE_COMMON_PROPERTIES,
+        type: { example: PATHS.EVENTS },
       },
     },
   },
@@ -120,7 +155,7 @@ export const DELETE_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
       type: 'object',
       properties: {
         ...INTERNAL_ERROR_COMMON_PROPERTIES,
-        type: { type: 'string', example: PATHS.DELETE_EVENT },
+        type: { type: 'string', example: PATHS.EVENTS },
       },
     },
   },

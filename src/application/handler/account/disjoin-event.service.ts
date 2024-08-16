@@ -10,7 +10,7 @@ import {
   EventParticipantsRepository,
 } from '../../../infrastructure/db/repositories';
 import {
-  BadEventIdApiError,
+  InvalidEventIdApiError,
   InvalidTokenApiError,
   NotAccepteableDisjoinEventApiError,
 } from '../../../domain/errors';
@@ -58,7 +58,7 @@ export class DisjoinEventService {
         throw new InvalidTokenApiError();
 
       if (error instanceof DataBaseNotFoundError)
-        throw new BadEventIdApiError();
+        throw new InvalidEventIdApiError();
 
       throw error;
     }

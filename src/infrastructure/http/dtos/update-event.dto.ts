@@ -17,24 +17,36 @@ import {
   ValidateNested,
 } from 'class-validator';
 
-import { IsValidDate, IsNotPastDate } from './custom-decorators';
+import {
+  IsValidDate,
+  IsNotPastDate,
+  IsNotEmptyArray,
+  IsNotEmptyObject,
+} from './custom-decorators';
 
 import { EVENT_TYPE } from '../../../domain/consts';
 
-class CreateEventLocationDto {
+class UpdateEventLocationDto {
   @MinLength(1, { message: 'name must have min 1 character' })
   @MaxLength(100, { message: 'name must have max 100 characters' })
   @IsString()
   @IsDefined({ message: 'name should not be empty' })
-  @ApiProperty({ example: 'A Coruña', minLength: 1, maxLength: 100 })
-  name: string;
+  @ApiPropertyOptional({ example: 'A Coruña', minLength: 1, maxLength: 100 })
+  @IsOptional()
+  name?: string;
 
   @IsNumber({}, { message: 'lat must be a number' })
   @IsNotEmpty({
     message: 'lat must be defined if long is already define',
   })
   @ValidateIf((location) => location.long)
-  @ApiPropertyOptional({ example: 43.35525182148881 })
+  @ApiPropertyOptional({
+    example: 43.35525182148881,
+    maximum: 90,
+    minimum: -90,
+    description: 'GPS Latitude',
+  })
+  @IsOptional()
   lat?: number;
 
   @IsNumber({}, { message: 'long must be a number' })
@@ -42,12 +54,27 @@ class CreateEventLocationDto {
     message: 'long must be defined if lat is already define',
   })
   @ValidateIf((location) => location.lat)
-  @ApiPropertyOptional({ example: -8.41937931298951 })
+  @ApiPropertyOptional({
+    example: -8.41937931298951,
+    maximum: 180,
+    minimum: -180,
+    description: 'GPS Longitude',
+  })
+  @IsOptional()
   long?: number;
 }
 
-export class CreateEventDto {
+export class UpdateEventDto {
   @ApiProperty({
+    example: '6656e23640e1fdb4ceb23cc9',
+    minLength: 24,
+    maxLength: 24,
+  })
+  @IsString()
+  @IsNotEmpty()
+  eventId: string;
+
+  @ApiPropertyOptional({
     example: 'End of the World Party',
     minLength: 3,
     maxLength: 100,
@@ -55,10 +82,13 @@ export class CreateEventDto {
   @MinLength(3, { message: 'eventName must have min 3 characters' })
   @MaxLength(100, { message: 'eventName must have max 100 characters' })
   @IsString()
-  @IsNotEmpty()
-  eventName: string;
+  @IsOptional()
+  eventName?: string;
 
-  @ApiProperty({ example: '2025-03-08T10:05:30.915Z' })
+  @ApiPropertyOptional({
+    example: '2025-03-08T10:05:30.915Z',
+    format: 'date-time',
+  })
   @IsNotPastDate({ message: 'eventDate cannot be in the past' })
   @IsValidDate({ message: 'eventDate must be valid' })
   @Matches(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/, {
@@ -66,9 +96,10 @@ export class CreateEventDto {
   })
   @IsString()
   @IsNotEmpty()
-  eventDate: string;
+  @IsOptional()
+  eventDate?: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     example:
       'Join us for an unforgettable celebration as we dance into the apocalypse.',
     minLength: 4,
@@ -77,29 +108,33 @@ export class CreateEventDto {
   @MinLength(4, { message: 'description must have min 4 characters' })
   @MaxLength(5000, { message: 'description must have max 5000 characters' })
   @IsString()
-  @IsNotEmpty()
-  description: string;
+  @IsOptional()
+  description?: string;
 
-  @ApiProperty({ example: 'Party' })
+  @ApiPropertyOptional({ example: 'Party', enum: EVENT_TYPE })
   @IsEnum(EVENT_TYPE)
   @IsString()
   @IsNotEmpty()
-  eventType: EVENT_TYPE;
+  @IsOptional()
+  eventType?: EVENT_TYPE;
 
   @ApiPropertyOptional({ example: 'image.url', maxLength: 500 })
   @MaxLength(500, {
     message: 'imageUrl must have max 500 characters',
   })
   @IsString()
+  @IsNotEmpty()
   @IsOptional()
   imageUrl?: string;
 
-  @ApiProperty({ type: CreateEventLocationDto })
+  @ApiPropertyOptional({ type: UpdateEventLocationDto })
   @IsNotEmpty()
+  @IsNotEmptyObject({ message: 'location should not be empty' })
   @IsObject()
   @ValidateNested()
-  @Type(() => CreateEventLocationDto)
-  location: CreateEventLocationDto;
+  @Type(() => UpdateEventLocationDto)
+  @IsOptional()
+  location?: UpdateEventLocationDto;
 
   @ApiPropertyOptional({
     example: ['Dance', 'Music'],
@@ -117,9 +152,14 @@ export class CreateEventDto {
   })
   @IsString({ each: true })
   @ArrayMaxSize(10, { message: 'tags must have max 10 elements' })
+  @IsNotEmptyArray({ message: 'tags should not be empty' })
   @IsArray({ message: 'tags must be an array' })
-  @Transform(({ value }) =>
-    Array.isArray(value)
+  @Transform(({ value }) => {
+    if (value === null) {
+      return null;
+    }
+
+    return Array.isArray(value)
       ? [
           ...new Set(
             value.map((tag) =>
@@ -127,7 +167,7 @@ export class CreateEventDto {
             ),
           ),
         ]
-      : value,
-  )
+      : value;
+  })
   tags?: string[];
 }

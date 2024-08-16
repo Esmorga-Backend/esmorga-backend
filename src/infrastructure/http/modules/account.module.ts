@@ -13,7 +13,7 @@ import { EventSharedModule } from './event-shared.module';
 import { AccountSharedModule } from './account-shared.module';
 
 @Module({
-  imports: [EventSharedModule, AccountSharedModule],
+  imports: [AccountSharedModule, EventSharedModule],
   controllers: [AccountController],
   providers: [
     LoginService,
