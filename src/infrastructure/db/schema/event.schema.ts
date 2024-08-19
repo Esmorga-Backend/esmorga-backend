@@ -24,6 +24,9 @@ export class Event {
   @Prop({ required: false })
   imageUrl: string;
 
+  @Prop({ required: true })
+  createdBy: string;
+
   @Prop({ required: false, default: undefined })
   updatedBy: string;
 }

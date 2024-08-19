@@ -4,7 +4,6 @@ import { Model } from 'mongoose';
 import { plainToClass } from 'class-transformer';
 import { PinoLogger } from 'nestjs-pino';
 import { EventDto } from '../../dtos';
-import { CreateEventDto } from '../../http/dtos';
 import { MongoRepository } from './mongo.repository';
 import { Event as EventSchema } from '../schema';
 import {
@@ -24,7 +23,7 @@ export class EventRepository extends MongoRepository<EventSchema> {
     super(eventModel);
   }
 
-  async createEvent(createEventDto: CreateEventDto, requestId?: string) {
+  async createEvent(createEventDto: object, requestId?: string) {
     try {
       this.logger.info(
         `[EventRepository] [createEvent] - x-request-id: ${requestId}`,
@@ -169,13 +168,13 @@ export class EventRepository extends MongoRepository<EventSchema> {
   async removeEvent(eventId: string, requestId?: string) {
     try {
       this.logger.info(
-        `[EventRepository] [removeEvent] - x-request-id:${requestId}, eventId ${eventId}`,
+        `[EventRepository] [removeEvent] - x-request-id: ${requestId}, eventId: ${eventId}`,
       );
 
       await this.removeById(eventId);
     } catch (error) {
       this.logger.error(
-        `[EventRepository] [removeEvent] - x-request-id:${requestId}, error ${error}`,
+        `[EventRepository] [removeEvent] - x-request-id: ${requestId}, error: ${error}`,
       );
 
       throw new DataBaseInternalError();

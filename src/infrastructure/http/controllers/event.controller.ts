@@ -70,9 +70,11 @@ export class EventController {
   }
 
   @Post('/')
+  @UseGuards(AuthGuard)
   @SwaggerCreateEvent()
   async createEvent(
     @Body() createEventDto: CreateEventDto,
+    @Headers('Authorization') accessToken: string,
     @RequestId() requestId: string,
   ) {
     try {
@@ -80,7 +82,11 @@ export class EventController {
         `[EventController] [createEvent] - x-request-id:${requestId}`,
       );
 
-      await this.createEventService.create(createEventDto, requestId);
+      await this.createEventService.create(
+        accessToken,
+        createEventDto,
+        requestId,
+      );
 
       return {};
     } catch (error) {

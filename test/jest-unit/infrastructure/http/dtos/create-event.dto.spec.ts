@@ -76,19 +76,9 @@ describe('[unit-test] [CreateEventDto]', () => {
     });
 
     it('Should only accept string values', async () => {
-      const event = {
-        eventName: 1345,
-        eventDate: '2025-03-08T10:05:30.915Z',
-        description: 'Hello World',
-        eventType: 'Party',
-        imageUrl: 'img.url',
-        location: {
-          lat: 43.35525182148881,
-          long: -8.41937931298951,
-          name: 'A Coruña',
-        },
-        tags: ['Meal', 'Music'],
-      };
+      const event: any = { ...CREATE_EVENT_MOCK };
+
+      event.eventName = 123;
 
       const createEventDto = plainToInstance(CreateEventDto, event);
 
@@ -168,19 +158,9 @@ describe('[unit-test] [CreateEventDto]', () => {
     });
 
     it('Should only accept string value', async () => {
-      const event = {
-        eventName: 'MongoFest',
-        eventDate: 123,
-        description: 'Hello World',
-        eventType: 'Party',
-        imageUrl: 'img.url',
-        location: {
-          lat: 43.35525182148881,
-          long: -8.41937931298951,
-          name: 'A Coruña',
-        },
-        tags: ['Meal', 'Music'],
-      };
+      const event: any = { ...CREATE_EVENT_MOCK };
+
+      event.eventDate = 123;
 
       const createEventDto = plainToInstance(CreateEventDto, event);
 
@@ -244,19 +224,9 @@ describe('[unit-test] [CreateEventDto]', () => {
     });
 
     it('Should only accept string value', async () => {
-      const event = {
-        eventName: 'MongoFest',
-        eventDate: '2025-03-08T10:05:30.915Z',
-        description: 123,
-        eventType: 'Party',
-        imageUrl: 'img.url',
-        location: {
-          lat: 43.35525182148881,
-          long: -8.41937931298951,
-          name: 'A Coruña',
-        },
-        tags: ['Meal', 'Music'],
-      };
+      const event: any = { ...CREATE_EVENT_MOCK };
+
+      event.description = 123;
 
       const createEventDto = plainToInstance(CreateEventDto, event);
 
@@ -288,19 +258,9 @@ describe('[unit-test] [CreateEventDto]', () => {
     });
 
     it('Should only accept string value', async () => {
-      const event = {
-        eventName: 'MongoFest',
-        eventDate: '2025-03-08T10:05:30.915Z',
-        description: 'Hello World',
-        eventType: 123,
-        imageUrl: 'img.url',
-        location: {
-          lat: 43.35525182148881,
-          long: -8.41937931298951,
-          name: 'A Coruña',
-        },
-        tags: ['Meal', 'Music'],
-      };
+      const event: any = { ...CREATE_EVENT_MOCK };
+
+      event.eventType = 123;
 
       const createEventDto = plainToInstance(CreateEventDto, event);
 
@@ -314,19 +274,9 @@ describe('[unit-test] [CreateEventDto]', () => {
     });
 
     it('Should only accept value predifined values', async () => {
-      const event = {
-        eventName: 'MongoFest',
-        eventDate: '2025-03-08T10:05:30.915Z',
-        description: 'Hello World',
-        eventType: 'TEST',
-        imageUrl: 'img.url',
-        location: {
-          lat: 43.35525182148881,
-          long: -8.41937931298951,
-          name: 'A Coruña',
-        },
-        tags: ['Meal', 'Music'],
-      };
+      const event: any = { ...CREATE_EVENT_MOCK };
+
+      event.eventType = 'INVALID EVENT TYPE';
 
       const createEventDto = plainToInstance(CreateEventDto, event);
 
@@ -343,19 +293,9 @@ describe('[unit-test] [CreateEventDto]', () => {
 
   describe('[CreateEventDto] [imageUrl]', () => {
     it('Should only accept string value', async () => {
-      const event = {
-        eventName: 'MongoFest',
-        eventDate: '2025-03-08T10:05:30.915Z',
-        description: 'Hello world',
-        eventType: 'Party',
-        imageUrl: 123,
-        location: {
-          lat: 43.35525182148881,
-          long: -8.41937931298951,
-          name: 'A Coruña',
-        },
-        tags: ['Meal', 'Music'],
-      };
+      const event: any = { ...CREATE_EVENT_MOCK };
+
+      event.imageUrl = 123;
 
       const createEventDto = plainToInstance(CreateEventDto, event);
 
@@ -381,6 +321,24 @@ describe('[unit-test] [CreateEventDto]', () => {
       expect(errors[0].property).toEqual('imageUrl');
       expect(errors[0].constraints).toEqual({
         maxLength: 'imageUrl must have max 500 characters',
+      });
+    });
+  });
+
+  describe('[UpdateEventDto] [location]', () => {
+    it('Should only accept an object', async () => {
+      const event = JSON.parse(
+        JSON.stringify({ ...CREATE_EVENT_MOCK, location: 123 }),
+      );
+
+      const createEventDto = plainToInstance(CreateEventDto, event);
+
+      const errors = await validate(createEventDto, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('location');
+      expect(errors[0].constraints).toEqual({
+        isObject: 'location must be an object',
       });
     });
   });
@@ -484,19 +442,9 @@ describe('[unit-test] [CreateEventDto]', () => {
     });
 
     it('Should only accept numbers as value', async () => {
-      const event = {
-        eventName: 'MobgenFest',
-        eventDate: '2025-03-08T10:05:30.915Z',
-        description: 'Hello World',
-        eventType: 'Party',
-        imageUrl: 'img.url',
-        location: {
-          lat: 'test',
-          long: -8.41937931298951,
-          name: 'A Coruña',
-        },
-        tags: ['Meal', 'Music'],
-      };
+      const event = JSON.parse(JSON.stringify(CREATE_EVENT_MOCK));
+
+      event.location.lat = 'invalid type';
 
       const createEventDto = plainToInstance(CreateEventDto, event);
 
@@ -530,19 +478,9 @@ describe('[unit-test] [CreateEventDto]', () => {
     });
 
     it('Should only accept numbers as value', async () => {
-      const event = {
-        eventName: 'MobgenFest',
-        eventDate: '2025-03-08T10:05:30.915Z',
-        description: 'Hello World',
-        eventType: 'Party',
-        imageUrl: 'img.url',
-        location: {
-          lat: -8.41937931298951,
-          long: 'test',
-          name: 'A Coruña',
-        },
-        tags: ['Meal', 'Music'],
-      };
+      const event = JSON.parse(JSON.stringify(CREATE_EVENT_MOCK));
+
+      event.location.long = 'invalid type';
 
       const createEventDto = plainToInstance(CreateEventDto, event);
 
@@ -591,31 +529,21 @@ describe('[unit-test] [CreateEventDto]', () => {
     });
 
     it('Should not accept more than 10 different tags', async () => {
-      const event = {
-        eventName: 'MobgenFest',
-        eventDate: '2025-03-08T10:05:30.915Z',
-        description: 'Hello World',
-        eventType: 'Party',
-        imageUrl: 'img.url',
-        location: {
-          lat: 43.35525182148881,
-          long: -8.41937931298951,
-          name: 'A Coruña',
-        },
-        tags: [
-          'AAA',
-          'AAB',
-          'AAC',
-          'AAD',
-          'AAF',
-          'AAG',
-          'AAH',
-          'AAI',
-          'AAJ',
-          'AAK',
-          'AAAA',
-        ],
-      };
+      const event = { ...CREATE_EVENT_MOCK };
+
+      event.tags = [
+        'AAA',
+        'AAB',
+        'AAC',
+        'AAD',
+        'AAE',
+        'AAF',
+        'AAG',
+        'AAH',
+        'AAI',
+        'AAJ',
+        'AAK',
+      ];
 
       const createEventDto = plainToInstance(CreateEventDto, event);
 
@@ -629,19 +557,7 @@ describe('[unit-test] [CreateEventDto]', () => {
     });
 
     it('Should only accept string values inside the array', async () => {
-      const event = {
-        eventName: 'MobgenFest',
-        eventDate: '2025-03-08T10:05:30.915Z',
-        description: 'Hello World',
-        eventType: 'Party',
-        imageUrl: 'img.url',
-        location: {
-          lat: 43.35525182148881,
-          long: -8.41937931298951,
-          name: 'A Coruña',
-        },
-        tags: [134],
-      };
+      const event = { ...CREATE_EVENT_MOCK, tags: [123] };
 
       const createEventDto = plainToInstance(CreateEventDto, event);
 
@@ -655,19 +571,7 @@ describe('[unit-test] [CreateEventDto]', () => {
     });
 
     it('Should only accept an array as tags field', async () => {
-      const event = {
-        eventName: 'MobgenFest',
-        eventDate: '2025-03-08T10:05:30.915Z',
-        description: 'Hello World',
-        eventType: 'Party',
-        imageUrl: 'img.url',
-        location: {
-          lat: 43.35525182148881,
-          long: -8.41937931298951,
-          name: 'A Coruña',
-        },
-        tags: 'test',
-      };
+      const event = { ...CREATE_EVENT_MOCK, tags: 'invalid type' };
 
       const createEventDto = plainToInstance(CreateEventDto, event);
 

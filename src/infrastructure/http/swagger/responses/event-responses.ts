@@ -33,12 +33,32 @@ export const CREATE_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
       },
     },
   },
+  FORBIDDEN_ERROR: {
+    description: 'Error for not have enough privileges',
+    schema: {
+      type: 'object',
+      properties: {
+        ...FORBIDDEN_INVALID_ROLE_COMMON_PROPERTIES,
+        type: { example: PATHS.EVENTS },
+      },
+    },
+  },
   INTERNAL_ERROR: {
     description: 'Error not handled',
     schema: {
       type: 'object',
       properties: {
         ...INTERNAL_ERROR_COMMON_PROPERTIES,
+        type: { example: PATHS.EVENTS },
+      },
+    },
+  },
+  UNAUTHORIZED_ERROR: {
+    description: 'Error for invalid token',
+    schema: {
+      type: 'object',
+      properties: {
+        ...UNAUTHORIZED_INVALID_TOKEN_COMMON_PROPERTIES,
         type: { example: PATHS.EVENTS },
       },
     },
