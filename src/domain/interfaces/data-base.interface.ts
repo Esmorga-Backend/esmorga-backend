@@ -8,6 +8,7 @@ export interface DBRepository<E> {
   findAndUpdateParticipantsList(eventId: string, userId: string);
   save(data);
   updateById(id: string, data: object): Promise<E>;
+  removePartipantFromList(eventId: string, userId: string);
   removeById(id: string);
   removeByEventId(eventId: string);
 }

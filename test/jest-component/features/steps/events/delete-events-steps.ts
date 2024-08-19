@@ -70,11 +70,11 @@ export const deleteEventStep: StepDefinitions = ({ given, and }) => {
       .mockResolvedValue(PAIR_OF_TOKENS_MOCK_DB);
 
     jest
-      .spyOn(context.accountRepository, 'findById')
+      .spyOn(context.accountRepository, 'findOneById')
       .mockResolvedValue(ADMIN_USER);
 
     jest
-      .spyOn(context.eventRepository, 'findById')
+      .spyOn(context.eventRepository, 'findOneById')
       .mockResolvedValue(FUTURE_EVENT_MOCK_DB);
   });
 

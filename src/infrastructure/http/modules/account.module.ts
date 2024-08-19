@@ -5,6 +5,7 @@ import {
   RegisterService,
   RefreshTokenService,
   JoinEventService,
+  DisjoinEventService,
 } from '../../../application/handler/account';
 import { GenerateTokenPair } from '../../../domain/services';
 import { AuthGuard } from '../guards';
@@ -15,12 +16,13 @@ import { AccountSharedModule } from './account-shared.module';
   imports: [AccountSharedModule, EventSharedModule],
   controllers: [AccountController],
   providers: [
-    AuthGuard,
-    GenerateTokenPair,
-    JoinEventService,
     LoginService,
-    RefreshTokenService,
     RegisterService,
+    RefreshTokenService,
+    JoinEventService,
+    DisjoinEventService,
+    GenerateTokenPair,
+    AuthGuard,
   ],
 })
 export class AccountModule {}

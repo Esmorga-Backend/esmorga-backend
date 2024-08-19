@@ -16,43 +16,41 @@ import {
   ValidateIf,
   ValidateNested,
 } from 'class-validator';
-
-import { IsValidDate, IsNotPastDate } from './custom-decorators';
-
 import { EVENT_TYPE } from '../../../domain/consts';
+import { IsNotPastDate, IsValidDate } from './custom-decorators';
 
 class CreateEventLocationDto {
+  @ApiProperty({ example: 'A Coruña', minLength: 1, maxLength: 100 })
   @MinLength(1, { message: 'name must have min 1 character' })
   @MaxLength(100, { message: 'name must have max 100 characters' })
   @IsString()
   @IsDefined({ message: 'name should not be empty' })
-  @ApiProperty({ example: 'A Coruña', minLength: 1, maxLength: 100 })
   name: string;
 
-  @IsNumber({}, { message: 'lat must be a number' })
-  @IsNotEmpty({
-    message: 'lat must be defined if long is already define',
-  })
-  @ValidateIf((location) => location.long)
   @ApiPropertyOptional({
     example: 43.35525182148881,
     maximum: 90,
     minimum: -90,
     description: 'GPS Latitude',
   })
+  @IsNumber({}, { message: 'lat must be a number' })
+  @IsNotEmpty({
+    message: 'lat must be defined if long is already define',
+  })
+  @ValidateIf((location) => location.long)
   lat?: number;
 
-  @IsNumber({}, { message: 'long must be a number' })
-  @IsNotEmpty({
-    message: 'long must be defined if lat is already define',
-  })
-  @ValidateIf((location) => location.lat)
   @ApiPropertyOptional({
     example: -8.41937931298951,
     maximum: 180,
     minimum: -180,
     description: 'GPS Longitude',
   })
+  @IsNumber({}, { message: 'long must be a number' })
+  @IsNotEmpty({
+    message: 'long must be defined if lat is already define',
+  })
+  @ValidateIf((location) => location.lat)
   long?: number;
 }
 
