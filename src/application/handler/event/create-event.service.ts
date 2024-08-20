@@ -9,6 +9,7 @@ import {
   InvalidRoleApiError,
   InvalidTokenApiError,
 } from '../../../domain/errors';
+import { CreateEventDto } from '../../../infrastructure/http/dtos';
 import { DataBaseUnathorizedError } from '../../../infrastructure/db/errors';
 import { USER_ROLES } from '../../../domain/consts';
 
@@ -30,7 +31,7 @@ export class CreateEventService {
    */
   async create(
     accessToken: string,
-    createEventDto: object,
+    createEventDto: CreateEventDto,
     requestId?: string,
   ) {
     try {
@@ -50,10 +51,7 @@ export class CreateEventService {
 
       if (role !== USER_ROLES.ADMIN) throw new InvalidRoleApiError();
 
-      await this.eventRepository.createEvent(
-        { ...createEventDto, createdBy: email },
-        requestId,
-      );
+      await this.eventRepository.createEvent(createEventDto, email, requestId);
     } catch (error) {
       this.logger.error(
         `[CreateEventService] [create] - x-request-id: ${requestId}, error: ${error}`,

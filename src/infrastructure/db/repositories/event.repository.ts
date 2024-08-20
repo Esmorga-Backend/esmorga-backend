@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { plainToClass } from 'class-transformer';
 import { PinoLogger } from 'nestjs-pino';
 import { EventDto } from '../../dtos';
+import { CreateEventDto } from '../../http/dtos';
 import { MongoRepository } from './mongo.repository';
 import { Event as EventSchema } from '../schema';
 import {
@@ -23,13 +24,20 @@ export class EventRepository extends MongoRepository<EventSchema> {
     super(eventModel);
   }
 
-  async createEvent(createEventDto: object, requestId?: string) {
+  async createEvent(
+    createEventDto: CreateEventDto,
+    email: string,
+    requestId?: string,
+  ) {
     try {
       this.logger.info(
         `[EventRepository] [createEvent] - x-request-id: ${requestId}`,
       );
 
-      const event = new this.eventModel(createEventDto);
+      const event = new this.eventModel({
+        ...createEventDto,
+        createdBy: email,
+      });
 
       await this.save(event);
     } catch (error) {
