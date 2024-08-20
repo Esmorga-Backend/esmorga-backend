@@ -1,5 +1,6 @@
 import {
   Controller,
+  Get,
   Post,
   HttpException,
   InternalServerErrorException,
@@ -17,6 +18,7 @@ import {
   RegisterService,
   RefreshTokenService,
   JoinEventService,
+  GetMyEventsService,
   DisjoinEventService,
 } from '../../../application/handler/account';
 import { HttpExceptionFilter } from '../errors';
@@ -32,8 +34,9 @@ import {
   SwaggerJoinEvent,
   SwaggerDisjoinEvent,
   SwaggerRefreshToken,
+  SwaggetGetMyEvents,
 } from '../swagger/decorators/account';
-import { AccountLoggedDto, NewPairOfTokensDto } from '../../dtos';
+import { AccountLoggedDto, NewPairOfTokensDto, EventListDto } from '../../dtos';
 import { RequestId } from '../req-decorators';
 import { AuthGuard } from '../guards';
 
@@ -47,8 +50,39 @@ export class AccountController {
     private readonly registerService: RegisterService,
     private readonly refreshTokenService: RefreshTokenService,
     private readonly joinEventService: JoinEventService,
+    private readonly getMyEventsService: GetMyEventsService,
     private readonly disjoinEventService: DisjoinEventService,
   ) {}
+
+  @Get('/events')
+  @UseGuards(AuthGuard)
+  @SwaggetGetMyEvents()
+  async getMyEvents(
+    @Headers('Authorization') accessToken: string,
+    @RequestId() requestId: string,
+  ): Promise<EventListDto> {
+    try {
+      this.logger.info(
+        `[AccountController] [getMyEvents] - x-request-id:${requestId}`,
+      );
+
+      const response: EventListDto = await this.getMyEventsService.getEvents(
+        accessToken,
+        requestId,
+      );
+
+      return response;
+    } catch (error) {
+      this.logger.error(
+        `[AccountController] [getMyEvents] - x-request-id:${requestId}, error ${error}`,
+      );
+
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new InternalServerErrorException();
+    }
+  }
 
   @Post('/login')
   @SwaggerAccountLogin()

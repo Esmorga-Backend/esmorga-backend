@@ -8,15 +8,11 @@ import {
 } from '../../../../../src/infrastructure/db/repositories';
 import { FUTURE_EVENT_MOCK_DB, OLD_EVENT_MOCK_DB } from '../../../../mocks/db';
 import { EVENT_ID_MOCK } from '../../../../mocks/dtos';
+import { HEADERS } from '../../../../mocks/common-data';
 
 const PATH = '/v1/account/events';
 
 const METHOD = 'delete';
-
-const HEADERS = {
-  'Content-Type': 'application/json',
-  Authorization: 'Bearer accessToken',
-};
 
 const BODY = { ...EVENT_ID_MOCK };
 

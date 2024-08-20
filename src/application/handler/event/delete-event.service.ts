@@ -23,6 +23,15 @@ export class DeleteEventService {
     private readonly eventParticipantsRepository: EventParticipantsRepository,
   ) {}
 
+  /**
+   * Remove the event document and event participant list that matches with the ID provided.
+   *
+   * @param accessToken - Token allows user a method to authenticate.
+   * @param eventId - Event identifier.
+   * @param requestId - Request identifier.
+   * @throws NotAdminAccountApiError - User is not admin.
+   * @throws InvalidEventIdApiError - EventId is not valid follwing DB schema ot not found.
+   */
   async delete(accessToken: string, eventId: string, requestId?: string) {
     try {
       this.logger.info(
@@ -36,7 +45,7 @@ export class DeleteEventService {
         requestId,
       );
 
-      const { role } = await this.accountRepository.getUserByUuid(
+      const { role } = await this.accountRepository.getUserById(
         uuid,
         requestId,
       );

@@ -30,7 +30,9 @@ export const reusableSteps: StepDefinitions = ({ when, then, and }) => {
   });
 
   when(/^a GET request is made to (.*) API$/, async () => {
-    context.response = await request(app.getHttpServer()).get(context.path);
+    context.response = await request(app.getHttpServer())
+      .get(context.path)
+      .set(context.headers);
   });
 
   when(/^a POST request is made to (.*) API$/, async () => {

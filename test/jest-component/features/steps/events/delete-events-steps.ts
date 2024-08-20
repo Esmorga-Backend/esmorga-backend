@@ -14,15 +14,11 @@ import {
   getUserMockDb,
 } from '../../../../mocks/db';
 import { EVENT_ID_MOCK } from '../../../../mocks/dtos';
+import { HEADERS } from '../../../../mocks/common-data';
 
 const PATH = '/v1/events';
 
 const METHOD = 'delete';
-
-const HEADERS = {
-  'Content-Type': 'application/json',
-  Authorization: 'Bearer accessToken',
-};
 
 const BODY = { ...EVENT_ID_MOCK };
 
@@ -70,11 +66,11 @@ export const deleteEventStep: StepDefinitions = ({ given, and }) => {
       .mockResolvedValue(PAIR_OF_TOKENS_MOCK_DB);
 
     jest
-      .spyOn(context.accountRepository, 'findById')
+      .spyOn(context.accountRepository, 'findOneById')
       .mockResolvedValue(ADMIN_USER);
 
     jest
-      .spyOn(context.eventRepository, 'findById')
+      .spyOn(context.eventRepository, 'findOneById')
       .mockResolvedValue(FUTURE_EVENT_MOCK_DB);
   });
 

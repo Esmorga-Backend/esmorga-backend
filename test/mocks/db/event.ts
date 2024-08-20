@@ -1,3 +1,9 @@
+import {
+  FUTURE_EVENT_MOCK_DB_ID,
+  EVENT_CORE_FIELDS_MOCK_DB_ID,
+  OLD_EVENT_MOCK_DB_ID,
+} from './common';
+
 const currentDate: Date = new Date();
 
 const futureDate: Date = new Date();
@@ -25,7 +31,7 @@ export const UPDATED_EVENT_MOCK_DB = {
 };
 
 export const FUTURE_EVENT_MOCK_DB = {
-  _id: '6656e23640e1fdb4ceb23cc9',
+  _id: FUTURE_EVENT_MOCK_DB_ID,
   eventName: 'MobgenFest',
   eventDate: futureDate,
   description: 'Hello World',
@@ -41,9 +47,23 @@ export const FUTURE_EVENT_MOCK_DB = {
   updatedAt: currentDate,
 };
 
+// Event with only mandatory fields
+export const EVENT_CORE_FIELDS_MOCK_DB = {
+  _id: EVENT_CORE_FIELDS_MOCK_DB_ID,
+  eventName: 'MobgenFest',
+  eventDate: futureDate,
+  description: 'Hello World',
+  eventType: 'Party',
+  location: {
+    name: 'A Coruña',
+  },
+  createdAt: currentDate,
+  updatedAt: currentDate,
+};
+
 // Event celebrated
 export const OLD_EVENT_MOCK_DB = {
-  _id: '6656e23640e1fdb4ceb23cc9',
+  _id: OLD_EVENT_MOCK_DB_ID,
   eventName: 'Paintball',
   eventDate: oldDate,
   description: 'Hello World',
