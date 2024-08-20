@@ -30,13 +30,20 @@ export class EventRepository extends MongoRepository<EventSchema> {
    * @param createEventDto - Event data provided.
    * @param requestId - Request identifier for API logger.
    */
-  async createEvent(createEventDto: CreateEventDto, requestId?: string) {
+  async createEvent(
+    createEventDto: CreateEventDto,
+    email: string,
+    requestId?: string,
+  ) {
     try {
       this.logger.info(
         `[EventRepository] [createEvent] - x-request-id: ${requestId}`,
       );
 
-      const event = new this.eventModel(createEventDto);
+      const event = new this.eventModel({
+        ...createEventDto,
+        createdBy: email,
+      });
 
       await this.save(event);
     } catch (error) {
@@ -246,13 +253,13 @@ export class EventRepository extends MongoRepository<EventSchema> {
   async removeEvent(eventId: string, requestId?: string) {
     try {
       this.logger.info(
-        `[EventRepository] [removeEvent] - x-request-id:${requestId}, eventId ${eventId}`,
+        `[EventRepository] [removeEvent] - x-request-id: ${requestId}, eventId: ${eventId}`,
       );
 
       await this.removeById(eventId);
     } catch (error) {
       this.logger.error(
-        `[EventRepository] [removeEvent] - x-request-id:${requestId}, error ${error}`,
+        `[EventRepository] [removeEvent] - x-request-id: ${requestId}, error: ${error}`,
       );
 
       throw new DataBaseInternalError();

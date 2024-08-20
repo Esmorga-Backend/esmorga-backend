@@ -57,6 +57,7 @@ export const EVENT_CORE_FIELDS_MOCK_DB = {
   location: {
     name: 'A Coruña',
   },
+  createdBy: 'esmorga.test.03@yopmail.com',
   createdAt: currentDate,
   updatedAt: currentDate,
 };

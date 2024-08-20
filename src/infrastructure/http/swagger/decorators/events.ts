@@ -28,12 +28,16 @@ import {
 
 export function SwaggerCreateEvent() {
   return applyDecorators(
+    ApiBearerAuth(),
     ApiOperation({ summary: 'Create an event.' }),
-    ApiHeader(CREATE_EVENT_HEADERS),
+    ApiHeader(CREATE_EVENT_HEADERS.AUTHORIZATION_BEARER),
+    ApiHeader(CREATE_EVENT_HEADERS.CONTENT_TYPE),
     ApiBody({ type: CreateEventDto }),
     ApiCreatedResponse(CREATE_EVENT_RESPONSES.CREATED),
     ApiBadRequestResponse(CREATE_EVENT_RESPONSES.BAD_REQUEST_ERROR),
+    ApiForbiddenResponse(CREATE_EVENT_RESPONSES.FORBIDDEN_ERROR),
     ApiInternalServerErrorResponse(CREATE_EVENT_RESPONSES.INTERNAL_ERROR),
+    ApiUnauthorizedResponse(CREATE_EVENT_RESPONSES.UNAUTHORIZED_ERROR),
   );
 }
 
