@@ -4,3 +4,4 @@ export * from './event-list.dto';
 export * from './new-pair-of-tokens.dto';
 export * from './pair-of-tokens.dto';
 export * from './user-profile.dto';
+export * from './event-participants.dto';

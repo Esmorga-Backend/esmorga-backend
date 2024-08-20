@@ -5,6 +5,7 @@ import {
   RegisterService,
   RefreshTokenService,
   JoinEventService,
+  GetMyEventsService,
   DisjoinEventService,
 } from '../../../application/handler/account';
 import { GenerateTokenPair } from '../../../domain/services';
@@ -20,6 +21,7 @@ import { AccountSharedModule } from './account-shared.module';
     RegisterService,
     RefreshTokenService,
     JoinEventService,
+    GetMyEventsService,
     DisjoinEventService,
     GenerateTokenPair,
     AuthGuard,

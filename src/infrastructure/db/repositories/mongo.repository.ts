@@ -1,4 +1,4 @@
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { DBRepository } from '../../../domain/interfaces';
 
 export class MongoRepository<E> implements DBRepository<E> {
@@ -61,6 +61,28 @@ export class MongoRepository<E> implements DBRepository<E> {
    */
   async findOneByEmail(email: string): Promise<E> {
     return this.entityModel.findOne({ email: { $eq: email } });
+  }
+
+  /**
+   * Find events document with the IDs provided in STRING format. The logic transform the strings IDs into mongo ObjectId before execute the query
+   * @param eventIds - Array of events identifiers
+   * @returns Promise with event that match with the ID list provided
+   */
+  async findByEventIds(eventIds: string[]): Promise<E[]> {
+    const objectIds = eventIds.map((id) => {
+      return new Types.ObjectId(id);
+    });
+
+    return this.entityModel.find({ _id: { $in: objectIds } });
+  }
+
+  /**
+   * Find the documents where user joined as participant
+   * @param userId - User identifier
+   * @returns Promise resolved the the documents that has the userId in the participant list
+   */
+  async findEventParticipant(userId: string): Promise<E[]> {
+    return this.entityModel.find({ participants: { $in: [userId] } });
   }
 
   /**

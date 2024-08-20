@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { plainToClass } from 'class-transformer';
 import { PinoLogger } from 'nestjs-pino';
+import { AccountRegisterDto } from '../..//http/dtos';
 import { MongoRepository } from './mongo.repository';
 import { User as UserSchema } from '../schema';
 import {
@@ -23,7 +24,15 @@ export class AccountRepository extends MongoRepository<UserSchema> {
     super(userModel);
   }
 
-  async getUserById(id: string, requestId?: string) {
+  /**
+   * Find an user by id.
+   *
+   * @param id - User identifier.
+   * @param requestId - Request identifier.
+   * @returns UserProfileDto - User data following business schema.
+   * @throws DataBaseUnathorizedError - User not found.
+   */
+  async getUserById(id: string, requestId?: string): Promise<UserProfileDto> {
     try {
       this.logger.info(
         `[AccountRepository] [getUserById] - x-request-id: ${requestId}, id: ${id}`,
@@ -51,6 +60,14 @@ export class AccountRepository extends MongoRepository<UserSchema> {
     }
   }
 
+  /**
+   * Find an user by email.
+   *
+   * @param email - User email.
+   * @param requestId - Request identifier.
+   * @returns UserProfileDto - User data following business schema.
+   * @throws DataBaseUnathorizedError - User not found.
+   */
   async getUserByEmail(email: string, requestId?: string) {
     try {
       this.logger.info(
@@ -79,41 +96,20 @@ export class AccountRepository extends MongoRepository<UserSchema> {
     }
   }
 
-  async getUserByUuid(uuid: string, requestId?: string) {
+  /**
+   * Create a new user document with the data provided.
+   *
+   * @param userData - DTO with user data provided to store.
+   * @param requestId - Request identifier.
+   * @throws DataBaseConflictError - Email already stored
+   */
+  async saveUser(userData: AccountRegisterDto, requestId?: string) {
     try {
       this.logger.info(
-        `[AccountRepository] [getUserByUuid] - x-request-id:${requestId}, uuid ${uuid}`,
+        `[AccountRepository] [saveUser] - x-request-id: ${requestId}, email: ${userData.email}`,
       );
 
-      const user = await this.findOneById(uuid);
-
-      const userProfile: UserProfileDto = plainToClass(UserProfileDto, user, {
-        excludeExtraneousValues: true,
-      });
-
-      if (!userProfile) throw new DataBaseUnathorizedError();
-
-      validateObjectDto(userProfile, REQUIRED_DTO_FIELDS.USER_PROFILE);
-
-      return userProfile;
-    } catch (error) {
-      this.logger.error(
-        `[AccountRepository] [getUserByUuid] - x-request-id:${requestId}, error ${error}`,
-      );
-
-      if (error instanceof HttpException) throw error;
-
-      throw new DataBaseInternalError();
-    }
-  }
-
-  async saveUser(data, requestId?: string) {
-    try {
-      this.logger.info(
-        `[AccountRepository] [saveUser] - x-request-id: ${requestId}, email: ${data.email}`,
-      );
-
-      const user = new this.userModel(data);
+      const user = new this.userModel(userData);
 
       await this.save(user);
     } catch (error) {

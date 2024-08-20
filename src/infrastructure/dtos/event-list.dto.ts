@@ -5,7 +5,7 @@ import { EventDto } from './event.dto';
 
 export class EventListDto {
   @IsNumber()
-  @ApiProperty({ example: 5 })
+  @ApiProperty({ example: 1 })
   totalEvents: number;
 
   @ValidateNested()

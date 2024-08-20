@@ -14,15 +14,11 @@ import {
   getUserMockDb,
 } from '../../../../mocks/db';
 import { EVENT_ID_MOCK } from '../../../../mocks/dtos';
+import { HEADERS } from '../../../../mocks/common-data';
 
 const PATH = '/v1/events';
 
 const METHOD = 'delete';
-
-const HEADERS = {
-  'Content-Type': 'application/json',
-  Authorization: 'Bearer accessToken',
-};
 
 const BODY = { ...EVENT_ID_MOCK };
 

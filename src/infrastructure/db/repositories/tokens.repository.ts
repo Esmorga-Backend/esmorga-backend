@@ -17,6 +17,14 @@ export class TokensRepository extends MongoRepository<TokensSchema> {
     super(tokensModel);
   }
 
+  /**
+   * Store a new pair of tokens for the user requested them.
+   *
+   * @param uuid - User identifier.
+   * @param accessToken - Access token to be saved.
+   * @param refreshToken Refresh token to be saved.
+   * @param requestId - Request identifier for API logger
+   */
   async saveTokens(
     uuid: string,
     accessToken: string,
@@ -44,6 +52,13 @@ export class TokensRepository extends MongoRepository<TokensSchema> {
     }
   }
 
+  /**
+   * Get all tokens generated for the user with that uuid/id.
+   *
+   * @param uuid - User identifier.
+   * @param requestId - Request identifier for API logger.
+   * @returns PairOfTokensDto[] - Array with tokens pairs.
+   */
   async getAllTokensByUuid(
     uuid: string,
     requestId?: string,
@@ -71,6 +86,13 @@ export class TokensRepository extends MongoRepository<TokensSchema> {
     }
   }
 
+  /**
+   * Get pair of tokens with user id related to the refresh provided.
+   *
+   * @param refreshToken - Refresh token stored.
+   * @param requestId - Request identifier for API logger.
+   * @returns PairOfTokensDto - Pair of tokens and user id.
+   */
   async getPairOfTokensByRefreshToken(
     refreshToken: string,
     requestId?: string,
@@ -100,6 +122,13 @@ export class TokensRepository extends MongoRepository<TokensSchema> {
     }
   }
 
+  /**
+   * Get pair of tokens with user id related to the access provided.
+   *
+   * @param acessToken - Access token stored.
+   * @param requestId - Request identifier for API logger.
+   * @returns PairOfTokensDto - Pair of tokens and user id.
+   */
   async getPairOfTokensByAccessToken(
     acessToken: string,
     requestId?: string,
@@ -129,6 +158,11 @@ export class TokensRepository extends MongoRepository<TokensSchema> {
     }
   }
 
+  /**
+   * Remove pair of tokens document by document's ID.
+   * @param id - Document identifier.
+   * @param requestId - Request identifier for API logger.
+   */
   async removeTokensById(id: string, requestId?: string) {
     try {
       this.logger.info(

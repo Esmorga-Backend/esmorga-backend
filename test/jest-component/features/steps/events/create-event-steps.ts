@@ -16,13 +16,10 @@ import {
   PAIR_OF_TOKENS_MOCK_DB,
 } from '../../../../mocks/db';
 
-const HEADERS = {
-  'Content-Type': 'application/json',
-  Authorization: 'Bearer accessToken',
-};
+import { HEADERS } from '../../../../mocks/common-data';
 
 export const createEventSteps: StepDefinitions = ({ given, and }) => {
-  // ###### MOB-TC-19 ######
+  // ###### TC-19 ######
   given('the POST Events API is available', () => {
     context.path = '/v1/events';
     context.method = 'post';
@@ -66,12 +63,14 @@ export const createEventSteps: StepDefinitions = ({ given, and }) => {
     },
   );
 
+  // ###### TC-21 ######
   and('an unauthenticated user', () => {
     jest
       .spyOn(context.tokensRepository, 'findOneByAccessToken')
       .mockResolvedValue(null);
   });
 
+  // ###### TC-22 ######
   and('an authenticated user without admin rights is logged in', async () => {
     const USER = await getUserMockDb();
 

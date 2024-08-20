@@ -29,6 +29,14 @@ export class LoginService {
     private configService: ConfigService,
   ) {}
 
+  /**
+   * Verify credentials provided match with an user stored in the DB and provided new pair of tokens with profile data.
+   *
+   * @param accountLoginDto - Account email and password.
+   * @param requestId - Request idenfier.
+   * @returns AccountLoggedDto - Object with new pair of tokens and profile data
+   * @throws InvalidCredentialsLoginApiError - Email and password combination do not match with the DB data
+   */
   async login(
     accountLoginDto: AccountLoginDto,
     requestId?: string,

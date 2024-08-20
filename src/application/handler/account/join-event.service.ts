@@ -24,6 +24,16 @@ export class JoinEventService {
     private readonly eventParticipantsRepository: EventParticipantsRepository,
   ) {}
 
+  /**
+   * Insert user uuid as particpant for the event that matches with the ID provided.
+   *
+   * @param accessToken - Token allows user a method to authenticate.
+   * @param eventId - Event identifier.
+   * @param requestId - Request identifier.
+   * @throws NotAcceptableEventApiError - User can not join past events
+   * @throws InvalidTokenApiError - No user found for the current session.
+   * @throws InvalidEventIdApiError - EventId is not valid follwing DB schema ot not found.
+   */
   async joinEvent(accessToken: string, eventId: string, requestId?: string) {
     try {
       this.logger.info(
