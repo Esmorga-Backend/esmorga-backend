@@ -1,7 +1,6 @@
 export interface DBRepository<E> {
   find(): Promise<E[]>;
   findByUuid(uuid: string): Promise<E[]>;
-  findById(id: string): Promise<E>;
   findByEventIds(eventIds: string[]): Promise<E[]>;
   findOneByAccessToken(accessToken: string): Promise<E>;
   findOneByEmail(email: string): Promise<E>;

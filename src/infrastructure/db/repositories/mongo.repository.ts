@@ -64,16 +64,6 @@ export class MongoRepository<E> implements DBRepository<E> {
   }
 
   /**
-   * Find a document by ID.
-   *
-   * @param id - The ID of the document to update.
-   * @returns Promise resolved with the document that matches the id provided.
-   */
-  async findById(id: string): Promise<E> {
-    return this.entityModel.findById({ _id: id });
-  }
-
-  /**
    * Find events document with the IDs provided in STRING format. The logic transform the strings IDs into mongo ObjectId before execute the query
    * @param eventIds - Array of events identifiers
    * @returns Promise with event that match with the ID list provided
