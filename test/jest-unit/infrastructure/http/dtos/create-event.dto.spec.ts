@@ -325,7 +325,7 @@ describe('[unit-test] [CreateEventDto]', () => {
     });
   });
 
-  describe('[UpdateEventDto] [location]', () => {
+  describe('[CreateEventDto] [location]', () => {
     it('Should only accept an object', async () => {
       const event = JSON.parse(
         JSON.stringify({ ...CREATE_EVENT_MOCK, location: 123 }),
