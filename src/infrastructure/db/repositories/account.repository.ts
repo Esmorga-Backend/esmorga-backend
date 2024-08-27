@@ -6,11 +6,7 @@ import { PinoLogger } from 'nestjs-pino';
 import { AccountRegisterDto } from '../..//http/dtos';
 import { MongoRepository } from './mongo.repository';
 import { User as UserSchema } from '../schema';
-import {
-  DataBaseInternalError,
-  DataBaseUnathorizedError,
-  DataBaseConflictError,
-} from '../errors';
+import { DataBaseInternalError, DataBaseUnathorizedError } from '../errors';
 import { UserProfileDto } from '../../dtos';
 import { validateObjectDto } from '../services';
 import { REQUIRED_DTO_FIELDS } from '../consts';
@@ -97,6 +93,31 @@ export class AccountRepository extends MongoRepository<UserSchema> {
   }
 
   /**
+   * Check if there is already a account with that email
+   *
+   * @param email - User email.
+   * @param requestId - Request identifier.
+   * @returns Boolean
+   */
+  async accountExist(email: string, requestId?: string): Promise<boolean> {
+    try {
+      this.logger.info(
+        `[AccountRepository] [accountExist] - x-request-id: ${requestId}, email: ${email}`,
+      );
+
+      const account = await this.findOneByEmail(email);
+
+      return account ? true : false;
+    } catch (error) {
+      this.logger.error(
+        `[AccountRepository] [accountExist] - x-request-id: ${requestId}, error: ${error}`,
+      );
+
+      throw new DataBaseInternalError();
+    }
+  }
+
+  /**
    * Create a new user document with the data provided.
    *
    * @param userData - DTO with user data provided to store.
@@ -116,8 +137,6 @@ export class AccountRepository extends MongoRepository<UserSchema> {
       this.logger.error(
         `[AccountRepository] [saveUser] - x-request-id: ${requestId}, error: ${error}`,
       );
-
-      if (error.code === 11000) throw new DataBaseConflictError();
 
       throw new DataBaseInternalError();
     }

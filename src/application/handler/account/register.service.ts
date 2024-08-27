@@ -3,8 +3,6 @@ import { PinoLogger } from 'nestjs-pino';
 import { AccountRegisterDto } from '../../../infrastructure/http/dtos';
 import { encodeValue } from '../../../domain/services';
 import { AccountRepository } from '../../../infrastructure/db/repositories';
-import { DataBaseConflictError } from '../../../infrastructure/db/errors';
-import { EmailConflictApiError } from '../../../domain/errors';
 
 @Injectable()
 export class RegisterService {
@@ -22,22 +20,28 @@ export class RegisterService {
    */
   async register(accountRegisterDto: AccountRegisterDto, requestId?: string) {
     try {
+      const { email, password } = accountRegisterDto;
+
       this.logger.info(
-        `[RegisterService] [register] - x-request-id:${requestId}, email ${accountRegisterDto.email}`,
+        `[RegisterService] [register] - x-request-id:${requestId}, email ${email}`,
       );
 
-      const hashPassword = await encodeValue(accountRegisterDto.password);
+      const exists = await this.accountRepository.accountExist(
+        email,
+        requestId,
+      );
 
-      accountRegisterDto.password = hashPassword;
+      if (!exists) {
+        const hashPassword = await encodeValue(password);
+
+        accountRegisterDto.password = hashPassword;
+      }
 
       await this.accountRepository.saveUser(accountRegisterDto, requestId);
     } catch (error) {
       this.logger.error(
         `[RegisterService] [register] - x-request-id:${requestId}, error ${error}`,
       );
-
-      if (error instanceof DataBaseConflictError)
-        throw new EmailConflictApiError();
 
       throw error;
     }
