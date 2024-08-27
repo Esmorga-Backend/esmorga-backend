@@ -11,7 +11,7 @@ import {
 } from '../../../domain/errors';
 import { CreateEventDto } from '../../../infrastructure/http/dtos';
 import { DataBaseUnathorizedError } from '../../../infrastructure/db/errors';
-import { USER_ROLES } from '../../../domain/consts';
+import { ACCOUNT_ROLES } from '../../../domain/const';
 
 @Injectable()
 export class CreateEventService {
@@ -49,7 +49,7 @@ export class CreateEventService {
         requestId,
       );
 
-      if (role !== USER_ROLES.ADMIN) throw new InvalidRoleApiError();
+      if (role !== ACCOUNT_ROLES.ADMIN) throw new InvalidRoleApiError();
 
       await this.eventRepository.createEvent(createEventDto, email, requestId);
     } catch (error) {

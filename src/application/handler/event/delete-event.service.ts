@@ -6,7 +6,7 @@ import {
   TokensRepository,
   EventParticipantsRepository,
 } from '../../../infrastructure/db/repositories';
-import { USER_ROLES } from '../../../domain/const';
+import { ACCOUNT_ROLES } from '../../../domain/const';
 import {
   NotAdminAccountApiError,
   InvalidEventIdApiError,
@@ -50,7 +50,7 @@ export class DeleteEventService {
         requestId,
       );
 
-      if (role !== USER_ROLES.ADMIN) throw new NotAdminAccountApiError();
+      if (role !== ACCOUNT_ROLES.ADMIN) throw new NotAdminAccountApiError();
 
       await this.eventRepository.removeEvent(eventId, requestId);
 

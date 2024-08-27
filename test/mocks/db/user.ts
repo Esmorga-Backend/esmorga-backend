@@ -1,6 +1,6 @@
 import * as argon2 from 'argon2';
 import { USER_MOCK_DB_ID } from './common';
-import { USER_ROLES } from '../../../src/domain/const';
+import { ACCOUNT_ROLES } from '../../../src/domain/const';
 
 export const PASSWORD_MOCK_DB = 'Password3';
 
@@ -10,7 +10,7 @@ const USER_MOCK_DB = {
   lastName: 'Pippen',
   email: 'esmorga.test.03@yopmail.com',
   password: PASSWORD_MOCK_DB,
-  role: USER_ROLES.USER,
+  role: ACCOUNT_ROLES.USER,
   createdAt: new Date(),
 };
 
@@ -20,7 +20,7 @@ const ADMIN_USER_MOCK_DB = {
   lastName: 'Tyson',
   email: 'esmorga.test.04@yopmail.com',
   password: PASSWORD_MOCK_DB,
-  role: USER_ROLES.ADMIN,
+  role: ACCOUNT_ROLES.ADMIN,
   createdAt: new Date(),
 };
 
