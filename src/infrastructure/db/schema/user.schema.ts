@@ -1,5 +1,5 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
-import { ACCOUNT_ROLES } from '../../../domain/const';
+import { ACCOUNT_ROLES, ACCOUNT_STATUS } from '../../../domain/const';
 
 @Schema({ timestamps: true })
 export class User {
@@ -17,6 +17,9 @@ export class User {
 
   @Prop({ required: true, default: ACCOUNT_ROLES.USER })
   role: string;
+
+  @Prop({ required: true, default: ACCOUNT_STATUS.UNVERIFIED })
+  status: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
