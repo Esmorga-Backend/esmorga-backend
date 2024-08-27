@@ -119,18 +119,13 @@ export class AccountController {
   async register(
     @Body() accountRegisterDto: AccountRegisterDto,
     @RequestId() requestId: string,
-  ): Promise<AccountLoggedDto> {
+  ) {
     try {
       this.logger.info(
         `[AccountController] [register] - x-request-id:${requestId}`,
       );
 
-      const response: AccountLoggedDto = await this.registerService.register(
-        accountRegisterDto,
-        requestId,
-      );
-
-      return response;
+      await this.registerService.register(accountRegisterDto, requestId);
     } catch (error) {
       this.logger.error(
         `[AccountController] [register] - x-request-id:${requestId}, error ${error}`,
