@@ -270,6 +270,28 @@ export const DISJOIN_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
       },
     },
   },
+  NOT_ACCEPTABLE_ERROR: {
+    description: 'Invalid credentials',
+    schema: {
+      type: 'object',
+      properties: {
+        title: {
+          type: 'string',
+          example: 'unauthorizedRequestError',
+        },
+        status: { type: 'number', example: HttpStatus.NOT_ACCEPTABLE },
+        type: { type: 'string', example: PATHS.JOIN_EVENT },
+        detail: {
+          type: 'string',
+          example: 'not acceptable',
+        },
+        errors: {
+          type: 'array',
+          example: ['cannot disjoin past events'],
+        },
+      },
+    },
+  },
   INTERNAL_ERROR: {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Error not handled',
