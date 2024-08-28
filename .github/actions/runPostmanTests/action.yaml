@@ -15,7 +15,7 @@ runs:
           id: test-postman
           run: |
             curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
-            postman login --with-api-key ${POSTMAN_TOKEN}
+            postman login --with-api-key ${{ inputs.POSTMAN_TOKEN}}
 #            postman collection run "test/postman/(Generator) Contract Tests - OAS3.postman_collection.json" -e "test/postman/Contract Test local on Pipeline.postman_environment.json"
 #            postman collection run "${{ github.workspace }}/TESTS.json" -e "34733067-4a57f5f3-ba99-4cdb-95a2-d89e4aaa24b7"
           # Lint your API using Postman CLI
