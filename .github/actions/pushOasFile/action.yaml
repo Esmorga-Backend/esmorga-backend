@@ -35,6 +35,7 @@ runs:
       - name: Push OAS to github
         shell: bash
         run: |
+          echo $Push
           if ($Push!=0) ; then
           echo "Run AutoCommit"
           git config --global user.email "devops@esmorga.canarte.org"
