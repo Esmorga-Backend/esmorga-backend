@@ -8,7 +8,10 @@ import {
   GetMyEventsService,
   DisjoinEventService,
 } from '../../../application/handler/account';
-import { GenerateTokenPair } from '../../../domain/services';
+import {
+  GenerateTokenPair,
+  GenerateMailService,
+} from '../../../domain/services';
 import { AuthGuard } from '../guards';
 import { EventSharedModule } from './event-shared.module';
 import { AccountSharedModule } from './account-shared.module';
@@ -24,6 +27,7 @@ import { AccountSharedModule } from './account-shared.module';
     GetMyEventsService,
     DisjoinEventService,
     GenerateTokenPair,
+    GenerateMailService,
     AuthGuard,
   ],
 })
