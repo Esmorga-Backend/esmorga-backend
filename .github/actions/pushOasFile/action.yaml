@@ -20,6 +20,7 @@ runs:
           if ! cmp -s "/tmp/swagger.json" "swagger.json"; then
           cp /tmp/swagger.json swagger.json
           git add swagger.json
+          echo "Swagger has Changed"
           Push=1
           fi
       - name: Push OAS to github
@@ -28,12 +29,14 @@ runs:
           if ! cmp -s "tmp/branch.txt" ".github/tmp/branch.txt" ; then
           cp /tmp/branch.txt .github/tmp/branch.txt
           git add .github/tmp/branch.txt
+          echo "Branch has Changed"
           Push=1
           fi
       - name: Push OAS to github
         shell: bash
         run: |
           if ($Push!=0) ; then
+          echo "Run AutoCommit"
           git config --global user.email "devops@esmorga.canarte.org"
           git config --global user.name "Pipe"
           git commit -m "ADD Files"
