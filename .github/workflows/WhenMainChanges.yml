@@ -67,6 +67,7 @@ jobs:
           uses: ./.github/actions/runPostmanTests
           with:
             SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+            POSTMAN_TOKEN: ${{ secrets.POSTMAN_TOKEN }}
         - name: Run E2E Tests
           uses: ./.github/actions/runE2ETests
           with:
