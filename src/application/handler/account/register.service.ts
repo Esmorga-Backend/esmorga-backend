@@ -10,12 +10,13 @@ import {
   AccountRepository,
   VerificationCodeRepository,
 } from '../../../infrastructure/db/repositories';
-
+import { NodemailerService } from '../../../infrastructure/services';
 @Injectable()
 export class RegisterService {
   constructor(
     private readonly logger: PinoLogger,
     private readonly generateMailService: GenerateMailService,
+    private readonly nodemailerService: NodemailerService,
     private readonly accountRepository: AccountRepository,
     private readonly veririficationCodeRepository: VerificationCodeRepository,
   ) {}
@@ -31,7 +32,7 @@ export class RegisterService {
       const { email, password } = accountRegisterDto;
 
       this.logger.info(
-        `[RegisterService] [register] - x-request-id:${requestId}, email ${email}`,
+        `[RegisterService] [register] - x-request-id: ${requestId}, email: ${email}`,
       );
 
       const exists = await this.accountRepository.accountExist(
@@ -56,6 +57,14 @@ export class RegisterService {
 
         const { from, subject, html } =
           this.generateMailService.getVerificationEmail(verificationCode);
+
+        await this.nodemailerService.sendEmail(
+          email,
+          from,
+          subject,
+          html,
+          requestId,
+        );
       }
     } catch (error) {
       this.logger.error(

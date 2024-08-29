@@ -17,6 +17,7 @@ import { AuthGuard } from '../guards';
 import { EventSharedModule } from './event-shared.module';
 import { AccountSharedModule } from './account-shared.module';
 import { VerificationCodeRepository } from '../../db/repositories';
+import { NodemailerService } from '../../services';
 import {
   VerificationCode,
   VerificationCodeSchema,
@@ -41,6 +42,7 @@ import {
     GenerateTokenPair,
     GenerateMailService,
     VerificationCodeRepository,
+    NodemailerService,
     AuthGuard,
   ],
 })

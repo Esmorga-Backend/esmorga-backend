@@ -9,7 +9,7 @@ export class GenerateMailService {
    * Provide the mail elements to send to verificate an account
    *
    * @param code - 6 digits number used as verification code
-   * @returns Email data to send
+   * @returns Email data to send (from, subject and mail content in html format)
    */
   getVerificationEmail(code: number) {
     const url = `${this.configService.get('APP_LINK') + '?verificationCode=' + code}`;
