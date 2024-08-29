@@ -1,6 +1,12 @@
 name: "Run Postman Tests"
 description: "Run Postman Tests"
-
+inputs:
+  SLACK_WEBHOOK_URL:
+    description: 'URL'
+    required: true
+  POSTMAN_TOKEN:
+    description: 'TOKEN'
+    required: true
 
 runs:
   using: "composite"
@@ -11,6 +17,7 @@ runs:
           run: |
             curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
             postman login --with-api-key ${POSTMAN_TOKEN}
+            postman collection run 25091136-0af5bd1f-1b37-450c-b138-b961128c40ec -e 34733067-4a57f5f3-ba99-4cdb-95a2-d89e4aaa24b7
 #            postman collection run "test/postman/(Generator) Contract Tests - OAS3.postman_collection.json" -e "test/postman/Contract Test local on Pipeline.postman_environment.json"
 #            postman collection run "${{ github.workspace }}/TESTS.json" -e "34733067-4a57f5f3-ba99-4cdb-95a2-d89e4aaa24b7"
           # Lint your API using Postman CLI
@@ -18,7 +25,7 @@ runs:
           # Run Api contract
 #            postman collection run 34733067-87db0ada-5ec1-435a-a33d-4cd36d19656d -e 34733067-dad4bba4-8253-4270-bb57-87cfe224d433 --env-var env-apiKey = ${POSTMAN_TOKEN}
           # Run Colection 
-#            postman collection run 25091136-0af5bd1f-1b37-450c-b138-b961128c40ec -e 34733067-4a57f5f3-ba99-4cdb-95a2-d89e4aaa24b7
+#
         - name: Run Reporting
           uses: ./.github/actions/SlackCom
           with: 
