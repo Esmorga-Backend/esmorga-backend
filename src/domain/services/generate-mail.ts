@@ -22,7 +22,7 @@ export class GenerateMailService {
         <div>
             <p>Hola,</p>
             <p>Hemos recibido una solicitud para registrar un nuevo usuario.
-            <p>Para abrir la aplicación y verificar el email, haz clic en el siguiente enlace: ${url}</p>
+            <p>Para abrir la aplicación y verificar el email, haz clic en el siguiente enlace: <a href=${url}>${url}</a></p>
             <p>Si no te has registrado en nuestra app, ignora este correo electrónico.</p>
             <p>Gracias,</p>
             <p>El equipo de Esmorga</p>
