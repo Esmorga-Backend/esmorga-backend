@@ -6,14 +6,18 @@ import {
   generateCode,
   GenerateMailService,
 } from '../../../domain/services';
-import { AccountRepository } from '../../../infrastructure/db/repositories';
+import {
+  AccountRepository,
+  VerificationCodeRepository,
+} from '../../../infrastructure/db/repositories';
 
 @Injectable()
 export class RegisterService {
   constructor(
     private readonly logger: PinoLogger,
-    private readonly accountRepository: AccountRepository,
     private readonly generateMailService: GenerateMailService,
+    private readonly accountRepository: AccountRepository,
+    private readonly veririficationCodeRepository: VerificationCodeRepository,
   ) {}
 
   /**
@@ -43,6 +47,12 @@ export class RegisterService {
         await this.accountRepository.saveUser(accountRegisterDto, requestId);
 
         const verificationCode = generateCode();
+
+        await this.veririficationCodeRepository.saveCode(
+          verificationCode,
+          email,
+          requestId,
+        );
 
         const mailData =
           this.generateMailService.getVerificationEmail(verificationCode);
