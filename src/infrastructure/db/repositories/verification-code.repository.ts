@@ -16,13 +16,21 @@ export class VerificationCodeRepository extends MongoRepository<VerificationCode
     super(verificationCodeModel);
   }
 
-  async saveCode(code: number, email: string, requestId?: string) {
+  /**
+   * Find a verificationCode document related to the email and update the code. If there is not document
+   * creates a new one.
+   *
+   * @param verificationCode - 6 random digits value
+   * @param email - User email
+   * @param requestId - Request identifier for API logger
+   */
+  async saveCode(verificationCode: number, email: string, requestId?: string) {
     try {
       this.logger.info(
         `[VeririficationCodeRepository] [saveCode] - x-request-id: ${requestId}`,
       );
 
-      await this.findAndUpdateVerificationCode(code, email);
+      await this.findAndUpdateVerificationCode(verificationCode, email);
     } catch (error) {
       this.logger.error(
         `[VeririficationCodeRepository] [saveCode] - x-request-id: ${requestId}, error: ${error}`,
