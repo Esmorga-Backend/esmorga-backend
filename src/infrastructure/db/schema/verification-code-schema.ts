@@ -12,4 +12,4 @@ export class VerificationCode {
 export const VerificationCodeSchema =
   SchemaFactory.createForClass(VerificationCode);
 
-VerificationCodeSchema.index({ updatedAt: 1 }, { expireAfterSeconds: 60 });
+VerificationCodeSchema.index({ updatedAt: 1 }, { expireAfterSeconds: 600 });
