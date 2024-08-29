@@ -38,22 +38,22 @@ export class RegisterService {
         email,
         requestId,
       );
+      console.log({ exists });
+      if (exists) {
+        // const hashPassword = await encodeValue(password);
 
-      if (!exists) {
-        const hashPassword = await encodeValue(password);
+        // accountRegisterDto.password = hashPassword;
 
-        accountRegisterDto.password = hashPassword;
-
-        await this.accountRepository.saveUser(accountRegisterDto, requestId);
+        // await this.accountRepository.saveUser(accountRegisterDto, requestId);
 
         const verificationCode = generateCode();
-
+        console.log('------> ', { verificationCode });
         await this.veririficationCodeRepository.saveCode(
           verificationCode,
           email,
           requestId,
         );
-
+        console.log('-----------');
         const mailData =
           this.generateMailService.getVerificationEmail(verificationCode);
       }
