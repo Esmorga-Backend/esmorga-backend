@@ -73,8 +73,8 @@ export const LOGIN_RESPONSES: { [key: string]: ApiResponseOptions } = {
 
 export const REGISTER_RESPONSES: { [key: string]: ApiResponseOptions } = {
   CREATED: {
-    description: 'User has successfully created',
-    type: AccountLoggedDto,
+    description:
+      'User has successfully created and verification email has been sent',
   },
   BAD_REQUEST_ERROR: {
     description: 'Some inputs are missed or wrong',
@@ -86,28 +86,6 @@ export const REGISTER_RESPONSES: { [key: string]: ApiResponseOptions } = {
         errors: {
           type: 'array',
           example: ['email should not be empty'],
-        },
-      },
-    },
-  },
-  CONFLICT_ERROR: {
-    description: 'User already registered',
-    schema: {
-      type: 'object',
-      properties: {
-        title: {
-          type: 'string',
-          example: 'userAlreadyRegistered',
-        },
-        status: { type: 'number', example: HttpStatus.CONFLICT },
-        type: { type: 'string', example: PATHS.REGISTER },
-        detail: {
-          type: 'string',
-          example: 'inputs are invalid',
-        },
-        errors: {
-          type: 'array',
-          example: ['user already registered'],
         },
       },
     },
