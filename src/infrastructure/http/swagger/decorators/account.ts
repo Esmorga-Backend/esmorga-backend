@@ -5,7 +5,6 @@ import {
   ApiOkResponse,
   ApiOperation,
   ApiUnauthorizedResponse,
-  ApiConflictResponse,
   ApiCreatedResponse,
   ApiNoContentResponse,
   ApiNotAcceptableResponse,
