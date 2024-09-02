@@ -72,6 +72,10 @@ jobs:
 #          uses: ./.github/actions/pushOasFile
 #          with: 
 #            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        - name: Checkout repository
+          uses: actions/checkout@v2
+          with:
+            fetch-depth: 0 
         - name: Push OAS to github
           shell: bash
           run: |
