@@ -11,6 +11,7 @@ import {
   VerificationCodeRepository,
 } from '../../../infrastructure/db/repositories';
 import { NodemailerService } from '../../../infrastructure/services';
+
 @Injectable()
 export class RegisterService {
   constructor(

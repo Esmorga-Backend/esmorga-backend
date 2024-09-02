@@ -9,6 +9,7 @@ import {
   BAD_REQUEST_ERROR_COMMON_PROPERTIES,
   UNAUTHORIZED_INVALID_TOKEN_COMMON_PROPERTIES,
   INTERNAL_ERROR_COMMON_PROPERTIES,
+  NOT_ACCEPTABLE_ERROR_COMMON_PROPERTIES,
 } from './common-response-properties';
 
 const PATHS = {
@@ -185,20 +186,12 @@ export const JOIN_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
     },
   },
   NOT_ACCEPTABLE_ERROR: {
-    description: 'Invalid credentials',
+    description: 'Can not join celebrated events',
     schema: {
       type: 'object',
       properties: {
-        title: {
-          type: 'string',
-          example: 'unauthorizedRequestError',
-        },
-        status: { type: 'number', example: HttpStatus.NOT_ACCEPTABLE },
+        ...NOT_ACCEPTABLE_ERROR_COMMON_PROPERTIES,
         type: { type: 'string', example: PATHS.JOIN_EVENT },
-        detail: {
-          type: 'string',
-          example: 'not acceptable',
-        },
         errors: {
           type: 'array',
           example: ['cannot join past events'],
@@ -248,6 +241,21 @@ export const DISJOIN_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
       },
     },
   },
+  NOT_ACCEPTABLE_ERROR: {
+    description: 'Can not disjoin celebrated events',
+    schema: {
+      type: 'object',
+      properties: {
+        ...NOT_ACCEPTABLE_ERROR_COMMON_PROPERTIES,
+        type: { type: 'string', example: PATHS.JOIN_EVENT },
+        errors: {
+          type: 'array',
+          example: ['cannot disjoin past events'],
+        },
+      },
+    },
+  },
+
   INTERNAL_ERROR: {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Error not handled',
