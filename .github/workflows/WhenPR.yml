@@ -30,6 +30,7 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       EMAIL_USER: esmorgamailservice@gmail.com
       EMAIL_PASS: ${{ secrets.EMAIL_PASS}}
+      APP_LINK: https://www.google.com
 
     steps:
       - name: Start MongoDB

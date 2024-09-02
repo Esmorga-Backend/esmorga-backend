@@ -42,6 +42,10 @@ class EnvVars {
   @IsNotEmpty()
   @IsString()
   EMAIL_PASS: string;
+
+  @IsNotEmpty()
+  @IsString()
+  APP_LINK: string;
 }
 
 /**
