@@ -44,6 +44,6 @@ runs:
           git config --global user.email "devops@esmorga.canarte.org"
           git config --global user.name "Pipe"
           git commit -m "ADD Files"
-          #git push origin HEAD:refs/heads/${GITHUB_HEAD_REF}
-          git push https://${{ github.actor }}:${{ inputs.GITHUB_TOKEN }}@github.com/${{ github.repository }} HEAD:refs/heads/${GITHUB_HEAD_REF}
+          git push --force-with-lease origin HEAD:refs/heads/${GITHUB_HEAD_REF}
+          #git push https://${{ github.actor }}:${{ inputs.GITHUB_TOKEN }}@github.com/${{ github.repository }} HEAD:refs/heads/${GITHUB_HEAD_REF}
           fi
