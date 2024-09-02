@@ -53,4 +53,8 @@ export const registerSteps: StepDefinitions = ({ given, and }) => {
   and('account confirmation email is sent', () => {
     expect(context.nodemailerService.sendEmail).toHaveBeenCalled();
   });
+
+  and('account confirmation email is not sent', () => {
+    expect(context.nodemailerService.sendEmail).not.toHaveBeenCalled();
+  });
 };
