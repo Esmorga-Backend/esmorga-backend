@@ -1,82 +1,82 @@
 name: Deploy QA Env & Then Test E2E & Test Postman
 run-name: ${{ github.actor }} is deploying new code to QA Env 🚀
 on:
-#Delete this , just for test
-#  pull_request:
-#    types: [opened,reopened,edited,synchronize]
-#    branches:
-#      - main
-#    paths:
-#      - '**'
-
+  #Delete this , just for test
+  #  pull_request:
+  #    types: [opened,reopened,edited,synchronize]
+  #    branches:
+  #      - main
+  #    paths:
+  #      - '**'
 
   push:
     branches:
       - main
   workflow_dispatch:
-  
+
 jobs:
-    Run-tests-on-Ubuntu:
-      name: Run npm test on Ubuntu
-      runs-on: ubuntu-latest
-      permissions:
-        contents: write  
-        pull-requests: write
-      env:
-        APP_PORT: 3000
-        MONGODB_URI: "mongodb://localhost:27017/esmorga"
+  Run-tests-on-Ubuntu:
+    name: Run npm test on Ubuntu
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    env:
+      APP_PORT: 3000
+      MONGODB_URI: "mongodb://localhost:27017/esmorga"
+      NODE_ENV: LOCAL"
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      ACCESS_TOKEN_TTL: 600
+      MAX_PAIR_OF_TOKEN: 5
+      AIO_TOKEN: ${{ secrets.AIO_TOKEN }}
+      CYPRESS_BASE_URL: http://localhost:3000/
+      POSTMAN_TOKEN: ${{ secrets.postmanToken }}
+      DNS_NAME: http://localhost:3000
+      SSHRSA: ${{ secrets.SSHRSA}}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      EMAIL_USER: esmorgamailservice@gmail.com
+      EMAIL_PASS: ${{ secrets.EMAIL_PASS}}
 
-        NODE_ENV: LOCAL"
-        JWT_SECRET: ${{ secrets.JWT_SECRET }}
-        ACCESS_TOKEN_TTL: 600
-        MAX_PAIR_OF_TOKEN: 5
-        AIO_TOKEN: ${{ secrets.AIO_TOKEN }}
-        CYPRESS_BASE_URL: http://localhost:3000/
-        POSTMAN_TOKEN: ${{ secrets.postmanToken }}
-        DNS_NAME: http://localhost:3000
-        SSHRSA: ${{ secrets.SSHRSA}}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Start MongoDB
+        uses: supercharge/mongodb-github-action@1.11.0
+        with:
+          mongodb-version: "7.0"
+          mongodb-db: esmorga
+          mongodb-port: 27017
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22.1"
 
-      steps:
-        - name: Start MongoDB
-          uses: supercharge/mongodb-github-action@1.11.0
-          with:
-            mongodb-version: '7.0'
-            mongodb-db: esmorga
-            mongodb-port: 27017
-        - uses: actions/checkout@v4
-        - uses: actions/setup-node@v4
-          with:
-            node-version: '22.1'
-
-        - run: npm ci
-        - run: npm run test:create:cycle
-        - name: Checkout repository
-          uses: actions/checkout@v2
-        - name: Run Unit Tests
-          uses: ./.github/actions/runUnitTests
-          with:
-            SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        - name: Run Component Tests
-          uses: ./.github/actions/runComponentTests
-          with:
-            SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        - name: Run Service
-          uses: ./.github/actions/runService
-        - name: Run Postman
-          uses: ./.github/actions/runPostmanTests
-          with:
-            SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-            POSTMAN_TOKEN: ${{ secrets.POSTMAN_TOKEN }}
-        - name: Run E2E Tests
-          uses: ./.github/actions/runE2ETests
-          with:
-                SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        - name: Run Reporting
-          uses: ./.github/actions/runReporting
-          with: 
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        - name: Deploy to QA
-          uses: ./.github/actions/DeployToQA
-          with: 
-            SSHRSA: ${{ secrets.SSHRSA}}
+      - run: npm ci
+      - run: npm run test:create:cycle
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Run Unit Tests
+        uses: ./.github/actions/runUnitTests
+        with:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      - name: Run Component Tests
+        uses: ./.github/actions/runComponentTests
+        with:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      - name: Run Service
+        uses: ./.github/actions/runService
+      - name: Run Postman
+        uses: ./.github/actions/runPostmanTests
+        with:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          POSTMAN_TOKEN: ${{ secrets.POSTMAN_TOKEN }}
+      - name: Run E2E Tests
+        uses: ./.github/actions/runE2ETests
+        with:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      - name: Run Reporting
+        uses: ./.github/actions/runReporting
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Deploy to QA
+        uses: ./.github/actions/DeployToQA
+        with:
+          SSHRSA: ${{ secrets.SSHRSA}}
