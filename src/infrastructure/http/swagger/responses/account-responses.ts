@@ -259,7 +259,6 @@ export const DISJOIN_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
       },
     },
   },
-
   INTERNAL_ERROR: {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Error not handled',

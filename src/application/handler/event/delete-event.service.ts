@@ -10,9 +10,12 @@ import { ACCOUNT_ROLES } from '../../../domain/const';
 import {
   NotAdminAccountApiError,
   InvalidEventIdApiError,
+  InvalidTokenApiError,
 } from '../../../domain/errors';
-import { DataBaseNotFoundError } from '../../../infrastructure/db/errors';
-
+import {
+  DataBaseNotFoundError,
+  DataBaseUnathorizedError,
+} from '../../../infrastructure/db/errors';
 @Injectable()
 export class DeleteEventService {
   constructor(
@@ -62,6 +65,9 @@ export class DeleteEventService {
       this.logger.error(
         `[DeleteEventService] [delete] - x-request-id:${requestId}, error ${error}`,
       );
+
+      if (error instanceof DataBaseUnathorizedError)
+        throw new InvalidTokenApiError();
 
       if (error instanceof DataBaseNotFoundError)
         throw new InvalidEventIdApiError();
