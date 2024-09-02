@@ -70,7 +70,8 @@ jobs:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         - name: Push OAS
           uses: ./.github/actions/pushOasFile
-
+          with: 
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
 

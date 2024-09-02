@@ -1,5 +1,9 @@
 name: "Push OAS to github"
 description: "Push OAS to github"
+inputs:
+  GITHUB_TOKEN:
+    description: 'A Github PAT'
+    required: true
 runs:
   using: "composite"
   steps:
@@ -40,5 +44,6 @@ runs:
           git config --global user.email "devops@esmorga.canarte.org"
           git config --global user.name "Pipe"
           git commit -m "ADD Files"
-          git push origin HEAD:refs/heads/${GITHUB_HEAD_REF}
+          #git push origin HEAD:refs/heads/${GITHUB_HEAD_REF}
+          git push https://${{ github.actor }}:${{ inputs.GITHUB_TOKEN }}@github.com/${{ github.repository }} HEAD:refs/heads/${GITHUB_HEAD_REF}
           fi
