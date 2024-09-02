@@ -1,9 +1,7 @@
 import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
-import {
-  AccountRegisterDto,
-  ACCOUNT_REGISTER_REGEX,
-} from '../../../../../src/infrastructure/http/dtos';
+import { AccountRegisterDto } from '../../../../../src/infrastructure/http/dtos';
+import { ACCOUNT_REGISTER_REGEX } from '../../../../../src/domain/regex';
 import { ACCOUNT_REGISTER } from '../../../../mocks/dtos';
 
 describe('[unit test] [AccountRegisterDto]', () => {
