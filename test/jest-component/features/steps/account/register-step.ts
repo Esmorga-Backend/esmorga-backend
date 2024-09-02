@@ -50,5 +50,7 @@ export const registerSteps: StepDefinitions = ({ given, and }) => {
       .mockResolvedValue(USER_MOCK_DB);
   });
 
-  and('account confirmation email is sent', () => {});
+  and('account confirmation email is sent', () => {
+    expect(context.nodemailerService.sendEmail).toHaveBeenCalled();
+  });
 };
