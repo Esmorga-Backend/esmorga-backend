@@ -68,53 +68,10 @@ jobs:
           uses: ./.github/actions/runReporting
           with: 
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        - name: Push OAS
-#          uses: ./.github/actions/pushOasFile
-#          with: 
-#            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        - name: Checkout del código
-          uses: actions/checkout@v3
-          with:
-            ref: ${{ github.head_ref }}
-        - name: Push OAS to github
-          shell: bash
-          run: |
-            echo "Push=0" >> $GITHUB_ENV
-            echo ${GITHUB_HEAD_REF} > /tmp/branch.txt
-            curl http://127.0.0.1:3000/swagger-json -o /tmp/swagger.json
-        - name: Push OAS to github
-          shell: bash
-          run: |
-            if ! cmp -s "/tmp/swagger.json" "swagger.json"; then
-            cp /tmp/swagger.json swagger.json
-            git add swagger.json
-            echo "Swagger has Changed"
-            echo "Push=1" >> $GITHUB_ENV
-            fi
-        - name: Push OAS to github
-          shell: bash
-          run: |
-            if ! cmp -s "/tmp/branch.txt" ".github/tmp/branch.txt" ; then
-            cp /tmp/branch.txt .github/tmp/branch.txt
-            git add .github/tmp/branch.txt
-            echo "Branch has Changed"
-            echo "Push=1" >> $GITHUB_ENV
-            fi
-        - name: Push OAS to github
-          shell: bash
-          env:
+        - name: Push OAS
+          uses: ./.github/actions/pushOasFile
+          with: 
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          run: |
-            if [ ${{ env.Push }} != 0 ] ; then
-            echo "Run AutoCommit"
-            git config --global user.email "devops@esmorga.canarte.org"
-            git config --global user.name "Pipe"
-            git commit -m "ADD Files"
-            git push origin "HEAD:${{ github.head_ref }}"
-            #git push origin HEAD:refs/heads/${GITHUB_HEAD_REF}
-            #git push --force-with-lease origin HEAD:refs/heads/${GITHUB_HEAD_REF}
-            #git push https://${{ github.actor }}:${{ inputs.GITHUB_TOKEN }}@github.com/${{ github.repository }} HEAD:refs/heads/${GITHUB_HEAD_REF}
-            fi
-      
+            AUTO_SSH_PRIVATE_KEY:  ${{ secrets.AUTO_SSH_PRIVATE_KEY }}
 
 

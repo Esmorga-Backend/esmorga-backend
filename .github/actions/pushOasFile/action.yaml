@@ -1,6 +1,9 @@
 name: "Push OAS to github"
 description: "Push OAS to github"
 inputs:
+  AUTO_SSH_PRIVATE_KEY:
+    description: 'A Github key'
+    required: true
   GITHUB_TOKEN:
     description: 'A Github PAT'
     required: true
@@ -11,6 +14,12 @@ runs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0 
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ input.AUTO_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
 
       - name: Push OAS to github
         shell: bash
@@ -41,9 +50,8 @@ runs:
         run: |
           if [ ${{ env.Push }} != 0 ] ; then
           echo "Run AutoCommit"
-          git config --global user.email "devops@esmorga.canarte.org"
-          git config --global user.name "Pipe"
+          git config --global user.email "pablo.canarte.accenture@gmail.com"
+          git config --global user.name "EsmorgaPipeBot"
           git commit -m "ADD Files"
           git push --force-with-lease origin HEAD:refs/heads/${GITHUB_HEAD_REF}
-          #git push https://${{ github.actor }}:${{ inputs.GITHUB_TOKEN }}@github.com/${{ github.repository }} HEAD:refs/heads/${GITHUB_HEAD_REF}
           fi
