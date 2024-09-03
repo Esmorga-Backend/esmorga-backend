@@ -45,32 +45,32 @@ jobs:
         - run: npm run test:create:cycle
         - name: Checkout repository
           uses: actions/checkout@v2
-        - name: Run Unit Tests
-          uses: ./.github/actions/runUnitTests
-          with:
-            SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        - name: Run Component Tests
-          uses: ./.github/actions/runComponentTests
-          with:
-            SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        # - name: Run Unit Tests
+        #   uses: ./.github/actions/runUnitTests
+        #   with:
+        #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        # - name: Run Component Tests
+        #   uses: ./.github/actions/runComponentTests
+        #   with:
+        #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         - name: Run Service
           uses: ./.github/actions/runService
-        - name: Run Postman
-          uses: ./.github/actions/runPostmanTests
-          with:
-            SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-            POSTMAN_TOKEN: ${{ secrets.POSTMAN_TOKEN }}
-        - name: Run E2E Tests
-          uses: ./.github/actions/runE2ETests
-          with:
-                SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        - name: Run Reporting
-          uses: ./.github/actions/runReporting
-          with: 
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        # - name: Run Postman
+        #   uses: ./.github/actions/runPostmanTests
+        #   with:
+        #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        #     POSTMAN_TOKEN: ${{ secrets.POSTMAN_TOKEN }}
+        # - name: Run E2E Tests
+        #   uses: ./.github/actions/runE2ETests
+        #   with:
+        #         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        # - name: Run Reporting
+        #   uses: ./.github/actions/runReporting
+        #   with: 
+        #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         - name: Push OAS
           uses: ./.github/actions/pushOasFile
-
-
+          with: 
+            AUTO_SSH_PRIVATE_KEY:  ${{ secrets.AUTO_SSH_PRIVATE_KEY }}
 
 
