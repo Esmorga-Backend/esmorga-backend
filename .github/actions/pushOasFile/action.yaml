@@ -4,9 +4,6 @@ inputs:
   AUTO_SSH_PRIVATE_KEY:
     description: 'A Github key'
     required: true
-  GITHUB_TOKEN:
-    description: 'A Github PAT'
-    required: true
 runs:
   using: "composite"
   steps:
@@ -46,6 +43,8 @@ runs:
           echo "Branch has Changed"
           echo "Push=1" >> $GITHUB_ENV
           fi
+      - name: Verificar configuración de Git
+        run: git remote -v
       - name: Push OAS to github
         shell: bash
         run: |
