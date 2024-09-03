@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
+import { MongooseModule } from '@nestjs/mongoose';
 import { AccountController } from '../controllers';
 import {
+  ForgotPasswordService,
   LoginService,
   RegisterService,
   RefreshTokenService,
@@ -13,10 +15,23 @@ import { AuthGuard } from '../guards';
 import { EventSharedModule } from './event-shared.module';
 import { AccountSharedModule } from './account-shared.module';
 
+import { VerificationCodeRepository } from '../../../infrastructure/db/repositories';
+import {
+  VerificationCodeSchema,
+  VerificationCode,
+} from '../../../infrastructure/db/schema';
+
 @Module({
-  imports: [AccountSharedModule, EventSharedModule],
+  imports: [
+    AccountSharedModule,
+    EventSharedModule,
+    MongooseModule.forFeature([
+      { name: VerificationCode.name, schema: VerificationCodeSchema },
+    ]),
+  ],
   controllers: [AccountController],
   providers: [
+    ForgotPasswordService,
     LoginService,
     RegisterService,
     RefreshTokenService,
@@ -25,6 +40,8 @@ import { AccountSharedModule } from './account-shared.module';
     DisjoinEventService,
     GenerateTokenPair,
     AuthGuard,
+    VerificationCodeRepository,
+    MongooseModule,
   ],
 })
 export class AccountModule {}

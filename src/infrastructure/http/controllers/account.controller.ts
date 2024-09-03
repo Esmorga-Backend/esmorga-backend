@@ -14,19 +14,21 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import { PinoLogger } from 'nestjs-pino';
 import {
+  DisjoinEventService,
+  ForgotPasswordService,
+  GetMyEventsService,
+  JoinEventService,
   LoginService,
   RegisterService,
   RefreshTokenService,
-  JoinEventService,
-  GetMyEventsService,
-  DisjoinEventService,
 } from '../../../application/handler/account';
 import { HttpExceptionFilter } from '../errors';
 import {
   AccountLoginDto,
   AccountRegisterDto,
-  RefreshTokenDto,
+  EmailDto,
   EventIdDto,
+  RefreshTokenDto,
 } from '../dtos';
 import {
   SwaggerAccountLogin,
@@ -46,12 +48,13 @@ import { AuthGuard } from '../guards';
 export class AccountController {
   constructor(
     private readonly logger: PinoLogger,
+    private readonly disjoinEventService: DisjoinEventService,
+    private readonly forgotPasswordService: ForgotPasswordService,
     private readonly loginService: LoginService,
     private readonly registerService: RegisterService,
     private readonly refreshTokenService: RefreshTokenService,
     private readonly joinEventService: JoinEventService,
     private readonly getMyEventsService: GetMyEventsService,
-    private readonly disjoinEventService: DisjoinEventService,
   ) {}
 
   @Get('/events')
@@ -223,6 +226,35 @@ export class AccountController {
     } catch (error) {
       this.logger.error(
         `[AccountController] [disJoinEvent] - x-request-id:${requestId}, error ${error}`,
+      );
+
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new InternalServerErrorException();
+    }
+  }
+
+  @Post('/password/forgot-init')
+  // @SwaggerRefreshToken()
+  async forgotPassword(
+    @Body() forgotPasswordDto: EmailDto,
+    @RequestId() requestId: string,
+  ) {
+    try {
+      this.logger.info(
+        `[AccountController] [forgotPasword] - x-request-id: ${requestId}`,
+      );
+
+      await this.forgotPasswordService.forgotPassword(
+        forgotPasswordDto.email,
+        requestId,
+      );
+
+      return 'Hola, creo que estoy funcionando bien :)';
+    } catch (error) {
+      this.logger.error(
+        `[AccountController] [forgotPasword] - x-request-id:${requestId}, error ${error}`,
       );
 
       if (error instanceof HttpException) {

@@ -32,6 +32,7 @@
     "migrate:prod-down-all": "cp migrations_prod.json migrations.json && npx mongo-migrate-ts down -a"
   },
   "dependencies": {
+    "@nestjs-modules/mailer": "^2.0.2",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.2.2",
     "@nestjs/core": "^10.0.0",
@@ -44,6 +45,7 @@
     "class-validator": "^0.14.1",
     "mongoose": "^8.3.4",
     "nestjs-pino": "^4.1.0",
+    "nodemailer": "^6.9.14",
     "pino-http": "^10.1.0",
     "pino-pretty": "^11.2.1",
     "reflect-metadata": "^0.2.0",

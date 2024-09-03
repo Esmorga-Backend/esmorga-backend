@@ -25,6 +25,41 @@ export class AccountRepository extends MongoRepository<UserSchema> {
   }
 
   /**
+   * Find a user by email but doesn't throw an error if not found.
+   *
+   * @param email - User email.
+   * @param requestId - Request identifier.
+   * @returns UserProfileDto - User data following business schema if found.
+   */
+  async findUserByEmail(email: string, requestId?: string) {
+    try {
+      this.logger.info(
+        `[AccountRepository] [findUserByEmail] - x-request-id: ${requestId}, email: ${email}`,
+      );
+
+      const user = await this.findOneByEmail(email);
+
+      if (user) {
+        const userProfile: UserProfileDto = plainToClass(UserProfileDto, user, {
+          excludeExtraneousValues: true,
+        });
+
+        validateObjectDto(userProfile, REQUIRED_DTO_FIELDS.USER_PROFILE);
+
+        return userProfile.email;
+      }
+    } catch (error) {
+      this.logger.error(
+        `[AccountRepository] [findUserByEmail] - x-request-id: ${requestId}, error: ${error}`,
+      );
+
+      if (error instanceof HttpException) throw error;
+
+      throw new DataBaseInternalError();
+    }
+  }
+
+  /**
    * Find an user by id.
    *
    * @param id - User identifier.
