@@ -44,6 +44,7 @@ runs:
           echo "Push=1" >> $GITHUB_ENV
           fi
       - name: Verificar configuración de Git
+        shell: bash
         run: git remote -v
       - name: Push OAS to github
         shell: bash
