@@ -15,6 +15,7 @@ runs:
         with:
           fetch-depth: 0 
       - name: Setup SSH
+        shell: bash
         run: |
           mkdir -p ~/.ssh
           echo "${{ inputs.AUTO_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
