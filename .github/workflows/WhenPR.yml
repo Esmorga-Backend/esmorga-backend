@@ -71,7 +71,6 @@ jobs:
         - name: Push OAS
           uses: ./.github/actions/pushOasFile
           with: 
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             AUTO_SSH_PRIVATE_KEY:  ${{ secrets.AUTO_SSH_PRIVATE_KEY }}
 
 
