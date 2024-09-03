@@ -51,6 +51,7 @@ runs:
         run: |
           if [ ${{ env.Push }} != 0 ] ; then
           echo "Run AutoCommit"
+          git remote set-url origin git@github.com:Esmorga-Backend/esmorga-backend.git
           git config --global user.email "pablo.canarte.accenture@gmail.com"
           git config --global user.name "EsmorgaPipeBot"
           git commit -m "ADD Files"
