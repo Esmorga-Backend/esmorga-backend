@@ -9,8 +9,8 @@ runs:
   steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-      with:
-        ref: ${GITHUB_HEAD_REF}
+        with:
+          ref: ${GITHUB_HEAD_REF}
       - name: Setup SSH
         shell: bash
         run: |
