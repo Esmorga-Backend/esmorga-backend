@@ -14,7 +14,7 @@ import {
 } from '../../../infrastructure/db/repositories';
 import {
   InvalidEventIdApiError,
-  InvalidRoleApiError,
+  NotAdminAccountApiError,
   InvalidTokenApiError,
 } from '../../../domain/errors';
 
@@ -54,7 +54,7 @@ export class UpdateEventService {
         requestId,
       );
 
-      if (role !== ACCOUNT_ROLES.ADMIN) throw new InvalidRoleApiError();
+      if (role !== ACCOUNT_ROLES.ADMIN) throw new NotAdminAccountApiError();
 
       const { eventId } = updateEventDto;
 

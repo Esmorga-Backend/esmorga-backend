@@ -6,7 +6,7 @@ import {
   TokensRepository,
 } from '../../../infrastructure/db/repositories';
 import {
-  InvalidRoleApiError,
+  NotAdminAccountApiError,
   InvalidTokenApiError,
 } from '../../../domain/errors';
 import { CreateEventDto } from '../../../infrastructure/http/dtos';
@@ -49,7 +49,7 @@ export class CreateEventService {
         requestId,
       );
 
-      if (role !== ACCOUNT_ROLES.ADMIN) throw new InvalidRoleApiError();
+      if (role !== ACCOUNT_ROLES.ADMIN) throw new NotAdminAccountApiError();
 
       await this.eventRepository.createEvent(createEventDto, email, requestId);
     } catch (error) {
