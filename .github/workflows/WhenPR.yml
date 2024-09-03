@@ -20,7 +20,7 @@ jobs:
       env:
         APP_PORT: 3000
         MONGODB_URI: "mongodb://localhost:27017/esmorga"
-        NODE_ENV: LOCAL"
+        NODE_ENV: LOCAL
         JWT_SECRET: ${{ secrets.JWT_SECRET }}
         ACCESS_TOKEN_TTL: 600
         MAX_PAIR_OF_TOKEN: 5
