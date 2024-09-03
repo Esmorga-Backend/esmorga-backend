@@ -17,7 +17,7 @@ runs:
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
-          echo "${{ input.AUTO_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          echo "${{ inputs.AUTO_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan github.com >> ~/.ssh/known_hosts
 
