@@ -53,8 +53,8 @@ jobs:
         #   uses: ./.github/actions/runComponentTests
         #   with:
         #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        # - name: Run Service
-        #   uses: ./.github/actions/runService
+        - name: Run Service
+          uses: ./.github/actions/runService
         # - name: Run Postman
         #   uses: ./.github/actions/runPostmanTests
         #   with:
