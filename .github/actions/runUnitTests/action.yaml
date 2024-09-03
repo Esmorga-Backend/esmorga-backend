@@ -24,7 +24,6 @@ runs:
           shell: bash
           if: always()
           run: |
-            if [ "${GITHUB_HEAD_REF}" != "main" ]; then
-            echo "Upload unit Report"
+            if [ "${GITHUB_HEAD_REF}" == "main" ]; then
             node test/scripts/features-tool.js report/junit-unit.xml --Upload-Results
             fi
