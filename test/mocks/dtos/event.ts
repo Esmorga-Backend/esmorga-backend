@@ -1,5 +1,5 @@
 import { EventDto } from '../../../src/infrastructure/dtos';
-import { EVENT_TYPE } from '../../../src/domain/consts';
+import { EVENT_TYPE } from '../../../src/domain/const';
 
 const futureDate: Date = new Date();
 futureDate.setFullYear(2025);

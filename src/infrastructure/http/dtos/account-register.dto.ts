@@ -7,13 +7,7 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
-
-// Regex for name and lastName is the same one
-export const ACCOUNT_REGISTER_REGEX = {
-  NAME: /^[A-Za-z\s'-]+$/,
-  EMAIL: /^[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-  PASSWORD: /(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+'])/,
-};
+import { ACCOUNT_REGISTER_REGEX } from '../../../domain/regex';
 
 export class AccountRegisterDto {
   @Matches(ACCOUNT_REGISTER_REGEX.NAME, {

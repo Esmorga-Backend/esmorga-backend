@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PinoLogger } from 'nestjs-pino';
 import { EventDto } from '../../../infrastructure/dtos';
 import { UpdateEventDto } from '../../../infrastructure/http/dtos';
-import { USER_ROLES } from '../../../domain/consts';
+import { ACCOUNT_ROLES } from '../../../domain/const';
 import {
   DataBaseBadRequestError,
   DataBaseUnathorizedError,
@@ -14,7 +14,7 @@ import {
 } from '../../../infrastructure/db/repositories';
 import {
   InvalidEventIdApiError,
-  InvalidRoleApiError,
+  NotAdminAccountApiError,
   InvalidTokenApiError,
 } from '../../../domain/errors';
 
@@ -54,7 +54,7 @@ export class UpdateEventService {
         requestId,
       );
 
-      if (role !== USER_ROLES.ADMIN) throw new InvalidRoleApiError();
+      if (role !== ACCOUNT_ROLES.ADMIN) throw new NotAdminAccountApiError();
 
       const { eventId } = updateEventDto;
 
