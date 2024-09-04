@@ -10,6 +10,7 @@ import {
   HttpCode,
   UseGuards,
   Delete,
+  Put,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { PinoLogger } from 'nestjs-pino';
@@ -25,6 +26,7 @@ import { HttpExceptionFilter } from '../errors';
 import {
   AccountLoginDto,
   AccountRegisterDto,
+  ActivateAccountDto,
   RefreshTokenDto,
   EventIdDto,
 } from '../dtos';
@@ -192,6 +194,27 @@ export class AccountController {
     } catch (error) {
       this.logger.error(
         `[AccountController] [joinEvent] - x-request-id:${requestId}, error ${error}`,
+      );
+
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new InternalServerErrorException();
+    }
+  }
+
+  @Put('/activate')
+  async activateAccount(
+    @Body() activateAccountDto: ActivateAccountDto,
+    @RequestId() requestId: string,
+  ) {
+    try {
+      this.logger.info(
+        `[AccountController] [activateAccount] - x-request-id:${requestId}`,
+      );
+    } catch (error) {
+      this.logger.error(
+        `[AccountController] [activateAccount] - x-request-id:${requestId}, error ${error}`,
       );
 
       if (error instanceof HttpException) {
