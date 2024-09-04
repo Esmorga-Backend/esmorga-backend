@@ -24,4 +24,7 @@ runs:
         - name : Upload Results
           shell: bash
           if: always()
-          run: node test/scripts/features-tool.js report/junit-e2e.xml --Upload-Results 
+          run: |
+                if [ "${GITHUB_HEAD_REF}" == "main" ]; then
+                node test/scripts/features-tool.js report/junit-e2e.xml --Upload-Results 
+                fi
