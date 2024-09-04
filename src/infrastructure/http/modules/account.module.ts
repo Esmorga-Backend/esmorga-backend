@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { MongooseModule } from '@nestjs/mongoose';
 import { AccountController } from '../controllers';
 import {
   LoginService,
@@ -8,13 +9,28 @@ import {
   GetMyEventsService,
   DisjoinEventService,
 } from '../../../application/handler/account';
-import { GenerateTokenPair } from '../../../domain/services';
+import {
+  GenerateTokenPair,
+  GenerateMailService,
+} from '../../../domain/services';
 import { AuthGuard } from '../guards';
 import { EventSharedModule } from './event-shared.module';
 import { AccountSharedModule } from './account-shared.module';
+import { VerificationCodeRepository } from '../../db/repositories';
+import { NodemailerService } from '../../services';
+import {
+  VerificationCode,
+  VerificationCodeSchema,
+} from '../../../infrastructure/db/schema';
 
 @Module({
-  imports: [AccountSharedModule, EventSharedModule],
+  imports: [
+    AccountSharedModule,
+    EventSharedModule,
+    MongooseModule.forFeature([
+      { name: VerificationCode.name, schema: VerificationCodeSchema },
+    ]),
+  ],
   controllers: [AccountController],
   providers: [
     LoginService,
@@ -24,6 +40,9 @@ import { AccountSharedModule } from './account-shared.module';
     GetMyEventsService,
     DisjoinEventService,
     GenerateTokenPair,
+    GenerateMailService,
+    VerificationCodeRepository,
+    NodemailerService,
     AuthGuard,
   ],
 })

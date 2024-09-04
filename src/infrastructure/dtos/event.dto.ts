@@ -9,7 +9,7 @@ import {
   IsOptional,
 } from 'class-validator';
 import { Expose, Transform, Type } from 'class-transformer';
-import { EVENT_TYPE } from '../../domain/consts';
+import { EVENT_TYPE } from '../../domain/const';
 
 class LocationDto {
   @Expose()

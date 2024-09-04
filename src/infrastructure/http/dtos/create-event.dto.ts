@@ -16,7 +16,7 @@ import {
   ValidateIf,
   ValidateNested,
 } from 'class-validator';
-import { EVENT_TYPE } from '../../../domain/consts';
+import { EVENT_TYPE } from '../../../domain/const';
 import { IsNotPastDate, IsValidDate } from './custom-decorators';
 
 class CreateEventLocationDto {

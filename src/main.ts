@@ -36,7 +36,11 @@ async function main() {
 
   const document = SwaggerModule.createDocument(app, swaggerConfig);
 
-  SwaggerModule.setup('swagger', app, document);
+  SwaggerModule.setup('swagger', app, document, {
+    swaggerOptions: {
+      operationsSorter: 'method',
+    },
+  });
 
   const configService = app.get(ConfigService);
 

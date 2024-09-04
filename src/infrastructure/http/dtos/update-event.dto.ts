@@ -24,7 +24,7 @@ import {
   IsNotEmptyObject,
 } from './custom-decorators';
 
-import { EVENT_TYPE } from '../../../domain/consts';
+import { EVENT_TYPE } from '../../../domain/const';
 
 class UpdateEventLocationDto {
   @MinLength(1, { message: 'name must have min 1 character' })

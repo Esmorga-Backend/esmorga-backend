@@ -1,5 +1,5 @@
 import { UpdateEventDto } from '../../../src/infrastructure/http/dtos';
-import { EVENT_TYPE } from '../../../src/domain/consts';
+import { EVENT_TYPE } from '../../../src/domain/const';
 
 export const UPDATE_EVENT_MOCK: UpdateEventDto = {
   eventId: '6656e23640e1fdb4ceb23cc9',
