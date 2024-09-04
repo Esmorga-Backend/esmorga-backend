@@ -20,17 +20,15 @@ export class ForgotPasswordService {
         `[ForgotPasswordService] [forgotPassword] - x-request-id:${requestId}, email: ${email}`,
       );
 
-      const isRegistered = await this.accountRepository.findUserByEmail(
+      const isRegistered = await this.accountRepository.accountExist(
         email,
         requestId,
       );
+
       if (isRegistered) {
         const verificationCode = generateVerificationCode();
-        console.log(
-          '>>****>>>***>>>> CÓDIGO DE VERIFICACIÓN:',
-          verificationCode,
-        );
-        this.verificationCodeRepository.sendVerificationCode(
+
+        this.verificationCodeRepository.saveVerificationCode(
           email,
           verificationCode,
           requestId,

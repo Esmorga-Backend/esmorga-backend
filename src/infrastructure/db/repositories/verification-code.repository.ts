@@ -19,15 +19,28 @@ export class VerificationCodeRepository extends MongoRepository<VerificationCode
    * Store the email and the verification code with a deadline.
    *
    * @param email - Email user identifier.
-   * @param requestId - Request identifier for API logger
+   * @param requestId - Request identifier for API logger.
    */
-  sendVerificationCode(
+  async saveVerificationCode(
     email: string,
     verificationCode: string,
-    requestId: string,
+    requestId?: string,
   ) {
-    console.log(
-      `>*> EMAIL: ${email}, CÓDIGO: ${verificationCode}, REQUEST_ID: ${requestId}`,
-    );
+    try {
+      this.logger.info(
+        `[VeririficationCodeRepository] [saveVerificationCode] - x-request-id: ${requestId}`,
+      );
+      console.log(
+        `>*> EMAIL: ${email}, CÓDIGO: ${verificationCode}, REQUEST_ID: ${requestId}`,
+      );
+
+      await this.findAndUpdateVerificationCode(verificationCode, email);
+    } catch (error) {
+      this.logger.error(
+        `[VeririficationCodeRepository] [saveVerificationCode] - x-request-id: ${requestId}, error: ${error}`,
+      );
+
+      throw new DataBaseInternalError();
+    }
   }
 }

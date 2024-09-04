@@ -25,35 +25,25 @@ export class AccountRepository extends MongoRepository<UserSchema> {
   }
 
   /**
-   * Find a user by email but doesn't throw an error if not found.
+   * Check if there is already an account with that email.
    *
    * @param email - User email.
    * @param requestId - Request identifier.
-   * @returns UserProfileDto - User data following business schema if found.
+   * @returns Boolean
    */
-  async findUserByEmail(email: string, requestId?: string) {
+  async accountExist(email: string, requestId?: string): Promise<boolean> {
     try {
       this.logger.info(
-        `[AccountRepository] [findUserByEmail] - x-request-id: ${requestId}, email: ${email}`,
+        `[AccountRepository] [accountExist] - x-request-id: ${requestId}, email: ${email}`,
       );
 
-      const user = await this.findOneByEmail(email);
+      const account = await this.findOneByEmail(email);
 
-      if (user) {
-        const userProfile: UserProfileDto = plainToClass(UserProfileDto, user, {
-          excludeExtraneousValues: true,
-        });
-
-        validateObjectDto(userProfile, REQUIRED_DTO_FIELDS.USER_PROFILE);
-
-        return userProfile.email;
-      }
+      return account ? true : false;
     } catch (error) {
       this.logger.error(
-        `[AccountRepository] [findUserByEmail] - x-request-id: ${requestId}, error: ${error}`,
+        `[AccountRepository] [accountExist] - x-request-id: ${requestId}, error: ${error}`,
       );
-
-      if (error instanceof HttpException) throw error;
 
       throw new DataBaseInternalError();
     }
