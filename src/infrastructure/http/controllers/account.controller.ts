@@ -21,6 +21,7 @@ import {
   JoinEventService,
   GetMyEventsService,
   DisjoinEventService,
+  ActivateAccount,
 } from '../../../application/handler/account';
 import { HttpExceptionFilter } from '../errors';
 import {
@@ -54,6 +55,7 @@ export class AccountController {
     private readonly joinEventService: JoinEventService,
     private readonly getMyEventsService: GetMyEventsService,
     private readonly disjoinEventService: DisjoinEventService,
+    private readonly activateAccount: ActivateAccount,
   ) {}
 
   @Get('/events')
@@ -204,13 +206,19 @@ export class AccountController {
   }
 
   @Put('/activate')
-  async activateAccount(
+  @HttpCode(204)
+  async activate(
     @Body() activateAccountDto: ActivateAccountDto,
     @RequestId() requestId: string,
   ) {
     try {
       this.logger.info(
         `[AccountController] [activateAccount] - x-request-id:${requestId}`,
+      );
+
+      await this.activateAccount.activate(
+        activateAccountDto.verificationCode,
+        requestId,
       );
     } catch (error) {
       this.logger.error(
