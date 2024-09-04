@@ -26,7 +26,6 @@ export class RegisterService {
    * Create a new user and provide a new pair of tokens and profile information.
    * @param accountRegisterDto - DTO with registration data to create a new user.
    * @param requestId - Request identifier
-   * @throws EmailConflictApiError - Email provided exists in the database.
    */
   async register(accountRegisterDto: AccountRegisterDto, requestId?: string) {
     try {

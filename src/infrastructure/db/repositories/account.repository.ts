@@ -122,7 +122,6 @@ export class AccountRepository extends MongoRepository<UserSchema> {
    *
    * @param userData - DTO with user data provided to store.
    * @param requestId - Request identifier.
-   * @throws DataBaseConflictError - Email already stored
    */
   async saveUser(userData: AccountRegisterDto, requestId?: string) {
     try {
