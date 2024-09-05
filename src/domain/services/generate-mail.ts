@@ -16,7 +16,7 @@ export class GenerateMailService {
 
     const from = 'Esmorga';
 
-    const subject = 'Solicitud cambio de contraseña';
+    const subject = 'Solicitud verificacion de cuenta';
 
     const html = `
         <div>
