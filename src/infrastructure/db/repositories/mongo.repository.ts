@@ -64,6 +64,16 @@ export class MongoRepository<E> implements DBRepository<E> {
   }
 
   /**
+   * Find a document by verificationCode field.
+   *
+   * @param code - The code value to find.
+   * @returns Promise resolved with the document that matches the email provided.
+   */
+  async findOneByVerificationCode(code: string): Promise<E> {
+    return this.entityModel.findOne({ verificationCode: { $eq: code } });
+  }
+
+  /**
    * Find events document with the IDs provided in STRING format. The logic transform the strings IDs into mongo ObjectId before execute the query
    * @param eventIds - Array of events identifiers
    * @returns Promise with event that match with the ID list provided

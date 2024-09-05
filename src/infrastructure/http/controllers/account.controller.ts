@@ -201,7 +201,6 @@ export class AccountController {
   }
 
   @Put('/activate')
-  @HttpCode(204)
   async activate(
     @Body() activateAccountDto: ActivateAccountDto,
     @RequestId() requestId: string,

@@ -39,4 +39,24 @@ export class VerificationCodeRepository extends MongoRepository<VerificationCode
       throw new DataBaseInternalError();
     }
   }
+
+  // TODO add TsDoc
+  async getCode(verificationCode: string, requestId?: string) {
+    try {
+      this.logger.info(
+        `[VeririficationCodeRepository] [getCode] - x-request-id: ${requestId}`,
+      );
+
+      const verificationCodeData =
+        await this.findOneByVerificationCode(verificationCode);
+
+      return verificationCodeData;
+    } catch (error) {
+      this.logger.error(
+        `[VeririficationCodeRepository] [getCode] - x-request-id: ${requestId}, error: ${error}`,
+      );
+
+      throw new DataBaseInternalError();
+    }
+  }
 }
