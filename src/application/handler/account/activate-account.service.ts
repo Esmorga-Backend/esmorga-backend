@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { PinoLogger } from 'nestjs-pino';
 import { TemporalCodeRepository } from '../../../infrastructure/db/repositories';
 import { TEMPORAL_CODE_TYPE } from '../../../domain/const';
+import { DataBaseNotFoundError } from '../../../infrastructure/db/errors';
+import { InvalidVerificationCodeApiError } from '../../../domain/errors';
 
 @Injectable()
 export class ActivateAccount {
@@ -27,6 +29,10 @@ export class ActivateAccount {
       this.logger.error(
         `[ActivateAccount] [activate] - x-request-id: ${requestId}, error ${error}`,
       );
+
+      if (error instanceof DataBaseNotFoundError) {
+        throw new InvalidVerificationCodeApiError();
+      }
 
       throw error;
     }
