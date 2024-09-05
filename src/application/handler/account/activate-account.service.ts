@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { PinoLogger } from 'nestjs-pino';
-import { VerificationCodeRepository } from '../../../infrastructure/db/repositories';
+import { TemporalCodeRepository } from '../../../infrastructure/db/repositories';
 
 @Injectable()
 export class ActivateAccount {
   constructor(
     private readonly logger: PinoLogger,
-    private readonly verificationCodeRepository: VerificationCodeRepository,
+    private readonly temporalCodeRepository: TemporalCodeRepository,
   ) {}
 
   async activate(verificationCode: string, requestId?: string) {
@@ -15,7 +15,7 @@ export class ActivateAccount {
         `[ActivateAccount] [activate] - x-request-id: ${requestId}`,
       );
 
-      const { email } = await this.verificationCodeRepository.getCode(
+      const { email } = await this.temporalCodeRepository.getCode(
         verificationCode,
         requestId,
       );

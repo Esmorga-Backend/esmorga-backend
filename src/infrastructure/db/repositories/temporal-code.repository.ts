@@ -24,13 +24,18 @@ export class TemporalCodeRepository extends MongoRepository<TemporalCodeSchema> 
    * @param email - User email
    * @param requestId - Request identifier for API logger
    */
-  async saveCode(code: number, email: string, requestId?: string) {
+  async saveCode(
+    code: number,
+    codeType: string,
+    email: string,
+    requestId?: string,
+  ) {
     try {
       this.logger.info(
         `[TemporalCodeRepository] [saveCode] - x-request-id: ${requestId}`,
       );
 
-      await this.findAndUpdateTemporalCode(code, email);
+      await this.findAndUpdateTemporalCode(code, codeType, email);
     } catch (error) {
       this.logger.error(
         `[TemporalCodeRepository] [saveCode] - x-request-id: ${requestId}, error: ${error}`,

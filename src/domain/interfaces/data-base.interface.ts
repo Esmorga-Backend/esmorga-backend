@@ -9,7 +9,7 @@ export interface DBRepository<E> {
   findOneByVerificationCode(verificationCode: string): Promise<E>;
   findEventParticipant(userId: string): Promise<E[]>;
   findAndUpdateParticipantsList(eventId: string, userId: string);
-  findAndUpdateTemporalCode(code: number, email: string);
+  findAndUpdateTemporalCode(code: number, type: string, email: string);
   save(data);
   updateById(id: string, data: object): Promise<E>;
   removePartipantFromList(eventId: string, userId: string);

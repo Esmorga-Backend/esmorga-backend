@@ -110,9 +110,10 @@ export class MongoRepository<E> implements DBRepository<E> {
     );
   }
 
-  async findAndUpdateTemporalCode(code: number, email: string) {
+  //TODO add TsDoc
+  async findAndUpdateTemporalCode(code: number, type: string, email: string) {
     await this.entityModel.findOneAndUpdate(
-      { email },
+      { email, type },
       { $set: { code: code } },
       { upsert: true },
     );
