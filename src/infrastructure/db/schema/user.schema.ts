@@ -15,10 +15,22 @@ export class User {
   @Prop({ required: true })
   password: string;
 
-  @Prop({ required: true, default: ACCOUNT_ROLES.USER })
+  @Prop({
+    required: true,
+    enum: [ACCOUNT_ROLES.USER],
+    default: ACCOUNT_ROLES.USER,
+  })
   role: string;
 
-  @Prop({ required: true, default: ACCOUNT_STATUS.UNVERIFIED })
+  @Prop({
+    required: true,
+    eanum: [
+      ACCOUNT_STATUS.ACTIVE,
+      ACCOUNT_STATUS.UNVERIFIED,
+      ACCOUNT_STATUS.BLOCKED,
+    ],
+    default: ACCOUNT_STATUS.UNVERIFIED,
+  })
   status: string;
 }
 

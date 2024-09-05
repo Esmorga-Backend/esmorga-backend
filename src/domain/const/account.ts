@@ -6,4 +6,5 @@ export const ACCOUNT_ROLES = {
 export const ACCOUNT_STATUS = {
   UNVERIFIED: 'UNVERIFIED',
   ACTIVE: 'ACTIVE',
+  BLOCKED: 'BLOCKED',
 };

@@ -3,37 +3,37 @@ import { InjectModel } from '@nestjs/mongoose';
 import { PinoLogger } from 'nestjs-pino';
 import { Model } from 'mongoose';
 import { MongoRepository } from './mongo.repository';
-import { VerificationCode as VerificationCodeSchema } from '../schema';
+import { TemporalCode as TemporalCodeSchema } from '../schema';
 import { DataBaseInternalError } from '../errors';
 
 @Injectable()
-export class VerificationCodeRepository extends MongoRepository<VerificationCodeSchema> {
+export class TemporalCodeRepository extends MongoRepository<TemporalCodeSchema> {
   constructor(
-    @InjectModel(VerificationCodeSchema.name)
-    private verificationCodeModel: Model<VerificationCodeSchema>,
+    @InjectModel(TemporalCodeSchema.name)
+    private temporalCodeModel: Model<TemporalCodeSchema>,
     private readonly logger: PinoLogger,
   ) {
-    super(verificationCodeModel);
+    super(temporalCodeModel);
   }
 
   /**
    * Find a verificationCode document related to the email and update the code. If there is not document
    * creates a new one.
    *
-   * @param verificationCode - 6 random digits value
+   * @param code - 6 random digits value
    * @param email - User email
    * @param requestId - Request identifier for API logger
    */
-  async saveCode(verificationCode: number, email: string, requestId?: string) {
+  async saveCode(code: number, email: string, requestId?: string) {
     try {
       this.logger.info(
-        `[VeririficationCodeRepository] [saveCode] - x-request-id: ${requestId}`,
+        `[TemporalCodeRepository] [saveCode] - x-request-id: ${requestId}`,
       );
 
-      await this.findAndUpdateVerificationCode(verificationCode, email);
+      await this.findAndUpdateTemporalCode(code, email);
     } catch (error) {
       this.logger.error(
-        `[VeririficationCodeRepository] [saveCode] - x-request-id: ${requestId}, error: ${error}`,
+        `[TemporalCodeRepository] [saveCode] - x-request-id: ${requestId}, error: ${error}`,
       );
 
       throw new DataBaseInternalError();
@@ -44,7 +44,7 @@ export class VerificationCodeRepository extends MongoRepository<VerificationCode
   async getCode(verificationCode: string, requestId?: string) {
     try {
       this.logger.info(
-        `[VeririficationCodeRepository] [getCode] - x-request-id: ${requestId}`,
+        `[TemporalCodeRepository] [getCode] - x-request-id: ${requestId}`,
       );
 
       const verificationCodeData =
@@ -53,7 +53,7 @@ export class VerificationCodeRepository extends MongoRepository<VerificationCode
       return verificationCodeData;
     } catch (error) {
       this.logger.error(
-        `[VeririficationCodeRepository] [getCode] - x-request-id: ${requestId}, error: ${error}`,
+        `[TemporalCodeRepository] [getCode] - x-request-id: ${requestId}, error: ${error}`,
       );
 
       throw new DataBaseInternalError();

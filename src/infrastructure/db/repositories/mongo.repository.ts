@@ -110,10 +110,10 @@ export class MongoRepository<E> implements DBRepository<E> {
     );
   }
 
-  async findAndUpdateVerificationCode(code: number, email: string) {
+  async findAndUpdateTemporalCode(code: number, email: string) {
     await this.entityModel.findOneAndUpdate(
       { email },
-      { $set: { verificationCode: code } },
+      { $set: { code: code } },
       { upsert: true },
     );
   }
