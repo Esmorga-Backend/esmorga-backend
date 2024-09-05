@@ -1,10 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { PinoLogger } from 'nestjs-pino';
 import { Model } from 'mongoose';
 import { MongoRepository } from './mongo.repository';
 import { TemporalCode as TemporalCodeSchema } from '../schema';
-import { DataBaseInternalError } from '../errors';
+import { DataBaseInternalError, DataBaseNotFoundError } from '../errors';
 
 @Injectable()
 export class TemporalCodeRepository extends MongoRepository<TemporalCodeSchema> {
@@ -45,21 +45,23 @@ export class TemporalCodeRepository extends MongoRepository<TemporalCodeSchema> 
     }
   }
 
-  // TODO add TsDoc
-  async getCode(verificationCode: string, requestId?: string) {
+  async getCode(code: number, codeType: string, requestId?: string) {
     try {
       this.logger.info(
         `[TemporalCodeRepository] [getCode] - x-request-id: ${requestId}`,
       );
 
-      const verificationCodeData =
-        await this.findOneByVerificationCode(verificationCode);
+      const codeData = await this.findOneByCodeAndType(code, codeType);
 
-      return verificationCodeData;
+      if (!codeData) throw new DataBaseNotFoundError();
+
+      return codeData;
     } catch (error) {
       this.logger.error(
         `[TemporalCodeRepository] [getCode] - x-request-id: ${requestId}, error: ${error}`,
       );
+
+      if (error instanceof HttpException) throw error;
 
       throw new DataBaseInternalError();
     }

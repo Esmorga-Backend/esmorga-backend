@@ -6,7 +6,7 @@ export interface DBRepository<E> {
   findOneByEmail(email: string): Promise<E>;
   findOneById(id: string): Promise<E>;
   findOneByRefreshToken(refreshToken: string): Promise<E>;
-  findOneByVerificationCode(verificationCode: string): Promise<E>;
+  findOneByCodeAndType(code: number, codeType: string): Promise<E>;
   findEventParticipant(userId: string): Promise<E[]>;
   findAndUpdateParticipantsList(eventId: string, userId: string);
   findAndUpdateTemporalCode(code: number, type: string, email: string);

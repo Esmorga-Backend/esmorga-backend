@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PinoLogger } from 'nestjs-pino';
 import { TemporalCodeRepository } from '../../../infrastructure/db/repositories';
+import { TEMPORAL_CODE_TYPE } from '../../../domain/const';
 
 @Injectable()
 export class ActivateAccount {
@@ -15,8 +16,11 @@ export class ActivateAccount {
         `[ActivateAccount] [activate] - x-request-id: ${requestId}`,
       );
 
+      const code = parseInt(verificationCode);
+
       const { email } = await this.temporalCodeRepository.getCode(
-        verificationCode,
+        code,
+        TEMPORAL_CODE_TYPE.VERIFICATION,
         requestId,
       );
     } catch (error) {

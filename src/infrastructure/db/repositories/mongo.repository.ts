@@ -69,8 +69,14 @@ export class MongoRepository<E> implements DBRepository<E> {
    * @param code - The code value to find.
    * @returns Promise resolved with the document that matches the email provided.
    */
-  async findOneByVerificationCode(code: string): Promise<E> {
-    return this.entityModel.findOne({ verificationCode: { $eq: code } });
+  async findOneByCodeAndType(
+    code: number,
+    codeType: string,
+  ): Promise<E | null> {
+    return this.entityModel.findOne({
+      code: { $eq: code },
+      type: { $eq: codeType },
+    });
   }
 
   /**
@@ -110,7 +116,14 @@ export class MongoRepository<E> implements DBRepository<E> {
     );
   }
 
-  //TODO add TsDoc
+  /**
+   * Find a document related to the email provided with the type specified and update the code or
+   * create a new document if it does not exist
+   *
+   * @param code - 6 digits number used as verificationCode or forgotPasswordCode
+   * @param type - Code type
+   * @param email - User email address
+   */
   async findAndUpdateTemporalCode(code: number, type: string, email: string) {
     await this.entityModel.findOneAndUpdate(
       { email, type },
