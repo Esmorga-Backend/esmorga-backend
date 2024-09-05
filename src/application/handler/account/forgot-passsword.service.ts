@@ -4,13 +4,19 @@ import {
   AccountRepository,
   VerificationCodeRepository,
 } from '../../../infrastructure/db/repositories';
-import { generateVerificationCode } from '../../../domain/services';
+import {
+  generateVerificationCode,
+  GenerateMailService,
+} from '../../../domain/services';
+import { NodemailerService } from '../../../infrastructure/services';
 
 @Injectable()
 export class ForgotPasswordService {
   constructor(
     private readonly logger: PinoLogger,
     private readonly accountRepository: AccountRepository,
+    private readonly generateMailService: GenerateMailService,
+    private readonly nodemailerService: NodemailerService,
     private readonly verificationCodeRepository: VerificationCodeRepository,
   ) {}
   //TODO: METER COMENTARIO DE LA FUNCIÓN
@@ -28,9 +34,20 @@ export class ForgotPasswordService {
       if (isRegistered) {
         const verificationCode = generateVerificationCode();
 
-        this.verificationCodeRepository.saveVerificationCode(
+        await this.verificationCodeRepository.saveVerificationCode(
           email,
           verificationCode,
+          requestId,
+        );
+
+        const { from, subject, html } =
+          this.generateMailService.getVerificationEmail(verificationCode);
+
+        await this.nodemailerService.sendEmail(
+          email,
+          from,
+          subject,
+          html,
           requestId,
         );
       }
