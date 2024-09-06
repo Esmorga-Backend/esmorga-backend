@@ -11,7 +11,7 @@ import {
   getUserMockDb,
 } from '../../../../mocks/db';
 
-export const activateAccountSteps: StepDefinitions = ({ given }) => {
+export const activateAccountSteps: StepDefinitions = ({ given, and }) => {
   given('The PUT activate account API is available', async () => {
     context.path = '/v1/account/activate';
 
@@ -48,5 +48,11 @@ export const activateAccountSteps: StepDefinitions = ({ given }) => {
     });
 
     jest.spyOn(context.tokensRepository, 'save').mockResolvedValue(null);
+  });
+
+  and('verificationCode provided expired', () => {
+    jest
+      .spyOn(context.temporalCodeRepository, 'findOneByCodeAndType')
+      .mockResolvedValue(null);
   });
 };
