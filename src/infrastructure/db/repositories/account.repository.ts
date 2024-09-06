@@ -5,7 +5,7 @@ import { plainToClass } from 'class-transformer';
 import { PinoLogger } from 'nestjs-pino';
 import { AccountRegisterDto } from '../..//http/dtos';
 import { MongoRepository } from './mongo.repository';
-import { Account as AccountSchema } from '../schema';
+import { User as UserSchema } from '../schema';
 import { DataBaseInternalError, DataBaseUnathorizedError } from '../errors';
 import { UserProfileDto } from '../../dtos';
 import { validateObjectDto } from '../services';
@@ -13,12 +13,12 @@ import { REQUIRED_DTO_FIELDS } from '../consts';
 import { ACCOUNT_STATUS } from '../../../domain/const';
 
 @Injectable()
-export class AccountRepository extends MongoRepository<AccountSchema> {
+export class AccountRepository extends MongoRepository<UserSchema> {
   constructor(
-    @InjectModel(AccountSchema.name) private accountModel: Model<AccountSchema>,
+    @InjectModel(UserSchema.name) private userModel: Model<UserSchema>,
     private readonly logger: PinoLogger,
   ) {
-    super(accountModel);
+    super(userModel);
   }
 
   /**
@@ -164,7 +164,7 @@ export class AccountRepository extends MongoRepository<AccountSchema> {
         `[AccountRepository] [saveUser] - x-request-id: ${requestId}, email: ${userData.email}`,
       );
 
-      const user = new this.accountModel(userData);
+      const user = new this.userModel(userData);
 
       await this.save(user);
     } catch (error) {

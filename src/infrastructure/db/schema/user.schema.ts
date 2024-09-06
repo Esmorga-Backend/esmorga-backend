@@ -2,7 +2,7 @@ import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { ACCOUNT_ROLES, ACCOUNT_STATUS } from '../../../domain/const';
 
 @Schema({ timestamps: true })
-export class Account {
+export class User {
   @Prop({ required: true })
   name: string;
 
@@ -34,4 +34,4 @@ export class Account {
   status: string;
 }
 
-export const AccountSchema = SchemaFactory.createForClass(Account);
+export const UserSchema = SchemaFactory.createForClass(User);

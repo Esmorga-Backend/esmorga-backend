@@ -7,8 +7,8 @@ import {
   EventParticipantsRepository,
 } from '../../../infrastructure/db/repositories';
 import {
-  AccountSchema,
-  Account,
+  UserSchema,
+  User,
   TokensSchema,
   Tokens,
   EventParticipantsSchema,
@@ -18,7 +18,7 @@ import {
 @Module({
   imports: [
     JwtModule.register({}),
-    MongooseModule.forFeature([{ name: Account.name, schema: AccountSchema }]),
+    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     MongooseModule.forFeature([{ name: Tokens.name, schema: TokensSchema }]),
     MongooseModule.forFeature([
       { name: EventParticipants.name, schema: EventParticipantsSchema },
