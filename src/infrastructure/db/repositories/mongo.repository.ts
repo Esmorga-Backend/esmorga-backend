@@ -49,7 +49,7 @@ export class MongoRepository<E> implements DBRepository<E> {
    * @param refreshToken - The refresToken to find.
    * @returns Promise resolved with the document that matches the refreshToken provided.
    */
-  async findOneByRefreshToken(refreshToken: string): Promise<E> {
+  async findOneByRefreshToken(refreshToken: string): Promise<E | null> {
     return this.entityModel.findOne({ refreshToken: { $eq: refreshToken } });
   }
 
@@ -59,7 +59,7 @@ export class MongoRepository<E> implements DBRepository<E> {
    * @param email - The email value to find.
    * @returns Promise resolved with the document that matches the email provided.
    */
-  async findOneByEmail(email: string): Promise<E> {
+  async findOneByEmail(email: string): Promise<E | null> {
     return this.entityModel.findOne({ email: { $eq: email } });
   }
 
@@ -169,6 +169,13 @@ export class MongoRepository<E> implements DBRepository<E> {
     );
   }
 
+  async updateStatusByEmail(email: string, newStatus: string): Promise<E> {
+    return this.entityModel.findOneAndUpdate(
+      { email },
+      { status: newStatus },
+      { new: true },
+    );
+  }
   /**
    * Find a document with that eventId and update it removing the userId from the particpant list.
    * @param eventId - Event identificator.

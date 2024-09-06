@@ -39,7 +39,12 @@ import {
   SwaggerRefreshToken,
   SwaggetGetMyEvents,
 } from '../swagger/decorators/account';
-import { AccountLoggedDto, NewPairOfTokensDto, EventListDto } from '../../dtos';
+import {
+  AccountLoggedDto,
+  NewPairOfTokensDto,
+  EventListDto,
+  UserProfileDto,
+} from '../../dtos';
 import { RequestId } from '../req-decorators';
 import { AuthGuard } from '../guards';
 
@@ -201,19 +206,22 @@ export class AccountController {
   }
 
   @Put('/activate')
+  @HttpCode(200)
   async activate(
     @Body() activateAccountDto: ActivateAccountDto,
     @RequestId() requestId: string,
-  ) {
+  ): Promise<UserProfileDto> {
     try {
       this.logger.info(
         `[AccountController] [activateAccount] - x-request-id:${requestId}`,
       );
 
-      await this.activateAccount.activate(
+      const userProfileUpdated = await this.activateAccount.activate(
         activateAccountDto.verificationCode,
         requestId,
       );
+
+      return userProfileUpdated;
     } catch (error) {
       this.logger.error(
         `[AccountController] [activateAccount] - x-request-id:${requestId}, error ${error}`,

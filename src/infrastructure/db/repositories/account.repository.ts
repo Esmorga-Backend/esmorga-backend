@@ -5,19 +5,20 @@ import { plainToClass } from 'class-transformer';
 import { PinoLogger } from 'nestjs-pino';
 import { AccountRegisterDto } from '../..//http/dtos';
 import { MongoRepository } from './mongo.repository';
-import { User as UserSchema } from '../schema';
+import { Account as AccountSchema } from '../schema';
 import { DataBaseInternalError, DataBaseUnathorizedError } from '../errors';
 import { UserProfileDto } from '../../dtos';
 import { validateObjectDto } from '../services';
 import { REQUIRED_DTO_FIELDS } from '../consts';
+import { ACCOUNT_STATUS } from '../../../domain/const';
 
 @Injectable()
-export class AccountRepository extends MongoRepository<UserSchema> {
+export class AccountRepository extends MongoRepository<AccountSchema> {
   constructor(
-    @InjectModel(UserSchema.name) private userModel: Model<UserSchema>,
+    @InjectModel(AccountSchema.name) private accountModel: Model<AccountSchema>,
     private readonly logger: PinoLogger,
   ) {
-    super(userModel);
+    super(accountModel);
   }
 
   /**
@@ -117,6 +118,40 @@ export class AccountRepository extends MongoRepository<UserSchema> {
     }
   }
 
+  async acticateAccountByEmail(
+    email: string,
+    requestId?: string,
+  ): Promise<UserProfileDto> {
+    try {
+      this.logger.info(
+        `[AccountRepository] [acticateAccountByEmail] - x-request-id: ${requestId}, email: ${email}`,
+      );
+
+      const account = await this.updateStatusByEmail(
+        email,
+        ACCOUNT_STATUS.ACTIVE,
+      );
+
+      const userProfile: UserProfileDto = plainToClass(
+        UserProfileDto,
+        account,
+        {
+          excludeExtraneousValues: true,
+        },
+      );
+
+      validateObjectDto(userProfile, REQUIRED_DTO_FIELDS.USER_PROFILE);
+
+      return userProfile;
+    } catch (error) {
+      this.logger.error(
+        `[AccountRepository] [acticateAccountByEmail] - x-request-id: ${requestId}, error: ${error}`,
+      );
+
+      throw new DataBaseInternalError();
+    }
+  }
+
   /**
    * Create a new user document with the data provided.
    *
@@ -129,7 +164,7 @@ export class AccountRepository extends MongoRepository<UserSchema> {
         `[AccountRepository] [saveUser] - x-request-id: ${requestId}, email: ${userData.email}`,
       );
 
-      const user = new this.userModel(userData);
+      const user = new this.accountModel(userData);
 
       await this.save(user);
     } catch (error) {

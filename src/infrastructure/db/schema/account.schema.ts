@@ -2,7 +2,7 @@ import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { ACCOUNT_ROLES, ACCOUNT_STATUS } from '../../../domain/const';
 
 @Schema({ timestamps: true })
-export class User {
+export class Account {
   @Prop({ required: true })
   name: string;
 
@@ -24,7 +24,7 @@ export class User {
 
   @Prop({
     required: true,
-    eanum: [
+    enum: [
       ACCOUNT_STATUS.ACTIVE,
       ACCOUNT_STATUS.UNVERIFIED,
       ACCOUNT_STATUS.BLOCKED,
@@ -34,4 +34,4 @@ export class User {
   status: string;
 }
 
-export const UserSchema = SchemaFactory.createForClass(User);
+export const AccountSchema = SchemaFactory.createForClass(Account);
