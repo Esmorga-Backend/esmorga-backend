@@ -38,6 +38,7 @@ import {
   SwaggerDisjoinEvent,
   SwaggerRefreshToken,
   SwaggetGetMyEvents,
+  SweggerActivateAccount,
 } from '../swagger/decorators/account';
 import { AccountLoggedDto, NewPairOfTokensDto, EventListDto } from '../../dtos';
 import { RequestId } from '../req-decorators';
@@ -201,6 +202,7 @@ export class AccountController {
   }
 
   @Put('/activate')
+  @SweggerActivateAccount()
   @HttpCode(200)
   async activate(
     @Body() activateAccountDto: ActivateAccountDto,
@@ -225,6 +227,7 @@ export class AccountController {
       if (error instanceof HttpException) {
         throw error;
       }
+
       throw new InternalServerErrorException();
     }
   }

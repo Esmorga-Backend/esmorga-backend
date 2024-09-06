@@ -18,6 +18,7 @@ import {
   JOIN_EVENT_HEADERS,
   GET_MY_EVENT_HEADERS,
   DISJOIN_EVENT_HEADERS,
+  ACTIVATE_ACCOUNT_HEADERS,
 } from '../headers';
 import {
   LOGIN_RESPONSES,
@@ -26,6 +27,7 @@ import {
   JOIN_EVENT_RESPONSES,
   GET_MY_EVENTS_RESPONSES,
   DISJOIN_EVENT_RESPONSES,
+  ACTIVATE_ACCOUNT_RESPONSES,
 } from '../responses';
 
 export function SwaggerAccountLogin() {
@@ -103,5 +105,18 @@ export function SwaggetGetMyEvents() {
     ApiOkResponse(GET_MY_EVENTS_RESPONSES.OK),
     ApiUnauthorizedResponse(GET_MY_EVENTS_RESPONSES.UNAUTHORIZED_ERROR),
     ApiInternalServerErrorResponse(GET_MY_EVENTS_RESPONSES.INTERNAL_ERROR),
+  );
+}
+
+export function SweggerActivateAccount() {
+  return applyDecorators(
+    ApiOperation({
+      summary:
+        'Update account status to ACTIVE for user the verificationCode is related',
+    }),
+    ApiHeader(ACTIVATE_ACCOUNT_HEADERS),
+    ApiOkResponse(ACTIVATE_ACCOUNT_RESPONSES.OK),
+    ApiBadRequestResponse(ACTIVATE_ACCOUNT_RESPONSES.BAD_REQUEST_ERROR),
+    ApiInternalServerErrorResponse(ACTIVATE_ACCOUNT_RESPONSES.INTERNAL_ERROR),
   );
 }

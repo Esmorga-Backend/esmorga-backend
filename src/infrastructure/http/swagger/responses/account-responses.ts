@@ -17,6 +17,7 @@ const PATHS = {
   REGISTER: '/v1/account/register',
   REFRESH_TOKEN: '/v1/account/refresh',
   JOIN_EVENT: '/v1/account/events',
+  ACTIVATE_ACCOUNT: '/v1/account/activate',
 };
 
 export const LOGIN_RESPONSES: { [key: string]: ApiResponseOptions } = {
@@ -300,3 +301,36 @@ export const GET_MY_EVENTS_RESPONSES: { [key: string]: ApiResponseOptions } = {
     },
   },
 };
+
+export const ACTIVATE_ACCOUNT_RESPONSES: { [key: string]: ApiResponseOptions } =
+  {
+    OK: {
+      description: 'User status succesfully updated to ACTIVE',
+      type: AccountLoggedDto,
+    },
+    BAD_REQUEST_ERROR: {
+      description: 'Some inputs are missed or wrong',
+      schema: {
+        type: 'object',
+        properties: {
+          ...BAD_REQUEST_ERROR_COMMON_PROPERTIES,
+          type: { type: 'string', example: PATHS.ACTIVATE_ACCOUNT },
+          errors: {
+            type: 'array',
+            example: ['verificationCode should not be empty'],
+          },
+        },
+      },
+    },
+    INTERNAL_ERROR: {
+      status: HttpStatus.INTERNAL_SERVER_ERROR,
+      description: 'Error not handled',
+      schema: {
+        type: 'object',
+        properties: {
+          ...INTERNAL_ERROR_COMMON_PROPERTIES,
+          type: { type: 'string', example: PATHS.ACTIVATE_ACCOUNT },
+        },
+      },
+    },
+  };
