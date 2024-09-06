@@ -118,6 +118,13 @@ export class AccountRepository extends MongoRepository<UserSchema> {
     }
   }
 
+  /**
+   * Update status to ACTIVE and return the document updated.
+   *
+   * @param email - User email address.
+   * @param requestId - Request identifier.
+   * @returns UserProfileDto - User data following business schema.
+   */
   async acticateAccountByEmail(
     email: string,
     requestId?: string,

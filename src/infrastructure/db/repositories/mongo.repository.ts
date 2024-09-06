@@ -169,6 +169,13 @@ export class MongoRepository<E> implements DBRepository<E> {
     );
   }
 
+  /**
+   * Finde a document by email, update the status and return the document updated.
+   *
+   * @param email - User email address.
+   * @param newStatus - Status value to update.
+   * @returns
+   */
   async updateStatusByEmail(email: string, newStatus: string): Promise<E> {
     return this.entityModel.findOneAndUpdate(
       { email },

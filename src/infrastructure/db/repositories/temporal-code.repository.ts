@@ -20,9 +20,9 @@ export class TemporalCodeRepository extends MongoRepository<TemporalCodeSchema> 
    * Find a verificationCode document related to the email and update the code. If there is not document
    * creates a new one.
    *
-   * @param code - 6 random digits value
-   * @param email - User email
-   * @param requestId - Request identifier for API logger
+   * @param code - 6 random digits value.
+   * @param email - User email.
+   * @param requestId - Request identifier for API logger.
    */
   async saveCode(
     code: number,
@@ -45,6 +45,15 @@ export class TemporalCodeRepository extends MongoRepository<TemporalCodeSchema> 
     }
   }
 
+  /**
+   * Find the document which code value and type matchs with params
+   *
+   * @param code - VerificationCode or ForgotPasswordCode value.
+   * @param codeType - Specification for code type.
+   * @param requestId - Request identifier for API logger.
+   * @returns Document data
+   * @throws DataBaseNotFoundError - Document with that code and codeType not found.
+   */
   async getCode(code: number, codeType: string, requestId?: string) {
     try {
       this.logger.info(
