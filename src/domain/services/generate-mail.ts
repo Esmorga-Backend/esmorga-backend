@@ -6,13 +6,13 @@ export class GenerateMailService {
   constructor(private configService: ConfigService) {}
 
   /**
-   * Provide the mail elements to send to verificate an account
+   * Provides the mail elements to send to verify the password change of an account.
    *
-   * @param code - 6 digits number used as verification code
-   * @returns Email data to send (from, subject and mail content in html format)
+   * @param code - 6 digits number used as verification code.
+   * @returns Email data to send (from, subject and mail content in html format).
    */
-  getVerificationEmail(code: number) {
-    const url = `${this.configService.get('APP_LINK') + '?verificationCode=' + code}`;
+  getForgotPasswordEmail(code: string) {
+    const url = `${this.configService.get('APP_LINK') + '?forgotPasswordcode=' + code}`;
 
     const from = 'Esmorga';
 
@@ -22,7 +22,7 @@ export class GenerateMailService {
         <div>
             <p>Hola,</p>
             <p>Hemos recibido una solicitud para restablecer tu contraseña.
-            <p>Para abrir la aplicación y restablecer tu contraseña, haz clic en el siguiente enlace: ${url + code}</p>
+            <p>Para abrir la aplicación y restablecer tu contraseña, haz clic en el siguiente enlace: <a href=${url}>${url}</a></p>
             <p>Si no solicitaste un restablecimiento de contraseña, ignora este correo electrónico.</p>
             <p>Gracias,</p>
             <p>El equipo de Esmorga</p>

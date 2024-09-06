@@ -33,10 +33,11 @@ import {
 import {
   SwaggerAccountLogin,
   SwaggerAccountRegister,
-  SwaggerJoinEvent,
   SwaggerDisjoinEvent,
-  SwaggerRefreshToken,
+  SwaggerForgotPassword,
   SwaggetGetMyEvents,
+  SwaggerJoinEvent,
+  SwaggerRefreshToken,
 } from '../swagger/decorators/account';
 import { AccountLoggedDto, NewPairOfTokensDto, EventListDto } from '../../dtos';
 import { RequestId } from '../req-decorators';
@@ -236,7 +237,7 @@ export class AccountController {
   }
 
   @Post('/password/forgot-init')
-  // @SwaggerRefreshToken()
+  @SwaggerForgotPassword()
   async forgotPassword(
     @Body() forgotPasswordDto: EmailDto,
     @RequestId() requestId: string,
@@ -250,8 +251,6 @@ export class AccountController {
         forgotPasswordDto.email,
         requestId,
       );
-
-      return 'Hola, creo que estoy funcionando bien :)';
     } catch (error) {
       this.logger.error(
         `[AccountController] [forgotPasword] - x-request-id:${requestId}, error ${error}`,

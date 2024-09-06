@@ -2,10 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { PinoLogger } from 'nestjs-pino';
 import {
   AccountRepository,
-  VerificationCodeRepository,
+  TemporalCodeRepository,
 } from '../../../infrastructure/db/repositories';
 import {
-  generateVerificationCode,
+  generateTemporalCode,
   GenerateMailService,
 } from '../../../domain/services';
 import { NodemailerService } from '../../../infrastructure/services';
@@ -17,9 +17,14 @@ export class ForgotPasswordService {
     private readonly accountRepository: AccountRepository,
     private readonly generateMailService: GenerateMailService,
     private readonly nodemailerService: NodemailerService,
-    private readonly verificationCodeRepository: VerificationCodeRepository,
+    private readonly temporalCodeRepository: TemporalCodeRepository,
   ) {}
-  //TODO: METER COMENTARIO DE LA FUNCIÓN
+  /**
+   * Allow to send an email to change the user password.
+   *
+   * @param email - DTO with registration data to create a new user.
+   * @param requestId - Request identifier.
+   */
   async forgotPassword(email: string, requestId?: string) {
     try {
       this.logger.info(
@@ -32,16 +37,16 @@ export class ForgotPasswordService {
       );
 
       if (isRegistered) {
-        const verificationCode = generateVerificationCode();
+        const temporalCode = generateTemporalCode();
 
-        await this.verificationCodeRepository.saveVerificationCode(
+        await this.temporalCodeRepository.saveTemporalCode(
           email,
-          verificationCode,
+          temporalCode,
           requestId,
         );
 
         const { from, subject, html } =
-          this.generateMailService.getVerificationEmail(verificationCode);
+          this.generateMailService.getForgotPasswordEmail(temporalCode);
 
         await this.nodemailerService.sendEmail(
           email,

@@ -1,15 +1,17 @@
 import { CONTENT_TYPE, AUTHORIZATION_BEARER } from './common';
 
-export const LOGIN_HEADERS = {
+export const DISJOIN_EVENT_HEADERS = {
+  CONTENT_TYPE,
+  AUTHORIZATION_BEARER,
+};
+
+export const FORGOT_PASSWORD_HEADER = {
   ...CONTENT_TYPE,
 };
 
-export const REGISTER_HEADER = {
-  ...CONTENT_TYPE,
-};
-
-export const REFRESH_TOKEN_HEADERS = {
-  ...CONTENT_TYPE,
+export const GET_MY_EVENT_HEADERS = {
+  CONTENT_TYPE,
+  AUTHORIZATION_BEARER,
 };
 
 export const JOIN_EVENT_HEADERS = {
@@ -17,12 +19,14 @@ export const JOIN_EVENT_HEADERS = {
   AUTHORIZATION_BEARER,
 };
 
-export const DISJOIN_EVENT_HEADERS = {
-  CONTENT_TYPE,
-  AUTHORIZATION_BEARER,
+export const LOGIN_HEADERS = {
+  ...CONTENT_TYPE,
 };
 
-export const GET_MY_EVENT_HEADERS = {
-  CONTENT_TYPE,
-  AUTHORIZATION_BEARER,
+export const REFRESH_TOKEN_HEADERS = {
+  ...CONTENT_TYPE,
+};
+
+export const REGISTER_HEADER = {
+  ...CONTENT_TYPE,
 };

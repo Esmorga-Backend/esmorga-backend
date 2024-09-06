@@ -101,6 +101,21 @@ export class MongoRepository<E> implements DBRepository<E> {
   }
 
   /**
+   * Find a document with that email and add the temporal verification/forgot passsword code if it has not been added yet.
+   * Also if the document has not been created, create a new one with this data.
+   *
+   * @param temporalCode - The temporary code that is associated with the user.
+   * @param email - User identificator to add.
+   */
+  async findAndUpdateTemporalCode(temporalCode: string, email: string) {
+    await this.entityModel.findOneAndUpdate(
+      { email },
+      { $set: { code: temporalCode } },
+      { upsert: true },
+    );
+  }
+
+  /**
    * Create a new document in the collection.
    *
    * @param data - The data to create the new document.
