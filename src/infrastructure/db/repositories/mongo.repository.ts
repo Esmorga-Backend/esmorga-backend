@@ -96,7 +96,15 @@ export class MongoRepository<E> implements DBRepository<E> {
     await this.entityModel.findOneAndUpdate(
       { eventId },
       { $addToSet: { participants: userId } },
-      { new: true, upsert: true },
+      { upsert: true },
+    );
+  }
+
+  async findAndUpdateVerificationCode(code: number, email: string) {
+    await this.entityModel.findOneAndUpdate(
+      { email },
+      { $set: { verificationCode: code } },
+      { upsert: true },
     );
   }
 

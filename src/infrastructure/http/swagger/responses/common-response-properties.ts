@@ -47,6 +47,18 @@ export const UNAUTHORIZED_INVALID_TOKEN_COMMON_PROPERTIES = {
   },
 };
 
+export const NOT_ACCEPTABLE_ERROR_COMMON_PROPERTIES = {
+  title: {
+    type: 'string',
+    example: 'notAcceptable',
+  },
+  status: { type: 'number', example: HttpStatus.NOT_ACCEPTABLE },
+  detail: {
+    type: 'string',
+    example: 'not acceptable',
+  },
+};
+
 export const INTERNAL_ERROR_COMMON_PROPERTIES = {
   title: {
     type: 'string',

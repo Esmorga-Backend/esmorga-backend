@@ -34,6 +34,18 @@ class EnvVars {
   @IsNumber()
   @IsPositive()
   MAX_PAIR_OF_TOKEN: number;
+
+  @IsNotEmpty()
+  @IsString()
+  EMAIL_USER: string;
+
+  @IsNotEmpty()
+  @IsString()
+  EMAIL_PASS: string;
+
+  @IsNotEmpty()
+  @IsString()
+  APP_LINK: string;
 }
 
 /**

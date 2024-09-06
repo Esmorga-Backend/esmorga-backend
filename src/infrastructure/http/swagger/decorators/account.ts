@@ -5,7 +5,6 @@ import {
   ApiOkResponse,
   ApiOperation,
   ApiUnauthorizedResponse,
-  ApiConflictResponse,
   ApiCreatedResponse,
   ApiNoContentResponse,
   ApiNotAcceptableResponse,
@@ -48,7 +47,6 @@ export function SwaggerAccountRegister() {
     ApiHeader(REGISTER_HEADER),
     ApiCreatedResponse(REGISTER_RESPONSES.CREATED),
     ApiBadRequestResponse(REGISTER_RESPONSES.BAD_REQUEST_ERROR),
-    ApiConflictResponse(REGISTER_RESPONSES.CONFLICT_ERROR),
     ApiInternalServerErrorResponse(LOGIN_RESPONSES.INTERNAL_ERROR),
   );
 }

@@ -9,6 +9,7 @@ import {
   BAD_REQUEST_ERROR_COMMON_PROPERTIES,
   UNAUTHORIZED_INVALID_TOKEN_COMMON_PROPERTIES,
   INTERNAL_ERROR_COMMON_PROPERTIES,
+  NOT_ACCEPTABLE_ERROR_COMMON_PROPERTIES,
 } from './common-response-properties';
 
 const PATHS = {
@@ -74,8 +75,12 @@ export const LOGIN_RESPONSES: { [key: string]: ApiResponseOptions } = {
 
 export const REGISTER_RESPONSES: { [key: string]: ApiResponseOptions } = {
   CREATED: {
-    description: 'User has successfully created',
-    type: AccountLoggedDto,
+    description:
+      'User has successfully created and verification email has been sent',
+    schema: {
+      type: 'object',
+      example: {},
+    },
   },
   BAD_REQUEST_ERROR: {
     description: 'Some inputs are missed or wrong',
@@ -87,28 +92,6 @@ export const REGISTER_RESPONSES: { [key: string]: ApiResponseOptions } = {
         errors: {
           type: 'array',
           example: ['email should not be empty'],
-        },
-      },
-    },
-  },
-  CONFLICT_ERROR: {
-    description: 'User already registered',
-    schema: {
-      type: 'object',
-      properties: {
-        title: {
-          type: 'string',
-          example: 'userAlreadyRegistered',
-        },
-        status: { type: 'number', example: HttpStatus.CONFLICT },
-        type: { type: 'string', example: PATHS.REGISTER },
-        detail: {
-          type: 'string',
-          example: 'inputs are invalid',
-        },
-        errors: {
-          type: 'array',
-          example: ['user already registered'],
         },
       },
     },
@@ -208,20 +191,12 @@ export const JOIN_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
     },
   },
   NOT_ACCEPTABLE_ERROR: {
-    description: 'Invalid credentials',
+    description: 'Can not join celebrated events',
     schema: {
       type: 'object',
       properties: {
-        title: {
-          type: 'string',
-          example: 'unauthorizedRequestError',
-        },
-        status: { type: 'number', example: HttpStatus.NOT_ACCEPTABLE },
+        ...NOT_ACCEPTABLE_ERROR_COMMON_PROPERTIES,
         type: { type: 'string', example: PATHS.JOIN_EVENT },
-        detail: {
-          type: 'string',
-          example: 'not acceptable',
-        },
         errors: {
           type: 'array',
           example: ['cannot join past events'],
@@ -268,6 +243,20 @@ export const DISJOIN_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
       properties: {
         ...UNAUTHORIZED_INVALID_TOKEN_COMMON_PROPERTIES,
         type: { type: 'string', example: PATHS.JOIN_EVENT },
+      },
+    },
+  },
+  NOT_ACCEPTABLE_ERROR: {
+    description: 'Can not disjoin celebrated events',
+    schema: {
+      type: 'object',
+      properties: {
+        ...NOT_ACCEPTABLE_ERROR_COMMON_PROPERTIES,
+        type: { type: 'string', example: PATHS.JOIN_EVENT },
+        errors: {
+          type: 'array',
+          example: ['cannot disjoin past events'],
+        },
       },
     },
   },

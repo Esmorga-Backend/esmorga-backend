@@ -18,7 +18,6 @@ async function main() {
   app.useGlobalPipes(
     new ValidationPipe({
       stopAtFirstError: true,
-      forbidNonWhitelisted: true,
       transform: true,
       whitelist: true,
     }),
@@ -37,7 +36,11 @@ async function main() {
 
   const document = SwaggerModule.createDocument(app, swaggerConfig);
 
-  SwaggerModule.setup('swagger', app, document);
+  SwaggerModule.setup('swagger', app, document, {
+    swaggerOptions: {
+      operationsSorter: 'method',
+    },
+  });
 
   const configService = app.get(ConfigService);
 

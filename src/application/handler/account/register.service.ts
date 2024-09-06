@@ -1,87 +1,69 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { plainToClass } from 'class-transformer';
 import { PinoLogger } from 'nestjs-pino';
 import { AccountRegisterDto } from '../../../infrastructure/http/dtos';
-import { GenerateTokenPair, encodeValue } from '../../../domain/services';
+import {
+  encodeValue,
+  generateCode,
+  GenerateMailService,
+} from '../../../domain/services';
 import {
   AccountRepository,
-  TokensRepository,
+  VerificationCodeRepository,
 } from '../../../infrastructure/db/repositories';
-import { DataBaseConflictError } from '../../../infrastructure/db/errors';
-import { EmailConflictApiError } from '../../../domain/errors';
-import { AccountLoggedDto } from '../../../infrastructure/dtos';
+import { NodemailerService } from '../../../infrastructure/services';
 
 @Injectable()
 export class RegisterService {
   constructor(
     private readonly logger: PinoLogger,
-    private readonly generateTokenPair: GenerateTokenPair,
+    private readonly generateMailService: GenerateMailService,
+    private readonly nodemailerService: NodemailerService,
     private readonly accountRepository: AccountRepository,
-    private readonly tokensRepository: TokensRepository,
-    private configService: ConfigService,
+    private readonly veririficationCodeRepository: VerificationCodeRepository,
   ) {}
 
   /**
    * Create a new user and provide a new pair of tokens and profile information.
    * @param accountRegisterDto - DTO with registration data to create a new user.
    * @param requestId - Request identifier
-   * @returns AccountLoggedDto - Object with new pair of tokens and profile data
-   * @throws EmailConflictApiError - Email provided exists in the database.
    */
-  async register(
-    accountRegisterDto: AccountRegisterDto,
-    requestId?: string,
-  ): Promise<AccountLoggedDto> {
+  async register(accountRegisterDto: AccountRegisterDto, requestId?: string) {
     try {
+      const { email, password } = accountRegisterDto;
+
       this.logger.info(
-        `[RegisterService] [register] - x-request-id:${requestId}, email ${accountRegisterDto.email}`,
+        `[RegisterService] [register] - x-request-id: ${requestId}, email: ${email}`,
       );
 
-      const hashPassword = await encodeValue(accountRegisterDto.password);
-
-      accountRegisterDto.password = hashPassword;
-
-      await this.accountRepository.saveUser(accountRegisterDto, requestId);
-
-      const { userProfile } = await this.accountRepository.getUserByEmail(
-        accountRegisterDto.email,
+      const exists = await this.accountRepository.accountExist(
+        email,
         requestId,
       );
 
-      const { uuid } = userProfile;
+      if (!exists) {
+        const hashPassword = await encodeValue(password);
 
-      const { accessToken, refreshToken } =
-        await this.generateTokenPair.generateTokens(uuid);
+        accountRegisterDto.password = hashPassword;
 
-      await this.tokensRepository.saveTokens(
-        uuid,
-        accessToken,
-        refreshToken,
-        requestId,
-      );
+        await this.accountRepository.saveUser(accountRegisterDto, requestId);
 
-      const ttl = this.configService.get('ACCESS_TOKEN_TTL');
+        const verificationCode = generateCode();
 
-      const accountLoggedDto: AccountLoggedDto = plainToClass(
-        AccountLoggedDto,
-        {
-          profile: userProfile,
-          accessToken,
-          refreshToken,
-          ttl,
-        },
-        { excludeExtraneousValues: true },
-      );
+        await this.veririficationCodeRepository.saveCode(
+          verificationCode,
+          email,
+          requestId,
+        );
 
-      return accountLoggedDto;
+        const { from, subject, html } =
+          this.generateMailService.getVerificationEmail(verificationCode);
+
+        this.nodemailerService.sendEmail(email, from, subject, html, requestId);
+      }
     } catch (error) {
       this.logger.error(
         `[RegisterService] [register] - x-request-id:${requestId}, error ${error}`,
       );
-
-      if (error instanceof DataBaseConflictError)
-        throw new EmailConflictApiError();
 
       throw error;
     }
