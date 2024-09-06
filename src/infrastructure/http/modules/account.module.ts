@@ -45,7 +45,6 @@ import {
     NodemailerService,
     GenerateTokenPair,
     GenerateMailService,
-    VerificationCodeRepository,
     NodemailerService,
     AuthGuard,
     TemporalCodeRepository,

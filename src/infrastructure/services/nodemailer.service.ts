@@ -5,23 +5,10 @@ import * as nodemailer from 'nodemailer';
 
 @Injectable()
 export class NodemailerService {
-  private transporter: nodemailer.Transporter;
-
   constructor(
     private readonly logger: PinoLogger,
     private configService: ConfigService,
-  ) {
-    this.transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: this.configService.get('EMAIL_USER'),
-        pass: this.configService.get('EMAIL_PASS'),
-      },
-      pool: true,
-      maxConnections: 5,
-      maxMessages: 50,
-    });
-  }
+  ) {}
 
   /**
    * Sends an email using the configured email service.
@@ -44,6 +31,14 @@ export class NodemailerService {
         `[NodemailerService] [sendEmail] - x-request-id: ${requestId}, email: ${email}, subject: ${subject}`,
       );
 
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: this.configService.get('EMAIL_USER'),
+          pass: this.configService.get('EMAIL_PASS'),
+        },
+      });
+
       const mailOptions = {
         from,
         to: email,
@@ -51,7 +46,7 @@ export class NodemailerService {
         html,
       };
 
-      await this.transporter.sendMail(mailOptions);
+      await transporter.sendMail(mailOptions);
     } catch (error) {
       this.logger.error(`[NodemailerService] [sendEmail] - error ${error}`);
 

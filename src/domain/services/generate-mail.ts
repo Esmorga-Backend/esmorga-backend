@@ -11,7 +11,7 @@ export class GenerateMailService {
    * @param code - 6 digits number used as verification code
    * @returns Email data to send (from, subject and mail content in html format)
    */
-  getVerificationEmail(code: number) {
+  getVerificationEmail(code: string) {
     const url = `${this.configService.get('APP_LINK') + '?verificationCode=' + code}`;
 
     const from = 'Esmorga';

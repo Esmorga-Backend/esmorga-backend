@@ -100,14 +100,6 @@ export class MongoRepository<E> implements DBRepository<E> {
     );
   }
 
-  async findAndUpdateVerificationCode(code: number, email: string) {
-    await this.entityModel.findOneAndUpdate(
-      { email },
-      { $set: { verificationCode: code } },
-      { upsert: true },
-    );
-  }
-
   /**
    * Find a document with that email and add the temporal verification/forgot passsword code if it has not been added yet.
    * Also if the document has not been created, create a new one with this data.

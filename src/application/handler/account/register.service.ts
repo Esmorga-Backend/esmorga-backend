@@ -3,12 +3,12 @@ import { PinoLogger } from 'nestjs-pino';
 import { AccountRegisterDto } from '../../../infrastructure/http/dtos';
 import {
   encodeValue,
-  generateCode,
+  generateTemporalCode,
   GenerateMailService,
 } from '../../../domain/services';
 import {
   AccountRepository,
-  VerificationCodeRepository,
+  TemporalCodeRepository,
 } from '../../../infrastructure/db/repositories';
 import { NodemailerService } from '../../../infrastructure/services';
 
@@ -19,7 +19,7 @@ export class RegisterService {
     private readonly generateMailService: GenerateMailService,
     private readonly nodemailerService: NodemailerService,
     private readonly accountRepository: AccountRepository,
-    private readonly veririficationCodeRepository: VerificationCodeRepository,
+    private readonly veririficationCodeRepository: TemporalCodeRepository,
   ) {}
 
   /**
@@ -47,9 +47,9 @@ export class RegisterService {
 
         await this.accountRepository.saveUser(accountRegisterDto, requestId);
 
-        const verificationCode = generateCode();
+        const verificationCode = generateTemporalCode();
 
-        await this.veririficationCodeRepository.saveCode(
+        await this.veririficationCodeRepository.saveTemporalCode(
           verificationCode,
           email,
           requestId,

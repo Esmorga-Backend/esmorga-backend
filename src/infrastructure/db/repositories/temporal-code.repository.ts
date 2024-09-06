@@ -10,10 +10,10 @@ import { TemporalCode as TemporalCodeSchema } from '../schema';
 export class TemporalCodeRepository extends MongoRepository<TemporalCodeSchema> {
   constructor(
     @InjectModel(TemporalCodeSchema.name)
-    private verificationCodeModel: Model<TemporalCodeSchema>,
+    private temporalCodeModel: Model<TemporalCodeSchema>,
     private readonly logger: PinoLogger,
   ) {
-    super(verificationCodeModel);
+    super(temporalCodeModel);
   }
 
   /**
