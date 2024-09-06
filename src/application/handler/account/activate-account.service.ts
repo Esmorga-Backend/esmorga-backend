@@ -1,18 +1,25 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { PinoLogger } from 'nestjs-pino';
+import { plainToClass } from 'class-transformer';
 import {
+  TokensRepository,
   AccountRepository,
   TemporalCodeRepository,
 } from '../../../infrastructure/db/repositories';
 import { TEMPORAL_CODE_TYPE } from '../../../domain/const';
 import { DataBaseNotFoundError } from '../../../infrastructure/db/errors';
 import { InvalidVerificationCodeApiError } from '../../../domain/errors';
-import { UserProfileDto } from '../../../infrastructure/dtos';
+import { AccountLoggedDto } from '../../../infrastructure/dtos';
+import { GenerateTokenPair } from '../../../domain/services';
 
 @Injectable()
 export class ActivateAccount {
   constructor(
     private readonly logger: PinoLogger,
+    private configService: ConfigService,
+    private readonly generateTokenPair: GenerateTokenPair,
+    private readonly tokensRepository: TokensRepository,
     private readonly accountRepository: AccountRepository,
     private readonly temporalCodeRepository: TemporalCodeRepository,
   ) {}
@@ -20,7 +27,7 @@ export class ActivateAccount {
   async activate(
     verificationCode: string,
     requestId?: string,
-  ): Promise<UserProfileDto> {
+  ): Promise<AccountLoggedDto> {
     try {
       this.logger.info(
         `[ActivateAccount] [activate] - x-request-id: ${requestId}`,
@@ -37,7 +44,32 @@ export class ActivateAccount {
       const userProfileUpdated =
         await this.accountRepository.acticateAccountByEmail(email, requestId);
 
-      return userProfileUpdated;
+      const { uuid } = userProfileUpdated;
+
+      const { accessToken, refreshToken } =
+        await this.generateTokenPair.generateTokens(uuid);
+
+      await this.tokensRepository.saveTokens(
+        uuid,
+        accessToken,
+        refreshToken,
+        requestId,
+      );
+
+      const ttl = this.configService.get('ACCESS_TOKEN_TTL');
+
+      const accountLoggedDto: AccountLoggedDto = plainToClass(
+        AccountLoggedDto,
+        {
+          profile: userProfileUpdated,
+          accessToken,
+          refreshToken,
+          ttl,
+        },
+        { excludeExtraneousValues: true },
+      );
+
+      return accountLoggedDto;
     } catch (error) {
       this.logger.error(
         `[ActivateAccount] [activate] - x-request-id: ${requestId}, error ${error}`,
