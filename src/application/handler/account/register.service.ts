@@ -60,13 +60,7 @@ export class RegisterService {
         const { from, subject, html } =
           this.generateMailService.getVerificationEmail(verificationCode);
 
-        await this.nodemailerService.sendEmail(
-          email,
-          from,
-          subject,
-          html,
-          requestId,
-        );
+        this.nodemailerService.sendEmail(email, from, subject, html, requestId);
       }
     } catch (error) {
       this.logger.error(
