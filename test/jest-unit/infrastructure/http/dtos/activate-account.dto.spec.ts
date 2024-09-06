@@ -18,7 +18,7 @@ describe('[unit-test] [ActivateAccountDto]', () => {
   });
 
   describe('[ActivateAccountDto] [verificationCode]', () => {
-    it('Should not accept empty email', async () => {
+    it('Should not accept empty verificationCode', async () => {
       const activateAccountData = { ...ACTIVATE_ACCOUNT_MOCK };
 
       delete activateAccountData.verificationCode;
@@ -39,7 +39,7 @@ describe('[unit-test] [ActivateAccountDto]', () => {
       });
     });
 
-    it('Should only accept string values for email field', async () => {
+    it('Should only accept string values for verificationCode field', async () => {
       const activateAccountData = {
         verificationCode: 123456,
       };
