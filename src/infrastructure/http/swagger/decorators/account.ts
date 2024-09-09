@@ -95,7 +95,7 @@ export function SwaggerDisjoinEvent() {
   );
 }
 
-export function SwaggetGetMyEvents() {
+export function SwaggerGetMyEvents() {
   return applyDecorators(
     ApiOperation({
       summary:
@@ -108,7 +108,7 @@ export function SwaggetGetMyEvents() {
   );
 }
 
-export function SweggerActivateAccount() {
+export function SwaggerActivateAccount() {
   return applyDecorators(
     ApiOperation({
       summary:

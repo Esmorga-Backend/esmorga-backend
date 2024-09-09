@@ -37,8 +37,8 @@ import {
   SwaggerJoinEvent,
   SwaggerDisjoinEvent,
   SwaggerRefreshToken,
-  SwaggetGetMyEvents,
-  SweggerActivateAccount,
+  SwaggerGetMyEvents,
+  SwaggerActivateAccount,
 } from '../swagger/decorators/account';
 import { AccountLoggedDto, NewPairOfTokensDto, EventListDto } from '../../dtos';
 import { RequestId } from '../req-decorators';
@@ -61,7 +61,7 @@ export class AccountController {
 
   @Get('/events')
   @UseGuards(AuthGuard)
-  @SwaggetGetMyEvents()
+  @SwaggerGetMyEvents()
   async getMyEvents(
     @Headers('Authorization') accessToken: string,
     @RequestId() requestId: string,
@@ -202,7 +202,7 @@ export class AccountController {
   }
 
   @Put('/activate')
-  @SweggerActivateAccount()
+  @SwaggerActivateAccount()
   @HttpCode(200)
   async activate(
     @Body() activateAccountDto: ActivateAccountDto,
