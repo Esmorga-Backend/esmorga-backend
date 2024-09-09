@@ -7,7 +7,7 @@ import {
 import { GenerateTokenPair } from '../../../../../src/domain/services';
 import { context, moduleFixture } from '../../../steps-config';
 import {
-  VERIFICATION_CODE_DATA_MOCK,
+  VERIFICATION_CODE_DATA_MOCK_DB,
   getUserMockDb,
 } from '../../../../mocks/db';
 
@@ -36,7 +36,7 @@ export const activateAccountSteps: StepDefinitions = ({ given, and }) => {
 
     jest
       .spyOn(context.temporalCodeRepository, 'findOneByCodeAndType')
-      .mockResolvedValue(VERIFICATION_CODE_DATA_MOCK);
+      .mockResolvedValue(VERIFICATION_CODE_DATA_MOCK_DB);
 
     jest
       .spyOn(context.accountRepository, 'updateStatusByEmail')
