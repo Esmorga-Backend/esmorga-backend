@@ -42,7 +42,7 @@ export class ActivateAccount {
       );
 
       const userProfileUpdated =
-        await this.accountRepository.acticateAccountByEmail(email, requestId);
+        await this.accountRepository.activateAccountByEmail(email, requestId);
 
       const { uuid } = userProfileUpdated;
 
