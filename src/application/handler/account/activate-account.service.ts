@@ -24,6 +24,14 @@ export class ActivateAccountService {
     private readonly temporalCodeRepository: TemporalCodeRepository,
   ) {}
 
+  /**
+   * Update account status to ACTIVE for the account the verificationCode is related.
+   *
+   * @param verificationCode - Temporal code related to the user
+   * @param requestId - Request identifier for API logger.
+   * @returns AccountLoggedDto - Account profile data updated.
+   * @throws InvalidVerificationCodeApiError - Error for invalid/expired code.
+   */
   async activate(
     verificationCode: string,
     requestId?: string,

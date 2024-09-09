@@ -18,6 +18,13 @@ export class UpdatePasswordService {
     private readonly temporalCodeRepository: TemporalCodeRepository,
   ) {}
 
+  /**
+   * Update account password related to code provided.
+   *
+   * @param updatePasswordDto - DTO that contains the new password and code to exchange.
+   * @param requestId - Request identifier for API logger.
+   * @throws InvalidForgotPasswordCodeApiError - Error for invalid/expired/used code.
+   */
   async updatePassword(
     updatePasswordDto: UpdatePasswordDto,
     requestId?: string,
@@ -31,7 +38,7 @@ export class UpdatePasswordService {
 
       const code = parseInt(forgotPasswordCode);
 
-      const { email } = await this.temporalCodeRepository.getCode(
+      const { id, email } = await this.temporalCodeRepository.getCode(
         code,
         TEMPORAL_CODE_TYPE.FORGOT_PASSWORD,
         requestId,
@@ -45,7 +52,7 @@ export class UpdatePasswordService {
         requestId,
       );
 
-      // TODO delete forgotPasswordCode used
+      await this.temporalCodeRepository.removeCodeById(id, requestId);
     } catch (error) {
       this.logger.error(
         `[UpdatePasswordService] [updatePassword] - x-request-id: ${requestId}, error: ${error}`,
