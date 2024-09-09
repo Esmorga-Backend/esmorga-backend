@@ -3,4 +3,4 @@ export * from './event.repository';
 export * from './account.repository';
 export * from './tokens.repository';
 export * from './event-participants.repository';
-export * from './verification-code.repository';
+export * from './temporal-code.repository';

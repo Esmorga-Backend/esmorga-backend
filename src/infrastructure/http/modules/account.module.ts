@@ -8,6 +8,7 @@ import {
   JoinEventService,
   GetMyEventsService,
   DisjoinEventService,
+  ActivateAccount,
 } from '../../../application/handler/account';
 import {
   GenerateTokenPair,
@@ -16,11 +17,11 @@ import {
 import { AuthGuard } from '../guards';
 import { EventSharedModule } from './event-shared.module';
 import { AccountSharedModule } from './account-shared.module';
-import { VerificationCodeRepository } from '../../db/repositories';
+import { TemporalCodeRepository } from '../../db/repositories';
 import { NodemailerService } from '../../services';
 import {
-  VerificationCode,
-  VerificationCodeSchema,
+  TemporalCode,
+  TemporalCodeSchema,
 } from '../../../infrastructure/db/schema';
 
 @Module({
@@ -28,7 +29,7 @@ import {
     AccountSharedModule,
     EventSharedModule,
     MongooseModule.forFeature([
-      { name: VerificationCode.name, schema: VerificationCodeSchema },
+      { name: TemporalCode.name, schema: TemporalCodeSchema },
     ]),
   ],
   controllers: [AccountController],
@@ -39,9 +40,10 @@ import {
     JoinEventService,
     GetMyEventsService,
     DisjoinEventService,
+    ActivateAccount,
     GenerateTokenPair,
     GenerateMailService,
-    VerificationCodeRepository,
+    TemporalCodeRepository,
     NodemailerService,
     AuthGuard,
   ],

@@ -49,7 +49,7 @@ export class MongoRepository<E> implements DBRepository<E> {
    * @param refreshToken - The refresToken to find.
    * @returns Promise resolved with the document that matches the refreshToken provided.
    */
-  async findOneByRefreshToken(refreshToken: string): Promise<E> {
+  async findOneByRefreshToken(refreshToken: string): Promise<E | null> {
     return this.entityModel.findOne({ refreshToken: { $eq: refreshToken } });
   }
 
@@ -59,8 +59,24 @@ export class MongoRepository<E> implements DBRepository<E> {
    * @param email - The email value to find.
    * @returns Promise resolved with the document that matches the email provided.
    */
-  async findOneByEmail(email: string): Promise<E> {
+  async findOneByEmail(email: string): Promise<E | null> {
     return this.entityModel.findOne({ email: { $eq: email } });
+  }
+
+  /**
+   * Find a document by verificationCode field.
+   *
+   * @param code - The code value to find.
+   * @returns Promise resolved with the document that matches the email provided.
+   */
+  async findOneByCodeAndType(
+    code: number,
+    codeType: string,
+  ): Promise<E | null> {
+    return this.entityModel.findOne({
+      code: { $eq: code },
+      type: { $eq: codeType },
+    });
   }
 
   /**
@@ -100,10 +116,18 @@ export class MongoRepository<E> implements DBRepository<E> {
     );
   }
 
-  async findAndUpdateVerificationCode(code: number, email: string) {
+  /**
+   * Find a document related to the email provided with the type specified and update the code or
+   * create a new document if it does not exist
+   *
+   * @param code - 6 digits number used as verificationCode or forgotPasswordCode
+   * @param type - Code type
+   * @param email - User email address
+   */
+  async findAndUpdateTemporalCode(code: number, type: string, email: string) {
     await this.entityModel.findOneAndUpdate(
-      { email },
-      { $set: { verificationCode: code } },
+      { email, type },
+      { $set: { code: code } },
       { upsert: true },
     );
   }
@@ -145,6 +169,20 @@ export class MongoRepository<E> implements DBRepository<E> {
     );
   }
 
+  /**
+   * Finde a document by email, update the status and return the document updated.
+   *
+   * @param email - User email address.
+   * @param newStatus - Status value to update.
+   * @returns Account document updated related to that email
+   */
+  async updateStatusByEmail(email: string, newStatus: string): Promise<E> {
+    return this.entityModel.findOneAndUpdate(
+      { email },
+      { status: newStatus },
+      { new: true },
+    );
+  }
   /**
    * Find a document with that eventId and update it removing the userId from the particpant list.
    * @param eventId - Event identificator.

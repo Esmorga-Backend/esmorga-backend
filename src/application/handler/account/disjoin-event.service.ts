@@ -34,7 +34,7 @@ export class DisjoinEventService {
    * @throws InvalidTokenApiError - No user found for the current session.
    * @throws InvalidEventIdApiError - EventId is not valid follwing DB schema ot not found.
    */
-  async disJoinEvent(accessToken: string, eventId: string, requestId: string) {
+  async disJoinEvent(accessToken: string, eventId: string, requestId?: string) {
     try {
       this.logger.info(
         `[DisjoinEventService] [disJoinEvent] - x-request-id: ${requestId}, eventId ${eventId}`,

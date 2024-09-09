@@ -3,7 +3,7 @@ import { context, moduleFixture } from '../../../steps-config';
 import { GenerateMailService } from '../../../../../src/domain/services';
 import {
   AccountRepository,
-  VerificationCodeRepository,
+  TemporalCodeRepository,
 } from '../../../../../src/infrastructure/db/repositories';
 import { ACCOUNT_REGISTER } from '../../../../mocks/dtos';
 import { getUserMockDb } from '../../../../mocks/db';
@@ -20,8 +20,9 @@ export const registerSteps: StepDefinitions = ({ given, and }) => {
     context.accountRepository =
       moduleFixture.get<AccountRepository>(AccountRepository);
 
-    context.verificationCodeRepository =
-      moduleFixture.get<VerificationCodeRepository>(VerificationCodeRepository);
+    context.temporalCodeRepository = moduleFixture.get<TemporalCodeRepository>(
+      TemporalCodeRepository,
+    );
 
     context.mock = { ...ACCOUNT_REGISTER };
     context.path = '/v1/account/register';
@@ -33,10 +34,7 @@ export const registerSteps: StepDefinitions = ({ given, and }) => {
     jest.spyOn(context.accountRepository, 'save').mockResolvedValue(null);
 
     jest
-      .spyOn(
-        context.verificationCodeRepository,
-        'findAndUpdateVerificationCode',
-      )
+      .spyOn(context.temporalCodeRepository, 'findAndUpdateTemporalCode')
       .mockResolvedValue(null);
 
     jest.spyOn(context.nodemailerService, 'sendEmail').mockResolvedValue(null);
