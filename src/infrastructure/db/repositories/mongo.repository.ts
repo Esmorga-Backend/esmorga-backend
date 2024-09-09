@@ -146,6 +146,19 @@ export class MongoRepository<E> implements DBRepository<E> {
   }
 
   /**
+   * Find a document by email and update password property
+   *
+   * @param email - Account email address
+   * @param password - New password already hashed
+   */
+  async updatePasswordByEmail(email: string, password: string) {
+    return this.entityModel.findOneAndUpdate(
+      { email: { $eq: email } },
+      { password: password },
+    );
+  }
+
+  /**
    * Find a document with that eventId and update it removing the userId from the particpant list.
    * @param eventId - Event identificator.
    * @param userId - User identificator to add as participant.

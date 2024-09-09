@@ -117,6 +117,26 @@ export class AccountRepository extends MongoRepository<UserSchema> {
     }
   }
 
+  async updateAccountPassword(
+    email: string,
+    password: string,
+    requestId?: string,
+  ) {
+    try {
+      this.logger.info(
+        `[AccountRepository] [updateAccountPassword] - x-request-id: ${requestId}, email: ${email}`,
+      );
+
+      await this.updatePasswordByEmail(email, password);
+    } catch (error) {
+      this.logger.error(
+        `[AccountRepository] [updateAccountPassword] - x-request-id: ${requestId}, error: ${error}`,
+      );
+
+      throw new DataBaseInternalError();
+    }
+  }
+
   /**
    * Create a new user document with the data provided.
    *

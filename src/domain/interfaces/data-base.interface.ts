@@ -11,6 +11,7 @@ export interface DBRepository<E> {
   findAndUpdateVerificationCode(code: number, email: string);
   save(data);
   updateById(id: string, data: object): Promise<E>;
+  updatePasswordByEmail(email: string, password: string);
   removePartipantFromList(eventId: string, userId: string);
   removeById(id: string);
   removeByEventId(eventId: string);

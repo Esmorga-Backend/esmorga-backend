@@ -32,6 +32,12 @@ export class UpdatePasswordService {
 
       const hashPassword = await encodeValue(password);
 
+      await this.accountRepository.updateAccountPassword(
+        email,
+        hashPassword,
+        requestId,
+      );
+
       // TODO delete forgotPasswordCode used
     } catch (error) {
       this.logger.error(
