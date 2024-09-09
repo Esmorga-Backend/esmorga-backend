@@ -8,6 +8,7 @@ import {
   JoinEventService,
   GetMyEventsService,
   DisjoinEventService,
+  UpdatePasswordService,
 } from '../../../application/handler/account';
 import {
   GenerateTokenPair,
@@ -39,6 +40,7 @@ import {
     JoinEventService,
     GetMyEventsService,
     DisjoinEventService,
+    UpdatePasswordService,
     GenerateTokenPair,
     GenerateMailService,
     VerificationCodeRepository,

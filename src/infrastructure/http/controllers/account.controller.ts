@@ -21,6 +21,7 @@ import {
   JoinEventService,
   GetMyEventsService,
   DisjoinEventService,
+  UpdatePasswordService,
 } from '../../../application/handler/account';
 import { HttpExceptionFilter } from '../errors';
 import {
@@ -54,6 +55,7 @@ export class AccountController {
     private readonly joinEventService: JoinEventService,
     private readonly getMyEventsService: GetMyEventsService,
     private readonly disjoinEventService: DisjoinEventService,
+    private readonly updatePasswordService: UpdatePasswordService,
   ) {}
 
   @Get('/events')
@@ -82,6 +84,7 @@ export class AccountController {
       if (error instanceof HttpException) {
         throw error;
       }
+
       throw new InternalServerErrorException();
     }
   }
@@ -112,6 +115,7 @@ export class AccountController {
       if (error instanceof HttpException) {
         throw error;
       }
+
       throw new InternalServerErrorException();
     }
   }
@@ -136,6 +140,7 @@ export class AccountController {
       if (error instanceof HttpException) {
         throw error;
       }
+
       throw new InternalServerErrorException();
     }
   }
@@ -163,6 +168,7 @@ export class AccountController {
       if (error instanceof HttpException) {
         throw error;
       }
+
       throw new InternalServerErrorException();
     }
   }
@@ -194,18 +200,25 @@ export class AccountController {
       if (error instanceof HttpException) {
         throw error;
       }
+
       throw new InternalServerErrorException();
     }
   }
 
   @Put('/password/forgot-update')
-  async updatePassword(
+  @HttpCode(204)
+  async passwordFotgotUpdate(
     @Body() updatePasswordDto: UpdatePasswordDto,
     @RequestId() requestId: string,
   ) {
     try {
       this.logger.info(
         `[AccountController] [updatePassword] - x-request-id:${requestId}`,
+      );
+
+      await this.updatePasswordService.updatePassword(
+        updatePasswordDto,
+        requestId,
       );
     } catch (error) {
       this.logger.error(
@@ -215,6 +228,7 @@ export class AccountController {
       if (error instanceof HttpException) {
         throw error;
       }
+
       throw new InternalServerErrorException();
     }
   }
@@ -246,6 +260,7 @@ export class AccountController {
       if (error instanceof HttpException) {
         throw error;
       }
+
       throw new InternalServerErrorException();
     }
   }
