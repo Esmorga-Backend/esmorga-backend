@@ -2,17 +2,20 @@ import { Injectable } from '@nestjs/common';
 import { PinoLogger } from 'nestjs-pino';
 import {
   AccountRepository,
-  VerificationCodeRepository,
+  TemporalCodeRepository,
 } from '../../../infrastructure/db/repositories';
 import { UpdatePasswordDto } from '../../../infrastructure/http/dtos';
 import { encodeValue } from '../../../domain/services';
+import { TEMPORAL_CODE_TYPE } from '../../../domain/const';
+import { DataBaseNotFoundError } from '../../../infrastructure/db/errors';
+import { InvalidForgotPasswordCodeApiError } from '../../../domain/errors';
 
 @Injectable()
 export class UpdatePasswordService {
   constructor(
     private readonly logger: PinoLogger,
     private readonly accountRepository: AccountRepository,
-    private readonly veririficationCodeRepository: VerificationCodeRepository,
+    private readonly temporalCodeRepository: TemporalCodeRepository,
   ) {}
 
   async updatePassword(
@@ -26,9 +29,13 @@ export class UpdatePasswordService {
 
       const { password, forgotPasswordCode } = updatePasswordDto;
 
-      // TODO get email from forgotPasswordCode once activate account endpoint is merged in QA with the required logic
+      const code = parseInt(forgotPasswordCode);
 
-      const email = 'ozounalocal37@yopmail.com';
+      const { email } = await this.temporalCodeRepository.getCode(
+        code,
+        TEMPORAL_CODE_TYPE.FORGOT_PASSWORD,
+        requestId,
+      );
 
       const hashPassword = await encodeValue(password);
 
@@ -43,6 +50,10 @@ export class UpdatePasswordService {
       this.logger.error(
         `[UpdatePasswordService] [updatePassword] - x-request-id: ${requestId}, error: ${error}`,
       );
+
+      if (error instanceof DataBaseNotFoundError) {
+        throw new InvalidForgotPasswordCodeApiError();
+      }
 
       throw error;
     }
