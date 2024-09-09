@@ -174,7 +174,7 @@ export class MongoRepository<E> implements DBRepository<E> {
    *
    * @param email - User email address.
    * @param newStatus - Status value to update.
-   * @returns
+   * @returns Account document updated related to that email
    */
   async updateStatusByEmail(email: string, newStatus: string): Promise<E> {
     return this.entityModel.findOneAndUpdate(
