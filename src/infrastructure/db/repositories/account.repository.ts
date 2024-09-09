@@ -125,13 +125,13 @@ export class AccountRepository extends MongoRepository<UserSchema> {
    * @param requestId - Request identifier.
    * @returns UserProfileDto - User data following business schema.
    */
-  async acticateAccountByEmail(
+  async activateAccountByEmail(
     email: string,
     requestId?: string,
   ): Promise<UserProfileDto> {
     try {
       this.logger.info(
-        `[AccountRepository] [acticateAccountByEmail] - x-request-id: ${requestId}, email: ${email}`,
+        `[AccountRepository] [activateAccountByEmail] - x-request-id: ${requestId}, email: ${email}`,
       );
 
       const account = await this.updateStatusByEmail(
@@ -152,7 +152,7 @@ export class AccountRepository extends MongoRepository<UserSchema> {
       return userProfile;
     } catch (error) {
       this.logger.error(
-        `[AccountRepository] [acticateAccountByEmail] - x-request-id: ${requestId}, error: ${error}`,
+        `[AccountRepository] [activateAccountByEmail] - x-request-id: ${requestId}, error: ${error}`,
       );
 
       throw new DataBaseInternalError();
