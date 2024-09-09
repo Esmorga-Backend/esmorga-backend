@@ -30,3 +30,7 @@ export const GET_MY_EVENT_HEADERS = {
 export const ACTIVATE_ACCOUNT_HEADERS = {
   ...CONTENT_TYPE,
 };
+
+export const FORGOT_PASSWORD_UPDATE_HEADERS = {
+  ...CONTENT_TYPE,
+};

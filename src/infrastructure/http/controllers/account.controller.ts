@@ -41,6 +41,7 @@ import {
   SwaggerRefreshToken,
   SwaggerGetMyEvents,
   SwaggerActivateAccount,
+  SwaggerForgotPasswordUpdate,
 } from '../swagger/decorators/account';
 import { AccountLoggedDto, NewPairOfTokensDto, EventListDto } from '../../dtos';
 import { RequestId } from '../req-decorators';
@@ -209,34 +210,6 @@ export class AccountController {
     }
   }
 
-  @Put('/password/forgot-update')
-  @HttpCode(204)
-  async passwordFotgotUpdate(
-    @Body() updatePasswordDto: UpdatePasswordDto,
-    @RequestId() requestId: string,
-  ) {
-    try {
-      this.logger.info(
-        `[AccountController] [updatePassword] - x-request-id:${requestId}`,
-      );
-
-      await this.updatePasswordService.updatePassword(
-        updatePasswordDto,
-        requestId,
-      );
-    } catch (error) {
-      this.logger.error(
-        `[AccountController] [updatePassword] - x-request-id:${requestId}, error ${error}`,
-      );
-
-      if (error instanceof HttpException) {
-        throw error;
-      }
-
-      throw new InternalServerErrorException();
-    }
-  }
-
   @Put('/activate')
   @SwaggerActivateAccount()
   @HttpCode(200)
@@ -269,6 +242,34 @@ export class AccountController {
     }
   }
 
+  @Put('/password/forgot-update')
+  @SwaggerForgotPasswordUpdate()
+  @HttpCode(204)
+  async passwordFotgotUpdate(
+    @Body() updatePasswordDto: UpdatePasswordDto,
+    @RequestId() requestId: string,
+  ) {
+    try {
+      this.logger.info(
+        `[AccountController] [updatePassword] - x-request-id:${requestId}`,
+      );
+
+      await this.updatePasswordService.updatePassword(
+        updatePasswordDto,
+        requestId,
+      );
+    } catch (error) {
+      this.logger.error(
+        `[AccountController] [updatePassword] - x-request-id:${requestId}, error ${error}`,
+      );
+
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      throw new InternalServerErrorException();
+    }
+  }
   @Delete('/events')
   @UseGuards(AuthGuard)
   @SwaggerDisjoinEvent()

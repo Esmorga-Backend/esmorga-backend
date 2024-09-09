@@ -19,6 +19,7 @@ import {
   GET_MY_EVENT_HEADERS,
   DISJOIN_EVENT_HEADERS,
   ACTIVATE_ACCOUNT_HEADERS,
+  FORGOT_PASSWORD_UPDATE_HEADERS,
 } from '../headers';
 import {
   LOGIN_RESPONSES,
@@ -28,6 +29,7 @@ import {
   GET_MY_EVENTS_RESPONSES,
   DISJOIN_EVENT_RESPONSES,
   ACTIVATE_ACCOUNT_RESPONSES,
+  FORGOT_PASSWORD_UPDATE_RESPONSE,
 } from '../responses';
 
 export function SwaggerAccountLogin() {
@@ -118,5 +120,19 @@ export function SwaggerActivateAccount() {
     ApiOkResponse(ACTIVATE_ACCOUNT_RESPONSES.OK),
     ApiBadRequestResponse(ACTIVATE_ACCOUNT_RESPONSES.BAD_REQUEST_ERROR),
     ApiInternalServerErrorResponse(ACTIVATE_ACCOUNT_RESPONSES.INTERNAL_ERROR),
+  );
+}
+
+export function SwaggerForgotPasswordUpdate() {
+  return applyDecorators(
+    ApiOperation({
+      summary: 'Update password for the account code provided belongs',
+    }),
+    ApiHeader(FORGOT_PASSWORD_UPDATE_HEADERS),
+    ApiNoContentResponse(FORGOT_PASSWORD_UPDATE_RESPONSE.NO_CONTENT),
+    ApiBadRequestResponse(FORGOT_PASSWORD_UPDATE_RESPONSE.BAD_REQUEST_ERROR),
+    ApiInternalServerErrorResponse(
+      FORGOT_PASSWORD_UPDATE_RESPONSE.INTERNAL_ERROR,
+    ),
   );
 }
