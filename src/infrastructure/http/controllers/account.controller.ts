@@ -233,6 +233,7 @@ export class AccountController {
 
   @Post('/password/forgot-init')
   @SwaggerForgotPassword()
+  @HttpCode(204)
   async forgotPassword(
     @Body() forgotPasswordDto: EmailDto,
     @RequestId() requestId: string,
