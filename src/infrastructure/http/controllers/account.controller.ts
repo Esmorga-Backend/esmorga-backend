@@ -210,7 +210,7 @@ export class AccountController {
   ): Promise<AccountLoggedDto> {
     try {
       this.logger.info(
-        `[AccountController] [activateAccount] - x-request-id:${requestId}`,
+        `[AccountController] [activate] - x-request-id:${requestId}`,
       );
 
       const response: AccountLoggedDto = await this.activateAccount.activate(
@@ -221,7 +221,7 @@ export class AccountController {
       return response;
     } catch (error) {
       this.logger.error(
-        `[AccountController] [activateAccount] - x-request-id:${requestId}, error ${error}`,
+        `[AccountController] [activate] - x-request-id:${requestId}, error ${error}`,
       );
 
       if (error instanceof HttpException) {
