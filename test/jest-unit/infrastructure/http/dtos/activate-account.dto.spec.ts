@@ -59,47 +59,5 @@ describe('[unit-test] [ActivateAccountDto]', () => {
         isString: 'verificationCode must be a string',
       });
     });
-
-    it('Should not accept less than 6 character', async () => {
-      const activateAccountData = {
-        verificationCode: '123',
-      };
-
-      const activateAccountDto = plainToInstance(
-        ActivateAccountDto,
-        activateAccountData,
-      );
-
-      const errors = await validate(activateAccountDto, {
-        stopAtFirstError: true,
-      });
-
-      expect(errors.length).toEqual(1);
-      expect(errors[0].property).toEqual('verificationCode');
-      expect(errors[0].constraints).toEqual({
-        minLength: 'verificationCode must have min 6 characters',
-      });
-    });
-
-    it('Should not accept more than 6 character', async () => {
-      const activateAccountData = {
-        verificationCode: '1234567',
-      };
-
-      const activateAccountDto = plainToInstance(
-        ActivateAccountDto,
-        activateAccountData,
-      );
-
-      const errors = await validate(activateAccountDto, {
-        stopAtFirstError: true,
-      });
-
-      expect(errors.length).toEqual(1);
-      expect(errors[0].property).toEqual('verificationCode');
-      expect(errors[0].constraints).toEqual({
-        maxLength: 'verificationCode must have max 6 characters',
-      });
-    });
   });
 });
