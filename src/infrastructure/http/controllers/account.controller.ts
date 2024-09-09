@@ -22,12 +22,14 @@ import {
   GetMyEventsService,
   DisjoinEventService,
   UpdatePasswordService,
+  ActivateAccountService,
 } from '../../../application/handler/account';
 import { HttpExceptionFilter } from '../errors';
 import {
   AccountLoginDto,
   AccountRegisterDto,
   UpdatePasswordDto,
+  ActivateAccountDto,
   RefreshTokenDto,
   EventIdDto,
 } from '../dtos';
@@ -37,7 +39,8 @@ import {
   SwaggerJoinEvent,
   SwaggerDisjoinEvent,
   SwaggerRefreshToken,
-  SwaggetGetMyEvents,
+  SwaggerGetMyEvents,
+  SwaggerActivateAccount,
 } from '../swagger/decorators/account';
 import { AccountLoggedDto, NewPairOfTokensDto, EventListDto } from '../../dtos';
 import { RequestId } from '../req-decorators';
@@ -56,11 +59,12 @@ export class AccountController {
     private readonly getMyEventsService: GetMyEventsService,
     private readonly disjoinEventService: DisjoinEventService,
     private readonly updatePasswordService: UpdatePasswordService,
+    private readonly activateAccountService: ActivateAccountService,
   ) {}
 
   @Get('/events')
   @UseGuards(AuthGuard)
-  @SwaggetGetMyEvents()
+  @SwaggerGetMyEvents()
   async getMyEvents(
     @Headers('Authorization') accessToken: string,
     @RequestId() requestId: string,
@@ -223,6 +227,38 @@ export class AccountController {
     } catch (error) {
       this.logger.error(
         `[AccountController] [updatePassword] - x-request-id:${requestId}, error ${error}`,
+      );
+
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      throw new InternalServerErrorException();
+    }
+  }
+
+  @Put('/activate')
+  @SwaggerActivateAccount()
+  @HttpCode(200)
+  async activate(
+    @Body() activateAccountDto: ActivateAccountDto,
+    @RequestId() requestId: string,
+  ): Promise<AccountLoggedDto> {
+    try {
+      this.logger.info(
+        `[AccountController] [activate] - x-request-id:${requestId}`,
+      );
+
+      const response: AccountLoggedDto =
+        await this.activateAccountService.activate(
+          activateAccountDto.verificationCode,
+          requestId,
+        );
+
+      return response;
+    } catch (error) {
+      this.logger.error(
+        `[AccountController] [activate] - x-request-id:${requestId}, error ${error}`,
       );
 
       if (error instanceof HttpException) {
