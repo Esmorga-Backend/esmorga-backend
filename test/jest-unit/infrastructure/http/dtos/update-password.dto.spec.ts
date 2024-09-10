@@ -48,7 +48,7 @@ describe('[unit-test] [UpdatePasswordDto]', () => {
       expect(errors.length).toEqual(1);
       expect(errors[0].property).toEqual('forgotPasswordCode');
       expect(errors[0].constraints).toEqual({
-        is: 'forgotPasswordCode must be a string',
+        isString: 'forgotPasswordCode must be a string',
       });
     });
   });
