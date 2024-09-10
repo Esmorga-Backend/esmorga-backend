@@ -6,10 +6,10 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
-import { ACCOUNT_REGISTER_REGEX } from '../../../domain/regex';
+import { ACCOUNT_REGEX } from '../../../domain/regex';
 
 export class UpdatePasswordDto {
-  @Matches(ACCOUNT_REGISTER_REGEX.PASSWORD, {
+  @Matches(ACCOUNT_REGEX.PASSWORD, {
     message:
       'password must include at least one digit, one letter and one symbol',
   })

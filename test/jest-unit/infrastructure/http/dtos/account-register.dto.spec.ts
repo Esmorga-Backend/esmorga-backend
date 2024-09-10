@@ -1,7 +1,7 @@
 import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
 import { AccountRegisterDto } from '../../../../../src/infrastructure/http/dtos';
-import { ACCOUNT_REGISTER_REGEX } from '../../../../../src/domain/regex';
+import { ACCOUNT_REGEX } from '../../../../../src/domain/regex';
 import { ACCOUNT_REGISTER } from '../../../../mocks/dtos';
 
 describe('[unit test] [AccountRegisterDto]', () => {
@@ -104,7 +104,7 @@ describe('[unit test] [AccountRegisterDto]', () => {
       ];
 
       validExamples.forEach((value) =>
-        expect(ACCOUNT_REGISTER_REGEX.NAME.test(value)).toBe(true),
+        expect(ACCOUNT_REGEX.NAME.test(value)).toBe(true),
       );
 
       const invalidExampls: string[] = [
@@ -139,7 +139,7 @@ describe('[unit test] [AccountRegisterDto]', () => {
       ];
 
       invalidExampls.forEach((value) =>
-        expect(ACCOUNT_REGISTER_REGEX.NAME.test(value)).toBe(false),
+        expect(ACCOUNT_REGEX.NAME.test(value)).toBe(false),
       );
     });
   });
@@ -295,7 +295,7 @@ describe('[unit test] [AccountRegisterDto]', () => {
       ];
 
       validExamples.forEach((value) =>
-        expect(ACCOUNT_REGISTER_REGEX.EMAIL.test(value)).toBe(true),
+        expect(ACCOUNT_REGEX.EMAIL.test(value)).toBe(true),
       );
 
       const invalidExampls: string[] = [
@@ -308,7 +308,7 @@ describe('[unit test] [AccountRegisterDto]', () => {
       ];
 
       invalidExampls.forEach((value) =>
-        expect(ACCOUNT_REGISTER_REGEX.EMAIL.test(value)).toBe(false),
+        expect(ACCOUNT_REGEX.EMAIL.test(value)).toBe(false),
       );
     });
 
@@ -402,7 +402,7 @@ describe('[unit test] [AccountRegisterDto]', () => {
       ];
 
       validExamples.forEach((value) =>
-        expect(ACCOUNT_REGISTER_REGEX.PASSWORD.test(value)).toBe(true),
+        expect(ACCOUNT_REGEX.PASSWORD.test(value)).toBe(true),
       );
 
       const invalidExampls: string[] = [
@@ -415,7 +415,7 @@ describe('[unit test] [AccountRegisterDto]', () => {
       ];
 
       invalidExampls.forEach((value) =>
-        expect(ACCOUNT_REGISTER_REGEX.PASSWORD.test(value)).toBe(false),
+        expect(ACCOUNT_REGEX.PASSWORD.test(value)).toBe(false),
       );
     });
   });
