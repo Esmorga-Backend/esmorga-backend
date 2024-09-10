@@ -70,7 +70,7 @@ export class MongoRepository<E> implements DBRepository<E> {
    * @returns Promise resolved with the document that matches the email provided.
    */
   async findOneByCodeAndType(
-    code: number,
+    code: string,
     codeType: string,
   ): Promise<E | null> {
     return this.entityModel.findOne({
@@ -124,7 +124,7 @@ export class MongoRepository<E> implements DBRepository<E> {
    * @param type - Code type
    * @param email - User email address
    */
-  async findAndUpdateTemporalCode(code: number, type: string, email: string) {
+  async findAndUpdateTemporalCode(code: string, type: string, email: string) {
     await this.entityModel.findOneAndUpdate(
       { email, type },
       { $set: { code: code } },

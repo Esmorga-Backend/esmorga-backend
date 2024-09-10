@@ -36,14 +36,8 @@ export class UpdatePasswordService {
 
       const { password, forgotPasswordCode } = updatePasswordDto;
 
-      const code = parseInt(forgotPasswordCode);
-
-      if (!code) {
-        throw new InvalidForgotPasswordCodeApiError();
-      }
-
       const { id, email } = await this.temporalCodeRepository.getCode(
-        code,
+        forgotPasswordCode,
         TEMPORAL_CODE_TYPE.FORGOT_PASSWORD,
         requestId,
       );

@@ -10,6 +10,15 @@ export class NodemailerService {
     private configService: ConfigService,
   ) {}
 
+  /**
+   * Sends an email using the configured email service.
+   *
+   * @param email - The recipient's email address.
+   * @param from - The sender's email address.
+   * @param subject - The subject of the email.
+   * @param html - The email content in HTML format.
+   * @param requestId - Request identifier.
+   */
   async sendEmail(
     email: string,
     from: string,

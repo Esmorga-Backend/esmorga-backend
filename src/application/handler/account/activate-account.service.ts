@@ -38,13 +38,11 @@ export class ActivateAccountService {
   ): Promise<AccountLoggedDto> {
     try {
       this.logger.info(
-        `[ActivateAccount] [activate] - x-request-id: ${requestId}`,
+        `[ActivateAccountService] [activate] - x-request-id: ${requestId}`,
       );
 
-      const code = parseInt(verificationCode);
-
       const { email } = await this.temporalCodeRepository.getCode(
-        code,
+        verificationCode,
         TEMPORAL_CODE_TYPE.VERIFICATION,
         requestId,
       );
@@ -80,7 +78,7 @@ export class ActivateAccountService {
       return accountLoggedDto;
     } catch (error) {
       this.logger.error(
-        `[ActivateAccount] [activate] - x-request-id: ${requestId}, error ${error}`,
+        `[ActivateAccountService] [activate] - x-request-id: ${requestId}, error ${error}`,
       );
 
       if (error instanceof DataBaseNotFoundError) {

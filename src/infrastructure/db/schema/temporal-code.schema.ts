@@ -4,7 +4,7 @@ import { TEMPORAL_CODE_TYPE } from '../../../domain/const';
 @Schema({ timestamps: true })
 export class TemporalCode {
   @Prop({ required: true, index: true, unique: true })
-  code: number;
+  code: string;
 
   @Prop({
     required: true,

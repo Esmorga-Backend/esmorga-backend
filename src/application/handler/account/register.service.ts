@@ -3,7 +3,7 @@ import { PinoLogger } from 'nestjs-pino';
 import { AccountRegisterDto } from '../../../infrastructure/http/dtos';
 import {
   encodeValue,
-  generateCode,
+  generateTemporalCode,
   GenerateMailService,
 } from '../../../domain/services';
 import {
@@ -49,7 +49,7 @@ export class RegisterService {
 
         await this.accountRepository.saveUser(accountRegisterDto, requestId);
 
-        const verificationCode = generateCode();
+        const verificationCode = generateTemporalCode();
 
         await this.temporalCodeRepository.saveCode(
           verificationCode,

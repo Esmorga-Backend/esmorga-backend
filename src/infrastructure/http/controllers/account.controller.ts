@@ -15,14 +15,15 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import { PinoLogger } from 'nestjs-pino';
 import {
-  LoginService,
-  RegisterService,
-  RefreshTokenService,
-  JoinEventService,
-  GetMyEventsService,
+  ActivateAccountService,
   DisjoinEventService,
   UpdatePasswordService,
-  ActivateAccountService,
+  ForgotPasswordService,
+  GetMyEventsService,
+  JoinEventService,
+  LoginService,
+  RefreshTokenService,
+  RegisterService,
 } from '../../../application/handler/account';
 import { HttpExceptionFilter } from '../errors';
 import {
@@ -30,14 +31,16 @@ import {
   AccountRegisterDto,
   UpdatePasswordDto,
   ActivateAccountDto,
-  RefreshTokenDto,
+  EmailDto,
   EventIdDto,
+  RefreshTokenDto,
 } from '../dtos';
 import {
   SwaggerAccountLogin,
   SwaggerAccountRegister,
-  SwaggerJoinEvent,
   SwaggerDisjoinEvent,
+  SwaggerForgotPassword,
+  SwaggerJoinEvent,
   SwaggerRefreshToken,
   SwaggerGetMyEvents,
   SwaggerActivateAccount,
@@ -53,12 +56,14 @@ import { AuthGuard } from '../guards';
 export class AccountController {
   constructor(
     private readonly logger: PinoLogger,
+    private readonly disjoinEventService: DisjoinEventService,
+    private readonly forgotPasswordService: ForgotPasswordService,
     private readonly loginService: LoginService,
     private readonly registerService: RegisterService,
     private readonly refreshTokenService: RefreshTokenService,
     private readonly joinEventService: JoinEventService,
     private readonly getMyEventsService: GetMyEventsService,
-    private readonly disjoinEventService: DisjoinEventService,
+
     private readonly updatePasswordService: UpdatePasswordService,
     private readonly activateAccountService: ActivateAccountService,
   ) {}
@@ -298,6 +303,34 @@ export class AccountController {
         throw error;
       }
 
+      throw new InternalServerErrorException();
+    }
+  }
+
+  @Post('/password/forgot-init')
+  @SwaggerForgotPassword()
+  @HttpCode(204)
+  async forgotPassword(
+    @Body() forgotPasswordDto: EmailDto,
+    @RequestId() requestId: string,
+  ) {
+    try {
+      this.logger.info(
+        `[AccountController] [forgotPassword] - x-request-id: ${requestId}`,
+      );
+
+      await this.forgotPasswordService.forgotPassword(
+        forgotPasswordDto.email,
+        requestId,
+      );
+    } catch (error) {
+      this.logger.error(
+        `[AccountController] [forgotPassword] - x-request-id:${requestId}, error ${error}`,
+      );
+
+      if (error instanceof HttpException) {
+        throw error;
+      }
       throw new InternalServerErrorException();
     }
   }

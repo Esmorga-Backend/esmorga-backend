@@ -13,11 +13,12 @@ import {
 } from './common-response-properties';
 
 const PATHS = {
+  ACTIVATE_ACCOUNT: '/v1/account/activate',
+  FORGOT_PASSWORD: '/v1/account/password/forgot-init',
+  JOIN_EVENT: '/v1/account/events',
   LOGIN: '/v1/account/login',
   REGISTER: '/v1/account/register',
   REFRESH_TOKEN: '/v1/account/refresh',
-  JOIN_EVENT: '/v1/account/events',
-  ACTIVATE_ACCOUNT: '/v1/account/activate',
   FORGOT_PASSWORD_UPDATE: '/v1/account/password/forgot-update',
 };
 
@@ -302,6 +303,40 @@ export const GET_MY_EVENTS_RESPONSES: { [key: string]: ApiResponseOptions } = {
     },
   },
 };
+
+export const FORGOT_PASSWORD_RESPONSES: { [key: string]: ApiResponseOptions } =
+  {
+    NO_CONTENT: {
+      description:
+        'The email for forgotten password has been sent successfully',
+    },
+    BAD_REQUEST_ERROR: {
+      status: HttpStatus.BAD_REQUEST,
+      description: 'Some inputs are missed or wrong',
+      schema: {
+        type: 'object',
+        properties: {
+          ...BAD_REQUEST_ERROR_COMMON_PROPERTIES,
+          type: { type: 'string', example: PATHS.FORGOT_PASSWORD },
+          errors: {
+            type: 'array',
+            example: ['email should not be empty'],
+          },
+        },
+      },
+    },
+    INTERNAL_ERROR: {
+      status: HttpStatus.INTERNAL_SERVER_ERROR,
+      description: 'Error not handled',
+      schema: {
+        type: 'object',
+        properties: {
+          ...INTERNAL_ERROR_COMMON_PROPERTIES,
+          type: { type: 'string', example: PATHS.FORGOT_PASSWORD },
+        },
+      },
+    },
+  };
 
 export const ACTIVATE_ACCOUNT_RESPONSES: { [key: string]: ApiResponseOptions } =
   {
