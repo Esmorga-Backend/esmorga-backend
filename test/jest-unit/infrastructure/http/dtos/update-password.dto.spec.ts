@@ -18,6 +18,41 @@ describe('[unit-test] [UpdatePasswordDto]', () => {
     expect(errors.length).toBe(0);
   });
 
+  describe('[UpdatePasswordDto] [forgotPasswordCode]', () => {
+    it('Should not accept an empty value', async () => {
+      const updatePasswordData = { ...UPDATE_PASSWORD };
+
+      delete updatePasswordData.forgotPasswordCode;
+
+      const data = plainToInstance(UpdatePasswordDto, updatePasswordData);
+
+      const errors = await validate(data, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('forgotPasswordCode');
+      expect(errors[0].constraints).toEqual({
+        isNotEmpty: 'forgotPasswordCode should not be empty',
+      });
+    });
+
+    it('Should only accept string values', async () => {
+      const updatePasswordData = {
+        password: UPDATE_PASSWORD.password,
+        forgotPasswordCode: 123456,
+      };
+
+      const data = plainToInstance(UpdatePasswordDto, updatePasswordData);
+
+      const errors = await validate(data, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('forgotPasswordCode');
+      expect(errors[0].constraints).toEqual({
+        is: 'forgotPasswordCode must be a string',
+      });
+    });
+  });
+
   describe('[UpdatePasswordDto] [password]', () => {
     it('Should not accept an empty value', async () => {
       const updatePasswordData = { ...UPDATE_PASSWORD };
