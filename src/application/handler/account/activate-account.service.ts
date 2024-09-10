@@ -35,6 +35,10 @@ export class ActivateAccount {
 
       const code = parseInt(verificationCode);
 
+      if (!code) {
+        throw new InvalidVerificationCodeApiError();
+      }
+
       const { email } = await this.temporalCodeRepository.getCode(
         code,
         TEMPORAL_CODE_TYPE.VERIFICATION,
