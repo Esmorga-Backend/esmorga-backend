@@ -7,7 +7,7 @@ export class InvalidForgotPasswordCodeApiError extends ApiError {
       HttpStatus.BAD_REQUEST,
       'badRequestError',
       'forgotPasswordCode',
-      'forgotPasswordCode invalid',
+      'forgotPasswordCode is invalid',
     );
   }
 }

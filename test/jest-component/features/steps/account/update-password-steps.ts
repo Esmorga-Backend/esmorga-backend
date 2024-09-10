@@ -35,12 +35,9 @@ export const updatePasswordSteps: StepDefinitions = ({ given, and }) => {
       .mockResolvedValue(null);
   });
 
-  and(
-    'forgotPasswordCode field correctly filled with code that has expired',
-    () => {
-      jest
-        .spyOn(context.temporalCodeRepository, 'findOneByCodeAndType')
-        .mockResolvedValue(null);
-    },
-  );
+  and('forgotPasswordCode provided expired', () => {
+    jest
+      .spyOn(context.temporalCodeRepository, 'findOneByCodeAndType')
+      .mockResolvedValue(null);
+  });
 };
