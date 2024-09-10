@@ -14,7 +14,7 @@ import { AccountLoggedDto } from '../../../infrastructure/dtos';
 import { GenerateTokenPair } from '../../../domain/services';
 
 @Injectable()
-export class ActivateAccount {
+export class ActivateAccountService {
   constructor(
     private readonly logger: PinoLogger,
     private configService: ConfigService,
@@ -30,13 +30,11 @@ export class ActivateAccount {
   ): Promise<AccountLoggedDto> {
     try {
       this.logger.info(
-        `[ActivateAccount] [activate] - x-request-id: ${requestId}`,
+        `[ActivateAccountService] [activate] - x-request-id: ${requestId}`,
       );
 
-      const code = parseInt(verificationCode);
-
       const { email } = await this.temporalCodeRepository.getCode(
-        code,
+        verificationCode,
         TEMPORAL_CODE_TYPE.VERIFICATION,
         requestId,
       );
@@ -72,7 +70,7 @@ export class ActivateAccount {
       return accountLoggedDto;
     } catch (error) {
       this.logger.error(
-        `[ActivateAccount] [activate] - x-request-id: ${requestId}, error ${error}`,
+        `[ActivateAccountService] [activate] - x-request-id: ${requestId}, error ${error}`,
       );
 
       if (error instanceof DataBaseNotFoundError) {

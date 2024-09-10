@@ -12,22 +12,24 @@ import {
 } from '@nestjs/swagger';
 import { applyDecorators } from '@nestjs/common';
 import {
-  LOGIN_HEADERS,
-  REGISTER_HEADER,
-  REFRESH_TOKEN_HEADERS,
-  JOIN_EVENT_HEADERS,
-  GET_MY_EVENT_HEADERS,
-  DISJOIN_EVENT_HEADERS,
   ACTIVATE_ACCOUNT_HEADERS,
+  DISJOIN_EVENT_HEADERS,
+  FORGOT_PASSWORD_HEADER,
+  GET_MY_EVENT_HEADERS,
+  JOIN_EVENT_HEADERS,
+  LOGIN_HEADERS,
+  REFRESH_TOKEN_HEADERS,
+  REGISTER_HEADER,
 } from '../headers';
 import {
-  LOGIN_RESPONSES,
-  REGISTER_RESPONSES,
-  REFRESH_TOKEN_RESPONSES,
-  JOIN_EVENT_RESPONSES,
-  GET_MY_EVENTS_RESPONSES,
-  DISJOIN_EVENT_RESPONSES,
   ACTIVATE_ACCOUNT_RESPONSES,
+  DISJOIN_EVENT_RESPONSES,
+  FORGOT_PASSWORD_RESPONSES,
+  GET_MY_EVENTS_RESPONSES,
+  JOIN_EVENT_RESPONSES,
+  LOGIN_RESPONSES,
+  REFRESH_TOKEN_RESPONSES,
+  REGISTER_RESPONSES,
 } from '../responses';
 
 export function SwaggerAccountLogin() {
@@ -105,6 +107,19 @@ export function SwaggerGetMyEvents() {
     ApiOkResponse(GET_MY_EVENTS_RESPONSES.OK),
     ApiUnauthorizedResponse(GET_MY_EVENTS_RESPONSES.UNAUTHORIZED_ERROR),
     ApiInternalServerErrorResponse(GET_MY_EVENTS_RESPONSES.INTERNAL_ERROR),
+  );
+}
+
+export function SwaggerForgotPassword() {
+  return applyDecorators(
+    ApiOperation({
+      summary:
+        'Allow users to send an email with a code to request the change of a forgotten password.',
+    }),
+    ApiHeader(FORGOT_PASSWORD_HEADER),
+    ApiNoContentResponse(FORGOT_PASSWORD_RESPONSES.NO_CONTENT),
+    ApiBadRequestResponse(FORGOT_PASSWORD_RESPONSES.BAD_REQUEST_ERROR),
+    ApiInternalServerErrorResponse(FORGOT_PASSWORD_RESPONSES.INTERNAL_ERROR),
   );
 }
 

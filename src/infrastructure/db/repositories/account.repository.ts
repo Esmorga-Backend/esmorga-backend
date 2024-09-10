@@ -22,6 +22,31 @@ export class AccountRepository extends MongoRepository<UserSchema> {
   }
 
   /**
+   * Check if there is already an account with that email.
+   *
+   * @param email - User email.
+   * @param requestId - Request identifier.
+   * @returns Boolean
+   */
+  async accountExist(email: string, requestId?: string): Promise<boolean> {
+    try {
+      this.logger.info(
+        `[AccountRepository] [accountExist] - x-request-id: ${requestId}, email: ${email}`,
+      );
+
+      const account = await this.findOneByEmail(email);
+
+      return account ? true : false;
+    } catch (error) {
+      this.logger.error(
+        `[AccountRepository] [accountExist] - x-request-id: ${requestId}, error: ${error}`,
+      );
+
+      throw new DataBaseInternalError();
+    }
+  }
+
+  /**
    * Find an user by id.
    *
    * @param id - User identifier.
@@ -88,31 +113,6 @@ export class AccountRepository extends MongoRepository<UserSchema> {
       );
 
       if (error instanceof HttpException) throw error;
-
-      throw new DataBaseInternalError();
-    }
-  }
-
-  /**
-   * Check if there is already a account with that email
-   *
-   * @param email - User email.
-   * @param requestId - Request identifier.
-   * @returns Boolean
-   */
-  async accountExist(email: string, requestId?: string): Promise<boolean> {
-    try {
-      this.logger.info(
-        `[AccountRepository] [accountExist] - x-request-id: ${requestId}, email: ${email}`,
-      );
-
-      const account = await this.findOneByEmail(email);
-
-      return account ? true : false;
-    } catch (error) {
-      this.logger.error(
-        `[AccountRepository] [accountExist] - x-request-id: ${requestId}, error: ${error}`,
-      );
 
       throw new DataBaseInternalError();
     }
