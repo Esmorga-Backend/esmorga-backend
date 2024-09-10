@@ -30,3 +30,7 @@ export const REFRESH_TOKEN_HEADERS = {
 export const REGISTER_HEADER = {
   ...CONTENT_TYPE,
 };
+
+export const ACTIVATE_ACCOUNT_HEADERS = {
+  ...CONTENT_TYPE,
+};

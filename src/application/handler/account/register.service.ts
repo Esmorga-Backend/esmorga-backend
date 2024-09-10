@@ -11,6 +11,7 @@ import {
   TemporalCodeRepository,
 } from '../../../infrastructure/db/repositories';
 import { NodemailerService } from '../../../infrastructure/services';
+import { TEMPORAL_CODE_TYPE } from '../../../domain/const';
 
 @Injectable()
 export class RegisterService {
@@ -19,7 +20,7 @@ export class RegisterService {
     private readonly generateMailService: GenerateMailService,
     private readonly nodemailerService: NodemailerService,
     private readonly accountRepository: AccountRepository,
-    private readonly veririficationCodeRepository: TemporalCodeRepository,
+    private readonly temporalCodeRepository: TemporalCodeRepository,
   ) {}
 
   /**
@@ -49,8 +50,9 @@ export class RegisterService {
 
         const verificationCode = generateTemporalCode();
 
-        await this.veririficationCodeRepository.saveTemporalCode(
+        await this.temporalCodeRepository.saveCode(
           verificationCode,
+          TEMPORAL_CODE_TYPE.VERIFICATION,
           email,
           requestId,
         );

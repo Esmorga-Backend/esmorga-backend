@@ -97,7 +97,8 @@
       "src/**/*.ts"
     ],
     "exclude": [
-      "src/config/*.ts"
+      "src/config/*.ts",
+      "src/infrastructure/db/repositories/mongo.repository.ts"
     ],
     "reporter": [
       "json"

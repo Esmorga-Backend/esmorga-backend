@@ -9,6 +9,7 @@ import {
   GenerateMailService,
 } from '../../../domain/services';
 import { NodemailerService } from '../../../infrastructure/services';
+import { TEMPORAL_CODE_TYPE } from '../../../domain/const';
 
 @Injectable()
 export class ForgotPasswordService {
@@ -39,9 +40,10 @@ export class ForgotPasswordService {
       if (isRegistered) {
         const temporalCode = generateTemporalCode();
 
-        await this.temporalCodeRepository.saveTemporalCode(
-          email,
+        await this.temporalCodeRepository.saveCode(
           temporalCode,
+          TEMPORAL_CODE_TYPE.FORGOT_PASSWORD,
+          email,
           requestId,
         );
 

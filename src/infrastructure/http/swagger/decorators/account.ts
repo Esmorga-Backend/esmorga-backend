@@ -12,6 +12,7 @@ import {
 } from '@nestjs/swagger';
 import { applyDecorators } from '@nestjs/common';
 import {
+  ACTIVATE_ACCOUNT_HEADERS,
   DISJOIN_EVENT_HEADERS,
   FORGOT_PASSWORD_HEADER,
   GET_MY_EVENT_HEADERS,
@@ -21,6 +22,7 @@ import {
   REGISTER_HEADER,
 } from '../headers';
 import {
+  ACTIVATE_ACCOUNT_RESPONSES,
   DISJOIN_EVENT_RESPONSES,
   FORGOT_PASSWORD_RESPONSES,
   GET_MY_EVENTS_RESPONSES,
@@ -95,7 +97,7 @@ export function SwaggerDisjoinEvent() {
   );
 }
 
-export function SwaggetGetMyEvents() {
+export function SwaggerGetMyEvents() {
   return applyDecorators(
     ApiOperation({
       summary:
@@ -118,5 +120,18 @@ export function SwaggerForgotPassword() {
     ApiNoContentResponse(FORGOT_PASSWORD_RESPONSES.NO_CONTENT),
     ApiBadRequestResponse(FORGOT_PASSWORD_RESPONSES.BAD_REQUEST_ERROR),
     ApiInternalServerErrorResponse(FORGOT_PASSWORD_RESPONSES.INTERNAL_ERROR),
+  );
+}
+
+export function SwaggerActivateAccount() {
+  return applyDecorators(
+    ApiOperation({
+      summary:
+        'Update account status to ACTIVE for user the verificationCode is related',
+    }),
+    ApiHeader(ACTIVATE_ACCOUNT_HEADERS),
+    ApiOkResponse(ACTIVATE_ACCOUNT_RESPONSES.OK),
+    ApiBadRequestResponse(ACTIVATE_ACCOUNT_RESPONSES.BAD_REQUEST_ERROR),
+    ApiInternalServerErrorResponse(ACTIVATE_ACCOUNT_RESPONSES.INTERNAL_ERROR),
   );
 }

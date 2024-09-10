@@ -10,6 +10,7 @@ import { DataBaseInternalError, DataBaseUnathorizedError } from '../errors';
 import { UserProfileDto } from '../../dtos';
 import { validateObjectDto } from '../services';
 import { REQUIRED_DTO_FIELDS } from '../consts';
+import { ACCOUNT_STATUS } from '../../../domain/const';
 
 @Injectable()
 export class AccountRepository extends MongoRepository<UserSchema> {
@@ -112,6 +113,47 @@ export class AccountRepository extends MongoRepository<UserSchema> {
       );
 
       if (error instanceof HttpException) throw error;
+
+      throw new DataBaseInternalError();
+    }
+  }
+
+  /**
+   * Update status to ACTIVE and return the document updated.
+   *
+   * @param email - User email address.
+   * @param requestId - Request identifier.
+   * @returns UserProfileDto - User data following business schema.
+   */
+  async activateAccountByEmail(
+    email: string,
+    requestId?: string,
+  ): Promise<UserProfileDto> {
+    try {
+      this.logger.info(
+        `[AccountRepository] [activateAccountByEmail] - x-request-id: ${requestId}, email: ${email}`,
+      );
+
+      const account = await this.updateStatusByEmail(
+        email,
+        ACCOUNT_STATUS.ACTIVE,
+      );
+
+      const userProfile: UserProfileDto = plainToClass(
+        UserProfileDto,
+        account,
+        {
+          excludeExtraneousValues: true,
+        },
+      );
+
+      validateObjectDto(userProfile, REQUIRED_DTO_FIELDS.USER_PROFILE);
+
+      return userProfile;
+    } catch (error) {
+      this.logger.error(
+        `[AccountRepository] [activateAccountByEmail] - x-request-id: ${requestId}, error: ${error}`,
+      );
 
       throw new DataBaseInternalError();
     }

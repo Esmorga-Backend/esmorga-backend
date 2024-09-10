@@ -34,6 +34,11 @@ export class UserProfileDto {
   role: string;
 
   @Expose()
+  @IsString()
+  @ApiProperty({ example: 'ACTIVE', maxLength: 100, minLength: 1 })
+  status: string;
+
+  @Expose()
   @IsDateString()
   @ApiProperty({ example: '2024-03-08T10:05:30.915Z', format: 'date-time' })
   createdAt: Date;

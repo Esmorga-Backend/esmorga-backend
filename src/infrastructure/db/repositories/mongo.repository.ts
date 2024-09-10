@@ -49,7 +49,7 @@ export class MongoRepository<E> implements DBRepository<E> {
    * @param refreshToken - The refresToken to find.
    * @returns Promise resolved with the document that matches the refreshToken provided.
    */
-  async findOneByRefreshToken(refreshToken: string): Promise<E> {
+  async findOneByRefreshToken(refreshToken: string): Promise<E | null> {
     return this.entityModel.findOne({ refreshToken: { $eq: refreshToken } });
   }
 
@@ -59,8 +59,24 @@ export class MongoRepository<E> implements DBRepository<E> {
    * @param email - The email value to find.
    * @returns Promise resolved with the document that matches the email provided.
    */
-  async findOneByEmail(email: string): Promise<E> {
+  async findOneByEmail(email: string): Promise<E | null> {
     return this.entityModel.findOne({ email: { $eq: email } });
+  }
+
+  /**
+   * Find a document by verificationCode field.
+   *
+   * @param code - The code value to find.
+   * @returns Promise resolved with the document that matches the email provided.
+   */
+  async findOneByCodeAndType(
+    code: string,
+    codeType: string,
+  ): Promise<E | null> {
+    return this.entityModel.findOne({
+      code: { $eq: code },
+      type: { $eq: codeType },
+    });
   }
 
   /**
@@ -101,16 +117,17 @@ export class MongoRepository<E> implements DBRepository<E> {
   }
 
   /**
-   * Find a document with that email and add the temporal verification/forgot passsword code if it has not been added yet.
-   * Also if the document has not been created, create a new one with this data.
+   * Find a document related to the email provided with the type specified and update the code or
+   * create a new document if it does not exist
    *
-   * @param temporalCode - The temporary code that is associated with the user.
-   * @param email - User identificator to add.
+   * @param code - 6 digits number used as verificationCode or forgotPasswordCode
+   * @param type - Code type
+   * @param email - User email address
    */
-  async findAndUpdateTemporalCode(temporalCode: string, email: string) {
+  async findAndUpdateTemporalCode(code: string, type: string, email: string) {
     await this.entityModel.findOneAndUpdate(
-      { email },
-      { $set: { code: temporalCode } },
+      { email, type },
+      { $set: { code: code } },
       { upsert: true },
     );
   }
@@ -152,6 +169,20 @@ export class MongoRepository<E> implements DBRepository<E> {
     );
   }
 
+  /**
+   * Finde a document by email, update the status and return the document updated.
+   *
+   * @param email - User email address.
+   * @param newStatus - Status value to update.
+   * @returns Account document updated related to that email
+   */
+  async updateStatusByEmail(email: string, newStatus: string): Promise<E> {
+    return this.entityModel.findOneAndUpdate(
+      { email },
+      { status: newStatus },
+      { new: true },
+    );
+  }
   /**
    * Find a document with that eventId and update it removing the userId from the particpant list.
    * @param eventId - Event identificator.

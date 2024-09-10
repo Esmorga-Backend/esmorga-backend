@@ -1,12 +1,19 @@
-import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { TEMPORAL_CODE_TYPE } from '../../../domain/const';
 
 @Schema({ timestamps: true })
 export class TemporalCode {
   @Prop({ required: true, index: true, unique: true })
-  email: string;
+  code: number;
+
+  @Prop({
+    required: true,
+    enum: [TEMPORAL_CODE_TYPE.FORGOT_PASSWORD, TEMPORAL_CODE_TYPE.VERIFICATION],
+  })
+  type: string;
 
   @Prop({ required: true, index: true })
-  code: string;
+  email: string;
 }
 
 export const TemporalCodeSchema = SchemaFactory.createForClass(TemporalCode);
