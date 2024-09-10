@@ -41,7 +41,7 @@ export class GenerateMailService {
    * @returns Email data to send (from, subject and mail content in html format).
    */
   getForgotPasswordEmail(code: string) {
-    const url = `${this.configService.get('APP_LINK') + '?forgotPasswordcode=' + code}`;
+    const url = `${this.configService.get('APP_LINK') + '?forgotPasswordCode=' + code}`;
 
     const from = 'Esmorga';
 

@@ -240,7 +240,7 @@ export class AccountController {
   ) {
     try {
       this.logger.info(
-        `[AccountController] [forgotPasword] - x-request-id: ${requestId}`,
+        `[AccountController] [forgotPassword] - x-request-id: ${requestId}`,
       );
 
       await this.forgotPasswordService.forgotPassword(
@@ -249,7 +249,7 @@ export class AccountController {
       );
     } catch (error) {
       this.logger.error(
-        `[AccountController] [forgotPasword] - x-request-id:${requestId}, error ${error}`,
+        `[AccountController] [forgotPassword] - x-request-id:${requestId}, error ${error}`,
       );
 
       if (error instanceof HttpException) {
