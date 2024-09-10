@@ -19,7 +19,7 @@ import { NodemailerService } from '../../services';
 import { AuthGuard } from '../guards';
 import { EventSharedModule } from './event-shared.module';
 import { AccountSharedModule } from './account-shared.module';
-import { TemporalCodeRepository } from '../../db/repositories/temporal-code.repository';
+import { TemporalCodeRepository } from '../../db/repositories';
 import {
   TemporalCodeSchema,
   TemporalCode,
