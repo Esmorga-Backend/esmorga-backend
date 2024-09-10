@@ -6,7 +6,7 @@ import {
 } from '../../../../../src/infrastructure/db/repositories';
 import { VERIFICATION_CODE_DATA_MOCK_DB } from '../../../../mocks/db';
 
-export const updatePasswordSteps: StepDefinitions = ({ given }) => {
+export const updatePasswordSteps: StepDefinitions = ({ given, and }) => {
   given('The PUT password update API is available', () => {
     context.path = '/v1/account/password/forgot-update';
 
@@ -34,4 +34,13 @@ export const updatePasswordSteps: StepDefinitions = ({ given }) => {
       .spyOn(context.temporalCodeRepository, 'removeById')
       .mockResolvedValue(null);
   });
+
+  and(
+    'forgotPasswordCode field correctly filled with code that has expired',
+    () => {
+      jest
+        .spyOn(context.temporalCodeRepository, 'findOneByCodeAndType')
+        .mockResolvedValue(null);
+    },
+  );
 };
