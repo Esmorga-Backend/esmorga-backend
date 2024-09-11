@@ -256,7 +256,7 @@ export class AccountController {
   ) {
     try {
       this.logger.info(
-        `[AccountController] [updatePassword] - x-request-id:${requestId}`,
+        `[AccountController] [passwordFotgotUpdate] - x-request-id:${requestId}`,
       );
 
       await this.updatePasswordService.updatePassword(
@@ -265,7 +265,7 @@ export class AccountController {
       );
     } catch (error) {
       this.logger.error(
-        `[AccountController] [updatePassword] - x-request-id:${requestId}, error ${error}`,
+        `[AccountController] [passwordFotgotUpdate] - x-request-id:${requestId}, error ${error}`,
       );
 
       if (error instanceof HttpException) {
