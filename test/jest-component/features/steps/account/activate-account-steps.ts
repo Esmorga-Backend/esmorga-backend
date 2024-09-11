@@ -48,6 +48,10 @@ export const activateAccountSteps: StepDefinitions = ({ given, and }) => {
     });
 
     jest.spyOn(context.tokensRepository, 'save').mockResolvedValue(null);
+
+    jest
+      .spyOn(context.temporalCodeRepository, 'removeById')
+      .mockResolvedValue(null);
   });
 
   and('verificationCode provided expired', () => {
