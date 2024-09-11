@@ -118,6 +118,13 @@ export class AccountRepository extends MongoRepository<UserSchema> {
     }
   }
 
+  /**
+   * Find an account by email and update the password with the value encoded provided
+   *
+   * @param email - User email.
+   * @param password - User password to update.
+   * @param requestId - Request identifier.
+   */
   async updateAccountPassword(
     email: string,
     password: string,
