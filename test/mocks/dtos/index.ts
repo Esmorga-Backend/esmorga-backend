@@ -7,3 +7,4 @@ export * from './event-id';
 export * from './update-event';
 export * from './user-profile';
 export * from './activate-account';
+export * from './update-password';

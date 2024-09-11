@@ -7,10 +7,10 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
-import { ACCOUNT_REGISTER_REGEX } from '../../../domain/regex';
+import { ACCOUNT_REGEX } from '../../../domain/regex';
 
 export class AccountRegisterDto {
-  @Matches(ACCOUNT_REGISTER_REGEX.NAME, {
+  @Matches(ACCOUNT_REGEX.NAME, {
     message: `name only accept letters (Uppercase or lowercase), spaces and ''',  '-'`,
   })
   @MinLength(3, { message: 'name must have min 3 characters' })
@@ -20,7 +20,7 @@ export class AccountRegisterDto {
   @ApiProperty({ example: 'John', minLength: 3, maxLength: 100 })
   name: string;
 
-  @Matches(ACCOUNT_REGISTER_REGEX.NAME, {
+  @Matches(ACCOUNT_REGEX.NAME, {
     message: `lastName only accept letters (Uppercase or lowercase), spaces and ''',  '-'`,
   })
   @MinLength(3, { message: 'lastName must have min 3 characters' })
@@ -37,7 +37,7 @@ export class AccountRegisterDto {
   @Transform(({ value }) =>
     typeof value === 'string' ? value.toLowerCase() : value,
   )
-  @Matches(ACCOUNT_REGISTER_REGEX.EMAIL, {
+  @Matches(ACCOUNT_REGEX.EMAIL, {
     message: `email is not correctly formatted. Additionally, we do not accept '+' or ' '. After '@', we only accept letters (uppercase and lowercase), digits, '_', and '-'`,
   })
   @MaxLength(100, { message: 'email must have max 100 characters' })
@@ -46,7 +46,7 @@ export class AccountRegisterDto {
   @ApiProperty({ example: 'eventslogin01@yopmail.com', maxLength: 100 })
   email: string;
 
-  @Matches(ACCOUNT_REGISTER_REGEX.PASSWORD, {
+  @Matches(ACCOUNT_REGEX.PASSWORD, {
     message:
       'password must include at least one digit, one letter and one symbol',
   })

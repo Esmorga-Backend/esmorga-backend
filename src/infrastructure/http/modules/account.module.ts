@@ -9,6 +9,7 @@ import {
   JoinEventService,
   GetMyEventsService,
   DisjoinEventService,
+  UpdatePasswordService,
   ActivateAccountService,
 } from '../../../application/handler/account';
 import {
@@ -42,6 +43,7 @@ import {
     JoinEventService,
     GetMyEventsService,
     DisjoinEventService,
+    UpdatePasswordService,
     ActivateAccountService,
     GenerateTokenPair,
     GenerateMailService,
