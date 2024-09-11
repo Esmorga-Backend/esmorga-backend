@@ -275,6 +275,7 @@ export class AccountController {
       throw new InternalServerErrorException();
     }
   }
+
   @Delete('/events')
   @UseGuards(AuthGuard)
   @SwaggerDisjoinEvent()
