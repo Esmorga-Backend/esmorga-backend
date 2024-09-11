@@ -174,11 +174,13 @@ export class MongoRepository<E> implements DBRepository<E> {
    *
    * @param email - Account email address
    * @param password - New password already hashed
+   * @returns Account document updated
    */
   async updatePasswordByEmail(email: string, password: string) {
     return this.entityModel.findOneAndUpdate(
       { email: { $eq: email } },
       { password: password },
+      { new: true },
     );
   }
 
