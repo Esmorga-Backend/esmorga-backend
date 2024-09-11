@@ -20,6 +20,7 @@ export class RefreshTokenService {
 
   /**
    * Consume the refreshToken provided to generate a new pair.
+   *
    * @param refreshTokenDto - DTO contain the refresh token.
    * @param requestId - Request identifier.
    * @returns NewPairOfTokensDto - New pair of tokens.

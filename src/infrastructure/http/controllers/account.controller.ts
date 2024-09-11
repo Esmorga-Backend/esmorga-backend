@@ -17,6 +17,7 @@ import { PinoLogger } from 'nestjs-pino';
 import {
   ActivateAccountService,
   DisjoinEventService,
+  UpdatePasswordService,
   ForgotPasswordService,
   GetMyEventsService,
   JoinEventService,
@@ -28,6 +29,7 @@ import { HttpExceptionFilter } from '../errors';
 import {
   AccountLoginDto,
   AccountRegisterDto,
+  UpdatePasswordDto,
   ActivateAccountDto,
   EmailDto,
   EventIdDto,
@@ -42,6 +44,7 @@ import {
   SwaggerRefreshToken,
   SwaggerGetMyEvents,
   SwaggerActivateAccount,
+  SwaggerForgotPasswordUpdate,
 } from '../swagger/decorators/account';
 import { AccountLoggedDto, NewPairOfTokensDto, EventListDto } from '../../dtos';
 import { RequestId } from '../req-decorators';
@@ -60,6 +63,8 @@ export class AccountController {
     private readonly refreshTokenService: RefreshTokenService,
     private readonly joinEventService: JoinEventService,
     private readonly getMyEventsService: GetMyEventsService,
+
+    private readonly updatePasswordService: UpdatePasswordService,
     private readonly activateAccountService: ActivateAccountService,
   ) {}
 
@@ -89,6 +94,7 @@ export class AccountController {
       if (error instanceof HttpException) {
         throw error;
       }
+
       throw new InternalServerErrorException();
     }
   }
@@ -119,6 +125,7 @@ export class AccountController {
       if (error instanceof HttpException) {
         throw error;
       }
+
       throw new InternalServerErrorException();
     }
   }
@@ -143,6 +150,7 @@ export class AccountController {
       if (error instanceof HttpException) {
         throw error;
       }
+
       throw new InternalServerErrorException();
     }
   }
@@ -170,6 +178,7 @@ export class AccountController {
       if (error instanceof HttpException) {
         throw error;
       }
+
       throw new InternalServerErrorException();
     }
   }
@@ -201,6 +210,7 @@ export class AccountController {
       if (error instanceof HttpException) {
         throw error;
       }
+
       throw new InternalServerErrorException();
     }
   }
@@ -227,6 +237,35 @@ export class AccountController {
     } catch (error) {
       this.logger.error(
         `[AccountController] [activate] - x-request-id:${requestId}, error ${error}`,
+      );
+
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      throw new InternalServerErrorException();
+    }
+  }
+
+  @Put('/password/forgot-update')
+  @SwaggerForgotPasswordUpdate()
+  @HttpCode(204)
+  async passwordFotgotUpdate(
+    @Body() updatePasswordDto: UpdatePasswordDto,
+    @RequestId() requestId: string,
+  ) {
+    try {
+      this.logger.info(
+        `[AccountController] [passwordFotgotUpdate] - x-request-id:${requestId}`,
+      );
+
+      await this.updatePasswordService.updatePassword(
+        updatePasswordDto,
+        requestId,
+      );
+    } catch (error) {
+      this.logger.error(
+        `[AccountController] [passwordFotgotUpdate] - x-request-id:${requestId}, error ${error}`,
       );
 
       if (error instanceof HttpException) {
@@ -264,6 +303,7 @@ export class AccountController {
       if (error instanceof HttpException) {
         throw error;
       }
+
       throw new InternalServerErrorException();
     }
   }
