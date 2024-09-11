@@ -50,13 +50,7 @@ export class ForgotPasswordService {
         const { from, subject, html } =
           this.generateMailService.getForgotPasswordEmail(temporalCode);
 
-        await this.nodemailerService.sendEmail(
-          email,
-          from,
-          subject,
-          html,
-          requestId,
-        );
+        this.nodemailerService.sendEmail(email, from, subject, html, requestId);
       }
     } catch (error) {
       this.logger.error(

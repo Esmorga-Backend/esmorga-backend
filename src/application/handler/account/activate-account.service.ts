@@ -41,7 +41,7 @@ export class ActivateAccountService {
         `[ActivateAccountService] [activate] - x-request-id: ${requestId}`,
       );
 
-      const { email } = await this.temporalCodeRepository.getCode(
+      const { id, email } = await this.temporalCodeRepository.getCode(
         verificationCode,
         TEMPORAL_CODE_TYPE.VERIFICATION,
         requestId,
@@ -74,6 +74,8 @@ export class ActivateAccountService {
         },
         { excludeExtraneousValues: true },
       );
+
+      await this.temporalCodeRepository.removeCodeById(id, requestId);
 
       return accountLoggedDto;
     } catch (error) {
