@@ -2,9 +2,11 @@ import { HttpException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { PinoLogger } from 'nestjs-pino';
 import { Model } from 'mongoose';
+import { plainToClass } from 'class-transformer';
 import { MongoRepository } from './mongo.repository';
 import { TemporalCode as TemporalCodeSchema } from '../schema';
 import { DataBaseInternalError, DataBaseNotFoundError } from '../errors';
+import { TemporalCodeDto } from '../../dtos';
 
 @Injectable()
 export class TemporalCodeRepository extends MongoRepository<TemporalCodeSchema> {
@@ -61,7 +63,15 @@ export class TemporalCodeRepository extends MongoRepository<TemporalCodeSchema> 
         `[TemporalCodeRepository] [getCode] - x-request-id: ${requestId}`,
       );
 
-      const codeData = await this.findOneByCodeAndType(code, codeType);
+      const codeDocumentData = await this.findOneByCodeAndType(code, codeType);
+
+      const codeData: TemporalCodeDto = plainToClass(
+        TemporalCodeDto,
+        codeDocumentData,
+        {
+          excludeExtraneousValues: true,
+        },
+      );
 
       if (!codeData) throw new DataBaseNotFoundError();
 
@@ -72,6 +82,28 @@ export class TemporalCodeRepository extends MongoRepository<TemporalCodeSchema> 
       );
 
       if (error instanceof HttpException) throw error;
+
+      throw new DataBaseInternalError();
+    }
+  }
+
+  /**
+   * Remove temporal code by document id provided
+   *
+   * @param id - Temporal code document identifier.
+   * @param requestId - Request identifier for API logger.
+   */
+  async removeCodeById(id: string, requestId?: string) {
+    try {
+      this.logger.info(
+        `[TemporalCodeRepository] [removeCodeById] - x-request-id: ${requestId}, tokensId: ${id}`,
+      );
+
+      await this.removeById(id);
+    } catch (error) {
+      this.logger.error(
+        `[TemporalCodeRepository] [removeCodeById] - x-request-id: ${requestId}, error: ${error}`,
+      );
 
       throw new DataBaseInternalError();
     }

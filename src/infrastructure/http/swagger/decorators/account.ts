@@ -13,6 +13,7 @@ import {
 import { applyDecorators } from '@nestjs/common';
 import {
   ACTIVATE_ACCOUNT_HEADERS,
+  FORGOT_PASSWORD_UPDATE_HEADERS,
   DISJOIN_EVENT_HEADERS,
   FORGOT_PASSWORD_HEADER,
   GET_MY_EVENT_HEADERS,
@@ -23,6 +24,7 @@ import {
 } from '../headers';
 import {
   ACTIVATE_ACCOUNT_RESPONSES,
+  FORGOT_PASSWORD_UPDATE_RESPONSE,
   DISJOIN_EVENT_RESPONSES,
   FORGOT_PASSWORD_RESPONSES,
   GET_MY_EVENTS_RESPONSES,
@@ -133,5 +135,19 @@ export function SwaggerActivateAccount() {
     ApiOkResponse(ACTIVATE_ACCOUNT_RESPONSES.OK),
     ApiBadRequestResponse(ACTIVATE_ACCOUNT_RESPONSES.BAD_REQUEST_ERROR),
     ApiInternalServerErrorResponse(ACTIVATE_ACCOUNT_RESPONSES.INTERNAL_ERROR),
+  );
+}
+
+export function SwaggerForgotPasswordUpdate() {
+  return applyDecorators(
+    ApiOperation({
+      summary: 'Update password for the account code provided belongs',
+    }),
+    ApiHeader(FORGOT_PASSWORD_UPDATE_HEADERS),
+    ApiNoContentResponse(FORGOT_PASSWORD_UPDATE_RESPONSE.NO_CONTENT),
+    ApiBadRequestResponse(FORGOT_PASSWORD_UPDATE_RESPONSE.BAD_REQUEST_ERROR),
+    ApiInternalServerErrorResponse(
+      FORGOT_PASSWORD_UPDATE_RESPONSE.INTERNAL_ERROR,
+    ),
   );
 }

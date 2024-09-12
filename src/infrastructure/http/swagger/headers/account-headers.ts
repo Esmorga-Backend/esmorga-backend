@@ -34,3 +34,7 @@ export const REGISTER_HEADER = {
 export const ACTIVATE_ACCOUNT_HEADERS = {
   ...CONTENT_TYPE,
 };
+
+export const FORGOT_PASSWORD_UPDATE_HEADERS = {
+  ...CONTENT_TYPE,
+};
