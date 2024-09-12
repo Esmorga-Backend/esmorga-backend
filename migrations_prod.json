@@ -1,6 +1,6 @@
 {
-    "uri": "mongodb://localhost:27017/",
-    "database": "esmorga",
+    "uri": "mongodb+srv://MigrationUser:zRK5draVbFYScGZu@clousterqa.xofidzb.mongodb.net/",
+    "database": "prod-esmorga",
     "options": {
         "useNewUrlParser": true,
         "useUnifiedTopology": true
