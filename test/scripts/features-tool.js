@@ -40,10 +40,10 @@ async function main() {
       branchName = await git.getBranchName();
       console.log(branchName);
     }
-    const usName = features.getUsNameFromBranch(branchName);
+    let usName = features.getUsNameFromBranch(branchName);
 
     //Comment previous line and use nexts to force a US with tests
-    //  const usName = 'MOB-80';
+    usName = 'MOB-122';
 
     selectedTestTypes = features.getSelectedTestTypes(testTypes);
     console.log(selectedTestTypes);
