@@ -34,3 +34,7 @@ export const REGISTER_HEADER = {
 export const ACTIVATE_ACCOUNT_HEADERS = {
   ...CONTENT_TYPE,
 };
+
+export const SEND_EMAIL_VERIFICATION_HEADER = {
+  ...CONTENT_TYPE,
+};

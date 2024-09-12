@@ -10,6 +10,7 @@ import {
   GetMyEventsService,
   DisjoinEventService,
   ActivateAccountService,
+  SendEmailVerificationService,
 } from '../../../application/handler/account';
 import {
   GenerateMailService,
@@ -45,6 +46,7 @@ import {
     ActivateAccountService,
     GenerateTokenPair,
     GenerateMailService,
+    SendEmailVerificationService,
     TemporalCodeRepository,
     NodemailerService,
     AuthGuard,

@@ -20,6 +20,7 @@ import {
   LOGIN_HEADERS,
   REFRESH_TOKEN_HEADERS,
   REGISTER_HEADER,
+  SEND_EMAIL_VERIFICATION_HEADER,
 } from '../headers';
 import {
   ACTIVATE_ACCOUNT_RESPONSES,
@@ -30,6 +31,7 @@ import {
   LOGIN_RESPONSES,
   REFRESH_TOKEN_RESPONSES,
   REGISTER_RESPONSES,
+  SEND_EMAIL_VERIFICATION_RESPONSES,
 } from '../responses';
 
 export function SwaggerAccountLogin() {
@@ -120,6 +122,21 @@ export function SwaggerForgotPassword() {
     ApiNoContentResponse(FORGOT_PASSWORD_RESPONSES.NO_CONTENT),
     ApiBadRequestResponse(FORGOT_PASSWORD_RESPONSES.BAD_REQUEST_ERROR),
     ApiInternalServerErrorResponse(FORGOT_PASSWORD_RESPONSES.INTERNAL_ERROR),
+  );
+}
+
+export function SwaggerSendEmailVerification() {
+  return applyDecorators(
+    ApiOperation({
+      summary:
+        'Send a verification email if the last code expires, as long as the account is not active or blocked.',
+    }),
+    ApiHeader(SEND_EMAIL_VERIFICATION_HEADER),
+    ApiNoContentResponse(SEND_EMAIL_VERIFICATION_RESPONSES.NO_CONTENT),
+    ApiBadRequestResponse(SEND_EMAIL_VERIFICATION_RESPONSES.BAD_REQUEST_ERROR),
+    ApiInternalServerErrorResponse(
+      SEND_EMAIL_VERIFICATION_RESPONSES.INTERNAL_ERROR,
+    ),
   );
 }
 

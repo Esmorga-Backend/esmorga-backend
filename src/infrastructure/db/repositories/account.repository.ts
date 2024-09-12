@@ -28,15 +28,13 @@ export class AccountRepository extends MongoRepository<UserSchema> {
    * @param requestId - Request identifier.
    * @returns Boolean
    */
-  async accountExist(email: string, requestId?: string): Promise<boolean> {
+  async accountExist(email: string, requestId?: string) {
     try {
       this.logger.info(
         `[AccountRepository] [accountExist] - x-request-id: ${requestId}, email: ${email}`,
       );
 
-      const account = await this.findOneByEmail(email);
-
-      return account ? true : false;
+      return this.findOneByEmail(email);
     } catch (error) {
       this.logger.error(
         `[AccountRepository] [accountExist] - x-request-id: ${requestId}, error: ${error}`,
@@ -54,7 +52,7 @@ export class AccountRepository extends MongoRepository<UserSchema> {
    * @returns UserProfileDto - User data following business schema.
    * @throws DataBaseUnathorizedError - User not found.
    */
-  async getUserById(id: string, requestId?: string): Promise<UserProfileDto> {
+  async getUserById(id: string, requestId?: string) {
     try {
       this.logger.info(
         `[AccountRepository] [getUserById] - x-request-id: ${requestId}, id: ${id}`,
