@@ -4,10 +4,12 @@ import ApiEvents from '../../pages/events/api_events';
 import ApiRefreshToken from '../../pages/account/api_refresh_token';
 import ApiLogin from '../../pages/account/api_login';
 import ApiJoinEvent from '../../pages/account/api_join_event';
+import ApiForgotPassword from '../../pages/account/password/api_forgot_password';
 
 const api_events = new ApiEvents();
 const api_refresh_token = new ApiRefreshToken();
 const api_login = new ApiLogin();
+const api_forgot_password = new ApiForgotPassword();
 const api_join_event = new ApiJoinEvent();
 var use_endpoint = '';
 const api = {
@@ -15,6 +17,7 @@ const api = {
   'Join Event': api_join_event,
   RefreshToken: api_refresh_token,
   Login: api_login,
+  'Forgot Password': api_forgot_password,
 };
 
 Given(/^the GET (.*) API is available$/, (endpoint) => {
@@ -75,3 +78,14 @@ Then(
     });
   },
 );
+
+Then('reset password email with correct format is received', async () => {
+  api_forgot_password.check_email();
+  cy.get('@email').then((email) => {
+    expect(email.subject).to.equal('Solicitud cambio de contraseña');
+    expect(email.body).to.match(
+      /(.*)Hemos recibido una solicitud para restablecer tu contraseña.(.*)/,
+    );
+    expect(email.body).to.match(/(.*)forgotPasswordCode=(.*)/);
+  });
+});
