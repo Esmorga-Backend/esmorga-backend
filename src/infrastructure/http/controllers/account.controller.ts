@@ -17,6 +17,7 @@ import { PinoLogger } from 'nestjs-pino';
 import {
   ActivateAccountService,
   DisjoinEventService,
+  UpdatePasswordService,
   ForgotPasswordService,
   GetMyEventsService,
   JoinEventService,
@@ -29,6 +30,7 @@ import { HttpExceptionFilter } from '../errors';
 import {
   AccountLoginDto,
   AccountRegisterDto,
+  UpdatePasswordDto,
   ActivateAccountDto,
   EmailDto,
   EventIdDto,
@@ -40,6 +42,7 @@ import {
   SwaggerAccountRegister,
   SwaggerDisjoinEvent,
   SwaggerForgotPassword,
+  SwaggerForgotPasswordUpdate,
   SwaggerGetMyEvents,
   SwaggerJoinEvent,
   SwaggerRefreshToken,
@@ -55,15 +58,16 @@ import { AuthGuard } from '../guards';
 export class AccountController {
   constructor(
     private readonly logger: PinoLogger,
+    private readonly activateAccountService: ActivateAccountService,
     private readonly disjoinEventService: DisjoinEventService,
     private readonly forgotPasswordService: ForgotPasswordService,
-    private readonly loginService: LoginService,
-    private readonly registerService: RegisterService,
-    private readonly refreshTokenService: RefreshTokenService,
-    private readonly joinEventService: JoinEventService,
     private readonly getMyEventsService: GetMyEventsService,
-    private readonly activateAccountService: ActivateAccountService,
+    private readonly joinEventService: JoinEventService,
+    private readonly loginService: LoginService,
+    private readonly refreshTokenService: RefreshTokenService,
+    private readonly registerService: RegisterService,
     private readonly sendEmailVerificationService: SendEmailVerificationService,
+    private readonly updatePasswordService: UpdatePasswordService,
   ) {}
 
   @Get('/events')
@@ -75,7 +79,7 @@ export class AccountController {
   ): Promise<EventListDto> {
     try {
       this.logger.info(
-        `[AccountController] [getMyEvents] - x-request-id:${requestId}`,
+        `[AccountController] [getMyEvents] - x-request-id: ${requestId}`,
       );
 
       const response: EventListDto = await this.getMyEventsService.getEvents(
@@ -86,12 +90,13 @@ export class AccountController {
       return response;
     } catch (error) {
       this.logger.error(
-        `[AccountController] [getMyEvents] - x-request-id:${requestId}, error ${error}`,
+        `[AccountController] [getMyEvents] - x-request-id: ${requestId}, error: ${error}`,
       );
 
       if (error instanceof HttpException) {
         throw error;
       }
+
       throw new InternalServerErrorException();
     }
   }
@@ -105,7 +110,7 @@ export class AccountController {
   ): Promise<AccountLoggedDto> {
     try {
       this.logger.info(
-        `[AccountController] [login] - x-request-id:${requestId}`,
+        `[AccountController] [login] - x-request-id: ${requestId}`,
       );
 
       const response: AccountLoggedDto = await this.loginService.login(
@@ -116,12 +121,13 @@ export class AccountController {
       return response;
     } catch (error) {
       this.logger.error(
-        `[AccountController] [login] - x-request-id:${requestId}, error ${error}`,
+        `[AccountController] [login] - x-request-id: ${requestId}, error: ${error}`,
       );
 
       if (error instanceof HttpException) {
         throw error;
       }
+
       throw new InternalServerErrorException();
     }
   }
@@ -134,18 +140,19 @@ export class AccountController {
   ) {
     try {
       this.logger.info(
-        `[AccountController] [register] - x-request-id:${requestId}`,
+        `[AccountController] [register] - x-request-id: ${requestId}`,
       );
 
       await this.registerService.register(accountRegisterDto, requestId);
     } catch (error) {
       this.logger.error(
-        `[AccountController] [register] - x-request-id:${requestId}, error ${error}`,
+        `[AccountController] [register] - x-request-id: ${requestId}, error: ${error}`,
       );
 
       if (error instanceof HttpException) {
         throw error;
       }
+
       throw new InternalServerErrorException();
     }
   }
@@ -167,12 +174,13 @@ export class AccountController {
       return response;
     } catch (error) {
       this.logger.error(
-        `[AccountController] [refreshToken] - x-request-id:${requestId}, error ${error}`,
+        `[AccountController] [refreshToken] - x-request-id: ${requestId}, error: ${error}`,
       );
 
       if (error instanceof HttpException) {
         throw error;
       }
+
       throw new InternalServerErrorException();
     }
   }
@@ -188,7 +196,7 @@ export class AccountController {
   ) {
     try {
       this.logger.info(
-        `[AccountController] [joinEvent] - x-request-id:${requestId}`,
+        `[AccountController] [joinEvent] - x-request-id: ${requestId}`,
       );
 
       await this.joinEventService.joinEvent(
@@ -198,12 +206,13 @@ export class AccountController {
       );
     } catch (error) {
       this.logger.error(
-        `[AccountController] [joinEvent] - x-request-id:${requestId}, error ${error}`,
+        `[AccountController] [joinEvent] - x-request-id: ${requestId}, error: ${error}`,
       );
 
       if (error instanceof HttpException) {
         throw error;
       }
+
       throw new InternalServerErrorException();
     }
   }
@@ -217,7 +226,7 @@ export class AccountController {
   ): Promise<AccountLoggedDto> {
     try {
       this.logger.info(
-        `[AccountController] [activate] - x-request-id:${requestId}`,
+        `[AccountController] [activate] - x-request-id: ${requestId}`,
       );
 
       const response: AccountLoggedDto =
@@ -229,7 +238,7 @@ export class AccountController {
       return response;
     } catch (error) {
       this.logger.error(
-        `[AccountController] [activate] - x-request-id:${requestId}, error ${error}`,
+        `[AccountController] [activate] - x-request-id: ${requestId}, error: ${error}`,
       );
 
       if (error instanceof HttpException) {
@@ -251,7 +260,7 @@ export class AccountController {
   ) {
     try {
       this.logger.info(
-        `[AccountController] [disJoinEvent] - x-request-id:${requestId}`,
+        `[AccountController] [disJoinEvent] - x-request-id: ${requestId}`,
       );
 
       await this.disjoinEventService.disJoinEvent(
@@ -261,12 +270,13 @@ export class AccountController {
       );
     } catch (error) {
       this.logger.error(
-        `[AccountController] [disJoinEvent] - x-request-id:${requestId}, error ${error}`,
+        `[AccountController] [disJoinEvent] - x-request-id: ${requestId}, error: ${error}`,
       );
 
       if (error instanceof HttpException) {
         throw error;
       }
+
       throw new InternalServerErrorException();
     }
   }
@@ -289,12 +299,13 @@ export class AccountController {
       );
     } catch (error) {
       this.logger.error(
-        `[AccountController] [sendEmailVerification] - x-request-id:${requestId}, error ${error}`,
+        `[AccountController] [sendEmailVerification] - x-request-id: ${requestId}, error: ${error}`,
       );
 
       if (error instanceof HttpException) {
         throw error;
       }
+
       throw new InternalServerErrorException();
     }
   }
@@ -317,12 +328,42 @@ export class AccountController {
       );
     } catch (error) {
       this.logger.error(
-        `[AccountController] [forgotPassword] - x-request-id:${requestId}, error ${error}`,
+        `[AccountController] [forgotPassword] - x-request-id: ${requestId}, error: ${error}`,
       );
 
       if (error instanceof HttpException) {
         throw error;
       }
+
+      throw new InternalServerErrorException();
+    }
+  }
+
+  @Put('/password/forgot-update')
+  @SwaggerForgotPasswordUpdate()
+  @HttpCode(204)
+  async passwordFotgotUpdate(
+    @Body() updatePasswordDto: UpdatePasswordDto,
+    @RequestId() requestId: string,
+  ) {
+    try {
+      this.logger.info(
+        `[AccountController] [passwordFotgotUpdate] - x-request-id: ${requestId}`,
+      );
+
+      await this.updatePasswordService.updatePassword(
+        updatePasswordDto,
+        requestId,
+      );
+    } catch (error) {
+      this.logger.error(
+        `[AccountController] [passwordFotgotUpdate] - x-request-id: ${requestId}, error: ${error}`,
+      );
+
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
       throw new InternalServerErrorException();
     }
   }

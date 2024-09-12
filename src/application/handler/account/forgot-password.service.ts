@@ -23,7 +23,7 @@ export class ForgotPasswordService {
   /**
    * Allow to send an email to change the user password.
    *
-   * @param email - DTO with registration data to create a new user.
+   * @param email - User email.
    * @param requestId - Request identifier.
    */
   async forgotPassword(email: string, requestId?: string) {
@@ -50,13 +50,7 @@ export class ForgotPasswordService {
         const { from, subject, html } =
           this.generateMailService.getForgotPasswordEmail(temporalCode);
 
-        await this.nodemailerService.sendEmail(
-          email,
-          from,
-          subject,
-          html,
-          requestId,
-        );
+        this.nodemailerService.sendEmail(email, from, subject, html, requestId);
       }
     } catch (error) {
       this.logger.error(

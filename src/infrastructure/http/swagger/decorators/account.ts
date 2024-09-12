@@ -13,6 +13,7 @@ import {
 import { applyDecorators } from '@nestjs/common';
 import {
   ACTIVATE_ACCOUNT_HEADERS,
+  FORGOT_PASSWORD_UPDATE_HEADERS,
   DISJOIN_EVENT_HEADERS,
   FORGOT_PASSWORD_HEADER,
   GET_MY_EVENT_HEADERS,
@@ -24,6 +25,7 @@ import {
 } from '../headers';
 import {
   ACTIVATE_ACCOUNT_RESPONSES,
+  FORGOT_PASSWORD_UPDATE_RESPONSE,
   DISJOIN_EVENT_RESPONSES,
   FORGOT_PASSWORD_RESPONSES,
   GET_MY_EVENTS_RESPONSES,
@@ -69,7 +71,7 @@ export function SwaggerRefreshToken() {
 export function SwaggerJoinEvent() {
   return applyDecorators(
     ApiOperation({
-      summary: 'Allow authenticated users to join as participants in an event',
+      summary: 'Allow authenticated users to join as participants in an event.',
     }),
     ApiBearerAuth(),
     ApiHeader(JOIN_EVENT_HEADERS.AUTHORIZATION_BEARER),
@@ -86,7 +88,7 @@ export function SwaggerDisjoinEvent() {
   return applyDecorators(
     ApiOperation({
       summary:
-        'Allow authenticated users to disjoin as participants from an event',
+        'Allow authenticated users to disjoin as participants from an event.',
     }),
     ApiBearerAuth(),
     ApiHeader(DISJOIN_EVENT_HEADERS.AUTHORIZATION_BEARER),
@@ -103,7 +105,7 @@ export function SwaggerGetMyEvents() {
   return applyDecorators(
     ApiOperation({
       summary:
-        'Return a list of events the user joined and have not been celebrated',
+        'Return a list of events the user joined and have not been celebrated.',
     }),
     ApiHeader(GET_MY_EVENT_HEADERS.AUTHORIZATION_BEARER),
     ApiOkResponse(GET_MY_EVENTS_RESPONSES.OK),
@@ -144,11 +146,25 @@ export function SwaggerActivateAccount() {
   return applyDecorators(
     ApiOperation({
       summary:
-        'Update account status to ACTIVE for user the verificationCode is related',
+        'Update account status to ACTIVE for user the verificationCode is related.',
     }),
     ApiHeader(ACTIVATE_ACCOUNT_HEADERS),
     ApiOkResponse(ACTIVATE_ACCOUNT_RESPONSES.OK),
     ApiBadRequestResponse(ACTIVATE_ACCOUNT_RESPONSES.BAD_REQUEST_ERROR),
     ApiInternalServerErrorResponse(ACTIVATE_ACCOUNT_RESPONSES.INTERNAL_ERROR),
+  );
+}
+
+export function SwaggerForgotPasswordUpdate() {
+  return applyDecorators(
+    ApiOperation({
+      summary: 'Update password for the account code provided belongs.',
+    }),
+    ApiHeader(FORGOT_PASSWORD_UPDATE_HEADERS),
+    ApiNoContentResponse(FORGOT_PASSWORD_UPDATE_RESPONSE.NO_CONTENT),
+    ApiBadRequestResponse(FORGOT_PASSWORD_UPDATE_RESPONSE.BAD_REQUEST_ERROR),
+    ApiInternalServerErrorResponse(
+      FORGOT_PASSWORD_UPDATE_RESPONSE.INTERNAL_ERROR,
+    ),
   );
 }

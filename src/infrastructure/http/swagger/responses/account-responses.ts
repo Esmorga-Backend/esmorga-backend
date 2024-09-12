@@ -20,6 +20,7 @@ const PATHS = {
   REGISTER: '/v1/account/register',
   REFRESH_TOKEN: '/v1/account/refresh',
   SEND_EMAIL_VERIFICATION: '/v1/account/email/verification',
+  FORGOT_PASSWORD_UPDATE: '/v1/account/password/forgot-update',
 };
 
 export const LOGIN_RESPONSES: { [key: string]: ApiResponseOptions } = {
@@ -373,6 +374,8 @@ export const SEND_EMAIL_VERIFICATION_RESPONSES: {
   },
 };
 
+
+
 export const ACTIVATE_ACCOUNT_RESPONSES: { [key: string]: ApiResponseOptions } =
   {
     OK: {
@@ -405,3 +408,36 @@ export const ACTIVATE_ACCOUNT_RESPONSES: { [key: string]: ApiResponseOptions } =
       },
     },
   };
+
+export const FORGOT_PASSWORD_UPDATE_RESPONSE: {
+  [key: string]: ApiResponseOptions;
+} = {
+  NO_CONTENT: {
+    description: 'ForgotPasswordCode used to update password',
+  },
+  BAD_REQUEST_ERROR: {
+    description: 'Some inputs are missed or wrong',
+    schema: {
+      type: 'object',
+      properties: {
+        ...BAD_REQUEST_ERROR_COMMON_PROPERTIES,
+        type: { type: 'string', example: PATHS.FORGOT_PASSWORD_UPDATE },
+        errors: {
+          type: 'array',
+          example: ['forgotPasswordCode should not be empty'],
+        },
+      },
+    },
+  },
+  INTERNAL_ERROR: {
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Error not handled',
+    schema: {
+      type: 'object',
+      properties: {
+        ...INTERNAL_ERROR_COMMON_PROPERTIES,
+        type: { type: 'string', example: PATHS.FORGOT_PASSWORD_UPDATE },
+      },
+    },
+  },
+};

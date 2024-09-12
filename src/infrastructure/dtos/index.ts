@@ -5,3 +5,4 @@ export * from './new-pair-of-tokens.dto';
 export * from './pair-of-tokens.dto';
 export * from './user-profile.dto';
 export * from './event-participants.dto';
+export * from './temporal-code.dto';

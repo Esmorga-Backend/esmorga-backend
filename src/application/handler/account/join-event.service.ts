@@ -30,7 +30,7 @@ export class JoinEventService {
    * @param accessToken - Token allows user a method to authenticate.
    * @param eventId - Event identifier.
    * @param requestId - Request identifier.
-   * @throws NotAcceptableEventApiError - User can not join past events
+   * @throws NotAcceptableEventApiError - User can not join past events.
    * @throws InvalidTokenApiError - No user found for the current session.
    * @throws InvalidEventIdApiError - EventId is not valid follwing DB schema ot not found.
    */
