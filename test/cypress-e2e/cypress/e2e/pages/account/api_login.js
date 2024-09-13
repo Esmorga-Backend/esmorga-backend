@@ -14,6 +14,9 @@ class ApiLogin extends ApiBasics {
   set_password(password) {
     this.#password = password;
   }
+  set_email(email) {
+    this.#email = email;
+  }
 
   post() {
     super.post(
