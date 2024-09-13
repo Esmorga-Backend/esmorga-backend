@@ -127,6 +127,20 @@ export function SwaggerForgotPassword() {
   );
 }
 
+export function SwaggerForgotPasswordUpdate() {
+  return applyDecorators(
+    ApiOperation({
+      summary: 'Update password for the account code provided belongs.',
+    }),
+    ApiHeader(FORGOT_PASSWORD_UPDATE_HEADERS),
+    ApiNoContentResponse(FORGOT_PASSWORD_UPDATE_RESPONSE.NO_CONTENT),
+    ApiBadRequestResponse(FORGOT_PASSWORD_UPDATE_RESPONSE.BAD_REQUEST_ERROR),
+    ApiInternalServerErrorResponse(
+      FORGOT_PASSWORD_UPDATE_RESPONSE.INTERNAL_ERROR,
+    ),
+  );
+}
+
 export function SwaggerSendEmailVerification() {
   return applyDecorators(
     ApiOperation({
@@ -152,19 +166,5 @@ export function SwaggerActivateAccount() {
     ApiOkResponse(ACTIVATE_ACCOUNT_RESPONSES.OK),
     ApiBadRequestResponse(ACTIVATE_ACCOUNT_RESPONSES.BAD_REQUEST_ERROR),
     ApiInternalServerErrorResponse(ACTIVATE_ACCOUNT_RESPONSES.INTERNAL_ERROR),
-  );
-}
-
-export function SwaggerForgotPasswordUpdate() {
-  return applyDecorators(
-    ApiOperation({
-      summary: 'Update password for the account code provided belongs.',
-    }),
-    ApiHeader(FORGOT_PASSWORD_UPDATE_HEADERS),
-    ApiNoContentResponse(FORGOT_PASSWORD_UPDATE_RESPONSE.NO_CONTENT),
-    ApiBadRequestResponse(FORGOT_PASSWORD_UPDATE_RESPONSE.BAD_REQUEST_ERROR),
-    ApiInternalServerErrorResponse(
-      FORGOT_PASSWORD_UPDATE_RESPONSE.INTERNAL_ERROR,
-    ),
   );
 }

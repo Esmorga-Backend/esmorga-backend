@@ -31,13 +31,20 @@ export class SendEmailVerificationService {
       this.logger.info(
         `[SendEmailVerificationService] [sendEmailVerification] - x-request-id:${requestId}, email: ${email}`,
       );
+
       const isRegistered = await this.accountRepository.accountExist(
         email,
         requestId,
       );
 
-      const { status } = isRegistered;
-      if (isRegistered && status !== 'ACTIVE' && status !== 'BLOCKED') {
+      console.log(isRegistered);
+
+      if (
+        isRegistered &&
+        isRegistered.status !== 'ACTIVE' &&
+        isRegistered.status !== 'BLOCKED'
+      ) {
+        console.log('***** HOLA');
         const verificationCode = generateTemporalCode();
 
         await this.temporalCodeRepository.saveCode(
