@@ -7,7 +7,9 @@ class ApiForgotPassword extends ApiBasics {
   constructor() {
     super();
   }
-
+  get_email() {
+    return this.#email;
+  }
   post() {
     super.post(
       this.#url,
@@ -21,6 +23,7 @@ class ApiForgotPassword extends ApiBasics {
     );
   }
   check_email() {
+    cy.wait(30000);
     api_1secmail.get_emails();
     cy.get('@response').then((response) => {
       api_1secmail.get_email(response.body[0].id);
