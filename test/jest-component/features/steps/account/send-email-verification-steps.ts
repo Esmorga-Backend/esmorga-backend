@@ -5,9 +5,10 @@ import {
   AccountRepository,
   TemporalCodeRepository,
 } from '../../../../../src/infrastructure/db/repositories';
+import { NodemailerService } from '../../../../../src/infrastructure/services';
+import { ACCOUNT_STATUS } from '../../../../../src/domain/const';
 import { EMAIL_MOCK } from '../../../../mocks/dtos';
 import { getUserMockDb } from '../../../../mocks/db';
-import { NodemailerService } from '../../../../../src/infrastructure/services';
 
 export const sendEmailVerificationSteps: StepDefinitions = ({ given, and }) => {
   // ###### MOB-TC-182 ######
@@ -33,7 +34,7 @@ export const sendEmailVerificationSteps: StepDefinitions = ({ given, and }) => {
 
     const USER_MOCK_DB = await getUserMockDb();
 
-    USER_MOCK_DB.status = 'UNVERIFIED';
+    USER_MOCK_DB.status = ACCOUNT_STATUS.UNVERIFIED;
 
     jest
       .spyOn(context.accountRepository, 'findOneByEmail')
@@ -75,10 +76,13 @@ export const sendEmailVerificationSteps: StepDefinitions = ({ given, and }) => {
         .mockResolvedValue(null);
     }
 
-    if ((status = 'ACTIVE')) {
+    if ((status = ACCOUNT_STATUS.ACTIVE)) {
       const USER_MOCK_DB = await getUserMockDb();
 
-      const USER_MOCK_ACTIVE_DB = { ...USER_MOCK_DB, status: 'ACTIVE' };
+      const USER_MOCK_ACTIVE_DB = {
+        ...USER_MOCK_DB,
+        status: ACCOUNT_STATUS.ACTIVE,
+      };
 
       jest
         .spyOn(context.accountRepository, 'findOneByEmail')
