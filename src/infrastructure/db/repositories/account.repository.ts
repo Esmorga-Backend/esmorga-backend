@@ -26,7 +26,7 @@ export class AccountRepository extends MongoRepository<UserSchema> {
    *
    * @param id - User identifier.
    * @param requestId - Request identifier.
-   * @returns UserProfileDto - User data following business schema.
+   * @returns User data following business schema.
    * @throws DataBaseUnathorizedError - User not found.
    */
   async getUserById(id: string, requestId?: string) {
@@ -62,7 +62,7 @@ export class AccountRepository extends MongoRepository<UserSchema> {
    *
    * @param email - User email.
    * @param requestId - Request identifier.
-   * @returns UserProfileDto - User data following business schema.
+   * @returns User data following business schema.
    * @throws DataBaseUnathorizedError - User not found.
    */
   async getUserByEmail(email: string, requestId?: string) {
@@ -98,7 +98,7 @@ export class AccountRepository extends MongoRepository<UserSchema> {
    *
    * @param email - User email.
    * @param requestId - Request identifier.
-   * @returns Boolean
+   * @returns User profile data if exist.
    */
   async accountExist(email: string, requestId?: string) {
     try {
