@@ -13,7 +13,16 @@ class ApiBasics {
     }).as('response');
     cy.wait(1000);
   }
-
+  put(url, data, headers) {
+    cy.request({
+      method: 'PUT',
+      url: Cypress.config().baseUrl + url,
+      body: data,
+      headers: headers,
+      failOnStatusCode: false,
+    }).as('response');
+    cy.wait(1000);
+  }
   check_response(code, response) {
     expect(code).to.eq(response.status);
   }
