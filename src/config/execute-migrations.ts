@@ -8,6 +8,7 @@ export async function executeMigrations() {
   const scripts = {
     QA: 'npm run migrate:qa-up',
     LOCAL: 'npm run migrate:local-up',
+    PROD: 'npm run migrate:prod-up',
   };
   const scriptToExecute = scripts[process.env.NODE_ENV];
 
