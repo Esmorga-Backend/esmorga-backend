@@ -9,11 +9,7 @@ import { EMAIL_MOCK } from '../../../../mocks/dtos';
 import { getUserMockDb } from '../../../../mocks/db';
 import { NodemailerService } from '../../../../../src/infrastructure/services';
 
-export const sendEmailVerificationSteps: StepDefinitions = ({
-  given,
-  and,
-  then,
-}) => {
+export const sendEmailVerificationSteps: StepDefinitions = ({ given, and }) => {
   // ###### MOB-TC-182 ######
   given('the POST Email verification API is available', async () => {
     context.path = '/v1/account/email/verification';
@@ -53,63 +49,49 @@ export const sendEmailVerificationSteps: StepDefinitions = ({
   and(
     /^(.*) fill correctly filled as (.*) with (.*)$/,
     async (input, inputType, inputValue) => {
-      if (
-        input === 'email' &&
-        inputType === 'number' &&
-        (inputValue === 123 || inputValue === 'pepe')
-      ) {
-        jest
-          .spyOn(context.accountRepository, 'findOneByEmail')
-          .mockResolvedValue(null);
+      if (input === 'email' && inputType === 'number' && inputValue == 123) {
+        context.mock = { ...EMAIL_MOCK, email: 123 };
       }
 
       if (
         input === 'email' &&
         inputType === 'string' &&
-        inputValue === 'esmorga.test.06@yopmail.com'
+        inputValue === 'pepe'
       ) {
-        const USER_MOCK_DB = await getUserMockDb();
-
-        jest
-          .spyOn(context.accountRepository, 'findOneByEmail')
-          .mockResolvedValue(USER_MOCK_DB);
+        context.mock = { ...EMAIL_MOCK, email: 'pepe' };
       }
+
+      input === 'email' &&
+        inputType === 'string' &&
+        (inputValue === 'esmorga.test.06@yopmail.com' ||
+          inputValue === 'pepe@yopmail.com');
     },
   );
 
-  and(/^email status (.*)$/, (status) => {
-    if (status === 'null' || status === 'ACTIVE') {
-      expect(context.nodemailerService.sendEmail).not.toHaveBeenCalled();
+  and(/^email status (.*)$/, async (status) => {
+    if (status === 'null') {
+      jest
+        .spyOn(context.accountRepository, 'findOneByEmail')
+        .mockResolvedValue(null);
+    }
+
+    if ((status = 'ACTIVE')) {
+      const USER_MOCK_DB = await getUserMockDb();
+
+      const USER_MOCK_ACTIVE_DB = { ...USER_MOCK_DB, status: 'ACTIVE' };
+
+      jest
+        .spyOn(context.accountRepository, 'findOneByEmail')
+        .mockResolvedValue(USER_MOCK_ACTIVE_DB);
     }
   });
-
-  then(
-    /^well-formed response with status code (.*) returned$/,
-    (responseCode) => {
-      if (responseCode === 400 || responseCode === 204) {
-        expect(context.nodemailerService.sendEmail).not.toHaveBeenCalled();
-      }
-    },
-  );
 
   and('none mail is sent', () => {
     expect(context.nodemailerService.sendEmail).not.toHaveBeenCalled();
   });
 
   // ###### MOB-TC-181 ######
-  and('mail is sent', () => {
-    jest
-      .spyOn(context.accountRepository, 'findOneByEmail')
-      .mockResolvedValue({});
-    console.log('***>>>>');
-    // const USER_MOCK_DB = await getUserMockDb();
-
-    // USER_MOCK_DB.status = 'UNVERIFIED';
-
-    // jest
-    //   .spyOn(context.accountRepository, 'findOneByEmail')
-    //   .mockResolvedValue(USER_MOCK_DB);
-
+  and('mail is sent', async () => {
     expect(context.nodemailerService.sendEmail).toHaveBeenCalledTimes(1);
   });
 };

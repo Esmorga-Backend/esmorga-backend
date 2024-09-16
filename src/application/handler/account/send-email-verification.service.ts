@@ -9,7 +9,7 @@ import {
   GenerateMailService,
 } from '../../../domain/services';
 import { NodemailerService } from '../../../infrastructure/services';
-import { TEMPORAL_CODE_TYPE } from '../../../domain/const';
+import { ACCOUNT_STATUS, TEMPORAL_CODE_TYPE } from '../../../domain/const';
 
 @Injectable()
 export class SendEmailVerificationService {
@@ -37,14 +37,11 @@ export class SendEmailVerificationService {
         requestId,
       );
 
-      console.log(isRegistered);
-
       if (
         isRegistered &&
-        isRegistered.status !== 'ACTIVE' &&
-        isRegistered.status !== 'BLOCKED'
+        isRegistered.status !== ACCOUNT_STATUS.ACTIVE &&
+        isRegistered.status !== ACCOUNT_STATUS.BLOCKED
       ) {
-        console.log('***** HOLA');
         const verificationCode = generateTemporalCode();
 
         await this.temporalCodeRepository.saveCode(
