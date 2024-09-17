@@ -4,6 +4,9 @@ inputs:
   SSHRSA:
     description: 'SSH RSA'
     required: true
+  ENV:
+    description: 'ENV to deploy to'
+    required: true
 runs:
   using: "composite"
   steps:
