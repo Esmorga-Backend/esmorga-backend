@@ -88,4 +88,13 @@ export const reusableSteps: StepDefinitions = ({ when, then, and }) => {
   and(/^detail in error is (.*) ,description: (.*)$/, async (row) => {
     expect(context.response.body.detail).toBe(row);
   });
+
+  then(
+    /^well-formed response with status code (.*) returned$/,
+    (responseCode) => {
+      expect(context.response.status).toBe(parseInt(responseCode));
+
+      if (context.response.status !== HttpStatus.NO_CONTENT) check_swagger();
+    },
+  );
 };

@@ -9,27 +9,27 @@ import {
   GenerateMailService,
 } from '../../../domain/services';
 import { NodemailerService } from '../../../infrastructure/services';
-import { TEMPORAL_CODE_TYPE } from '../../../domain/const';
+import { ACCOUNT_STATUS, TEMPORAL_CODE_TYPE } from '../../../domain/const';
 
 @Injectable()
-export class ForgotPasswordService {
+export class SendEmailVerificationService {
   constructor(
     private readonly logger: PinoLogger,
     private readonly accountRepository: AccountRepository,
+    private readonly temporalCodeRepository: TemporalCodeRepository,
     private readonly generateMailService: GenerateMailService,
     private readonly nodemailerService: NodemailerService,
-    private readonly temporalCodeRepository: TemporalCodeRepository,
   ) {}
   /**
-   * Allow to send an email to change the user password.
+   * Sends a verification email if the account is registered but not ACTIVE or BLOCKED.
    *
    * @param email - User email.
    * @param requestId - Request identifier.
    */
-  async forgotPassword(email: string, requestId?: string) {
+  async sendEmailVerification(email: string, requestId?: string) {
     try {
       this.logger.info(
-        `[ForgotPasswordService] [forgotPassword] - x-request-id:${requestId}, email: ${email}`,
+        `[SendEmailVerificationService] [sendEmailVerification] - x-request-id:${requestId}, email: ${email}`,
       );
 
       const isRegistered = await this.accountRepository.accountExist(
@@ -37,24 +37,28 @@ export class ForgotPasswordService {
         requestId,
       );
 
-      if (isRegistered) {
-        const temporalCode = generateTemporalCode();
+      if (
+        isRegistered &&
+        isRegistered.status !== ACCOUNT_STATUS.ACTIVE &&
+        isRegistered.status !== ACCOUNT_STATUS.BLOCKED
+      ) {
+        const verificationCode = generateTemporalCode();
 
         await this.temporalCodeRepository.saveCode(
-          temporalCode,
-          TEMPORAL_CODE_TYPE.FORGOT_PASSWORD,
+          verificationCode,
+          TEMPORAL_CODE_TYPE.VERIFICATION,
           email,
           requestId,
         );
 
         const { from, subject, html } =
-          this.generateMailService.getForgotPasswordEmail(temporalCode);
+          this.generateMailService.getVerificationEmail(verificationCode);
 
         this.nodemailerService.sendEmail(email, from, subject, html, requestId);
       }
     } catch (error) {
       this.logger.error(
-        `[ForgotPasswordService] [forgotPassword] - x-request-id: ${requestId}, error: ${error}`,
+        `[SendEmailVerificationService] [sendEmailVerification] - x-request-id: ${requestId}, error: ${error}`,
       );
 
       throw error;

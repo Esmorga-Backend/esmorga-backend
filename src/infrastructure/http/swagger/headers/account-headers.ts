@@ -35,6 +35,10 @@ export const ACTIVATE_ACCOUNT_HEADERS = {
   ...CONTENT_TYPE,
 };
 
+export const SEND_EMAIL_VERIFICATION_HEADER = {
+  ...CONTENT_TYPE,
+};
+
 export const FORGOT_PASSWORD_UPDATE_HEADERS = {
   ...CONTENT_TYPE,
 };
