@@ -78,6 +78,7 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Deploy to QA
-        uses: ./.github/actions/DeployToQA
+        uses: ./.github/actions/Deploy
         with:
           SSHRSA: ${{ secrets.SSHRSA}}
+          ENV: QA

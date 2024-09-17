@@ -1,0 +1,37 @@
+name: Deploy PROD Env 
+run-name: ${{ github.actor }} is deploying release to PROD Env 🚀
+on:
+
+  workflow_dispatch:
+
+jobs:
+  Run-tests-on-Ubuntu:
+    name: Run npm test on Ubuntu
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    env:
+      APP_PORT: 3000
+      MONGODB_URI: "mongodb://localhost:27017/esmorga"
+      NODE_ENV: LOCAL"
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      ACCESS_TOKEN_TTL: 600
+      MAX_PAIR_OF_TOKEN: 5
+      AIO_TOKEN: ${{ secrets.AIO_TOKEN }}
+      CYPRESS_BASE_URL: http://localhost:3000/
+      POSTMAN_TOKEN: ${{ secrets.postmanToken }}
+      DNS_NAME: http://localhost:3000
+      SSHRSA: ${{ secrets.SSHRSA}}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      EMAIL_USER: esmorgamailservice@gmail.com
+      EMAIL_PASS: ${{ secrets.EMAIL_PASS}}
+      APP_LINK: https://www.google.com
+
+    steps:
+
+      - name: Deploy to PROD
+        uses: ./.github/actions/Deploy
+        with:
+          SSHRSA: ${{ secrets.SSHRSA}}
+          ENV: PROD
