@@ -97,7 +97,7 @@ async function main() {
       }
     } else {
       const cyKey = await aio.findCycleByUs(onErrorMsg, usName);
-      if (cyKey == null) {
+      if (cyKey == null && branchName.split('/'[0]) != 'release') {
         console.log(
           "Seems Cycle is not created, create it with 'node test/scripts/features-tool --Create-Cycle-for-US",
         );
