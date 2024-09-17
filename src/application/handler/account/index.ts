@@ -6,4 +6,5 @@ export * from './join-event.service';
 export * from './login.service';
 export * from './register.service';
 export * from './refresh-token.service';
+export * from './send-email-verification.service';
 export * from './update-password.service';

@@ -26,10 +26,10 @@ export class AccountRepository extends MongoRepository<UserSchema> {
    *
    * @param id - User identifier.
    * @param requestId - Request identifier.
-   * @returns UserProfileDto - User data following business schema.
+   * @returns User data following business schema.
    * @throws DataBaseUnathorizedError - User not found.
    */
-  async getUserById(id: string, requestId?: string): Promise<UserProfileDto> {
+  async getUserById(id: string, requestId?: string) {
     try {
       this.logger.info(
         `[AccountRepository] [getUserById] - x-request-id: ${requestId}, id: ${id}`,
@@ -62,7 +62,7 @@ export class AccountRepository extends MongoRepository<UserSchema> {
    *
    * @param email - User email.
    * @param requestId - Request identifier.
-   * @returns UserProfileDto - User data following business schema.
+   * @returns User data following business schema.
    * @throws DataBaseUnathorizedError - User not found.
    */
   async getUserByEmail(email: string, requestId?: string) {
@@ -94,21 +94,19 @@ export class AccountRepository extends MongoRepository<UserSchema> {
   }
 
   /**
-   * Check if there is already a account with that email
+   * Check if there is already an account with that email.
    *
    * @param email - User email.
    * @param requestId - Request identifier.
-   * @returns Boolean
+   * @returns User profile data if exist.
    */
-  async accountExist(email: string, requestId?: string): Promise<boolean> {
+  async accountExist(email: string, requestId?: string) {
     try {
       this.logger.info(
         `[AccountRepository] [accountExist] - x-request-id: ${requestId}, email: ${email}`,
       );
 
-      const account = await this.findOneByEmail(email);
-
-      return account ? true : false;
+      return this.findOneByEmail(email);
     } catch (error) {
       this.logger.error(
         `[AccountRepository] [accountExist] - x-request-id: ${requestId}, error: ${error}`,

@@ -34,8 +34,8 @@ export class LoginService {
    *
    * @param accountLoginDto - Account email and password.
    * @param requestId - Request idenfier.
-   * @returns AccountLoggedDto - Object with new pair of tokens and profile data
-   * @throws InvalidCredentialsLoginApiError - Email and password combination do not match with the DB data
+   * @returns AccountLoggedDto - Object with new pair of tokens and profile data.
+   * @throws InvalidCredentialsLoginApiError - Email and password combination do not match with the DB data.
    */
   async login(
     accountLoginDto: AccountLoginDto,

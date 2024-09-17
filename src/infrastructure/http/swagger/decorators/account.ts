@@ -21,6 +21,7 @@ import {
   LOGIN_HEADERS,
   REFRESH_TOKEN_HEADERS,
   REGISTER_HEADER,
+  SEND_EMAIL_VERIFICATION_HEADER,
 } from '../headers';
 import {
   ACTIVATE_ACCOUNT_RESPONSES,
@@ -32,6 +33,7 @@ import {
   LOGIN_RESPONSES,
   REFRESH_TOKEN_RESPONSES,
   REGISTER_RESPONSES,
+  SEND_EMAIL_VERIFICATION_RESPONSES,
 } from '../responses';
 
 export function SwaggerAccountLogin() {
@@ -69,7 +71,7 @@ export function SwaggerRefreshToken() {
 export function SwaggerJoinEvent() {
   return applyDecorators(
     ApiOperation({
-      summary: 'Allow authenticated users to join as participants in an event',
+      summary: 'Allow authenticated users to join as participants in an event.',
     }),
     ApiBearerAuth(),
     ApiHeader(JOIN_EVENT_HEADERS.AUTHORIZATION_BEARER),
@@ -86,7 +88,7 @@ export function SwaggerDisjoinEvent() {
   return applyDecorators(
     ApiOperation({
       summary:
-        'Allow authenticated users to disjoin as participants from an event',
+        'Allow authenticated users to disjoin as participants from an event.',
     }),
     ApiBearerAuth(),
     ApiHeader(DISJOIN_EVENT_HEADERS.AUTHORIZATION_BEARER),
@@ -103,7 +105,7 @@ export function SwaggerGetMyEvents() {
   return applyDecorators(
     ApiOperation({
       summary:
-        'Return a list of events the user joined and have not been celebrated',
+        'Return a list of events the user joined and have not been celebrated.',
     }),
     ApiHeader(GET_MY_EVENT_HEADERS.AUTHORIZATION_BEARER),
     ApiOkResponse(GET_MY_EVENTS_RESPONSES.OK),
@@ -125,23 +127,10 @@ export function SwaggerForgotPassword() {
   );
 }
 
-export function SwaggerActivateAccount() {
-  return applyDecorators(
-    ApiOperation({
-      summary:
-        'Update account status to ACTIVE for user the verificationCode is related',
-    }),
-    ApiHeader(ACTIVATE_ACCOUNT_HEADERS),
-    ApiOkResponse(ACTIVATE_ACCOUNT_RESPONSES.OK),
-    ApiBadRequestResponse(ACTIVATE_ACCOUNT_RESPONSES.BAD_REQUEST_ERROR),
-    ApiInternalServerErrorResponse(ACTIVATE_ACCOUNT_RESPONSES.INTERNAL_ERROR),
-  );
-}
-
 export function SwaggerForgotPasswordUpdate() {
   return applyDecorators(
     ApiOperation({
-      summary: 'Update password for the account code provided belongs',
+      summary: 'Update password for the account code provided belongs.',
     }),
     ApiHeader(FORGOT_PASSWORD_UPDATE_HEADERS),
     ApiNoContentResponse(FORGOT_PASSWORD_UPDATE_RESPONSE.NO_CONTENT),
@@ -149,5 +138,33 @@ export function SwaggerForgotPasswordUpdate() {
     ApiInternalServerErrorResponse(
       FORGOT_PASSWORD_UPDATE_RESPONSE.INTERNAL_ERROR,
     ),
+  );
+}
+
+export function SwaggerSendEmailVerification() {
+  return applyDecorators(
+    ApiOperation({
+      summary:
+        'Send a verification email if the last code expires, as long as the account is not active or blocked.',
+    }),
+    ApiHeader(SEND_EMAIL_VERIFICATION_HEADER),
+    ApiNoContentResponse(SEND_EMAIL_VERIFICATION_RESPONSES.NO_CONTENT),
+    ApiBadRequestResponse(SEND_EMAIL_VERIFICATION_RESPONSES.BAD_REQUEST_ERROR),
+    ApiInternalServerErrorResponse(
+      SEND_EMAIL_VERIFICATION_RESPONSES.INTERNAL_ERROR,
+    ),
+  );
+}
+
+export function SwaggerActivateAccount() {
+  return applyDecorators(
+    ApiOperation({
+      summary:
+        'Update account status to ACTIVE for user the verificationCode is related.',
+    }),
+    ApiHeader(ACTIVATE_ACCOUNT_HEADERS),
+    ApiOkResponse(ACTIVATE_ACCOUNT_RESPONSES.OK),
+    ApiBadRequestResponse(ACTIVATE_ACCOUNT_RESPONSES.BAD_REQUEST_ERROR),
+    ApiInternalServerErrorResponse(ACTIVATE_ACCOUNT_RESPONSES.INTERNAL_ERROR),
   );
 }
