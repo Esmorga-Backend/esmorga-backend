@@ -39,6 +39,7 @@ jobs:
          run: |
           echo ${{vars}}
           echo ${{secrets}}
+          echo ${{secrets[0]}}
       - run: npm ci
       - run: npm run test:create:cycle
       - name: Run Unit Tests
