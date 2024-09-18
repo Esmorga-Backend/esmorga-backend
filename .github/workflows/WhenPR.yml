@@ -37,7 +37,7 @@ jobs:
           node-version: "22.1"
       -  name: Create env
          run: |
-          python3 .github/workflows/scripts/DeployToEnv.py ${{vars}}
+          python3 .github/workflows/scripts/createENV.py ${{vars}}
 
       - run: npm ci
       - run: npm run test:create:cycle
