@@ -118,13 +118,13 @@ class Aio {
     };
     return data;
   }
-  async createCycle(onErrorMsg, usName) {
+  async createCycle(onErrorMsg, usName, usVersionName) {
     let url =
       'https://tcms.aiojiraapps.com/aio-tcms/api/v1/project/MOB/testcycle/detail';
 
     const data = {
       jiraTaskIDs: [usName],
-      title: 'CY for ' + usName,
+      title: 'CY for ' + usVersionName,
       objective: 'TEST US ' + usName,
       ownedByID: '6135554fc425a20068e24a56',
       folder: {
