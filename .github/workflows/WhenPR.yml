@@ -32,7 +32,7 @@ jobs:
       APP_LINK: https://www.google.com
 
     steps:
-      - run: echo "${{ env.APP_PORT }}"
+      - run: echo "${{ LOCAL.APP_PORT }}"
       - name: Start MongoDB
         uses: supercharge/mongodb-github-action@1.11.0
         with:
