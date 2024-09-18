@@ -2,9 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { plainToClass } from 'class-transformer';
 import { PinoLogger } from 'nestjs-pino';
+import { ACCOUNT_STATUS } from '../../../domain/const';
 import { DataBaseUnathorizedError } from '../../../infrastructure/db/errors';
 import {
   AccountRepository,
+  LoginAttempsRepository,
   TokensRepository,
 } from '../../../infrastructure/db/repositories';
 import {
@@ -17,7 +19,11 @@ import {
   getOldestPairOfTokens,
   GenerateTokenPair,
 } from '../../../domain/services';
-import { InvalidCredentialsLoginApiError } from '../../../domain/errors';
+import {
+  BlockedUserApiError,
+  InvalidCredentialsLoginApiError,
+  UnverifiedUserApiError,
+} from '../../../domain/errors';
 
 @Injectable()
 export class LoginService {
@@ -25,6 +31,7 @@ export class LoginService {
     private readonly logger: PinoLogger,
     private readonly generateTokenPair: GenerateTokenPair,
     private readonly accountRepository: AccountRepository,
+    private readonly loginAttempsRepository: LoginAttempsRepository,
     private readonly tokensRepository: TokensRepository,
     private configService: ConfigService,
   ) {}
@@ -51,9 +58,24 @@ export class LoginService {
       const { userProfile, password: userDbPassword } =
         await this.accountRepository.getUserByEmail(email, requestId);
 
-      await validateLoginCredentials(userDbPassword, password);
+      if (userProfile.status === ACCOUNT_STATUS.UNVERIFIED) {
+        throw new UnverifiedUserApiError();
+      }
+
+      if (userProfile.status === ACCOUNT_STATUS.BLOCKED) {
+        throw new BlockedUserApiError();
+      }
 
       const { uuid } = userProfile;
+
+      await validateLoginCredentials(
+        uuid,
+        userDbPassword,
+        password,
+        this.accountRepository,
+        this.loginAttempsRepository,
+        requestId,
+      );
 
       const { accessToken, refreshToken } =
         await this.generateTokenPair.generateTokens(uuid);

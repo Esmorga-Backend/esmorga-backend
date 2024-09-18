@@ -133,26 +133,27 @@ export class MongoRepository<E> implements DBRepository<E> {
   }
 
   /**
+   * Searches for a document related to the uuid provided and increases login attempts.
+   * If the document doesn't exist creates a new one .
+   *
+   * @param uuid - The uuid to find.
+   * @returns Login attemps updated.
+   */
+  async findAndUpdateLoginAttemps(uuid: string): Promise<E> {
+    return this.entityModel.findOneAndUpdate(
+      { uuid },
+      { $inc: { loginAttemps: 1 } },
+      { upsert: true, new: true },
+    );
+  }
+
+  /**
    * Create a new document in the collection.
    *
    * @param data - The data to create the new document.
    */
   async save(data) {
     await this.entityModel.create(data);
-  }
-
-  /**
-   * Remove document fields by ID.
-   *
-   * @param id - The ID of the document to remove fields.
-   * @param data - The data to remove.
-   */
-  async removeFieldsById(id: string, data: object): Promise<E> {
-    return this.entityModel.findOneAndUpdate(
-      { _id: id },
-      { $unset: data },
-      { new: true },
-    );
   }
 
   /**
@@ -185,7 +186,7 @@ export class MongoRepository<E> implements DBRepository<E> {
   }
 
   /**
-   * Finde a document by email, update the status and return the document updated.
+   * Find a document by email, update the status and return the document updated.
    *
    * @param email - User email address.
    * @param newStatus - Status value to update.
@@ -196,6 +197,28 @@ export class MongoRepository<E> implements DBRepository<E> {
       { email },
       { status: newStatus },
       { new: true },
+    );
+  }
+
+  /**
+   * Find a document by uuid and update the status to BLOCKED.
+   *
+   * @param email - User email address.
+   * @param newStatus - Status value to update.
+   */
+  async updateBlockedStatusByUuid(
+    uuid: string,
+    newStatus: string,
+    unblockDate: Date,
+  ) {
+    await this.entityModel.findOneAndUpdate(
+      { uuid },
+      {
+        $set: {
+          status: newStatus,
+          expireBlockedAt: unblockDate,
+        },
+      },
     );
   }
 
