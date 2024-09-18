@@ -19,20 +19,9 @@ jobs:
       contents: write
       pull-requests: write
     env:
-      APP_PORT: ${{ vars.APP_PORT }}
-      MONGODB_URI: ${{secrets.MONGODB_URI}}
-      NODE_ENV: ${{ vars.NODE_ENV }}
-      JWT_SECRET: ${{ secrets.JWT_SECRET }}
-      ACCESS_TOKEN_TTL: 600
-      MAX_PAIR_OF_TOKEN: 5
       AIO_TOKEN: ${{ secrets.AIO_TOKEN }}
-      CYPRESS_BASE_URL: http://localhost:3000/
       POSTMAN_TOKEN: ${{ secrets.postmanToken }}
-      DNS_NAME: ${{ vars.DNS_NAME }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      EMAIL_USER: ${{vars.EMAIL_USER}}
-      EMAIL_PASS: ${{ secrets.EMAIL_PASS}}
-      APP_LINK: ${{vars.APP_LINK}}
 
     steps:
       - run: echo ""
@@ -46,10 +35,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22.1"
+      -  name: Create env
+        run: |
+          echo $vars
+          echo $secrets 
       - run: npm ci
       - run: npm run test:create:cycle
-      - name: Checkout repository
-        uses: actions/checkout@v2
       - name: Run Unit Tests
         uses: ./.github/actions/runUnitTests
         with:
