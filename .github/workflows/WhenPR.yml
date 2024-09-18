@@ -24,7 +24,7 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
-      - run: echo ""
+ 
       - name: Start MongoDB
         uses: supercharge/mongodb-github-action@1.11.0
         with:
@@ -37,8 +37,8 @@ jobs:
           node-version: "22.1"
       -  name: Create env
          run: |
-          echo $vars
-          echo $secrets 
+          echo ${{vars}}
+          echo ${{secrets}}
       - run: npm ci
       - run: npm run test:create:cycle
       - name: Run Unit Tests
