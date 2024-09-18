@@ -14,9 +14,9 @@ jobs:
       contents: write
       pull-requests: write
     env:
-
+      APP_PORT: ${{ github.env.APP_PORT }}
       MONGODB_URI: "mongodb://localhost:27017/esmorga"
-
+      NODE_ENV: ${{  github.env.NODE_ENV }}
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
       ACCESS_TOKEN_TTL: 600
       MAX_PAIR_OF_TOKEN: 5
