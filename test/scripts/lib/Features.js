@@ -37,13 +37,12 @@ class Features {
   }
 
   getUsNameFromBranch(branchName) {
-    let match_n = 2;
     const regex = /\/(MOB-\d+|mob-\d+)/;
-
     const match = branchName.match(regex);
+    const regexV = /\/(MOB-\d+\(\w+\)|MOB-\d+|mob-\d+|mob-\d+\(\w+\))/;
+    const matchV = branchName.match(regexV);
     if (match && match.length > 1) {
-      console.log(match);
-      return match[1];
+      return match[1], matchV[1];
     }
     return;
   }
