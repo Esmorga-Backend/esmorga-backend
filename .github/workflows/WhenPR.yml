@@ -37,6 +37,7 @@ jobs:
           node-version: "22.1"
       -  name: Create env
          run: |
+          printenv
           python3 .github/workflows/scripts/createENV.py ${{vars}}
 
       - run: npm ci
