@@ -40,7 +40,8 @@ async function main() {
       branchName = await git.getBranchName();
       console.log(branchName);
     }
-    let usName = features.getUsNameFromBranch(branchName);
+    let usName,
+      usVersionName = features.getUsNameFromBranch(branchName);
 
     //Comment previous line and use nexts to force a US with tests
     // usName = 'MOB-122';
@@ -88,7 +89,7 @@ async function main() {
       console.log('Create Cycle for', usName, 'with tests', TESTS);
       let cyKey = await aio.findCycleByUs(onErrorMsg, usName);
       if (cyKey == null) {
-        cyKey = await aio.createCycle(onErrorMsg, usName);
+        cyKey = await aio.createCycle(onErrorMsg, usName, usVersionName);
         for (test of TESTS) {
           await aio.addTestToCycle(onErrorMsg, test, cyKey);
         }
