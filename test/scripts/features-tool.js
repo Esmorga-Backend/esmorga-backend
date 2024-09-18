@@ -97,7 +97,27 @@ async function main() {
       }
     } else {
       const cyKey = await aio.findCycleByUs(onErrorMsg, usName);
-      if (cyKey == null && branchName.split('/'[0]) != 'release') {
+      if (branchName.split('/'[0]) != 'release') {
+        console.log('Get test for release');
+
+        for (selectedTestType in selectedTestTypes) {
+          Data = [];
+
+          Data.push(
+            aio.prepareDataForAutomated(selectedTestTypes[selectedTestType]),
+          );
+          Tests = await features.getTestFromQuerys(Data, onErrorMsg);
+
+          console.log(Tests);
+          if (Tests.length > 0) {
+            await aio.getFeatures(
+              Tests,
+              selectedTestTypes[selectedTestType],
+              onErrorMsg,
+            );
+          }
+        }
+      } else if (cyKey == null) {
         console.log(
           "Seems Cycle is not created, create it with 'node test/scripts/features-tool --Create-Cycle-for-US",
         );
