@@ -1,6 +1,8 @@
 import paramiko
 import sys
 import io
+import os
+
 key=sys.argv[2]
 hostname=sys.argv[1]
 pkey = paramiko.RSAKey.from_private_key(io.StringIO(key))
@@ -13,7 +15,7 @@ cd /opt/esmorga-backend/
 git reset --hard HEAD
 git clean -df
 git pull
-echo "APP_PORT=3000" > .env
+echo "APP_PORT="""+os.getenv('APP_PORT')+""" > .env
 echo "MONGODB_URI=mongodb://localhost:27017/esmorga" >> .env
 echo "NODE_ENV=LOCAL" >> .env
 echo "JWT_SECRET=j1u5RDS8Ga4hzDcS1vGULNPHYMGjMfjINLarWJM9UIjAVPxgFUgA1tMc/OT4NItCzGqU/cGlkjg4l6kgqcNEcQ" >> .env
