@@ -1,6 +1,6 @@
 name: Run  Unit & Component Tests
 run-name: ${{ github.actor }} is testing PR ${{ github.ref }} new code 🚀
-concurrency: LOCAL
+
 on:
   pull_request:
     types: [opened, reopened, edited, synchronize]
@@ -14,6 +14,7 @@ jobs:
   Run-tests-on-Ubuntu:
     name: Run npm test on Ubuntu
     runs-on: ubuntu-latest
+    environment: LOCAL
     permissions:
       contents: write
       pull-requests: write
@@ -32,7 +33,7 @@ jobs:
       APP_LINK: https://www.google.com
 
     steps:
-      - run: echo "${{ LOCAL.APP_PORT }}"
+      - run: echo "${{ vars.APP_PORT }}"
       - name: Start MongoDB
         uses: supercharge/mongodb-github-action@1.11.0
         with:
