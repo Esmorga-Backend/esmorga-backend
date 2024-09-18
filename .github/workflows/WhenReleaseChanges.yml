@@ -43,7 +43,7 @@ jobs:
           node-version: "22.1"
 
       - run: npm ci
-
+      - run: npm run test:create:cycle
       - name: Checkout repository
         uses: actions/checkout@v2
       - name: Run Unit Tests
