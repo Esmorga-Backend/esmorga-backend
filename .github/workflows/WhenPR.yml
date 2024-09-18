@@ -19,21 +19,23 @@ jobs:
       contents: write
       pull-requests: write
     env:
-      MONGODB_URI: "mongodb://localhost:27017/esmorga"
+      APP_PORT: ${{ vars.APP_PORT }}
+      MONGODB_URI: ${{secrets.MONGODB_URI}}
+      NODE_ENV: ${{ vars.NODE_ENV }}
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
       ACCESS_TOKEN_TTL: 600
       MAX_PAIR_OF_TOKEN: 5
       AIO_TOKEN: ${{ secrets.AIO_TOKEN }}
       CYPRESS_BASE_URL: http://localhost:3000/
       POSTMAN_TOKEN: ${{ secrets.postmanToken }}
-      DNS_NAME: http://localhost:3000
+      DNS_NAME: ${{ vars.DNS_NAME }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      EMAIL_USER: esmorgamailservice@gmail.com
+      EMAIL_USER: ${{vars.EMAIL_USER}}
       EMAIL_PASS: ${{ secrets.EMAIL_PASS}}
-      APP_LINK: https://www.google.com
+      APP_LINK: ${{vars.APP_LINK}}
 
     steps:
-      - run: echo "${{ vars.APP_PORT }}"
+      - run: echo ""
       - name: Start MongoDB
         uses: supercharge/mongodb-github-action@1.11.0
         with:
