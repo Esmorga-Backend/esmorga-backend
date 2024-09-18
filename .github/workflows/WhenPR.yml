@@ -18,11 +18,7 @@ jobs:
       contents: write
       pull-requests: write
     env:
-      TEST2: ${{vars.EMAIL_USER}}
-      TEST_VAR: ${{vars.TEST_VAR}}
-      APP_PORT: ${{ vars.APP_PORT }}
       MONGODB_URI: "mongodb://localhost:27017/esmorga"
-      NODE_ENV: ${{  github.env.NODE_ENV }}
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
       ACCESS_TOKEN_TTL: 600
       MAX_PAIR_OF_TOKEN: 5
@@ -36,6 +32,7 @@ jobs:
       APP_LINK: https://www.google.com
 
     steps:
+      - run: echo "${{ env.APP_PORT }}"
       - name: Start MongoDB
         uses: supercharge/mongodb-github-action@1.11.0
         with:
