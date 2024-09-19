@@ -37,6 +37,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+      - run: ls
       - name: Create ENV
         uses: ./.github/actions/Env-Create/
       # - name: Start MongoDB
