@@ -7,7 +7,7 @@ jobs:
   setup-secrets:
     runs-on: ubuntu-latest
     outputs:
-      my_var: ${{ steps.step1.outputs.VARS }}
+      VARS: ${{ steps.step1.outputs.VARS }}
 
     steps:
       - name: Configurar variables de entorno a partir de secrets
