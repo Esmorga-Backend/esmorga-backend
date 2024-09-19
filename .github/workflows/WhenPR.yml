@@ -37,8 +37,7 @@ jobs:
           node-version: "22.1"
       -  name: Create env
          run: |
-          printenv
-          python3 .github/workflows/scripts/createENV.py ${{vars}}
+          npm run start > VARS.txt  2>&1
 
       - run: npm ci
       - run: npm run test:create:cycle

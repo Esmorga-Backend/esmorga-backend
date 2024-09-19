@@ -18,4 +18,4 @@ runs:
         shell: bash
         run: |
           python -m pip install --upgrade pip paramiko 
-          python .github/workflows/scripts/DeployToEnv.py qa.esmorga.canarte.org ${{inputs.SSHRSA}}
+          python .github/workflows/scripts/DeployToEnv.py qa.esmorga.canarte.org ${{inputs.SSHRSA}} APP_PORT="${{secrets.APP_PORT}}${{vars.APP_PORT}}" MONGODB_URI="${{secrets.MONGODB_URI}}${{vars.MONGODB_URI}}" NODE_ENV="${{secrets.NODE_ENV}}${{vars.NODE_ENV}}" JWT_SECRET="${{secrets.JWT_SECRET}}${{vars.JWT_SECRET}}" ACCESS_TOKEN_TTL="${{secrets.ACCESS_TOKEN_TTL}}${{vars.ACCESS_TOKEN_TTL}}" MAX_PAIR_OF_TOKEN="${{secrets.MAX_PAIR_OF_TOKEN}}${{vars.MAX_PAIR_OF_TOKEN}}" EMAIL_USER="${{secrets.EMAIL_USER}}${{vars.EMAIL_USER}}" EMAIL_PASS="${{secrets.EMAIL_PASS}}${{vars.EMAIL_PASS}}" APP_LINK="${{secrets.APP_LINK}}${{vars.APP_LINK}}"
