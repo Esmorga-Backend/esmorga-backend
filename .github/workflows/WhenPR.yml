@@ -21,17 +21,21 @@ jobs:
       pull-requests: write
 
     env:
-
-      MONGODB_URI: "mongodb://localhost:27017/esmorga"
-      NODE_ENV: ${{vars.NODE_ENV}}
+      AIO_TOKEN: ${{ secrets.AIO_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      POSTMAN_TOKEN: ${{ secrets.postmanToken }}
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
-      ACCESS_TOKEN_TTL: 600
-      MAX_PAIR_OF_TOKEN: 5
-      CYPRESS_BASE_URL: http://localhost:3000/
-      DNS_NAME: http://localhost:3000
-      EMAIL_USER: esmorgamailservice@gmail.com
       EMAIL_PASS: ${{ secrets.EMAIL_PASS}}
-      APP_LINK: https://www.google.com
+      MONGODB_URI: "mongodb://localhost:27017/esmorga"
+
+      # APP_PORT: ${{vars.APP_PORT}}
+      # NODE_ENV: ${{vars.NODE_ENV}}
+      # ACCESS_TOKEN_TTL: 600
+      # MAX_PAIR_OF_TOKEN: 5
+      # CYPRESS_BASE_URL: http://localhost:3000/
+      # DNS_NAME: http://localhost:3000
+      # EMAIL_USER: esmorgamailservice@gmail.com
+      # APP_LINK: https://www.google.com
 
     steps:
       - name: Checkout repository
