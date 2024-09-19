@@ -1,0 +1,10 @@
+name: "Create ENV"
+description: "Create ENV"
+
+runs:
+  using: "composite"
+  steps:
+      - name: Create ENV
+        shell: bash
+        run: |
+          echo "APP_PORT=${{vars.APP_PORT}}" >> $GITHUB_ENV
