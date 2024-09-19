@@ -3,10 +3,14 @@ import { ConfigService } from '@nestjs/config';
 import { plainToClass } from 'class-transformer';
 import { PinoLogger } from 'nestjs-pino';
 import { ACCOUNT_STATUS } from '../../../domain/const';
-import { DataBaseUnathorizedError } from '../../../infrastructure/db/errors';
+import {
+  DataBaseBlockedError,
+  DataBaseForbiddenError,
+  DataBaseUnathorizedError,
+} from '../../../infrastructure/db/errors';
 import {
   AccountRepository,
-  LoginAttempsRepository,
+  LoginAttemptsRepository,
   TokensRepository,
 } from '../../../infrastructure/db/repositories';
 import {
@@ -31,7 +35,7 @@ export class LoginService {
     private readonly logger: PinoLogger,
     private readonly generateTokenPair: GenerateTokenPair,
     private readonly accountRepository: AccountRepository,
-    private readonly loginAttempsRepository: LoginAttempsRepository,
+    private readonly loginAttemptsRepository: LoginAttemptsRepository,
     private readonly tokensRepository: TokensRepository,
     private configService: ConfigService,
   ) {}
@@ -73,7 +77,7 @@ export class LoginService {
         userDbPassword,
         password,
         this.accountRepository,
-        this.loginAttempsRepository,
+        this.loginAttemptsRepository,
         requestId,
       );
 
@@ -117,6 +121,12 @@ export class LoginService {
       this.logger.error(
         `[LoginService] [login] - x-request-id:${requestId}, error ${error}`,
       );
+
+      if (error instanceof DataBaseBlockedError)
+        throw new BlockedUserApiError();
+
+      if (error instanceof DataBaseForbiddenError)
+        throw new UnverifiedUserApiError();
 
       if (error instanceof DataBaseUnathorizedError)
         throw new InvalidCredentialsLoginApiError();

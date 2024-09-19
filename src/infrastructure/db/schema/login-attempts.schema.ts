@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 const ttl = Number(process.env.LOGIN_ATTEMPTS_TTL);
 
 @Schema({ timestamps: true })
-export class LoginAttemps {
+export class LoginAttempts {
   @Prop({ required: true, index: true })
   uuid: string;
 
@@ -10,6 +10,6 @@ export class LoginAttemps {
   loginAttempts: number;
 }
 
-export const LoginAttempsSchema = SchemaFactory.createForClass(LoginAttemps);
+export const LoginAttemptsSchema = SchemaFactory.createForClass(LoginAttempts);
 
-LoginAttempsSchema.index({ createdAt: 1 }, { expireAfterSeconds: ttl });
+LoginAttemptsSchema.index({ createdAt: 1 }, { expireAfterSeconds: ttl });

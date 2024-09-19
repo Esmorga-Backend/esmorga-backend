@@ -137,12 +137,12 @@ export class MongoRepository<E> implements DBRepository<E> {
    * If the document doesn't exist creates a new one .
    *
    * @param uuid - The uuid to find.
-   * @returns Login attemps updated.
+   * @returns Login attempts updated.
    */
-  async findAndUpdateLoginAttemps(uuid: string): Promise<E> {
+  async findAndUpdateLoginAttempts(uuid: string): Promise<E> {
     return this.entityModel.findOneAndUpdate(
       { uuid },
-      { $inc: { loginAttemps: 1 } },
+      { $inc: { loginAttempts: 1 } },
       { upsert: true, new: true },
     );
   }
@@ -212,7 +212,7 @@ export class MongoRepository<E> implements DBRepository<E> {
     unblockDate: Date,
   ) {
     await this.entityModel.findOneAndUpdate(
-      { uuid },
+      { _id: uuid },
       {
         $set: {
           status: newStatus,

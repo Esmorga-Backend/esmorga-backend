@@ -22,6 +22,7 @@ jobs:
       NODE_ENV: LOCAL
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
       ACCESS_TOKEN_TTL: 600
+      LOGIN_ATTEMPTS_TTL: 300
       MAX_PAIR_OF_TOKEN: 5
       AIO_TOKEN: ${{ secrets.AIO_TOKEN }}
       CYPRESS_BASE_URL: http://localhost:3000/
