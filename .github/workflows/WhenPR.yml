@@ -14,8 +14,8 @@ jobs:
     uses: ./.github/workflows/SetupENV.yml
     secrets: inherit
 
-  Run-tests-on-Ubuntu:
-    uses: ./.github/workflows/Tests/RunTests.yaml
+  Run-tests:
+    uses: ./.github/workflows/RunTests.yml
     secrets: inherit
     needs: SetupEnv 
 
