@@ -38,7 +38,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
       - name: Create ENV
-        uses: ./.github/actions/Env-Create/action.yaml
+        uses: ./.github/actions/Env-Create/
       # - name: Start MongoDB
       #   uses: supercharge/mongodb-github-action@1.11.0
       #   with:
