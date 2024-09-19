@@ -17,7 +17,9 @@ jobs:
   Run-tests:
     uses: ./.github/workflows/RunTests.yml
     secrets: inherit
-    needs: SetupEnv 
+    needs: SetupEnv
+    with:
+      ENV: ${{needs.SetupEnv.outputs.VARS}}
 
     
 
