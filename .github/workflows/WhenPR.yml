@@ -10,6 +10,8 @@ on:
   workflow_dispatch:
 
 jobs:
+  deploy:
+    uses: ./.github/workflows/SetupENV.yml
   Run-tests-on-Ubuntu:
     name: Run npm test on Ubuntu
     runs-on: ubuntu-latest
@@ -17,6 +19,7 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+
     env:
       AIO_TOKEN: ${{ secrets.AIO_TOKEN }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

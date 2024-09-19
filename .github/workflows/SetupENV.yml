@@ -1,0 +1,14 @@
+name: Setup Secrets
+
+on:
+  workflow_call:
+
+jobs:
+  setup-secrets:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Configurar variables de entorno a partir de secrets
+        run: |
+          echo "APP_PORT=${{ vars.APP_PORT }}" >> $GITHUB_ENV
+
