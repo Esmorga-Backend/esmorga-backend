@@ -3,7 +3,7 @@ import subprocess
 process = subprocess.run(['/usr/local/bin/npm','run','start'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
 out = process.stderr.splitlines()
-print(out)
+
 failed_vars=[]
 for line in out:
     if line[:12]==' - property ':
