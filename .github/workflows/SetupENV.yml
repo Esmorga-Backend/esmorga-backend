@@ -12,3 +12,7 @@ jobs:
         run: |
           echo "APP_PORT=${{ vars.APP_PORT }}" >> $GITHUB_ENV
 
+          echo "AIO_TOKEN: ${{ secrets.AIO_TOKEN }}" >> $GITHUB_ENV
+          echo "GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
+          echo "POSTMAN_TOKEN: ${{ secrets.postmanToken }}" >> $GITHUB_ENV
+    

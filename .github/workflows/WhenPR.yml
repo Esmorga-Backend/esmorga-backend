@@ -21,11 +21,7 @@ jobs:
       pull-requests: write
 
     env:
-      AIO_TOKEN: ${{ secrets.AIO_TOKEN }}
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      POSTMAN_TOKEN: ${{ secrets.postmanToken }}
 
-      APP_PORT: ${{vars.APP_PORT}}
       MONGODB_URI: "mongodb://localhost:27017/esmorga"
       NODE_ENV: ${{vars.NODE_ENV}}
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
