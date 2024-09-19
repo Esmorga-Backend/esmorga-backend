@@ -1,12 +1,21 @@
 name: Run Tests
+
 on:
   workflow_call:
+    inputs: 
+      config:
+        required: true
+        type: string
 
 jobs:
+  
   Run:
+    
     runs-on: ubuntu-latest
 
     steps:
+      - run: echo ${{inputs.config}} >> $GITHUB_ENV
+        
       - name: Start MongoDB
         uses: supercharge/mongodb-github-action@1.11.0
         with:
