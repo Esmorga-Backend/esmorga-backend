@@ -3,11 +3,13 @@ description: "Prepare Env"
 runs:
   using: "composite"
   steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
       - name: Set up Python "pypy3.9"
         uses: actions/setup-python@v5
         with:
           python-version: "pypy3.9"
-      - name: Install dependencies And Deploy to QA
+      - name: LOL
         shell: bash
         run: |
           python .github/workflows/scripts/createENV.py

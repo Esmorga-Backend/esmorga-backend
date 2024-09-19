@@ -28,7 +28,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Create env
         id: createEnv
-        uses: ./.github/actions/CreateENV
+        uses: ./.github/actions/CreateEnv
 
       - name: Create env
         run: 
