@@ -24,6 +24,7 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
+      - uses: actions/checkout@v4
       - name: Create env
         id: createEnv
         uses: ./.github/actions/CreateENV
