@@ -24,7 +24,14 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
- 
+      - name: Create env
+        id: createEnv
+        uses: ./.github/actions/CreateENV
+
+      - name: Create env
+        run: 
+          echo "${{steps.createEnv.outputs}}"
+
       - name: Start MongoDB
         uses: supercharge/mongodb-github-action@1.11.0
         with:
@@ -35,9 +42,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22.1"
-      -  name: Create env
-         run: |
-          npm run start > VARS.txt  2>&1
+
 
       - run: npm ci
       - run: npm run test:create:cycle
