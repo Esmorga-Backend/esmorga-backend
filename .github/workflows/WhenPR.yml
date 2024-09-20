@@ -48,7 +48,7 @@ jobs:
         if: failure()
         run: |
           mkdir -p ~/.ssh
-          echo "${{ inputs.AUTO_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          echo "${{ secrets.AUTO_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan github.com >> ~/.ssh/known_hosts
           git remote set-url origin git@github.com:Esmorga-Backend/esmorga-backend.git
