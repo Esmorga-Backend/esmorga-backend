@@ -48,9 +48,9 @@ jobs:
         run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "Github Actions"
-          git add .
+          git add .github/workflows/*.yml
           git commit -m "Update VARS from GitHub Actions"
-           git push --force-with-lease origin HEAD:refs/heads/${GITHUB_HEAD_REF}
+          git push --force-with-lease origin HEAD:refs/heads/${GITHUB_HEAD_REF}
 
 
       # - name: Start MongoDB
