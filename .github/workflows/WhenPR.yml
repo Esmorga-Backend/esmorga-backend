@@ -19,6 +19,20 @@ jobs:
     env:
       MONGODB_URI: mongodb://localhost:27017/esmorga
       NODE_ENV: LOCAL
+      ACCESS_TOKEN_TTL: ${{vars.ACCESS_TOKEN_TTL}}
+      APP_LINK: ${{vars.APP_LINK}}
+      APP_PORT: ${{vars.APP_PORT}}
+      CYPRESS_BASE_URL: ${{vars.CYPRESS_BASE_URL}}
+      DNS_NAME: ${{vars.DNS_NAME}}
+      EMAIL_USER: ${{vars.EMAIL_USER}}
+      MAX_PAIR_OF_TOKEN: ${{vars.MAX_PAIR_OF_TOKEN}}
+      AIO_TOKEN: ${{secrets.AIO_TOKEN}}
+      AOITOKEN: ${{secrets.AOITOKEN}}
+      EMAIL_PASS: ${{secrets.EMAIL_PASS}}
+      JWT_SECRET: ${{secrets.JWT_SECRET}}
+      POSTMANTOKEN: ${{secrets.POSTMANTOKEN}}
+      POSTMAN_TOKEN: ${{secrets.POSTMAN_TOKEN}}
+      SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}
     steps:
     - uses: actions/checkout@v3
       with:
