@@ -66,6 +66,7 @@ for yml_file in yml_files:
             if 'env' in data['jobs'][job] :
                 for var in envs_to_create:
                     if var not in data['jobs'][job]['env'] and var not in dontAddVars:
+                        change=1
                         if envs_to_create[var] == 'variables':
                             print("ADD "+var+'=${{vars.'+var+'}} to file'+yml_file)
                             data['jobs'][job]['env'][var]='${{vars.'+var+'}}'
@@ -75,7 +76,6 @@ for yml_file in yml_files:
     if data!=data_orig:
         with open(dir+yml_file, 'w') as file:
             yaml.dump(data, file)
-            change=1
 
 if change!=0:
     sys.exit(1) 
