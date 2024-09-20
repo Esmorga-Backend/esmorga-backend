@@ -7,10 +7,8 @@ yaml = YAML()
 import git
 
 repo = git.Repo("./")
+mensaje_commit = "ADD VARS to "
 
-
-
-print("Commit realizado y empujado con éxito.")
 
 dontAddVars=['AUTO_SSH_PRIVATE_KEY','SSHRSA','PAT']
 dontTouch=['DeployToProd.yml','WhenMainChanges.yml','WhenPR.yml','WhenReleaseChanges.yml']
