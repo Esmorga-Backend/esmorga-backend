@@ -69,8 +69,9 @@ for yml_file in yml_files:
                         if envs_to_create[var] == 'variables':
                             print("ADD "+var+'=${{vars.'+var+'}} to file'+yml_file)
                             data['jobs'][job]['env'][var]='${{vars.'+var+'}}'
-#                    else:
-#                        print(var+'=${{'+envs_to_create[var]+'.'+var+'}}')
+                        else:
+                            print(var+'=${{'+envs_to_create[var]+'.'+var+'}}')
+                            data['jobs'][job]['env'][var]='${{'+envs_to_create[var]+'.'+var+'}}'
     if data!=data_orig:
         with open(dir+yml_file, 'w') as file:
             yaml.dump(data, file)
