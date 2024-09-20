@@ -1,0 +1,55 @@
+name: TEST
+run-name: TEST
+on:
+  workflow_dispatch: null
+jobs:
+  Run-tests-on-Ubuntu:
+    env:
+      pepe: lol
+    name: Run npm test on Ubuntu
+    permissions:
+      contents: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+    - name: Start MongoDB
+      uses: supercharge/mongodb-github-action@1.11.0
+      with:
+        mongodb-db: esmorga
+        mongodb-port: 27017
+        mongodb-version: '7.0'
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '22.1'
+    - run: npm ci
+    - run: npm run test:create:cycle
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Run Unit Tests
+      uses: ./.github/actions/runUnitTests
+      with:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+    - name: Run Component Tests
+      uses: ./.github/actions/runComponentTests
+      with:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+    - name: Run Service
+      uses: ./.github/actions/runService
+    - name: Run Postman
+      uses: ./.github/actions/runPostmanTests
+      with:
+        POSTMAN_TOKEN: ${{ secrets.POSTMAN_TOKEN }}
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+    - name: Run E2E Tests
+      uses: ./.github/actions/runE2ETests
+      with:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+    - name: Run Reporting
+      uses: ./.github/actions/runReporting
+      with:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Push OAS
+      uses: ./.github/actions/pushOasFile
+      with:
+        AUTO_SSH_PRIVATE_KEY: ${{ secrets.AUTO_SSH_PRIVATE_KEY }}
