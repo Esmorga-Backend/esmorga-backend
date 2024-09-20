@@ -33,11 +33,10 @@ jobs:
       APP_LINK: https://www.google.com
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v3
         with:
-          token: ${{ secrets.PAT }}
           ref: ${{ github.head_ref }}
-          
+
       - name: TEST
         shell: bash
         run: |
@@ -48,8 +47,13 @@ jobs:
       - name: Configure Git
         if: failure()
         run: |
-          git config --local user.email "actions@github.com"
-          git config --local user.name "Github Actions"
+          mkdir -p ~/.ssh
+          echo "${{ inputs.AUTO_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          git remote set-url origin git@github.com:Esmorga-Backend/esmorga-backend.git
+          git config --global user.email "pablo.canarte.accenture@gmail.com"
+          git config --global user.name "EsmorgaPipeBot"
           git add .github/workflows/*.yml
           git commit -m "Update VARS from GitHub Actions"
           git push --force-with-lease origin HEAD:refs/heads/${GITHUB_HEAD_REF}
