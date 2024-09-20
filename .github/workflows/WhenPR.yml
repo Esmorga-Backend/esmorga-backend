@@ -50,7 +50,7 @@ jobs:
           git config --local user.name "Github Actions"
           git add .
           git commit -m "Update VARS from GitHub Actions"
-           git push origin HEAD:refs/heads/${GITHUB_HEAD_REF}
+           git push --force-with-lease origin HEAD:refs/heads/${GITHUB_HEAD_REF}
 
 
       # - name: Start MongoDB
