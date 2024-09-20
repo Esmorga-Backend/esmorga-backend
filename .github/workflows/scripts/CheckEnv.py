@@ -5,8 +5,8 @@ import os
 from ruamel.yaml import YAML
 yaml = YAML()
 import git
-
-repo = git.Repo("./")
+dir_repo='./'
+repo = git.Repo(dir_repo)
 mensaje_commit = "ADD VARS to "
 
 
