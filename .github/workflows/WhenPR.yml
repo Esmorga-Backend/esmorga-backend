@@ -33,10 +33,12 @@ jobs:
       APP_LINK: https://www.google.com
 
     steps:
+
       - name: TEST
         shell: bash
         run: |
-          .github/workflows/scripts/CheckEnv.py
+          python -m pip install --upgrade pip ruamel.yaml 
+          python .github/workflows/scripts/CheckEnv.py
           cat .github/workflows/TEST.yml
 
       # - name: Start MongoDB
