@@ -2,11 +2,17 @@ import urllib.request
 import json
 import sys
 import os
-#import yaml
 from ruamel.yaml import YAML
 yaml = YAML()
+import git
 
-dontAddVars=['AUTO_SSH_PRIVATE_KEY','SSHRSA']
+repo = git.Repo("./")
+
+
+
+print("Commit realizado y empujado con éxito.")
+
+dontAddVars=['AUTO_SSH_PRIVATE_KEY','SSHRSA','PAT']
 dontTouch=['DeployToProd.yml','WhenMainChanges.yml','WhenPR.yml','WhenReleaseChanges.yml']
 token = sys.argv[-1]
 owner = "Esmorga-Backend"  
@@ -59,8 +65,6 @@ yml_files = [f for f in os.listdir(dir) if f.endswith('.yml')]
 for yml_file in yml_files:
  if yml_file not in dontTouch:
     with open(dir+yml_file, 'r') as file:
-#        data = yaml.safe_load(file)
-#        data_orig=yaml.safe_load(file)
         data = yaml.load(file)
         data_orig=yaml.load(file)
         for job in data['jobs']:
@@ -76,3 +80,9 @@ for yml_file in yml_files:
     if data!=data_orig:
         with open(dir+yml_file, 'w') as file:
             yaml.dump(data, file)
+            mensaje_commit = mensaje_commit+file+" "
+
+if mensaje_commit != "ADD VARS to ":
+    repo.git.add(A=True)
+    repo.index.commit(mensaje_commit)
+
