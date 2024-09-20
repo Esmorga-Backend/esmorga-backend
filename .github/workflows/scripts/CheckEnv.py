@@ -78,7 +78,7 @@ for yml_file in yml_files:
     if data!=data_orig:
         with open(dir+yml_file, 'w') as file:
             yaml.dump(data, file)
-            mensaje_commit = mensaje_commit+file+" "
+            mensaje_commit = mensaje_commit+yml_file+" "
 
 if mensaje_commit != "ADD VARS to ":
     repo.git.add(A=True)
