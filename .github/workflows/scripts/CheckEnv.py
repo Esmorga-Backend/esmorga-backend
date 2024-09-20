@@ -53,7 +53,7 @@ for url in urls:
         print(e.read().decode())
 
 dir = '.github/workflows/'
-
+print(envs_to_create)
 yml_files = [f for f in os.listdir(dir) if f.endswith('.yml')]
 for yml_file in yml_files:
  if yml_file not in ['DeployToProd.yml','WhenMainChanges.yml','WhenPR.yml','WhenReleaseChanges.yml']:
