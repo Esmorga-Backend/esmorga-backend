@@ -33,7 +33,7 @@ jobs:
       APP_LINK: https://www.google.com
 
     steps:
-
+      - uses: actions/checkout@v4
       - name: TEST
         shell: bash
         run: |
