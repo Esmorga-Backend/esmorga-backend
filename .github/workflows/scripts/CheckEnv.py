@@ -5,7 +5,7 @@ import os
 from ruamel.yaml import YAML
 yaml = YAML()
 import git
-dir_repo='.'
+dir_repo=os.getenv('GITHUB_WORKSPACE')
 repo = git.Repo(dir_repo)
 mensaje_commit = "ADD VARS to "
 
