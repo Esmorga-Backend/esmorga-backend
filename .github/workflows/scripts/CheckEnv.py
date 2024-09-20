@@ -4,10 +4,7 @@ import sys
 import os
 from ruamel.yaml import YAML
 yaml = YAML()
-import git
-dir_repo=os.getenv('GITHUB_WORKSPACE')
-repo = git.Repo(dir_repo)
-mensaje_commit = "ADD VARS to "
+change=0
 
 
 dontAddVars=['AUTO_SSH_PRIVATE_KEY','SSHRSA','PAT']
@@ -78,9 +75,8 @@ for yml_file in yml_files:
     if data!=data_orig:
         with open(dir+yml_file, 'w') as file:
             yaml.dump(data, file)
-            mensaje_commit = mensaje_commit+yml_file+" "
+            change=1
 
-if mensaje_commit != "ADD VARS to ":
-    repo.git.add(A=True)
-    repo.index.commit(mensaje_commit)
+if change!=0:
+    sys.exit(1) 
 
