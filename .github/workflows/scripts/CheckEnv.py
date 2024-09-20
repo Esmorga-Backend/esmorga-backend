@@ -6,7 +6,8 @@ import os
 from ruamel.yaml import YAML
 yaml = YAML()
 
-
+dontAddVars=['AUTO_SSH_PRIVATE_KEY','SSHRSA']
+dontTouch=['DeployToProd.yml','WhenMainChanges.yml','WhenPR.yml','WhenReleaseChanges.yml']
 token = sys.argv[-1]
 owner = "Esmorga-Backend"  
 repo = "esmorga-backend"  
@@ -56,7 +57,7 @@ dir = '.github/workflows/'
 print(envs_to_create)
 yml_files = [f for f in os.listdir(dir) if f.endswith('.yml')]
 for yml_file in yml_files:
- if yml_file not in ['DeployToProd.yml','WhenMainChanges.yml','WhenPR.yml','WhenReleaseChanges.yml']:
+ if yml_file not in dontTouch:
     with open(dir+yml_file, 'r') as file:
 #        data = yaml.safe_load(file)
 #        data_orig=yaml.safe_load(file)
@@ -65,7 +66,7 @@ for yml_file in yml_files:
         for job in data['jobs']:
             if 'env' in data['jobs'][job] :
                 for var in envs_to_create:
-                    if var not in data['jobs'][job]['env']:
+                    if var not in data['jobs'][job]['env'] and var not in dontAddVars:
                         if envs_to_create[var] == 'variables':
                             print("ADD "+var+'=${{vars.'+var+'}} to file'+yml_file)
                             data['jobs'][job]['env'][var]='${{vars.'+var+'}}'
