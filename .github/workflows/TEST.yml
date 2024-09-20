@@ -1,11 +1,14 @@
 name: TEST
 run-name: TEST
 on:
-  workflow_dispatch: null
+  workflow_dispatch:
 jobs:
   Run-tests-on-Ubuntu:
     env:
       pepe: lol
+      AOITOKEN: ${{secrets.AOITOKEN}}
+      POSTMANTOKEN: ${{secrets.POSTMANTOKEN}}
+      SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}
     name: Run npm test on Ubuntu
     permissions:
       contents: write
