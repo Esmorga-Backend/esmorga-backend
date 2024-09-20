@@ -8,7 +8,7 @@ change=0
 
 
 dontAddVars=['AUTO_SSH_PRIVATE_KEY','SSHRSA','PAT']
-dontTouch=['DeployToProd.yml','WhenMainChanges.yml','WhenPR.yml','WhenReleaseChanges.yml']
+dontTouch=['DeployToProd.yml','WhenMainChanges.yml','WhenReleaseChanges.yml']
 token = sys.argv[-1]
 owner = "Esmorga-Backend"  
 repo = "esmorga-backend"  
