@@ -3,20 +3,22 @@ import json
 import sys
 import os
 import subprocess
-
-from ruamel.yaml import YAML
-yaml = YAML()
+try:
+    from ruamel.yaml import YAML
+    yaml = YAML()
+except:
+    print("fail to load ruamel.yaml")
 change=0
 
 
 dontAddVars=['AUTO_SSH_PRIVATE_KEY','SSHRSA','PAT']
-dontTouch=['CheckEnv.yml','DeployToProd.yml','WhenMainChanges.yml','WhenReleaseChanges.yml']
+dontTouch=['WhenPR.yml','DeployToProd.yml','WhenMainChanges.yml','WhenReleaseChanges.yml']
 token = sys.argv[-1]
 owner = "Esmorga-Backend"  
 repo = "esmorga-backend"  
 urls= {}
-#urls[f"https://api.github.com/repos/{owner}/{repo}/actions/variables"]="variables"
-#urls[f"https://api.github.com/repos/{owner}/{repo}/actions/secrets"]="secrets"
+urls[f"https://api.github.com/repos/{owner}/{repo}/actions/variables"]="variables"
+urls[f"https://api.github.com/repos/{owner}/{repo}/actions/secrets"]="secrets"
 
 failed_vars=[]
 envs_to_create = {}
@@ -68,7 +70,6 @@ for url in urls:
         print(e.read().decode())
 
 dir = '.github/workflows/'
-print(envs_to_create)
 yml_files = [f for f in os.listdir(dir) if f.endswith('.yml')]
 for yml_file in yml_files:
  if yml_file not in dontTouch:

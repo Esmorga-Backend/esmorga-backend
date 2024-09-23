@@ -23,6 +23,9 @@ jobs:
       contents: write
       pull-requests: write
     env:
+      AIO_TOKEN: ${{secrets.AIO_TOKEN}}
+      AOITOKEN: ${{secrets.AOITOKEN}}
+      SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}
       MONGODB_URI: mongodb://localhost:27017/esmorga
       NODE_ENV: LOCAL
 
@@ -33,13 +36,9 @@ jobs:
       DNS_NAME: ${{vars.DNS_NAME}}
       EMAIL_USER: ${{vars.EMAIL_USER}}
       MAX_PAIR_OF_TOKEN: ${{vars.MAX_PAIR_OF_TOKEN}}
-      AIO_TOKEN: ${{secrets.AIO_TOKEN}}
-      AOITOKEN: ${{secrets.AOITOKEN}}
       EMAIL_PASS: ${{secrets.EMAIL_PASS}}
       JWT_SECRET: ${{secrets.JWT_SECRET}}
-      POSTMANTOKEN: ${{secrets.POSTMANTOKEN}}
-      POSTMAN_TOKEN: ${{secrets.POSTMAN_TOKEN}}
-      SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}
+
     steps:
     - name: Start MongoDB
       uses: supercharge/mongodb-github-action@1.11.0
