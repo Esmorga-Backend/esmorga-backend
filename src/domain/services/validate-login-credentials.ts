@@ -20,8 +20,8 @@ import {
  * @param accountRepository - Repository for interacting with the user account data.
  * @param loginAttemptsRepository - Repository for interacting to login attempts.
  * @param requestId - Request identifier.
- * @throws BlockedUserApiError - The account has been blocked due to too many failed login attempts.
- * @throws InvalidCredentialsLoginApiError - The email and password combination don't match with the db data.
+ * @throws DataBaseBlockedError - The account has been blocked due to too many failed login attempts.
+ * @throws DataBaseUnathorizedError - The email and password combination don't match with the db data.
  */
 export async function validateLoginCredentials(
   uuid: string,
@@ -37,6 +37,7 @@ export async function validateLoginCredentials(
         uuid,
         requestId,
       );
+
       if (updatedAttempts === 5) {
         await accountRepository.blockAccountByUuid(uuid, requestId);
         throw new DataBaseBlockedError();
