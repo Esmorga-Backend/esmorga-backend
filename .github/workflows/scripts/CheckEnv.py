@@ -80,11 +80,13 @@ for yml_file in yml_files:
         data = yaml.load(file)
         data_orig=yaml.load(file)
         for job in data['jobs']:
-            if 'steps' in data['jobs'][job]:
-                for step in data['jobs'][job]['steps']:
-                    if 'name' in step and step['name']=='Create .env':
-                        print(step['run'])
-                # for var in failed_vars:
+            if 'name' in data['jobs'][job]['steps'][0] and  data['jobs'][job]['steps'][0]['name'] =='Create .env' :
+                run='|\n'
+                for var in failed_vars:
+                    run=nrun+'echo '+var+'=${{'+envs_to_create[var]+'.'+var+'}} >> .env \n'
+                if run!=data['jobs'][job]['steps'][0]['run']:
+                    print("original:"+data['jobs'][job]['steps'][0]['run'])
+                    print("new:"+run)
                 #     if var not in data['jobs'][job]['env'] and var not in dontAddVars and var in envs_to_create:
                 #         change=1
                 #         if envs_to_create[var] == 'variables':
