@@ -32,13 +32,10 @@ jobs:
     - name: Create .env
       run: |
         |
-        echo MONGODB_URI=${{secrets.MONGODB_URI}} >> .env 
-        echo NODE_ENV=${{variables.NODE_ENV}} >> .env 
+
+        echo NODE_ENV=${{vars.NODE_ENV}} >> .env 
         echo JWT_SECRET=${{secrets.JWT_SECRET}} >> .env 
-        echo ACCESS_TOKEN_TTL=${{variables.ACCESS_TOKEN_TTL}} >> .env 
-        echo MAX_PAIR_OF_TOKEN=${{variables.MAX_PAIR_OF_TOKEN}} >> .env 
-        echo EMAIL_USER=${{variables.EMAIL_USER}} >> .env 
-        echo EMAIL_PASS=${{secrets.EMAIL_PASS}} >> .env 
+
 
     - name: Start MongoDB
       uses: supercharge/mongodb-github-action@1.11.0

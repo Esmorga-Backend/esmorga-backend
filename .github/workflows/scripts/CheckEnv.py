@@ -84,7 +84,10 @@ for yml_file in yml_files:
             if 'steps' in data['jobs'][job] and 'name' in data['jobs'][job]['steps'][0] and  data['jobs'][job]['steps'][0]['name'] =='Create .env' :
                 run='|\n'
                 for var in failed_vars:
-                    run=run+'echo '+var+'=${{'+envs_to_create[var]+'.'+var+'}} >> .env \n'
+                    if envs_to_create[var] == 'variables':
+                        run=run+'echo '+var+'=${{vars.'+var+'}} >> .env \n'
+                    else:
+                        run=run+'echo '+var+'=${{'+envs_to_create[var]+'.'+var+'}} >> .env \n'
                 if run!=data['jobs'][job]['steps'][0]['run']:
                     print("original:"+data['jobs'][job]['steps'][0]['run'])
                     print("new:"+run)
@@ -92,7 +95,6 @@ for yml_file in yml_files:
                     change=1
                 #     if var not in data['jobs'][job]['env'] and var not in dontAddVars and var in envs_to_create:
                 #         
-                #         if envs_to_create[var] == 'variables':
                 #             print("ADD "+var+'=${{vars.'+var+'}} to file'+yml_file)
                 #             data['jobs'][job]['env'][var]='${{vars.'+var+'}}'
                 #         else:
