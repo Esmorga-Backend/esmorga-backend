@@ -1,13 +1,13 @@
-name: Deploy PROD Env 
+name: Deploy PROD Env
 run-name: ${{ github.actor }} is deploying release to PROD Env 🚀
 on:
 
   workflow_dispatch:
     inputs:
       environment:
-        description: 'Entorno de despliegue (staging, production)'
+        description: Entorno de despliegue (staging, production)
         required: true
-        default: 'staging'
+        default: staging
 
 jobs:
   Deploy:
@@ -17,12 +17,19 @@ jobs:
 
     steps:
 
-      - name: Create .env
-        run: |
-          echo "NODE_ENV=${{vars.NODE_ENV}}" >> .env
+    - name: Create .env
+      run: |
+        |
+        echo MONGODB_URI=${{secrets.MONGODB_URI}} >> .env 
+        echo NODE_ENV=${{variables.NODE_ENV}} >> .env 
+        echo JWT_SECRET=${{secrets.JWT_SECRET}} >> .env 
+        echo ACCESS_TOKEN_TTL=${{variables.ACCESS_TOKEN_TTL}} >> .env 
+        echo MAX_PAIR_OF_TOKEN=${{variables.MAX_PAIR_OF_TOKEN}} >> .env 
+        echo EMAIL_USER=${{variables.EMAIL_USER}} >> .env 
+        echo EMAIL_PASS=${{secrets.EMAIL_PASS}} >> .env 
 
-      - name: Deploy to PROD
-        uses: ./.github/actions/Deploy
-        with:
-          SSHRSA: ${{ secrets.SSHRSA}}
-          ENV: PROD
+    - name: Deploy to PROD
+      uses: ./.github/actions/Deploy
+      with:
+        SSHRSA: ${{ secrets.SSHRSA}}
+        ENV: PROD
