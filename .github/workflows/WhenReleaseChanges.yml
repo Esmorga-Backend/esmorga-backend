@@ -3,7 +3,7 @@ run-name: ${{ github.actor }} has changed the code on the release, testing it ðŸ
 on:
   push:
     branches:
-    - release/*/*
+    - release/*
   workflow_dispatch:
 
 jobs:
