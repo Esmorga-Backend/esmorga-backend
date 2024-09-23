@@ -82,7 +82,7 @@ for yml_file in yml_files:
         data_orig=yaml.load(file)
         for job in data['jobs']:
             if 'steps' in data['jobs'][job] and 'name' in data['jobs'][job]['steps'][0] and  data['jobs'][job]['steps'][0]['name'] =='Create .env' :
-                run='|\n'
+                run=''
                 for var in failed_vars:
                     if envs_to_create[var] == 'variables':
                         run=run+'echo '+var+'=${{vars.'+var+'}} >> .env \n'
