@@ -31,7 +31,6 @@ jobs:
     steps:
     - name: Create .env
       run: |
-        |
         echo MONGODB_URI=${{secrets.MONGODB_URI}} >> .env 
         echo NODE_ENV=${{vars.NODE_ENV}} >> .env 
         echo JWT_SECRET=${{secrets.JWT_SECRET}} >> .env 
