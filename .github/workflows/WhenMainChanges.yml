@@ -1,42 +1,20 @@
 name: Deploy QA Env & Then Test E2E & Test Postman
 run-name: ${{ github.actor }} is deploying new code to QA Env 🚀
 on:
-  #Delete this , just for test
-  #  pull_request:
-  #    types: [opened,reopened,edited,synchronize]
-  #    branches:
-  #      - main
-  #    paths:
-  #      - '**'
-
   push:
     branches:
     - main
-  workflow_dispatch:
 
 jobs:
-  Run-tests-on-Ubuntu:
+  RunTestsOnUbuntu:
     name: Run npm test on Ubuntu
     runs-on: ubuntu-latest
     permissions:
       contents: write
       pull-requests: write
     env:
-      APP_PORT: 3000
-      MONGODB_URI: mongodb://localhost:27017/esmorga
-      NODE_ENV: LOCAL"
-      JWT_SECRET: ${{ secrets.JWT_SECRET }}
-      ACCESS_TOKEN_TTL: 600
-      MAX_PAIR_OF_TOKEN: 5
-      AIO_TOKEN: ${{ secrets.AIO_TOKEN }}
-      CYPRESS_BASE_URL: http://localhost:3000/
-      POSTMAN_TOKEN: ${{ secrets.postmanToken }}
-      DNS_NAME: http://localhost:3000
-      SSHRSA: ${{ secrets.SSHRSA}}
+      AIO_TOKEN: ${{secrets.AIO_TOKEN}}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      EMAIL_USER: esmorgamailservice@gmail.com
-      EMAIL_PASS: ${{ secrets.EMAIL_PASS}}
-      APP_LINK: https://www.google.com
 
     steps:
     - name: Start MongoDB
@@ -107,16 +85,11 @@ jobs:
       uses: ./.github/actions/runReporting
       with:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: Deploy to QA
-      uses: ./.github/actions/Deploy
-      with:
-        SSHRSA: ${{ secrets.SSHRSA}}
-        ENV: QA
-      env:
-        MONGODB_URI: ${{secrets.MONGODB_URI}}
-        NODE_ENV: ${{vars.NODE_ENV}}
-        JWT_SECRET: ${{secrets.JWT_SECRET}}
-        ACCESS_TOKEN_TTL: ${{vars.ACCESS_TOKEN_TTL}}
-        MAX_PAIR_OF_TOKEN: ${{vars.MAX_PAIR_OF_TOKEN}}
-        EMAIL_USER: ${{vars.EMAIL_USER}}
-        EMAIL_PASS: ${{secrets.EMAIL_PASS}}
+
+
+  DeployToQA: 
+    needs: RunTestsOnUbuntu
+    uses: ./.github/workflows/Deploy.yml
+    secrets: inherit
+    with:
+      environment: QA

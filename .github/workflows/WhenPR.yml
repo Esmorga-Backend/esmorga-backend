@@ -24,8 +24,7 @@ jobs:
       pull-requests: write
     env:
       AIO_TOKEN: ${{secrets.AIO_TOKEN}}
-      AOITOKEN: ${{secrets.AOITOKEN}}
-      SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}
+
 
 
     steps:
