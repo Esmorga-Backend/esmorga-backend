@@ -29,6 +29,10 @@ jobs:
 
 
     steps:
+    - name: Create .env
+      run: |
+        echo "NODE_ENV=${{vars.NODE_ENV}}" >> .env
+        
     - name: Start MongoDB
       uses: supercharge/mongodb-github-action@1.11.0
       with:
