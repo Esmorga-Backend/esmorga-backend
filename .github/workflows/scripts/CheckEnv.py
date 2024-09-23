@@ -81,29 +81,30 @@ for yml_file in yml_files:
         data = yaml.load(file)
         data_orig=yaml.load(file)
         for job in data['jobs']:
-            if 'steps' in data['jobs'][job] and 'name' in data['jobs'][job]['steps'][0] and data['jobs'][job]['steps'][0]['name'] =='Create .env' :
-                run=''
-                for var in failed_vars:
-                    if envs_to_create[var] == 'variables':
-                        run=run+'echo '+var+'=${{vars.'+var+'}} >> .env \n'
-                    else:
-                        run=run+'echo '+var+'=${{'+envs_to_create[var]+'.'+var+'}} >> .env \n'
-                if run!=data['jobs'][job]['steps'][0]['run']:
-                    print("original:"+data['jobs'][job]['steps'][0]['run'])
-                    print("new:"+run)
-                    data['jobs'][job]['steps'][0]['run']=run
-
-            step_n=0
-            while  step_n < len(data['jobs'][job]['steps']):
-
-                if 'uses' in data['jobs'][job]['steps'][step_n] and data['jobs'][job]['steps'][step_n]['uses'] in steps_need_vars:
+            if 'steps' in data['jobs'][job] :
+                if 'name' in data['jobs'][job]['steps'][0] and data['jobs'][job]['steps'][0]['name'] =='Create .env' :
+                    run=''
                     for var in failed_vars:
-                         if 'env' not in data['jobs'][job]['steps'][step_n] or var not in data['jobs'][job]['steps'][step_n]['env']:
-                             if envs_to_create[var] == 'variables':
-                                 data['jobs'][job]['steps'][step_n][var]='${{vars.'+var+'}}'
-                             else:
-                                 data['jobs'][job]['steps'][step_n][var]='${{'+envs_to_create[var]+'.'+var+'}}'
-                step_n=step_n+1
+                        if envs_to_create[var] == 'variables':
+                            run=run+'echo '+var+'=${{vars.'+var+'}} >> .env \n'
+                        else:
+                            run=run+'echo '+var+'=${{'+envs_to_create[var]+'.'+var+'}} >> .env \n'
+                    if run!=data['jobs'][job]['steps'][0]['run']:
+                        print("original:"+data['jobs'][job]['steps'][0]['run'])
+                        print("new:"+run)
+                        data['jobs'][job]['steps'][0]['run']=run
+
+                step_n=0
+                while  step_n < len(data['jobs'][job]['steps']):
+
+                    if 'uses' in data['jobs'][job]['steps'][step_n] and data['jobs'][job]['steps'][step_n]['uses'] in steps_need_vars:
+                        for var in failed_vars:
+                            if 'env' not in data['jobs'][job]['steps'][step_n] or var not in data['jobs'][job]['steps'][step_n]['env']:
+                                if envs_to_create[var] == 'variables':
+                                    data['jobs'][job]['steps'][step_n]['env'][var]='${{vars.'+var+'}}'
+                                else:
+                                    data['jobs'][job]['steps'][step_n]['env'][var]='${{'+envs_to_create[var]+'.'+var+'}}'
+                    step_n=step_n+1
                                  
     if data!=data_orig:
         with open(dir+yml_file, 'w') as file:
