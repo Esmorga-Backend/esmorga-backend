@@ -11,8 +11,11 @@ except:
 change=0
 
 
-dontAddVars=['AUTO_SSH_PRIVATE_KEY','SSHRSA','PAT']
-dontTouch=['WhenPR.yml','DeployToProd.yml','WhenMainChanges.yml','WhenReleaseChanges.yml']
+#dontAddVars=['AUTO_SSH_PRIVATE_KEY','SSHRSA','PAT']
+#dontTouch=['WhenPR.yml','DeployToProd.yml','WhenMainChanges.yml','WhenReleaseChanges.yml']
+
+dontAddVars=[]
+dontTouch=[]
 token = sys.argv[-1]
 owner = "Esmorga-Backend"  
 repo = "esmorga-backend"  
@@ -77,16 +80,17 @@ for yml_file in yml_files:
         data = yaml.load(file)
         data_orig=yaml.load(file)
         for job in data['jobs']:
-            if 'env' in data['jobs'][job] :
-                for var in failed_vars:
-                    if var not in data['jobs'][job]['env'] and var not in dontAddVars and var in envs_to_create:
-                        change=1
-                        if envs_to_create[var] == 'variables':
-                            print("ADD "+var+'=${{vars.'+var+'}} to file'+yml_file)
-                            data['jobs'][job]['env'][var]='${{vars.'+var+'}}'
-                        else:
-                            print(var+'=${{'+envs_to_create[var]+'.'+var+'}}')
-                            data['jobs'][job]['env'][var]='${{'+envs_to_create[var]+'.'+var+'}}'
+            if 'steps' in data['jobs'][job]:
+                print (data['jobs'][job]['steps'])
+                # for var in failed_vars:
+                #     if var not in data['jobs'][job]['env'] and var not in dontAddVars and var in envs_to_create:
+                #         change=1
+                #         if envs_to_create[var] == 'variables':
+                #             print("ADD "+var+'=${{vars.'+var+'}} to file'+yml_file)
+                #             data['jobs'][job]['env'][var]='${{vars.'+var+'}}'
+                #         else:
+                #             print(var+'=${{'+envs_to_create[var]+'.'+var+'}}')
+                #             data['jobs'][job]['env'][var]='${{'+envs_to_create[var]+'.'+var+'}}'
     if data!=data_orig:
         with open(dir+yml_file, 'w') as file:
             yaml.dump(data, file)
