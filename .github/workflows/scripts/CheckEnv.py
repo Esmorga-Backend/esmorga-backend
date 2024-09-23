@@ -98,8 +98,10 @@ for yml_file in yml_files:
                 while  step_n < len(data['jobs'][job]['steps']):
 
                     if 'uses' in data['jobs'][job]['steps'][step_n] and data['jobs'][job]['steps'][step_n]['uses'] in steps_need_vars:
+                        if 'env' not in data['jobs'][job]['steps'][step_n]:
+                            data['jobs'][job]['steps'][step_n]['env']={}
                         for var in failed_vars:
-                            if 'env' not in data['jobs'][job]['steps'][step_n] or var not in data['jobs'][job]['steps'][step_n]['env']:
+                            if var not in data['jobs'][job]['steps'][step_n]['env']:
                                 if envs_to_create[var] == 'variables':
                                     data['jobs'][job]['steps'][step_n]['env'][var]='${{vars.'+var+'}}'
                                 else:
