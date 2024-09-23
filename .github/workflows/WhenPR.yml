@@ -26,18 +26,7 @@ jobs:
       AIO_TOKEN: ${{secrets.AIO_TOKEN}}
       AOITOKEN: ${{secrets.AOITOKEN}}
       SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}
-      MONGODB_URI: mongodb://localhost:27017/esmorga
-      NODE_ENV: LOCAL
 
-      ACCESS_TOKEN_TTL: ${{vars.ACCESS_TOKEN_TTL}}
-      APP_LINK: ${{vars.APP_LINK}}
-      APP_PORT: ${{vars.APP_PORT}}
-      CYPRESS_BASE_URL: ${{vars.CYPRESS_BASE_URL}}
-      DNS_NAME: ${{vars.DNS_NAME}}
-      EMAIL_USER: ${{vars.EMAIL_USER}}
-      MAX_PAIR_OF_TOKEN: ${{vars.MAX_PAIR_OF_TOKEN}}
-      EMAIL_PASS: ${{secrets.EMAIL_PASS}}
-      JWT_SECRET: ${{secrets.JWT_SECRET}}
 
     steps:
     - name: Start MongoDB
@@ -81,3 +70,17 @@ jobs:
       uses: ./.github/actions/pushOasFile
       with:
         AUTO_SSH_PRIVATE_KEY: ${{ secrets.AUTO_SSH_PRIVATE_KEY }}
+
+
+      #   MONGODB_URI: mongodb://localhost:27017/esmorga
+      # NODE_ENV: LOCAL
+
+      # ACCESS_TOKEN_TTL: ${{vars.ACCESS_TOKEN_TTL}}
+      # APP_LINK: ${{vars.APP_LINK}}
+      # APP_PORT: ${{vars.APP_PORT}}
+      # CYPRESS_BASE_URL: ${{vars.CYPRESS_BASE_URL}}
+      # DNS_NAME: ${{vars.DNS_NAME}}
+      # EMAIL_USER: ${{vars.EMAIL_USER}}
+      # MAX_PAIR_OF_TOKEN: ${{vars.MAX_PAIR_OF_TOKEN}}
+      # EMAIL_PASS: ${{secrets.EMAIL_PASS}}
+      # JWT_SECRET: ${{secrets.JWT_SECRET}}
