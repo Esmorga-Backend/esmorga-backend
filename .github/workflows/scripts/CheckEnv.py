@@ -2,21 +2,34 @@ import urllib.request
 import json
 import sys
 import os
+import subprocess
+
 from ruamel.yaml import YAML
 yaml = YAML()
 change=0
 
 
 dontAddVars=['AUTO_SSH_PRIVATE_KEY','SSHRSA','PAT']
-dontTouch=['DeployToProd.yml','WhenMainChanges.yml','WhenReleaseChanges.yml']
+dontTouch=['CheckEnv.yml','DeployToProd.yml','WhenMainChanges.yml','WhenReleaseChanges.yml']
 token = sys.argv[-1]
 owner = "Esmorga-Backend"  
 repo = "esmorga-backend"  
 urls= {}
-urls[f"https://api.github.com/repos/{owner}/{repo}/actions/variables"]="variables"
-urls[f"https://api.github.com/repos/{owner}/{repo}/actions/secrets"]="secrets"
+#urls[f"https://api.github.com/repos/{owner}/{repo}/actions/variables"]="variables"
+#urls[f"https://api.github.com/repos/{owner}/{repo}/actions/secrets"]="secrets"
 
+failed_vars=[]
 envs_to_create = {}
+
+
+
+process = subprocess.run(['/usr/local/bin/npm','run','start'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+out = process.stderr.splitlines()
+failed_vars=[]
+for line in out:
+    if line[:12]==' - property ':
+        failed_vars.append(line[12:].split('has')[0][:-1])
+print(failed_vars)
 
 
 headers = {
@@ -64,8 +77,8 @@ for yml_file in yml_files:
         data_orig=yaml.load(file)
         for job in data['jobs']:
             if 'env' in data['jobs'][job] :
-                for var in envs_to_create:
-                    if var not in data['jobs'][job]['env'] and var not in dontAddVars:
+                for var in failed_vars:
+                    if var not in data['jobs'][job]['env'] and var not in dontAddVars and var in envs_to_create:
                         change=1
                         if envs_to_create[var] == 'variables':
                             print("ADD "+var+'=${{vars.'+var+'}} to file'+yml_file)
