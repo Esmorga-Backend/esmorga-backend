@@ -31,12 +31,5 @@ jobs:
       uses: ./.github/actions/Deploy
       with:
         SSHRSA: ${{ secrets.SSHRSA}}
-        ENV: PROD
-      env:
-        MONGODB_URI: ${{secrets.MONGODB_URI}}
-        NODE_ENV: ${{vars.NODE_ENV}}
-        JWT_SECRET: ${{secrets.JWT_SECRET}}
-        ACCESS_TOKEN_TTL: ${{vars.ACCESS_TOKEN_TTL}}
-        MAX_PAIR_OF_TOKEN: ${{vars.MAX_PAIR_OF_TOKEN}}
-        EMAIL_USER: ${{vars.EMAIL_USER}}
-        EMAIL_PASS: ${{secrets.EMAIL_PASS}}
+
+
