@@ -32,9 +32,13 @@ jobs:
     - name: Create .env
       run: |
         |
-
+        echo MONGODB_URI=${{secrets.MONGODB_URI}} >> .env 
         echo NODE_ENV=${{vars.NODE_ENV}} >> .env 
         echo JWT_SECRET=${{secrets.JWT_SECRET}} >> .env 
+        echo ACCESS_TOKEN_TTL=${{vars.ACCESS_TOKEN_TTL}} >> .env 
+        echo MAX_PAIR_OF_TOKEN=${{vars.MAX_PAIR_OF_TOKEN}} >> .env 
+        echo EMAIL_USER=${{vars.EMAIL_USER}} >> .env 
+        echo EMAIL_PASS=${{secrets.EMAIL_PASS}} >> .env 
 
 
     - name: Start MongoDB
