@@ -101,16 +101,3 @@ jobs:
       with:
         AUTO_SSH_PRIVATE_KEY: ${{ secrets.AUTO_SSH_PRIVATE_KEY }}
 
-
-      #   MONGODB_URI: mongodb://localhost:27017/esmorga
-      # NODE_ENV: LOCAL
-
-      # ACCESS_TOKEN_TTL: ${{vars.ACCESS_TOKEN_TTL}}
-      # APP_LINK: ${{vars.APP_LINK}}
-      # APP_PORT: ${{vars.APP_PORT}}
-      # CYPRESS_BASE_URL: ${{vars.CYPRESS_BASE_URL}}
-      # DNS_NAME: ${{vars.DNS_NAME}}
-      # EMAIL_USER: ${{vars.EMAIL_USER}}
-      # MAX_PAIR_OF_TOKEN: ${{vars.MAX_PAIR_OF_TOKEN}}
-      # EMAIL_PASS: ${{secrets.EMAIL_PASS}}
-      # JWT_SECRET: ${{secrets.JWT_SECRET}}
