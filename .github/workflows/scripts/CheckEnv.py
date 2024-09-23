@@ -88,8 +88,10 @@ for yml_file in yml_files:
                 if run!=data['jobs'][job]['steps'][0]['run']:
                     print("original:"+data['jobs'][job]['steps'][0]['run'])
                     print("new:"+run)
+                    data['jobs'][job]['steps'][0]['run']=run
+                    change=1
                 #     if var not in data['jobs'][job]['env'] and var not in dontAddVars and var in envs_to_create:
-                #         change=1
+                #         
                 #         if envs_to_create[var] == 'variables':
                 #             print("ADD "+var+'=${{vars.'+var+'}} to file'+yml_file)
                 #             data['jobs'][job]['env'][var]='${{vars.'+var+'}}'
