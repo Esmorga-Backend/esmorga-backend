@@ -58,6 +58,14 @@ jobs:
       uses: ./.github/actions/runUnitTests
       with:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      env:
+        MONGODB_URI: ${{secrets.MONGODB_URI}}
+        NODE_ENV: ${{vars.NODE_ENV}}
+        JWT_SECRET: ${{secrets.JWT_SECRET}}
+        ACCESS_TOKEN_TTL: ${{vars.ACCESS_TOKEN_TTL}}
+        MAX_PAIR_OF_TOKEN: ${{vars.MAX_PAIR_OF_TOKEN}}
+        EMAIL_USER: ${{vars.EMAIL_USER}}
+        EMAIL_PASS: ${{secrets.EMAIL_PASS}}
     - name: Run Component Tests
       uses: ./.github/actions/runComponentTests
       with:
@@ -72,6 +80,14 @@ jobs:
         EMAIL_PASS: ${{secrets.EMAIL_PASS}}
     - name: Run Service
       uses: ./.github/actions/runService
+      env:
+        MONGODB_URI: ${{secrets.MONGODB_URI}}
+        NODE_ENV: ${{vars.NODE_ENV}}
+        JWT_SECRET: ${{secrets.JWT_SECRET}}
+        ACCESS_TOKEN_TTL: ${{vars.ACCESS_TOKEN_TTL}}
+        MAX_PAIR_OF_TOKEN: ${{vars.MAX_PAIR_OF_TOKEN}}
+        EMAIL_USER: ${{vars.EMAIL_USER}}
+        EMAIL_PASS: ${{secrets.EMAIL_PASS}}
     - name: Run Postman
       uses: ./.github/actions/runPostmanTests
       with:
@@ -90,3 +106,11 @@ jobs:
       with:
         SSHRSA: ${{ secrets.SSHRSA}}
         ENV: QA
+      env:
+        MONGODB_URI: ${{secrets.MONGODB_URI}}
+        NODE_ENV: ${{vars.NODE_ENV}}
+        JWT_SECRET: ${{secrets.JWT_SECRET}}
+        ACCESS_TOKEN_TTL: ${{vars.ACCESS_TOKEN_TTL}}
+        MAX_PAIR_OF_TOKEN: ${{vars.MAX_PAIR_OF_TOKEN}}
+        EMAIL_USER: ${{vars.EMAIL_USER}}
+        EMAIL_PASS: ${{secrets.EMAIL_PASS}}
