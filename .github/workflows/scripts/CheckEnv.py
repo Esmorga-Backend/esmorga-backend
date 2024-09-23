@@ -30,12 +30,12 @@ envs_to_create = {}
 
 process = subprocess.run(['/usr/local/bin/npm','run','start'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 out = process.stderr.splitlines()
-print(out)
+
 failed_vars=[]
 for line in out:
     if line[:12]==' - property ':
         failed_vars.append(line[12:].split('has')[0][:-1])
-print(failed_vars)
+
 
 
 headers = {
