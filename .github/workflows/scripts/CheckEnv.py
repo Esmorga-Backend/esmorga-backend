@@ -100,11 +100,11 @@ for yml_file in yml_files:
                     if 'env' not in data['jobs'][job]['step'][step_n]:
                         data['jobs'][job]['step'][step_n]=[]
                     for var in failed_vars:
-                         if var not in data['jobs'][job]['step'][step_n]['env']:
+                         if var not in data['jobs'][job]['steps'][step_n]['env']:
                              if envs_to_create[var] == 'variables':
-                                 data['jobs'][job]['step'][step_n][var]='${{vars.'+var+'}}'
+                                 data['jobs'][job]['steps'][step_n][var]='${{vars.'+var+'}}'
                              else:
-                                 data['jobs'][job]['step'][step_n][var]='${{'+envs_to_create[var]+'.'+var+'}}'
+                                 data['jobs'][job]['steps'][step_n][var]='${{'+envs_to_create[var]+'.'+var+'}}'
                 step_n=step_n+1
                                  
     if data!=data_orig:
