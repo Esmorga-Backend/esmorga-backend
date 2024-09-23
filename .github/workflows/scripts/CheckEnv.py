@@ -96,7 +96,7 @@ for yml_file in yml_files:
             step_n=0
             while  step_n < len(data['jobs'][job]['step']):
 
-                if 'uses' in data['jobs'][job]['step'][step_n] and data['jobs'][job]['step'][step_n]['uses'] in steps_need_vars:
+                if 'uses' in data['jobs'][job]['steps'][step_n] and data['jobs'][job]['steps'][step_n]['uses'] in steps_need_vars:
                     if 'env' not in data['jobs'][job]['step'][step_n]:
                         data['jobs'][job]['step'][step_n]=[]
                     for var in failed_vars:
@@ -105,6 +105,7 @@ for yml_file in yml_files:
                                  data['jobs'][job]['step'][step_n][var]='${{vars.'+var+'}}'
                              else:
                                  data['jobs'][job]['step'][step_n][var]='${{'+envs_to_create[var]+'.'+var+'}}'
+                step_n=step_n+1
                                  
     if data!=data_orig:
         with open(dir+yml_file, 'w') as file:
