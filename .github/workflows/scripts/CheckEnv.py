@@ -37,7 +37,7 @@ for line in out:
         failed_vars.append(line[12:].split('has')[0][:-1])
 print(failed_vars)
 
-quit()
+
 headers = {
     "Authorization": f"Bearer {token}",
     "Accept": "application/vnd.github+json",
