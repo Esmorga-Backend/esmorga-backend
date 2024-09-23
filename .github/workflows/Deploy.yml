@@ -15,7 +15,8 @@ on:
       environment:
         description: 'DEPLOY ENV'
         required: true
-        type: QA
+        type: string
+        default: QA
 jobs:
   Deploy:
     name: Deploy to ${{ inputs.environment }}
