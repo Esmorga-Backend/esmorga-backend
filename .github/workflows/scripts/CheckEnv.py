@@ -82,8 +82,8 @@ for yml_file in yml_files:
         for job in data['jobs']:
             if 'steps' in data['jobs'][job]:
                 for step in data['jobs'][job]['steps']:
-                    if data['jobs'][job]['steps'][step]['name']=='Create .env':
-                        print(data['jobs'][job]['steps'][step]['run'])
+                    if step['name']=='Create .env':
+                        print(step)
                 # for var in failed_vars:
                 #     if var not in data['jobs'][job]['env'] and var not in dontAddVars and var in envs_to_create:
                 #         change=1
