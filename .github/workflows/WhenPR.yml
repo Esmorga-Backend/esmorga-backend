@@ -56,6 +56,8 @@ jobs:
         MAX_PAIR_OF_TOKEN: ${{vars.MAX_PAIR_OF_TOKEN}}
         EMAIL_USER: ${{vars.EMAIL_USER}}
         EMAIL_PASS: ${{secrets.EMAIL_PASS}}
+        APP_PORT: ${{vars.APP_PORT}}
+        APP_LINK: ${{vars.APP_LINK}}
     - name: Run Component Tests
       uses: ./.github/actions/runComponentTests
       with:
@@ -68,6 +70,8 @@ jobs:
         MAX_PAIR_OF_TOKEN: ${{vars.MAX_PAIR_OF_TOKEN}}
         EMAIL_USER: ${{vars.EMAIL_USER}}
         EMAIL_PASS: ${{secrets.EMAIL_PASS}}
+        APP_PORT: ${{vars.APP_PORT}}
+        APP_LINK: ${{vars.APP_LINK}}
     - name: Run Service
       uses: ./.github/actions/runService
       env:
@@ -78,6 +82,8 @@ jobs:
         MAX_PAIR_OF_TOKEN: ${{vars.MAX_PAIR_OF_TOKEN}}
         EMAIL_USER: ${{vars.EMAIL_USER}}
         EMAIL_PASS: ${{secrets.EMAIL_PASS}}
+        APP_PORT: ${{vars.APP_PORT}}
+        APP_LINK: ${{vars.APP_LINK}}
     - name: Run Postman
       uses: ./.github/actions/runPostmanTests
       with:
