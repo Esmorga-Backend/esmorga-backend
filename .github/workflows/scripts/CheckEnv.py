@@ -94,7 +94,7 @@ for yml_file in yml_files:
                     data['jobs'][job]['steps'][0]['run']=run
 
             step_n=0
-            while  step_n < len(data['jobs'][job]['step']):
+            while  step_n < len(data['jobs'][job]['steps']):
 
                 if 'uses' in data['jobs'][job]['steps'][step_n] and data['jobs'][job]['steps'][step_n]['uses'] in steps_need_vars:
                     if 'env' not in data['jobs'][job]['step'][step_n]:
