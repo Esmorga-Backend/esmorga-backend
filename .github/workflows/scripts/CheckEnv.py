@@ -13,7 +13,7 @@ change=0
 
 #dontAddVars=['AUTO_SSH_PRIVATE_KEY','SSHRSA','PAT']
 #dontTouch=['WhenPR.yml','DeployToProd.yml','WhenMainChanges.yml','WhenReleaseChanges.yml']
-
+steps_need_vars=['./.github/actions/runComponentTests']
 dontAddVars=[]
 dontTouch=[]
 token = sys.argv[-1]
@@ -81,7 +81,7 @@ for yml_file in yml_files:
         data = yaml.load(file)
         data_orig=yaml.load(file)
         for job in data['jobs']:
-            if 'steps' in data['jobs'][job] and 'name' in data['jobs'][job]['steps'][0] and  data['jobs'][job]['steps'][0]['name'] =='Create .env' :
+            if 'steps' in data['jobs'][job] and 'name' in data['jobs'][job]['steps'][0] and data['jobs'][job]['steps'][0]['name'] =='Create .env' :
                 run=''
                 for var in failed_vars:
                     if envs_to_create[var] == 'variables':
@@ -92,14 +92,20 @@ for yml_file in yml_files:
                     print("original:"+data['jobs'][job]['steps'][0]['run'])
                     print("new:"+run)
                     data['jobs'][job]['steps'][0]['run']=run
-                    change=1
-                #     if var not in data['jobs'][job]['env'] and var not in dontAddVars and var in envs_to_create:
-                #         
-                #             print("ADD "+var+'=${{vars.'+var+'}} to file'+yml_file)
-                #             data['jobs'][job]['env'][var]='${{vars.'+var+'}}'
-                #         else:
-                #             print(var+'=${{'+envs_to_create[var]+'.'+var+'}}')
-                #             data['jobs'][job]['env'][var]='${{'+envs_to_create[var]+'.'+var+'}}'
+
+            step_n=0
+            while  step_n < len(data['jobs'][job]['step']):
+
+                if 'uses' in data['jobs'][job]['step'][step_n] and data['jobs'][job]['step'][step_n]['uses'] in steps_need_vars:
+                    if 'env' not in data['jobs'][job]['step'][step_n]:
+                        data['jobs'][job]['step'][step_n]=[]
+                    for var in failed_vars:
+                         if var not in data['jobs'][job]['step'][step_n]['env']:
+                             if envs_to_create[var] == 'variables':
+                                 data['jobs'][job]['step'][step_n][var]='${{vars.'+var+'}}'
+                             else:
+                                 data['jobs'][job]['step'][step_n][var]='${{'+envs_to_create[var]+'.'+var+'}}'
+                                 
     if data!=data_orig:
         with open(dir+yml_file, 'w') as file:
             yaml.dump(data, file)
