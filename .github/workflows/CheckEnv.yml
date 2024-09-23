@@ -5,10 +5,6 @@ on:
 jobs:
   setup-secrets:
     runs-on: ubuntu-latest
-    env:
-      APP_LINK: ${{vars.APP_LINK}}
-      APP_PORT: ${{vars.APP_PORT}}
-
 
     steps:
     - name: GET HEAD REF
