@@ -13,7 +13,7 @@ change=0
 
 #dontAddVars=['AUTO_SSH_PRIVATE_KEY','SSHRSA','PAT']
 #dontTouch=['WhenPR.yml','DeployToProd.yml','WhenMainChanges.yml','WhenReleaseChanges.yml']
-steps_need_vars=['./.github/actions/runComponentTests']
+steps_need_vars=['./.github/actions/runComponentTests','./.github/actions/runService','./.github/actions/runUnitTests','./.github/actions/Deploy']
 dontAddVars=[]
 dontTouch=[]
 token = sys.argv[-1]
