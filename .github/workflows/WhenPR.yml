@@ -5,8 +5,7 @@ on:
     types: [opened, reopened, edited, synchronize]
     branches:
     - main
-    paths:
-    - '**'
+
     paths-ignore:
       - '.github/tmp'
       - 'swagger.json'
