@@ -52,7 +52,7 @@ jobs:
         shell: bash
         run: |
           python -m pip install --upgrade pip paramiko 
-          python .github/workflows/scripts/DeployToEnv.py esmorga.canarte.org ${{inputs.SSHRSA}}
+          python .github/workflows/scripts/DeployToEnv.py esmorga.canarte.org ${{secrets.SSHRSA}}
           rm .env
       # - name: Run Reporting
       #   uses: ./.github/actions/SlackCom
