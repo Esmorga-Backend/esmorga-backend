@@ -42,27 +42,27 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "pypy3.9"
-      - name: Run Reporting
-        uses: ./.github/actions/SlackCom
-        with: 
-          msg: "The backend will be down for a while, we are deploying to ${{ inputs.environment }}"
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        if: failure()
+#      - name: Run Reporting
+#        uses: ./.github/actions/SlackCom
+#        with: 
+#          msg: "The backend will be down for a while, we are deploying to ${{ inputs.environment }}"
+#          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
       - name: Install dependencies And Deploy
         shell: bash
         run: |
           python -m pip install --upgrade pip paramiko 
           python .github/workflows/scripts/DeployToEnv.py esmorga.canarte.org ${{secrets.SSHRSA}}
           rm .env
-      - name: Run Reporting
-        uses: ./.github/actions/SlackCom
-        with: 
-          msg: "Backend Deploy Fails"
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        if: failure()
-      - name: Run Reporting
-        uses: ./.github/actions/SlackCom
-        with: 
-          msg: "Backend is up and ready again"
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      # - name: Run Reporting
+      #   uses: ./.github/actions/SlackCom
+      #   with: 
+      #     msg: "Backend Deploy Fails"
+      #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      #   if: failure()
+      # - name: Run Reporting
+      #   uses: ./.github/actions/SlackCom
+      #   with: 
+      #     msg: "Backend is up and ready again"
+      #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
