@@ -28,7 +28,8 @@ jobs:
 
 
     steps:
-
+    - name: Checkout repository
+      uses: actions/checkout@v4
     - name: Start MongoDB
       uses: supercharge/mongodb-github-action@1.11.0
       with:
@@ -41,8 +42,7 @@ jobs:
         node-version: '22.1'
     - run: npm ci
     - run: npm run test:create:cycle
-    - name: Checkout repository
-      uses: actions/checkout@v2
+
     - name: Run Unit Tests
       uses: ./.github/actions/runUnitTests
       with:
