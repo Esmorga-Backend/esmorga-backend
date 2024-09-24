@@ -92,7 +92,7 @@ for yml_file in yml_files:
                                 run=run+'echo '+var+'=${{vars.'+var+'}} >> .env \n'
                             else:
                                 run=run+'echo '+var+'=${{'+envs_to_create[var]+'.'+var+'}} >> .env \n'
-                        if run!=data['jobs'][job]['steps'][0]['run']:
+                        if run!=data['jobs'][job]['steps'][step_n]['run']:
                             print("original:"+data['jobs'][job]['steps'][step_n]['run'])
                             print("new:"+run)
                             data['jobs'][job]['steps'][step_n]['run']=run
