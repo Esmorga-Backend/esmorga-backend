@@ -1,18 +1,15 @@
 name: Deploy
 run-name: ${{ github.actor }} is deploying release to ${{ inputs.environment }} Env 🚀
 on:
+  repository_dispatch:
+    types: [DeployToProd]
 
   workflow_dispatch:
     inputs:
       environment:
         description: 'DEPLOY ENV'
         required: true
-        default: PROD
-      release:
-          description: 'BRANCH TO RELEASE'
-          required: true
-
-  
+        default: PROD  
 
   workflow_call:
     inputs:
@@ -31,14 +28,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with: 
-          ref: ${{inputs.release}}
-        if: ${{inputs.release}} == ""
+          ref: ${{ github.event.client_payload.BRANCH }}
+        if: ${{ github.event.client_payload.BRANCH }}
 
       - name: Checkout repository
         uses: actions/checkout@v4
-        with: 
-          ref: ${{inputs.release}}
-        if: ${{inputs.release}} != ""
+
+        if: ${{!inputs.release}}
         
       - name: Create .env
         run: |
