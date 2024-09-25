@@ -38,6 +38,18 @@ jobs:
         git commit -m "Update VARS from GitHub Actions"
         git push --force-with-lease origin HEAD:refs/heads/${GITHUB_HEAD_REF}
 
+    - name: Start MongoDB
+      uses: supercharge/mongodb-github-action@1.11.0
+      with:
+        mongodb-version: '7.0'
+        mongodb-db: esmorga
+        mongodb-port: 27017
+
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '22.1'
+    - run: npm ci
+
     - name: Run Service
       uses: ./.github/actions/runService
       env:
@@ -50,7 +62,7 @@ jobs:
         EMAIL_PASS: ${{secrets.EMAIL_PASS}}
         APP_PORT: ${{vars.APP_PORT}}
         APP_LINK: ${{vars.APP_LINK}}
-        
+
     - name: Push OAS
       uses: ./.github/actions/pushOasFile
       with:
