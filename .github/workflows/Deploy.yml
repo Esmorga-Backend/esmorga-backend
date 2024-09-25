@@ -1,16 +1,18 @@
 name: Deploy
 run-name: ${{ github.actor }} is deploying release to ${{ inputs.environment }} Env 🚀
 on:
-  repository_dispatch:
-    types: [DeployToProd] 
-    
+
   workflow_dispatch:
     inputs:
       environment:
         description: 'DEPLOY ENV'
         required: true
         default: PROD
+      release:
+          description: 'BRANCH TO RELEASE'
+          required: true
 
+  
 
   workflow_call:
     inputs:
@@ -28,6 +30,16 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with: 
+          ref: ${{inputs.release}}
+        if: ${{inputs.release}} == ""
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with: 
+          ref: ${{inputs.release}}
+        if: ${{inputs.release}} != ""
+        
       - name: Create .env
         run: |
           echo APP_PORT=${{vars.APP_PORT}} >> .env 

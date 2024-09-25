@@ -99,8 +99,5 @@ jobs:
       uses: ./.github/actions/runReporting
       with:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: Push OAS
-      uses: ./.github/actions/pushOasFile
-      with:
-        AUTO_SSH_PRIVATE_KEY: ${{ secrets.AUTO_SSH_PRIVATE_KEY }}
+
 
