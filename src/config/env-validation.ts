@@ -33,6 +33,11 @@ class EnvVars {
   @IsNotEmpty()
   @IsNumber()
   @IsPositive()
+  LOGIN_ATTEMPTS_TTL: number;
+
+  @IsNotEmpty()
+  @IsNumber()
+  @IsPositive()
   MAX_PAIR_OF_TOKEN: number;
 
   @IsNotEmpty()
