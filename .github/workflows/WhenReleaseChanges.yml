@@ -1,21 +1,20 @@
-name: Deploy QA Env & Then Test E2E & Test Postman
-run-name: ${{ github.actor }} is deploying new code to QA Env 🚀
+name: Test code on release before deploy to Prod
+run-name: ${{ github.actor }} has changed the code on the release, testing it 🚀
 on:
   push:
     branches:
-    - main
-
+    - release/*
+  workflow_dispatch:
 
 jobs:
-  RunTestsOnUbuntu:
+  Run-tests-on-Ubuntu:
     name: Run npm test on Ubuntu
     runs-on: ubuntu-latest
     permissions:
       contents: write
       pull-requests: write
     env:
-      AIO_TOKEN: ${{secrets.AIO_TOKEN}}
-
+      AIO_TOKEN: ${{ secrets.AIO_TOKEN }}
 
     steps:
     - name: Start MongoDB
@@ -30,16 +29,15 @@ jobs:
         node-version: '22.1'
 
     - run: npm ci
-    - run: npm run test:create:cycle
+
     - name: Checkout repository
       uses: actions/checkout@v2
-
     - name: Run Unit Tests
       uses: ./.github/actions/runUnitTests
       with:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
       env:
-        MONGODB_URI: ${{secrets.MONGODB_URI}}
+        MONGODB_URI: mongodb://localhost:27017/esmorga
         NODE_ENV: ${{vars.NODE_ENV}}
         JWT_SECRET: ${{secrets.JWT_SECRET}}
         ACCESS_TOKEN_TTL: ${{vars.ACCESS_TOKEN_TTL}}
@@ -49,12 +47,13 @@ jobs:
         APP_PORT: ${{vars.APP_PORT}}
         APP_LINK: ${{vars.APP_LINK}}
 
+
     - name: Run Component Tests
       uses: ./.github/actions/runComponentTests
       with:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
       env:
-        MONGODB_URI: ${{secrets.MONGODB_URI}}
+        MONGODB_URI: mongodb://localhost:27017/esmorga
         NODE_ENV: ${{vars.NODE_ENV}}
         JWT_SECRET: ${{secrets.JWT_SECRET}}
         ACCESS_TOKEN_TTL: ${{vars.ACCESS_TOKEN_TTL}}
@@ -67,7 +66,7 @@ jobs:
     - name: Run Service
       uses: ./.github/actions/runService
       env:
-        MONGODB_URI: ${{secrets.MONGODB_URI}}
+        MONGODB_URI: mongodb://localhost:27017/esmorga
         NODE_ENV: ${{vars.NODE_ENV}}
         JWT_SECRET: ${{secrets.JWT_SECRET}}
         ACCESS_TOKEN_TTL: ${{vars.ACCESS_TOKEN_TTL}}
@@ -87,16 +86,4 @@ jobs:
       uses: ./.github/actions/runE2ETests
       with:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        
-    - name: Run Reporting
-      uses: ./.github/actions/runReporting
-      with:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-
-  DeployToQA: 
-    needs: RunTestsOnUbuntu
-    uses: ./.github/workflows/Deploy.yml
-    secrets: inherit
-    with:
-      environment: QA

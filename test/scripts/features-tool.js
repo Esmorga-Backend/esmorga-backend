@@ -40,7 +40,8 @@ async function main() {
       branchName = await git.getBranchName();
       console.log(branchName);
     }
-    let usName = features.getUsNameFromBranch(branchName);
+    let usName,
+      usVersionName = features.getUsNameFromBranch(branchName);
 
     //Comment previous line and use nexts to force a US with tests
     // usName = 'MOB-122';
@@ -48,10 +49,10 @@ async function main() {
     selectedTestTypes = features.getSelectedTestTypes(testTypes);
     console.log(selectedTestTypes);
     if (process.argv.includes('--Upload-Results')) {
-      const cyKey = await aio.findCycleByUs(onErrorMsg, usName);
+      const cyKey = await aio.findCycleByUs(onErrorMsg, usVersionName);
       aio.UploadResults(cyKey);
     } else if (process.argv.includes('--Update-Test-to-Automated')) {
-      const cyKey = await aio.findCycleByUs(onErrorMsg, usName);
+      const cyKey = await aio.findCycleByUs(onErrorMsg, usVersionName);
       if (cyKey != null) {
         const Tests = await aio.getTestsByCy(onErrorMsg, cyKey);
         console.log('Update', Tests, 'to Automated');
@@ -86,9 +87,9 @@ async function main() {
         TESTS.push(...Tests);
       }
       console.log('Create Cycle for', usName, 'with tests', TESTS);
-      let cyKey = await aio.findCycleByUs(onErrorMsg, usName);
+      let cyKey = await aio.findCycleByUs(onErrorMsg, usVersionName);
       if (cyKey == null) {
-        cyKey = await aio.createCycle(onErrorMsg, usName);
+        cyKey = await aio.createCycle(onErrorMsg, usName, usVersionName);
         for (test of TESTS) {
           await aio.addTestToCycle(onErrorMsg, test, cyKey);
         }
@@ -96,7 +97,7 @@ async function main() {
         console.log('This US has a CY created, for ADD new TCs do it on Jira');
       }
     } else {
-      const cyKey = await aio.findCycleByUs(onErrorMsg, usName);
+      const cyKey = await aio.findCycleByUs(onErrorMsg, usVersionName);
       if (cyKey == null) {
         console.log(
           "Seems Cycle is not created, create it with 'node test/scripts/features-tool --Create-Cycle-for-US",
