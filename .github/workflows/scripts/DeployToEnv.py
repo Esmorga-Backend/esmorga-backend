@@ -1,7 +1,7 @@
 import paramiko
 import sys
 import io
-key=sys.argv[-1]
+key=sys.argv[4]
 service=sys.argv[2]
 service_path=sys.argv[3]
 hostname=sys.argv[1]
