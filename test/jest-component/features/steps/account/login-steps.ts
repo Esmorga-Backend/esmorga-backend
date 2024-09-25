@@ -7,8 +7,6 @@ import {
   validateLoginCredentials,
 } from '../../../../../src/domain/services';
 import { ACCOUNT_STATUS } from '../../../../../src/domain/const';
-import { ACCOUNT_LOGIN_MOCK } from '../../../../mocks/dtos';
-
 import {
   AccountRepository,
   TokensRepository,
@@ -16,7 +14,7 @@ import {
 } from '../../../../../src/infrastructure/db/repositories';
 const TTL = parseInt(process.env.ACCESS_TOKEN_TTL);
 
-export const loginSteps: StepDefinitions = ({ given, and, then }) => {
+export const loginSteps: StepDefinitions = async ({ given, and, then }) => {
   given('the POST Login API is available', async () => {
     context.path = '/v1/account/login';
 
@@ -26,10 +24,8 @@ export const loginSteps: StepDefinitions = ({ given, and, then }) => {
     context.tokensRepository =
       moduleFixture.get<TokensRepository>(TokensRepository);
 
-    // jest.spyOn(argon2, 'verify').mockResolvedValue(true);
-
-    // context.loginAttemptsRepository =
-    //   moduleFixture.get<LoginAttemptsRepository>(LoginAttemptsRepository);
+    context.loginAttemptsRepository =
+      moduleFixture.get<LoginAttemptsRepository>(LoginAttemptsRepository);
 
     context.generateTokenPair =
       moduleFixture.get<GenerateTokenPair>(GenerateTokenPair);
@@ -54,6 +50,7 @@ export const loginSteps: StepDefinitions = ({ given, and, then }) => {
     'profile, accessToken and refreshToken are provided with correct schema',
     async () => {
       const USER_MOCK_DB = await getUserMockDb();
+
       expect(context.response.body).toMatchObject({
         accessToken: 'ACCESS_TOKEN',
         refreshToken: 'REFRESH_TOKEN',
@@ -93,10 +90,30 @@ export const loginSteps: StepDefinitions = ({ given, and, then }) => {
   });
 
   then(/^the result is that (.*)$/, async (result) => {
-    //   if (result === 'email error counter +1') {
-    //     expect(
-    //       context.loginAttemptsRepository.updateLoginAttempts,
-    //     ).toHaveBeenCalled();
-    //   }
+    if (result === 'email error counter +1') {
+      jest.spyOn(argon2, 'verify').mockResolvedValue(false);
+      jest
+        .spyOn(context.loginAttemptsRepository, 'updateLoginAttempts')
+        .mockResolvedValue(2);
+
+      try {
+        await validateLoginCredentials(
+          'uuid',
+          'password',
+          'wrong password',
+          context.accountRepository,
+          context.loginAttemptsRepository,
+          'requestId',
+        );
+      } catch (error) {
+        expect(
+          context.loginAttemptsRepository.updateLoginAttempts,
+        ).toHaveBeenCalledTimes(1);
+
+        expect(
+          context.loginAttemptsRepository.updateLoginAttempts,
+        ).toHaveBeenCalledWith('uuid', 'requestId');
+      }
+    }
   });
 };
