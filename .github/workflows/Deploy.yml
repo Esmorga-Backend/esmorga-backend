@@ -1,5 +1,5 @@
 name: Deploy
-run-name: ${{ github.actor }} is deploying release to ${{ inputs.environment }} Env 🚀
+run-name: ${{ github.actor }} is deploying release to ${{ inputs.environment }}${{ github.event.client_payload.env }} Env 🚀
 on:
   repository_dispatch:
     types: [DeployToProd]
@@ -20,16 +20,16 @@ on:
         default: QA
 jobs:
   Deploy:
-    name: Deploy to ${{ inputs.environment }}
+    name: Deploy to ${{ inputs.environment }}${{ github.event.client_payload.env }}
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
+    environment: ${{ inputs.environment }}${{ github.event.client_payload.env }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with: 
-          ref: ${{ github.event.client_payload.BRANCH }}
-        if: ${{ github.event.client_payload.BRANCH }}
+          ref: ${{ github.event.client_payload.branch }}
+        if: ${{ github.event.client_payload.branch }}
 
       - name: Checkout repository
         uses: actions/checkout@v4
