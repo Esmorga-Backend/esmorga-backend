@@ -1,0 +1,12 @@
+name: Dispatch Deploy
+run-name: Jira is deploying release to PROD Env 🚀
+on:
+    repository_dispatch:
+        types: [DeployToProd]
+
+jobs:
+    DeployToPROD: 
+        uses: ./.github/workflows/Deploy.yml
+        secrets: inherit
+        with:
+          environment: PROD

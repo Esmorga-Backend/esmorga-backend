@@ -1,7 +1,9 @@
 name: Deploy
 run-name: ${{ github.actor }} is deploying release to ${{ inputs.environment }} Env 🚀
 on:
-
+  repository_dispatch:
+    types: [DeployToProd] 
+    
   workflow_dispatch:
     inputs:
       environment:
