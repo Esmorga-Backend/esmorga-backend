@@ -19,9 +19,10 @@ command = """sudo systemctl stop """+service+"""
 sleep 30
 cd """+service_path+"""
 sudo git reset --hard HEAD
-sudo git clean -df
-sudo git checkout """+branch+"""
-sudo git fetch
+sudo git clean -df"""
+if branch[:6]=="release":
+    command=command+"""sudo git checkout """+branch
+command=command+"""sudo git fetch
 sudo git pull"""
 print(command)
 stdin, stdout, stderr = ssh_client.exec_command(command)
