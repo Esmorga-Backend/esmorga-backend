@@ -24,6 +24,6 @@ jobs:
       run: |
         git checkout -b release/esmorga-${{ inputs.release_num }}
         echo "release/esmorga-${{ inputs.release_num }}" > .github/tmp/branch.txt
-        git add .
+        git add .github/tmp/branch.txt
         git commit "${{ inputs.usKey }}"
-        git push -u origin release/esmorga-${{ inputs.release_num }}
+        git push -u origin "release/esmorga-${{ inputs.release_num }}"
