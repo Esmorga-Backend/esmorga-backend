@@ -29,11 +29,14 @@ jobs:
         git config --local user.email "actions@github.com"
         git config --local user.name "Github Actions"
         git fetch --unshallow
+        echo "Checkout:"
         git checkout ${{ github.head_ref }}
         git pull
+        echo "Merge:"
         git merge --no-ff ${{ github.ref }} -m "Auto-merge ${{ github.ref }} to  ${{ github.head_ref }}"
         git push
-
+        echo "Finished"
+        
     - name: Start MongoDB
       uses: supercharge/mongodb-github-action@1.11.0
       with:
