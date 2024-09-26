@@ -3,7 +3,7 @@ on:
   workflow_call:
 
 jobs:
-  setup-secrets:
+  Check-PIPE:
     runs-on: ubuntu-latest
 
     steps:
