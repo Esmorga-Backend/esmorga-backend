@@ -33,7 +33,7 @@ jobs:
         git pull
         git add .github/workflows/*.yml
         git commit -m "Update VARS from GitHub Actions"
-        git push --force-with-lease origin ${{ github.head_ref }}
+        git push --force-with-lease origin "${{ github.head_ref }}"
         
     - name: Start MongoDB
       uses: supercharge/mongodb-github-action@1.11.0
