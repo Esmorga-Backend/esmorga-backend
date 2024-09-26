@@ -7,7 +7,7 @@ on:
         description: release number
         required: true
       usKey:
-        description: release number
+        description: US key to link to this new branch
         required: true
 
 
