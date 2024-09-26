@@ -36,7 +36,7 @@ jobs:
         git config --global user.name "EsmorgaPipeBot"
         git add .github/workflows/*.yml
         git commit -m "Update VARS from GitHub Actions"
-        git push --force-with-lease origin HEAD:refs/heads/${GITHUB_HEAD_REF}
+        git push origin HEAD:refs/heads/${GITHUB_HEAD_REF}
 
     - name: Start MongoDB
       uses: supercharge/mongodb-github-action@1.11.0

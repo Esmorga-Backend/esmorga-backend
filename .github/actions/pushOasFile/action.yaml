@@ -57,6 +57,6 @@ runs:
           git config --global user.email "pablo.canarte.accenture@gmail.com"
           git config --global user.name "EsmorgaPipeBot"
           git commit -m "ADD Files"
-          git push --force-with-lease origin HEAD:refs/heads/${GITHUB_HEAD_REF}
+          git push origin HEAD:refs/heads/${GITHUB_HEAD_REF}
           exit 1
           fi
