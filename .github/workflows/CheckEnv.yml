@@ -57,11 +57,7 @@ jobs:
         MAX_PAIR_OF_TOKEN: ${{vars.MAX_PAIR_OF_TOKEN}}
         EMAIL_USER: ${{vars.EMAIL_USER}}
 
-
-        APP_PORT: ${{vars.APP_PORT}}
-        EMAIL_PASS: ${{secrets.EMAIL_PASS}}
-        APP_LINK: ${{vars.APP_LINK}}
     - name: Push OAS
       uses: ./.github/actions/pushOasFile
       with:
-        PAT: ${{ secrets.PAT }}
+        PAT: ${{ secrets.G_PAT }}
