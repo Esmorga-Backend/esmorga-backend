@@ -63,6 +63,8 @@ jobs:
         APP_PORT: ${{vars.APP_PORT}}
         APP_LINK: ${{vars.APP_LINK}}
 
+        LOGIN_ATTEMPTS_TTL: ${{vars.LOGIN_ATTEMPTS_TTL}}
+        MAX_LOGIN_ATTEMPTS: ${{vars.MAX_LOGIN_ATTEMPTS}}
     - name: Push OAS
       uses: ./.github/actions/pushOasFile
       with:

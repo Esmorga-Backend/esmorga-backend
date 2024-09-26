@@ -37,6 +37,8 @@ jobs:
         echo EMAIL_USER=${{vars.EMAIL_USER}} >> .env 
         echo EMAIL_PASS=${{secrets.EMAIL_PASS}} >> .env 
         echo APP_LINK=${{vars.APP_LINK}} >> .env 
+        echo LOGIN_ATTEMPTS_TTL=${{vars.LOGIN_ATTEMPTS_TTL}} >> .env 
+        echo MAX_LOGIN_ATTEMPTS=${{vars.MAX_LOGIN_ATTEMPTS}} >> .env 
 
     - name: Set up Python "pypy3.9"
       uses: actions/setup-python@v5
