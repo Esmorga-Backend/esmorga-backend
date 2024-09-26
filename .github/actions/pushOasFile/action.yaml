@@ -40,6 +40,8 @@ runs:
           git config --local user.name "Github Actions"
           git fetch
           git pull
+          git add .github/tmp/branch.txt
+          git add swagger.json
           git commit -m "Update VARS from GitHub Actions"
           git push --force-with-lease origin ${{ github.head_ref }}
         
