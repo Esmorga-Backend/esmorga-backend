@@ -7,9 +7,9 @@ on:
     - main
 
     paths-ignore:
-      - '.github/tmp'
-      - 'swagger.json'
-      - 'README.md'
+    - .github/tmp
+    - swagger.json
+    - README.md
   workflow_dispatch:
 
 jobs:

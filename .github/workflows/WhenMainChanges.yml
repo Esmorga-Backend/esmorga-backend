@@ -87,14 +87,14 @@ jobs:
       uses: ./.github/actions/runE2ETests
       with:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        
+
     - name: Run Reporting
       uses: ./.github/actions/runReporting
       with:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
-  DeployToQA: 
+  DeployToQA:
     needs: RunTestsOnUbuntu
     uses: ./.github/workflows/Deploy.yml
     secrets: inherit
