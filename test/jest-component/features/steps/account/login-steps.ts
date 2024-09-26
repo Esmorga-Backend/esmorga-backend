@@ -4,7 +4,7 @@ import { getUserMockDb } from '../../../../mocks/db';
 import { context, moduleFixture } from '../../../steps-config';
 import {
   GenerateTokenPair,
-  validateLoginCredentials,
+  ValidateLoginCredentialsService,
 } from '../../../../../src/domain/services';
 import { ACCOUNT_STATUS } from '../../../../../src/domain/const';
 import {
@@ -30,11 +30,20 @@ export const loginSteps: StepDefinitions = async ({ given, and, then }) => {
     context.generateTokenPair =
       moduleFixture.get<GenerateTokenPair>(GenerateTokenPair);
 
+    context.validateLoginCredentialsService =
+      moduleFixture.get<ValidateLoginCredentialsService>(
+        ValidateLoginCredentialsService,
+      );
+
     const USER_MOCK_DB = await getUserMockDb();
 
     jest
       .spyOn(context.accountRepository, 'findOneByEmail')
       .mockResolvedValue(USER_MOCK_DB);
+
+    jest
+      .spyOn(context.loginAttemptsRepository, 'updateLoginAttempts')
+      .mockResolvedValue(0);
 
     jest.spyOn(context.generateTokenPair, 'generateTokens').mockResolvedValue({
       accessToken: 'ACCESS_TOKEN',
@@ -92,17 +101,16 @@ export const loginSteps: StepDefinitions = async ({ given, and, then }) => {
   then(/^the result is that (.*)$/, async (result) => {
     if (result === 'email error counter +1') {
       jest.spyOn(argon2, 'verify').mockResolvedValue(false);
+
       jest
         .spyOn(context.loginAttemptsRepository, 'updateLoginAttempts')
         .mockResolvedValue(2);
 
       try {
-        await validateLoginCredentials(
+        await context.validateLoginCredentialsService.validateLoginCredentials(
           'uuid',
           'password',
           'wrong password',
-          context.accountRepository,
-          context.loginAttemptsRepository,
           'requestId',
         );
       } catch (error) {
