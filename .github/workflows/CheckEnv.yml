@@ -33,7 +33,7 @@ jobs:
         git pull
         git add .github/workflows/*.yml
         git commit -m "Update VARS from GitHub Actions"
-        git push --force-with-lease origin "${{ github.head_ref }}"
+        git push origin "${{ github.head_ref }}"
 
     - name: Start MongoDB
       uses: supercharge/mongodb-github-action@1.11.0
@@ -49,17 +49,7 @@ jobs:
 
     - name: Run Service
       uses: ./.github/actions/runService
-      env:
-        MONGODB_URI: ${{secrets.MONGODB_URI}}
-        NODE_ENV: ${{vars.NODE_ENV}}
-        JWT_SECRET: ${{secrets.JWT_SECRET}}
-        ACCESS_TOKEN_TTL: ${{vars.ACCESS_TOKEN_TTL}}
-        MAX_PAIR_OF_TOKEN: ${{vars.MAX_PAIR_OF_TOKEN}}
-        EMAIL_USER: ${{vars.EMAIL_USER}}
-
-        APP_PORT: ${{vars.APP_PORT}}
-        EMAIL_PASS: ${{secrets.EMAIL_PASS}}
-        APP_LINK: ${{vars.APP_LINK}}
+ 
     - name: Push OAS
       uses: ./.github/actions/pushOasFile
       with:
