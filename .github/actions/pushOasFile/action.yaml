@@ -32,31 +32,27 @@ runs:
         run: |
           if ! cmp -s "/tmp/swagger.json" "swagger.json"; then
           cp /tmp/swagger.json swagger.json
-          git add swagger.json
-          echo "Swagger has Changed"
-          echo "Push=1" >> $GITHUB_ENV
+          exit 1
           fi
       - name: Push OAS to github
         shell: bash
         run: |
           if ! cmp -s "/tmp/branch.txt" ".github/tmp/branch.txt" ; then
           cp /tmp/branch.txt .github/tmp/branch.txt
-          git add .github/tmp/branch.txt
-          echo "Branch has Changed"
-          echo "Push=1" >> $GITHUB_ENV
+          exit 1
           fi
       - name: Verificar configuración de Git
         shell: bash
         run: git remote -v
       - name: Push OAS to github
         shell: bash
+        if: failure()
         run: |
-          if [ ${{ env.Push }} != 0 ] ; then
           echo "Run AutoCommit"
-          git remote set-url origin git@github.com:Esmorga-Backend/esmorga-backend.git
-          git config --global user.email "pablo.canarte.accenture@gmail.com"
-          git config --global user.name "EsmorgaPipeBot"
-          git commit -m "ADD Files"
-          git push origin HEAD:refs/heads/${GITHUB_HEAD_REF}
-          exit 1
-          fi
+#          git remote set-url origin git@github.com:Esmorga-Backend/esmorga-backend.git
+#          git config --global user.email "pablo.canarte.accenture@gmail.com"
+#          git config --global user.name "EsmorgaPipeBot"
+#          git commit -m "ADD Files"
+#          git push origin HEAD:refs/heads/${GITHUB_HEAD_REF}
+#          exit 1
+#          fi
