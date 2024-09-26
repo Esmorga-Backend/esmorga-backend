@@ -44,7 +44,7 @@ jobs:
     - uses: actions/setup-node@v4
       with:
         node-version: '22.1'
-    - run: npm ci
+
 
     - name: Run Service
       uses: ./.github/actions/runService
@@ -55,9 +55,7 @@ jobs:
         ACCESS_TOKEN_TTL: ${{vars.ACCESS_TOKEN_TTL}}
         MAX_PAIR_OF_TOKEN: ${{vars.MAX_PAIR_OF_TOKEN}}
         EMAIL_USER: ${{vars.EMAIL_USER}}
-        EMAIL_PASS: ${{secrets.EMAIL_PASS}}
-        APP_PORT: ${{vars.APP_PORT}}
-        APP_LINK: ${{vars.APP_LINK}}
+
 
     - name: Push OAS
       uses: ./.github/actions/pushOasFile
