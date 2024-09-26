@@ -1,0 +1,23 @@
+name: Create Release
+run-name: ${{ github.actor }} is creating a release 🚀
+on:
+  repository_dispatch:
+    types: [CreateRelease]
+
+ 
+jobs:
+  CreateRelease:
+    name: Create release github.event.client_payload.branch
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+        
+      - name: Create .env
+        run: |
+          git checkout -b release/esmorga-${{ github.event.client_payload.branch }}
+          echo "release/esmorga-${{ github.event.client_payload.branch }}" > .github/tmp/branch.txt
+          git add .
+          git commit "${{ github.event.client_payload.usKey }}"
+          git push -u origin release/esmorga-${{ github.event.client_payload.branch }}
