@@ -26,8 +26,8 @@ export class ValidateLoginCredentialsService {
    * @param userDbPassword - Password saved in the DB for this user.
    * @param requestPassword - Password provided by the request.
    * @param requestId - Request identifier.
-   * @throws DataBaseBlockedError - The account has been blocked due to too many failed login attempts.
-   * @throws DataBaseUnathorizedError - The email and password combination don't match with the db data.
+   * @throws BlockedUserApiError - The account has been blocked due to too many failed login attempts.
+   * @throws InvalidCredentialsLoginApiError - The email and password combination don't match with the db data.
    */
   async validateLoginCredentials(
     uuid: string,
