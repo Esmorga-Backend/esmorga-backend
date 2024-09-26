@@ -1,62 +1,47 @@
 name: "Push OAS to github"
 description: "Push OAS to github"
 inputs:
-  AUTO_SSH_PRIVATE_KEY:
+  PAT:
     description: 'A Github key'
     required: true
 runs:
   using: "composite"
   steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
+          token: ${{ inputs.PAT }}
           ref: ${{ github.head_ref }}
-
- 
-      - name: Setup SSH
-        shell: bash
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ inputs.AUTO_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
 
       - name: Push OAS to github
         shell: bash
         run: |
-          echo "Push=0" >> $GITHUB_ENV
-          echo ${GITHUB_HEAD_REF} > /tmp/branch.txt
+          echo "${{ github.head_ref }}" > /tmp/branch.txt
           curl http://127.0.0.1:3000/swagger-json -o /tmp/swagger.json
       - name: Push OAS to github
         shell: bash
         run: |
           if ! cmp -s "/tmp/swagger.json" "swagger.json"; then
           cp /tmp/swagger.json swagger.json
-          git add swagger.json
-          echo "Swagger has Changed"
-          echo "Push=1" >> $GITHUB_ENV
+          exit 1
           fi
       - name: Push OAS to github
         shell: bash
         run: |
           if ! cmp -s "/tmp/branch.txt" ".github/tmp/branch.txt" ; then
           cp /tmp/branch.txt .github/tmp/branch.txt
-          git add .github/tmp/branch.txt
-          echo "Branch has Changed"
-          echo "Push=1" >> $GITHUB_ENV
-          fi
-      - name: Verificar configuración de Git
-        shell: bash
-        run: git remote -v
-      - name: Push OAS to github
-        shell: bash
-        run: |
-          if [ ${{ env.Push }} != 0 ] ; then
-          echo "Run AutoCommit"
-          git remote set-url origin git@github.com:Esmorga-Backend/esmorga-backend.git
-          git config --global user.email "pablo.canarte.accenture@gmail.com"
-          git config --global user.name "EsmorgaPipeBot"
-          git commit -m "ADD Files"
-          git push --force-with-lease origin HEAD:refs/heads/${GITHUB_HEAD_REF}
           exit 1
           fi
+
+      - name: Update Git
+        if: failure()
+        shell: bash
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "Github Actions"
+          git fetch
+          git pull
+          git add .github/tmp/branch.txt
+          git add swagger.json
+          git commit -m "Update Swagger/BranchReference from GitHub Actions"
+          git push origin "${{ github.head_ref }}"
