@@ -16,6 +16,7 @@ import {
 import {
   GenerateMailService,
   GenerateTokenPair,
+  ValidateLoginCredentialsService,
 } from '../../../domain/services';
 import { NodemailerService } from '../../services';
 import { AuthGuard } from '../guards';
@@ -57,6 +58,7 @@ import {
     GenerateTokenPair,
     GenerateMailService,
     SendEmailVerificationService,
+    ValidateLoginCredentialsService,
     LoginAttemptsRepository,
     TemporalCodeRepository,
     NodemailerService,

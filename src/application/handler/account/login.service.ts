@@ -10,7 +10,6 @@ import {
 } from '../../../infrastructure/db/errors';
 import {
   AccountRepository,
-  LoginAttemptsRepository,
   TokensRepository,
 } from '../../../infrastructure/db/repositories';
 import {
@@ -19,7 +18,7 @@ import {
 } from '../../../infrastructure/dtos';
 import { AccountLoginDto } from '../../../infrastructure/http/dtos';
 import {
-  validateLoginCredentials,
+  ValidateLoginCredentialsService,
   getOldestPairOfTokens,
   GenerateTokenPair,
 } from '../../../domain/services';
@@ -35,8 +34,8 @@ export class LoginService {
     private readonly logger: PinoLogger,
     private readonly generateTokenPair: GenerateTokenPair,
     private readonly accountRepository: AccountRepository,
-    private readonly loginAttemptsRepository: LoginAttemptsRepository,
     private readonly tokensRepository: TokensRepository,
+    private readonly validateLoginCredentialsService: ValidateLoginCredentialsService,
     private configService: ConfigService,
   ) {}
 
@@ -72,12 +71,10 @@ export class LoginService {
 
       const { uuid } = userProfile;
 
-      await validateLoginCredentials(
+      await this.validateLoginCredentialsService.validateLoginCredentials(
         uuid,
         userDbPassword,
         password,
-        this.accountRepository,
-        this.loginAttemptsRepository,
         requestId,
       );
 
