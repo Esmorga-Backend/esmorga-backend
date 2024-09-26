@@ -11,6 +11,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         token: ${{ secrets.PAT }}
+        ref: ${{ github.head_ref }}
 
     - name: Preare system
       shell: bash
@@ -28,14 +29,10 @@ jobs:
       run: |
         git config --local user.email "actions@github.com"
         git config --local user.name "Github Actions"
-        git fetch --unshallow
-        echo "Checkout:"
-        git checkout "${{ github.head_ref }}"
+        git fetch
         git pull
-        echo "Merge:"
-        git merge --no-ff "${{ github.ref }}" -m "Auto-merge \"${{ github.ref }}\" to  \"${{ github.head_ref }}\""
-        git push
-        echo "Finished"
+        git commit -m "Update VARS from GitHub Actions"
+        git push --force-with-lease origin ${{ github.head_ref }}
         
     - name: Start MongoDB
       uses: supercharge/mongodb-github-action@1.11.0

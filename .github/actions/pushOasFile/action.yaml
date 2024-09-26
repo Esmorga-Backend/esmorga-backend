@@ -10,14 +10,13 @@ runs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.PAT }}
-
-
+          token: ${{ inputs.PAT }}
+          ref: ${{ github.head_ref }}
 
       - name: Push OAS to github
         shell: bash
         run: |
-          echo ${GITHUB_HEAD_REF} > /tmp/branch.txt
+          echo ${{ github.head_ref }} > /tmp/branch.txt
           curl http://127.0.0.1:3000/swagger-json -o /tmp/swagger.json
       - name: Push OAS to github
         shell: bash
@@ -39,8 +38,8 @@ runs:
         run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "Github Actions"
-          git fetch --unshallow
-          git checkout ${{ github.head_ref }}
+          git fetch
           git pull
-          git merge --no-ff ${{ github.ref }} -m "Auto-merge ${{ github.ref }} to  ${{ github.head_ref }}"
-          git push
+          git commit -m "Update VARS from GitHub Actions"
+          git push --force-with-lease origin ${{ github.head_ref }}
+        
