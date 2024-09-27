@@ -8,7 +8,9 @@ import {
 import {
   BlockedUserApiError,
   InvalidCredentialsLoginApiError,
+  UnverifiedUserApiError,
 } from '../errors';
+import { ACCOUNT_STATUS } from '../const';
 
 @Injectable()
 export class ValidateLoginCredentialsService {
@@ -33,10 +35,19 @@ export class ValidateLoginCredentialsService {
     uuid: string,
     userDbPassword: string,
     requestPassword: string,
+    status: string,
     requestId?: string,
   ) {
     try {
       if (!(await argon2.verify(userDbPassword, requestPassword))) {
+        if (status === ACCOUNT_STATUS.UNVERIFIED) {
+          throw new UnverifiedUserApiError();
+        }
+
+        if (status === ACCOUNT_STATUS.BLOCKED) {
+          throw new BlockedUserApiError();
+        }
+
         const updatedAttempts =
           await this.loginAttemptsRepository.updateLoginAttempts(
             uuid,

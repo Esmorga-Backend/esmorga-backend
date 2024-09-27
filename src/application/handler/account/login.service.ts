@@ -63,22 +63,23 @@ export class LoginService {
       const { userProfile, password: userDbPassword } =
         await this.accountRepository.getUserByEmail(email, requestId);
 
-      if (userProfile.status === ACCOUNT_STATUS.UNVERIFIED) {
-        throw new UnverifiedUserApiError();
-      }
-
-      if (userProfile.status === ACCOUNT_STATUS.BLOCKED) {
-        throw new BlockedUserApiError();
-      }
-
-      const { uuid } = userProfile;
+      const { uuid, status } = userProfile;
 
       await this.validateLoginCredentialsService.validateLoginCredentials(
         uuid,
         userDbPassword,
         password,
+        status,
         requestId,
       );
+
+      if (status === ACCOUNT_STATUS.UNVERIFIED) {
+        throw new UnverifiedUserApiError();
+      }
+
+      if (status === ACCOUNT_STATUS.BLOCKED) {
+        throw new BlockedUserApiError();
+      }
 
       const { accessToken, refreshToken } =
         await this.generateTokenPair.generateTokens(uuid);
