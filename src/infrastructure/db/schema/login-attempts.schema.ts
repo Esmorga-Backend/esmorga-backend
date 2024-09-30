@@ -1,4 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
+
 const ttl = Number(process.env.LOGIN_ATTEMPTS_TTL);
 
 @Schema({ timestamps: true })
