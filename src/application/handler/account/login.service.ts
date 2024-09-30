@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { plainToClass } from 'class-transformer';
 import { PinoLogger } from 'nestjs-pino';
-import { ACCOUNT_STATUS } from '../../../domain/const';
+
 import {
   DataBaseBlockedError,
   DataBaseForbiddenError,
@@ -72,14 +72,6 @@ export class LoginService {
         status,
         requestId,
       );
-
-      if (status === ACCOUNT_STATUS.UNVERIFIED) {
-        throw new UnverifiedUserApiError();
-      }
-
-      if (status === ACCOUNT_STATUS.BLOCKED) {
-        throw new BlockedUserApiError();
-      }
 
       const { accessToken, refreshToken } =
         await this.generateTokenPair.generateTokens(uuid);

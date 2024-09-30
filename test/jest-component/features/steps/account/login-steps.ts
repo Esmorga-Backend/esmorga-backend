@@ -1,5 +1,4 @@
 import { StepDefinitions } from 'jest-cucumber';
-import * as argon2 from 'argon2';
 import { getUserMockDb } from '../../../../mocks/db';
 import { context, moduleFixture } from '../../../steps-config';
 import {
@@ -39,7 +38,12 @@ export const loginSteps: StepDefinitions = async ({ given, and, then }) => {
 
     jest
       .spyOn(context.accountRepository, 'findOneByEmail')
-      .mockResolvedValue(USER_MOCK_DB);
+      .mockImplementation(async (email) => {
+        if (email === USER_MOCK_DB.email) {
+          return USER_MOCK_DB;
+        }
+        return null;
+      });
 
     jest
       .spyOn(context.loginAttemptsRepository, 'updateLoginAttempts')
@@ -98,30 +102,9 @@ export const loginSteps: StepDefinitions = async ({ given, and, then }) => {
       .mockResolvedValue(USER_MOCK_UNVERIFIED_DB);
   });
 
-  then(/^the result is that (.*)$/, async (result) => {
-    if (result === 'email error counter +1') {
-      jest.spyOn(argon2, 'verify').mockResolvedValue(false);
-
-      jest
-        .spyOn(context.loginAttemptsRepository, 'updateLoginAttempts')
-        .mockResolvedValue(2);
-
-      try {
-        await context.validateLoginCredentialsService.validateLoginCredentials(
-          'uuid',
-          'password',
-          'wrong password',
-          'requestId',
-        );
-      } catch (error) {
-        expect(
-          context.loginAttemptsRepository.updateLoginAttempts,
-        ).toHaveBeenCalledTimes(1);
-
-        expect(
-          context.loginAttemptsRepository.updateLoginAttempts,
-        ).toHaveBeenCalledWith('uuid', 'requestId');
-      }
-    }
+  then(/^the result is that (\d+)$/, async (result) => {
+    expect(
+      context.loginAttemptsRepository.updateLoginAttempts,
+    ).toHaveBeenCalledTimes(Number(result));
   });
 };

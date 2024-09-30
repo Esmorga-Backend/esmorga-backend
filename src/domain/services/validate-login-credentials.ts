@@ -28,8 +28,9 @@ export class ValidateLoginCredentialsService {
    * @param userDbPassword - Password saved in the DB for this user.
    * @param requestPassword - Password provided by the request.
    * @param requestId - Request identifier.
-   * @throws BlockedUserApiError - The account has been blocked due to too many failed login attempts.
+   * @throws BlockedUserApiError - The account has been BLOCKED due to too many failed login attempts.
    * @throws InvalidCredentialsLoginApiError - The email and password combination don't match with the db data.
+   * @throws UnverifiedUserApiError - The account is UNVERIFIED.
    */
   async validateLoginCredentials(
     uuid: string,
@@ -40,25 +41,29 @@ export class ValidateLoginCredentialsService {
   ) {
     try {
       if (!(await argon2.verify(userDbPassword, requestPassword))) {
-        if (status === ACCOUNT_STATUS.UNVERIFIED) {
-          throw new UnverifiedUserApiError();
+        if (status === ACCOUNT_STATUS.ACTIVE) {
+          const updatedAttempts =
+            await this.loginAttemptsRepository.updateLoginAttempts(
+              uuid,
+              requestId,
+            );
+
+          if (
+            updatedAttempts === this.configService.get('MAX_LOGIN_ATTEMPTS')
+          ) {
+            await this.accountRepository.blockAccountByUuid(uuid, requestId);
+          }
         }
 
-        if (status === ACCOUNT_STATUS.BLOCKED) {
-          throw new BlockedUserApiError();
-        }
-
-        const updatedAttempts =
-          await this.loginAttemptsRepository.updateLoginAttempts(
-            uuid,
-            requestId,
-          );
-
-        if (updatedAttempts === this.configService.get('MAX_LOGIN_ATTEMPTS')) {
-          await this.accountRepository.blockAccountByUuid(uuid, requestId);
-          throw new BlockedUserApiError();
-        }
         throw new InvalidCredentialsLoginApiError();
+      }
+
+      if (status === ACCOUNT_STATUS.UNVERIFIED) {
+        throw new UnverifiedUserApiError();
+      }
+
+      if (status === ACCOUNT_STATUS.BLOCKED) {
+        throw new BlockedUserApiError();
       }
     } catch (error) {
       if (error instanceof HttpException) throw error;
