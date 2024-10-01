@@ -37,7 +37,7 @@ ftp_client.put('.env','.env')
 command = """
 cp .env """+service_path+"""
 cd """+service_path+"""
-chown ubuntu -R ./
+chown ubuntu -R """+service_path+"""
 npm ci
 sudo systemctl start """+service
 
