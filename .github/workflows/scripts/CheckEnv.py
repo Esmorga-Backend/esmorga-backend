@@ -90,11 +90,11 @@ def process_yml_files(yml_file,change):
         data = yaml.load(file)
         data_orig=yaml.load(file)
         jobs=get_all_jobs_with_steps(data)
-        data=check_steps_needs_inside_each_job(jobs,data)
+        data,change=check_steps_needs_inside_each_job(jobs,data,change)
         if data!=data_orig:
             with open(dir+yml_file, 'w') as file:
                 yaml.dump(data, file)
-            change=1
+            
     return change
         
 def get_all_jobs_with_steps(data):
@@ -104,16 +104,16 @@ def get_all_jobs_with_steps(data):
             jobs.append(job)
     return jobs
 
-def check_steps_needs_inside_each_job(jobs,data):
+def check_steps_needs_inside_each_job(jobs,data,change):
     step_n=0
     for job in jobs:
         while step_n < len(data['jobs'][job]['steps']):
-            data=check_create_env_steps(data,job,step_n)
-            data=check_steps_need_vars(data,job,step_n)
+            data,change=check_create_env_steps(data,change,job,step_n)
+            data,change=check_steps_need_vars(data,change,job,step_n)
             step_n=step_n+1
-    return data
+    return data,change
 
-def check_create_env_steps(data,job,step_n):
+def check_create_env_steps(data,change,job,step_n):
     if 'name' in data['jobs'][job]['steps'][step_n] and data['jobs'][job]['steps'][step_n]['name'] =='Create .env' :
         run=''
         for var in failed_vars:
@@ -123,11 +123,11 @@ def check_create_env_steps(data,job,step_n):
                 run=run+'echo "'+var+'=${{'+envs_to_create[var]+'.'+var+'}}" >> .env \n'
         if run!=data['jobs'][job]['steps'][step_n]['run']:
             data['jobs'][job]['steps'][step_n]['run']=run
-            
+            change=1
 
-    return data
+    return data,change
 
-def check_steps_need_vars(data,job,step_n):
+def check_steps_need_vars(data,change,job,step_n):
     if 'uses' in data['jobs'][job]['steps'][step_n] and data['jobs'][job]['steps'][step_n]['uses'] in steps_need_vars:
         if 'env' not in data['jobs'][job]['steps'][step_n]:
             data['jobs'][job]['steps'][step_n]['env']=dict()
@@ -138,8 +138,9 @@ def check_steps_need_vars(data,job,step_n):
                     data['jobs'][job]['steps'][step_n]['env'][var]='${{vars.'+var+'}}'
                 else:
                     data['jobs'][job]['steps'][step_n]['env'][var]='${{'+envs_to_create[var]+'.'+var+'}}'
-               
-    return data                       
+                change=1
+            
+    return data,change                       
                                         
 
 def main():
