@@ -9,7 +9,6 @@ try:
 except:
     print("fail to load ruamel.yaml")
 
-change=0
 
 #dontAddVars=['AUTO_SSH_PRIVATE_KEY','SSHRSA','PAT']
 #dontTouch=['WhenPR.yml','DeployToProd.yml','WhenMainChanges.yml','WhenReleaseChanges.yml']
@@ -86,7 +85,7 @@ def get_yml_files_in_dir():
             files.append(yml_file)
     return files
 
-def process_yml_files(yml_file):
+def process_yml_files(yml_file,change):
     with open(dir+yml_file, 'r') as file:
         data = yaml.load(file)
         data_orig=yaml.load(file)
@@ -95,7 +94,9 @@ def process_yml_files(yml_file):
         if data!=data_orig:
             with open(dir+yml_file, 'w') as file:
                 yaml.dump(data, file)
-
+            change=1
+    return change
+        
 def get_all_jobs_with_steps(data):
     jobs=[]
     for job in data['jobs']:
@@ -122,7 +123,7 @@ def check_create_env_steps(data,job,step_n):
                 run=run+'echo "'+var+'=${{'+envs_to_create[var]+'.'+var+'}}" >> .env \n'
         if run!=data['jobs'][job]['steps'][step_n]['run']:
             data['jobs'][job]['steps'][step_n]['run']=run
-            change=1
+            
 
     return data
 
@@ -137,18 +138,20 @@ def check_steps_need_vars(data,job,step_n):
                     data['jobs'][job]['steps'][step_n]['env'][var]='${{vars.'+var+'}}'
                 else:
                     data['jobs'][job]['steps'][step_n]['env'][var]='${{'+envs_to_create[var]+'.'+var+'}}'
-                change=1
+               
     return data                       
                                         
 
 def main():
+    change=0
     run_app()
     get_env()
     add_envs_to_create_from_urls()
     files=get_yml_files_in_dir()
     for file in files:
-        process_yml_files(file)
+        change=process_yml_files(file,change)
     if change!=0:
-        sys.exit(1) 
+
+        sys.exit(1)
 
 main()
