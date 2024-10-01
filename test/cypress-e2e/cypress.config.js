@@ -5,7 +5,7 @@ module.exports = defineConfig({
     screenshotsFolder: 'test/cypress-e2e/cypress/e2e/screenshots',
     downloadsFolder: 'test/cypress-e2e/cypress/e2e/downloads',
     supportFile: false,
-    baseUrl: 'https://qa.esmorga.canarte.org/',
+    baseUrl: 'http://localhost:3000/',
     specPattern: 'test/cypress-e2e/cypress/e2e/**/*.feature',
     setupNodeEvents(on, config) {
       on('file:preprocessor', cucumber());
