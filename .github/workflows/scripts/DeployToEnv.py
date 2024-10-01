@@ -21,11 +21,12 @@ cd """+service_path+"""
 sudo git reset --hard HEAD
 sudo git clean -df
 """
-if branch[:6]=="release":
+if branch[:8]=="release/":
     command=command+"""sudo git checkout """+branch
 command=command+"""
 sudo git fetch
 sudo git pull"""
+
 stdin, stdout, stderr = ssh_client.exec_command(command)
 for line in stdout.readlines():
     print(line)
@@ -38,7 +39,8 @@ cp .env """+service_path+"""
 cd """+service_path+"""
 chown ubuntu -R ./
 npm ci
-sudo systemctl start  """+service
+sudo systemctl start """+service
+
 stdin, stdout, stderr = ssh_client.exec_command(command)
 for line in stdout.readlines():
     print(line)

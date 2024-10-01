@@ -117,9 +117,9 @@ def check_create_env_steps(data,job,step_n):
         run=''
         for var in failed_vars:
             if envs_to_create[var] == 'variables':
-                run=run+'echo '+var+'=${{vars.'+var+'}} >> .env \n'
+                run=run+'echo "'+var+'=${{vars.'+var+'}}" >> .env \n'
             else:
-                run=run+'echo '+var+'=${{'+envs_to_create[var]+'.'+var+'}} >> .env \n'
+                run=run+'echo "'+var+'=${{'+envs_to_create[var]+'.'+var+'}}" >> .env \n'
         if run!=data['jobs'][job]['steps'][step_n]['run']:
             data['jobs'][job]['steps'][step_n]['run']=run
             change=1
