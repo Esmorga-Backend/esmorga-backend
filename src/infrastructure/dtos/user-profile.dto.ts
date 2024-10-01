@@ -1,6 +1,6 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Expose, Transform } from 'class-transformer';
-import { IsDateString, IsString } from 'class-validator';
+import { IsDateString, IsOptional, IsString } from 'class-validator';
 
 export class UserProfileDto {
   @Transform((value) => value.obj._id.toString())
@@ -42,4 +42,13 @@ export class UserProfileDto {
   @IsDateString()
   @ApiProperty({ example: '2024-03-08T10:05:30.915Z', format: 'date-time' })
   createdAt: Date;
+
+  @Expose()
+  @IsDateString()
+  @IsOptional()
+  @ApiPropertyOptional({
+    example: '2024-03-09T10:05:30.915Z',
+    format: 'date-time',
+  })
+  expireBlockedAt: Date;
 }

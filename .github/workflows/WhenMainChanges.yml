@@ -49,6 +49,8 @@ jobs:
         APP_PORT: ${{vars.APP_PORT}}
         APP_LINK: ${{vars.APP_LINK}}
 
+        LOGIN_ATTEMPTS_TTL: ${{vars.LOGIN_ATTEMPTS_TTL}}
+        MAX_LOGIN_ATTEMPTS: ${{vars.MAX_LOGIN_ATTEMPTS}}
     - name: Run Component Tests
       uses: ./.github/actions/runComponentTests
       with:
@@ -64,6 +66,8 @@ jobs:
         APP_PORT: ${{vars.APP_PORT}}
         APP_LINK: ${{vars.APP_LINK}}
 
+        LOGIN_ATTEMPTS_TTL: ${{vars.LOGIN_ATTEMPTS_TTL}}
+        MAX_LOGIN_ATTEMPTS: ${{vars.MAX_LOGIN_ATTEMPTS}}
     - name: Run Service
       uses: ./.github/actions/runService
       env:
@@ -77,6 +81,8 @@ jobs:
         APP_PORT: ${{vars.APP_PORT}}
         APP_LINK: ${{vars.APP_LINK}}
 
+        LOGIN_ATTEMPTS_TTL: ${{vars.LOGIN_ATTEMPTS_TTL}}
+        MAX_LOGIN_ATTEMPTS: ${{vars.MAX_LOGIN_ATTEMPTS}}
     - name: Run Postman
       uses: ./.github/actions/runPostmanTests
       with:

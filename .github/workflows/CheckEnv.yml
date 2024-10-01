@@ -60,6 +60,9 @@ jobs:
         EMAIL_USER: ${{vars.EMAIL_USER}}
         EMAIL_PASS: ${{secrets.EMAIL_PASS}}
         APP_LINK: ${{vars.APP_LINK}}
+
+        LOGIN_ATTEMPTS_TTL: ${{vars.LOGIN_ATTEMPTS_TTL}}
+        MAX_LOGIN_ATTEMPTS: ${{vars.MAX_LOGIN_ATTEMPTS}}
     - name: Push OAS
       uses: ./.github/actions/pushOasFile
       with:

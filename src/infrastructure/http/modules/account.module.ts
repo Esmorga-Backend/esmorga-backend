@@ -16,13 +16,19 @@ import {
 import {
   GenerateMailService,
   GenerateTokenPair,
+  ValidateLoginCredentialsService,
 } from '../../../domain/services';
 import { NodemailerService } from '../../services';
 import { AuthGuard } from '../guards';
 import { EventSharedModule } from './event-shared.module';
 import { AccountSharedModule } from './account-shared.module';
-import { TemporalCodeRepository } from '../../db/repositories';
 import {
+  LoginAttemptsRepository,
+  TemporalCodeRepository,
+} from '../../db/repositories';
+import {
+  LoginAttemptsSchema,
+  LoginAttempts,
   TemporalCodeSchema,
   TemporalCode,
 } from '../../../infrastructure/db/schema';
@@ -31,6 +37,9 @@ import {
   imports: [
     AccountSharedModule,
     EventSharedModule,
+    MongooseModule.forFeature([
+      { name: LoginAttempts.name, schema: LoginAttemptsSchema },
+    ]),
     MongooseModule.forFeature([
       { name: TemporalCode.name, schema: TemporalCodeSchema },
     ]),
@@ -49,6 +58,8 @@ import {
     GenerateTokenPair,
     GenerateMailService,
     SendEmailVerificationService,
+    ValidateLoginCredentialsService,
+    LoginAttemptsRepository,
     TemporalCodeRepository,
     NodemailerService,
     AuthGuard,

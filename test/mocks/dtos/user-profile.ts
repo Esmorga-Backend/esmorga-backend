@@ -10,4 +10,5 @@ export const USER_PROFILE_MOCK: UserProfileDto = {
   role: ACCOUNT_ROLES.USER,
   status: ACCOUNT_STATUS.ACTIVE,
   createdAt: new Date(),
+  expireBlockedAt: undefined,
 };

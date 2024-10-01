@@ -2,7 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { plainToClass } from 'class-transformer';
 import { PinoLogger } from 'nestjs-pino';
-import { DataBaseUnathorizedError } from '../../../infrastructure/db/errors';
+
+import {
+  DataBaseBlockedError,
+  DataBaseForbiddenError,
+  DataBaseUnathorizedError,
+} from '../../../infrastructure/db/errors';
 import {
   AccountRepository,
   TokensRepository,
@@ -13,11 +18,15 @@ import {
 } from '../../../infrastructure/dtos';
 import { AccountLoginDto } from '../../../infrastructure/http/dtos';
 import {
-  validateLoginCredentials,
+  ValidateLoginCredentialsService,
   getOldestPairOfTokens,
   GenerateTokenPair,
 } from '../../../domain/services';
-import { InvalidCredentialsLoginApiError } from '../../../domain/errors';
+import {
+  BlockedUserApiError,
+  InvalidCredentialsLoginApiError,
+  UnverifiedUserApiError,
+} from '../../../domain/errors';
 
 @Injectable()
 export class LoginService {
@@ -26,6 +35,7 @@ export class LoginService {
     private readonly generateTokenPair: GenerateTokenPair,
     private readonly accountRepository: AccountRepository,
     private readonly tokensRepository: TokensRepository,
+    private readonly validateLoginCredentialsService: ValidateLoginCredentialsService,
     private configService: ConfigService,
   ) {}
 
@@ -35,7 +45,9 @@ export class LoginService {
    * @param accountLoginDto - Account email and password.
    * @param requestId - Request idenfier.
    * @returns AccountLoggedDto - Object with new pair of tokens and profile data.
+   * @throws BlockedUserApiError - The user status account is BLOCKED in the DB data.
    * @throws InvalidCredentialsLoginApiError - Email and password combination do not match with the DB data.
+   * @throws UnverifiedUserApiError - The user status account is UNVERIFIED in the DB data.
    */
   async login(
     accountLoginDto: AccountLoginDto,
@@ -51,9 +63,15 @@ export class LoginService {
       const { userProfile, password: userDbPassword } =
         await this.accountRepository.getUserByEmail(email, requestId);
 
-      await validateLoginCredentials(userDbPassword, password);
+      const { uuid, status } = userProfile;
 
-      const { uuid } = userProfile;
+      await this.validateLoginCredentialsService.validateLoginCredentials(
+        uuid,
+        userDbPassword,
+        password,
+        status,
+        requestId,
+      );
 
       const { accessToken, refreshToken } =
         await this.generateTokenPair.generateTokens(uuid);
@@ -95,6 +113,12 @@ export class LoginService {
       this.logger.error(
         `[LoginService] [login] - x-request-id:${requestId}, error ${error}`,
       );
+
+      if (error instanceof DataBaseBlockedError)
+        throw new BlockedUserApiError();
+
+      if (error instanceof DataBaseForbiddenError)
+        throw new UnverifiedUserApiError();
 
       if (error instanceof DataBaseUnathorizedError)
         throw new InvalidCredentialsLoginApiError();

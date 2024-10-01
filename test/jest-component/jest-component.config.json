@@ -28,9 +28,6 @@
     "lcov",
     "clover"
   ],
-  "setupFiles": [
-    "<rootDir>/test/mocks/test.env.ts"
-  ],
   "reporters": [
   "default",
   ["jest-junit", {

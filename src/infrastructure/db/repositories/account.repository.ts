@@ -1,5 +1,6 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { ConfigService } from '@nestjs/config';
 import { Model } from 'mongoose';
 import { plainToClass } from 'class-transformer';
 import { PinoLogger } from 'nestjs-pino';
@@ -17,6 +18,7 @@ export class AccountRepository extends MongoRepository<UserSchema> {
   constructor(
     @InjectModel(UserSchema.name) private userModel: Model<UserSchema>,
     private readonly logger: PinoLogger,
+    private configService: ConfigService,
   ) {
     super(userModel);
   }
@@ -178,6 +180,37 @@ export class AccountRepository extends MongoRepository<UserSchema> {
     } catch (error) {
       this.logger.error(
         `[AccountRepository] [activateAccountByEmail] - x-request-id: ${requestId}, error: ${error}`,
+      );
+
+      throw new DataBaseInternalError();
+    }
+  }
+
+  /**
+   * Update status to BLOCKED.
+   *
+   * @param uuid - User identifier..
+   * @param requestId - Request identifier.
+   * @returns UserProfileDto - User data following business schema.
+   */
+  async blockAccountByUuid(uuid: string, requestId?: string) {
+    try {
+      this.logger.info(
+        `[AccountRepository] [blockAccountByUuid] - x-request-id: ${requestId}, uuid: ${uuid}`,
+      );
+
+      const userTimeBlock = this.configService.get('LOGIN_ATTEMPTS_TTL') * 1000;
+
+      const unblockDate = new Date(Date.now() + userTimeBlock);
+
+      await this.updateBlockedStatusByUuid(
+        uuid,
+        ACCOUNT_STATUS.BLOCKED,
+        unblockDate,
+      );
+    } catch (error) {
+      this.logger.error(
+        `[AccountRepository] [blockAccountByUuid] - x-request-id: ${requestId}, error: ${error}`,
       );
 
       throw new DataBaseInternalError();

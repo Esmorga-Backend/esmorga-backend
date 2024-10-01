@@ -34,11 +34,14 @@ export const sendEmailVerificationSteps: StepDefinitions = ({ given, and }) => {
 
     const USER_MOCK_DB = await getUserMockDb();
 
-    USER_MOCK_DB.status = ACCOUNT_STATUS.UNVERIFIED;
+    const USER_MOCK_UNVERIFIED_DB = {
+      ...USER_MOCK_DB,
+      status: ACCOUNT_STATUS.UNVERIFIED,
+    };
 
     jest
       .spyOn(context.accountRepository, 'findOneByEmail')
-      .mockResolvedValue(USER_MOCK_DB);
+      .mockResolvedValue(USER_MOCK_UNVERIFIED_DB);
 
     jest
       .spyOn(context.temporalCodeRepository, 'findAndUpdateTemporalCode')
@@ -79,14 +82,9 @@ export const sendEmailVerificationSteps: StepDefinitions = ({ given, and }) => {
     if ((status = ACCOUNT_STATUS.ACTIVE)) {
       const USER_MOCK_DB = await getUserMockDb();
 
-      const USER_MOCK_ACTIVE_DB = {
-        ...USER_MOCK_DB,
-        status: ACCOUNT_STATUS.ACTIVE,
-      };
-
       jest
         .spyOn(context.accountRepository, 'findOneByEmail')
-        .mockResolvedValue(USER_MOCK_ACTIVE_DB);
+        .mockResolvedValue(USER_MOCK_DB);
     }
   });
 
