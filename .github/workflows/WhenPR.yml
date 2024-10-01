@@ -82,13 +82,13 @@ jobs:
       uses: ./.github/actions/runService
       env:
         MONGODB_URI: ${{secrets.MONGODB_URI}}
+        APP_PORT: ${{vars.APP_PORT}}
         NODE_ENV: ${{vars.NODE_ENV}}
         JWT_SECRET: ${{secrets.JWT_SECRET}}
         ACCESS_TOKEN_TTL: ${{vars.ACCESS_TOKEN_TTL}}
         MAX_PAIR_OF_TOKEN: ${{vars.MAX_PAIR_OF_TOKEN}}
         EMAIL_USER: ${{vars.EMAIL_USER}}
         EMAIL_PASS: ${{secrets.EMAIL_PASS}}
-        APP_PORT: ${{vars.APP_PORT}}
         APP_LINK: ${{vars.APP_LINK}}
         LOGIN_ATTEMPTS_TTL: ${{vars.LOGIN_ATTEMPTS_TTL}}
         MAX_LOGIN_ATTEMPTS: ${{vars.MAX_LOGIN_ATTEMPTS}}
