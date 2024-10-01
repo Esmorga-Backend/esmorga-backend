@@ -32,6 +32,9 @@ export class User {
     default: ACCOUNT_STATUS.UNVERIFIED,
   })
   status: string;
+
+  @Prop({ required: false, default: null })
+  expireBlockedAt: Date;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

@@ -1,14 +1,16 @@
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiForbiddenResponse,
   ApiHeader,
   ApiInternalServerErrorResponse,
-  ApiOkResponse,
-  ApiOperation,
-  ApiUnauthorizedResponse,
-  ApiCreatedResponse,
   ApiNoContentResponse,
   ApiNotAcceptableResponse,
-  ApiBearerAuth,
+  ApiOkResponse,
+  ApiOperation,
+  ApiResponse,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { applyDecorators } from '@nestjs/common';
 import {
@@ -42,8 +44,13 @@ export function SwaggerAccountLogin() {
     ApiHeader(LOGIN_HEADERS),
     ApiOkResponse(LOGIN_RESPONSES.OK),
     ApiBadRequestResponse(LOGIN_RESPONSES.BAD_REQUEST_ERROR),
+    ApiForbiddenResponse(LOGIN_RESPONSES.FORBIDDEN_ERROR),
     ApiUnauthorizedResponse(LOGIN_RESPONSES.UNAUTHORIZED_ERROR),
     ApiInternalServerErrorResponse(LOGIN_RESPONSES.INTERNAL_ERROR),
+    ApiResponse({
+      status: 423,
+      ...LOGIN_RESPONSES.BLOCKED_ACCOUNT_ERROR,
+    }),
   );
 }
 

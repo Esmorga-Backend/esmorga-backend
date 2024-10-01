@@ -7,9 +7,9 @@ import {
 } from '../../../dtos';
 import {
   BAD_REQUEST_ERROR_COMMON_PROPERTIES,
-  UNAUTHORIZED_INVALID_TOKEN_COMMON_PROPERTIES,
   INTERNAL_ERROR_COMMON_PROPERTIES,
   NOT_ACCEPTABLE_ERROR_COMMON_PROPERTIES,
+  UNAUTHORIZED_INVALID_TOKEN_COMMON_PROPERTIES,
 } from './common-response-properties';
 
 const PATHS = {
@@ -42,6 +42,51 @@ export const LOGIN_RESPONSES: { [key: string]: ApiResponseOptions } = {
       },
     },
   },
+  FORBIDDEN_ERROR: {
+    description: 'User account is unverified',
+    schema: {
+      type: 'object',
+      properties: {
+        title: {
+          type: 'string',
+          example: 'unverifiedUserError',
+        },
+        status: { type: 'number', example: HttpStatus.FORBIDDEN },
+        type: { type: 'string', example: PATHS.LOGIN },
+        detail: {
+          type: 'string',
+          example: 'user is unverified',
+        },
+        errors: {
+          type: 'array',
+          example: ['user is unverified'],
+        },
+      },
+    },
+  },
+  BLOCKED_ACCOUNT_ERROR: {
+    description: 'User account is blocked',
+    schema: {
+      type: 'object',
+      properties: {
+        title: {
+          type: 'string',
+          example: 'blockedUserError',
+        },
+        status: { type: 'number', example: 423 },
+        type: { type: 'string', example: PATHS.LOGIN },
+        detail: {
+          type: 'string',
+          example: 'user is blocked',
+        },
+        errors: {
+          type: 'array',
+          example: ['user is blocked'],
+        },
+      },
+    },
+  },
+
   UNAUTHORIZED_ERROR: {
     description: 'Invalid credentials',
     schema: {
@@ -373,8 +418,6 @@ export const SEND_EMAIL_VERIFICATION_RESPONSES: {
     },
   },
 };
-
-
 
 export const ACTIVATE_ACCOUNT_RESPONSES: { [key: string]: ApiResponseOptions } =
   {

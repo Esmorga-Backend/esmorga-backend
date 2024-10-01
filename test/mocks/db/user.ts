@@ -28,14 +28,17 @@ const ADMIN_USER_MOCK_DB = {
   createdAt: new Date(),
 };
 
-export async function getUserMockDb() {
-  USER_MOCK_DB.password = await argon2.hash(USER_MOCK_DB.password);
+async function hashPassword(user) {
+  return {
+    ...user,
+    password: await argon2.hash(user.password),
+  };
+}
 
-  return USER_MOCK_DB;
+export async function getUserMockDb() {
+  return hashPassword(USER_MOCK_DB);
 }
 
 export async function getAdminUserMockDb() {
-  ADMIN_USER_MOCK_DB.password = await argon2.hash(ADMIN_USER_MOCK_DB.password);
-
-  return ADMIN_USER_MOCK_DB;
+  return hashPassword(ADMIN_USER_MOCK_DB);
 }

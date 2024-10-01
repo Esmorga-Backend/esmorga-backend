@@ -10,7 +10,9 @@ export interface DBRepository<E> {
   findEventParticipant(userId: string): Promise<E[]>;
   findAndUpdateParticipantsList(eventId: string, userId: string);
   findAndUpdateTemporalCode(code: string, type: string, email: string);
+  findAndUpdateLoginAttempts(uuid: string): Promise<E>;
   save(data);
+  updateBlockedStatusByUuid(uuid: string, newStatus: string, unblockDate: Date);
   updateById(id: string, data: object): Promise<E>;
   updatePasswordByEmail(email: string, password: string);
   updateStatusByEmail(email: string, newStatus: string): Promise<E>;
