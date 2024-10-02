@@ -39,6 +39,7 @@ jobs:
         echo "APP_LINK=${{vars.APP_LINK}}" >> .env 
         echo "LOGIN_ATTEMPTS_TTL=${{vars.LOGIN_ATTEMPTS_TTL}}" >> .env 
         echo "MAX_LOGIN_ATTEMPTS=${{vars.MAX_LOGIN_ATTEMPTS}}" >> .env 
+        echo "DNS_NAME=${{vars.DNS_NAME}}" >> .env 
     - name: Set up Python "pypy3.9"
       uses: actions/setup-python@v5
       with:

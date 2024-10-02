@@ -63,6 +63,7 @@ jobs:
 
         LOGIN_ATTEMPTS_TTL: ${{vars.LOGIN_ATTEMPTS_TTL}}
         MAX_LOGIN_ATTEMPTS: ${{vars.MAX_LOGIN_ATTEMPTS}}
+        DNS_NAME: ${{vars.DNS_NAME}}
     - name: Push OAS
       uses: ./.github/actions/pushOasFile
       with:

@@ -10,11 +10,8 @@ import {
   EventRepository,
   TokensRepository,
 } from '../../../../../src/infrastructure/db/repositories';
-import {
-  getAdminUserMockDb,
-  getUserMockDb,
-  PAIR_OF_TOKENS_MOCK_DB,
-} from '../../../../mocks/db';
+import { ACCOUNT_ROLES } from '../../../../../src/domain/const';
+import { getUserMockDb, PAIR_OF_TOKENS_MOCK_DB } from '../../../../mocks/db';
 
 import { HEADERS } from '../../../../mocks/common-data';
 
@@ -47,11 +44,14 @@ export const createEventSteps: StepDefinitions = ({ given, and }) => {
   });
 
   and('an authenticated user with admin rights is logged in', async () => {
-    const USER_ADMIN = await getAdminUserMockDb();
+    const ADMIN_USER = {
+      ...(await getUserMockDb()),
+      role: ACCOUNT_ROLES.ADMIN,
+    };
 
     jest
       .spyOn(context.accountRepository, 'findOneById')
-      .mockResolvedValue(USER_ADMIN);
+      .mockResolvedValue(ADMIN_USER);
   });
 
   and(

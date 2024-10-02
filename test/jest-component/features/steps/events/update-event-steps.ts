@@ -7,13 +7,14 @@ import {
   TokensRepository,
 } from '../../../../../src/infrastructure/db/repositories';
 import {
-  getAdminUserMockDb,
+  getUserMockDb,
   FUTURE_EVENT_MOCK_DB,
   PAIR_OF_TOKENS_MOCK_DB,
   UPDATED_EVENT_MOCK_DB,
 } from '../../../../mocks/db';
 import { EVENT_MOCK } from '../../../../mocks/dtos';
 import { HEADERS } from '../../../../mocks/common-data';
+import { ACCOUNT_ROLES } from '../../../../../src/domain/const';
 
 export const updateEventSteps: StepDefinitions = ({ given }) => {
   // ###### MOB-TC-73 ######
@@ -34,7 +35,10 @@ export const updateEventSteps: StepDefinitions = ({ given }) => {
     context.tokensRepository =
       moduleFixture.get<TokensRepository>(TokensRepository);
 
-    const USER_ADMIN = await getAdminUserMockDb();
+    const ADMIN_USER = {
+      ...(await getUserMockDb()),
+      role: ACCOUNT_ROLES.ADMIN,
+    };
 
     jest.spyOn(context.jwtService, 'verifyAsync').mockResolvedValue({});
     jest
@@ -42,7 +46,7 @@ export const updateEventSteps: StepDefinitions = ({ given }) => {
       .mockResolvedValue(PAIR_OF_TOKENS_MOCK_DB);
     jest
       .spyOn(context.accountRepository, 'findOneById')
-      .mockResolvedValue(USER_ADMIN);
+      .mockResolvedValue(ADMIN_USER);
     jest
       .spyOn(context.eventRepository, 'findOneById')
       .mockResolvedValue(FUTURE_EVENT_MOCK_DB);
