@@ -187,6 +187,43 @@ export class AccountRepository extends MongoRepository<UserSchema> {
   }
 
   /**
+   * Update user status to ACTIVE to unblock it
+   * and return the new status.
+   *
+   * @param email - User email address.
+   * @param requestId - Request identifier.
+   * @returns UserProfileDto - User data following business schema.
+   */
+  async unblockAccountByEmail(email: string, requestId?: string) {
+    try {
+      this.logger.info(
+        `[AccountRepository] [unblockAccountByEmail] - x-request-id: ${requestId}, email: ${email}`,
+      );
+
+      const account = await this.updateStatusByEmail(
+        email,
+        ACCOUNT_STATUS.ACTIVE,
+      );
+
+      const userProfile: UserProfileDto = plainToClass(
+        UserProfileDto,
+        account,
+        {
+          excludeExtraneousValues: true,
+        },
+      );
+
+      return userProfile.status;
+    } catch (error) {
+      this.logger.error(
+        `[AccountRepository] [unblockAccountByEmail] - x-request-id: ${requestId}, error: ${error}`,
+      );
+
+      throw new DataBaseInternalError();
+    }
+  }
+
+  /**
    * Update status to BLOCKED.
    *
    * @param uuid - User identifier..

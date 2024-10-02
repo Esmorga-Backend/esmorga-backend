@@ -63,7 +63,17 @@ export class LoginService {
       const { userProfile, password: userDbPassword } =
         await this.accountRepository.getUserByEmail(email, requestId);
 
-      const { uuid, status } = userProfile;
+      const { expireBlockedAt, uuid } = userProfile;
+      let { status } = userProfile;
+
+      const currentDate = new Date();
+
+      if (expireBlockedAt && currentDate >= expireBlockedAt) {
+        status = await this.accountRepository.unblockAccountByEmail(
+          email,
+          requestId,
+        );
+      }
 
       await this.validateLoginCredentialsService.validateLoginCredentials(
         uuid,

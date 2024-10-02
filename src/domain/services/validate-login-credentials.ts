@@ -27,6 +27,7 @@ export class ValidateLoginCredentialsService {
    * @param uuid - User identifier.
    * @param userDbPassword - Password saved in the DB for this user.
    * @param requestPassword - Password provided by the request.
+   * @param status - Current account status.
    * @param requestId - Request identifier.
    * @throws BlockedUserApiError - The account has been BLOCKED due to too many failed login attempts.
    * @throws InvalidCredentialsLoginApiError - The email and password combination don't match with the db data.
@@ -52,6 +53,10 @@ export class ValidateLoginCredentialsService {
             updatedAttempts === this.configService.get('MAX_LOGIN_ATTEMPTS')
           ) {
             await this.accountRepository.blockAccountByUuid(uuid, requestId);
+            await this.loginAttemptsRepository.removeLoginAttempts(
+              uuid,
+              requestId,
+            );
           }
         }
 

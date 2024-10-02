@@ -195,7 +195,7 @@ export class MongoRepository<E> implements DBRepository<E> {
   async updateStatusByEmail(email: string, newStatus: string): Promise<E> {
     return this.entityModel.findOneAndUpdate(
       { email },
-      { status: newStatus },
+      { status: newStatus, expireBlockedAt: null },
       { new: true },
     );
   }
@@ -232,6 +232,15 @@ export class MongoRepository<E> implements DBRepository<E> {
       { eventId },
       { $pull: { participants: userId } },
     );
+  }
+
+  /**
+   * Remove a document by uuid field.
+   *
+   * @param uuid - The uuid user to remove the document.
+   */
+  async removeByUuid(uuid: string) {
+    await this.entityModel.findOneAndDelete({ uuid });
   }
 
   /**

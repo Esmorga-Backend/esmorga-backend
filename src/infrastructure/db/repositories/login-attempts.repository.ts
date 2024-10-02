@@ -40,4 +40,26 @@ export class LoginAttemptsRepository extends MongoRepository<LoginAttemptsSchema
       throw new DataBaseInternalError();
     }
   }
+
+  /**
+   * Removes the login attempts for a user identified by the uuid.
+   *
+   * @param uuid - User identifier.
+   * @param requestId - Request identifier.
+   */
+  async removeLoginAttempts(uuid: string, requestId?: string) {
+    try {
+      this.logger.info(
+        `[LoginAttemptsRepository] [removeLoginAttempts] - x-request-id: ${requestId}`,
+      );
+
+      await this.removeByUuid(uuid);
+    } catch (error) {
+      this.logger.error(
+        `[LoginAttemptsRepository] [removeLoginAttempts] - x-request-id: ${requestId}, error: ${error}`,
+      );
+
+      throw new DataBaseInternalError();
+    }
+  }
 }
