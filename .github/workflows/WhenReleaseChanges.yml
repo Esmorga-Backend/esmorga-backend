@@ -50,6 +50,7 @@ jobs:
 
         LOGIN_ATTEMPTS_TTL: ${{vars.LOGIN_ATTEMPTS_TTL}}
         MAX_LOGIN_ATTEMPTS: ${{vars.MAX_LOGIN_ATTEMPTS}}
+        DNS_NAME: ${{vars.DNS_NAME}}
     - name: Run Component Tests
       uses: ./.github/actions/runComponentTests
       with:
@@ -67,6 +68,7 @@ jobs:
 
         LOGIN_ATTEMPTS_TTL: ${{vars.LOGIN_ATTEMPTS_TTL}}
         MAX_LOGIN_ATTEMPTS: ${{vars.MAX_LOGIN_ATTEMPTS}}
+        DNS_NAME: ${{vars.DNS_NAME}}
     - name: Run Service
       uses: ./.github/actions/runService
       env:
@@ -82,6 +84,7 @@ jobs:
 
         LOGIN_ATTEMPTS_TTL: ${{vars.LOGIN_ATTEMPTS_TTL}}
         MAX_LOGIN_ATTEMPTS: ${{vars.MAX_LOGIN_ATTEMPTS}}
+        DNS_NAME: ${{vars.DNS_NAME}}
     - name: Run Postman
       uses: ./.github/actions/runPostmanTests
       with:
