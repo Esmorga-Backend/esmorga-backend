@@ -142,7 +142,17 @@ class Aio {
       process.exit(1);
     }
   }
-  async addTestToCycle(onErrorMsg, test, cyKey) {
+  delay(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+  async addTestToCycle(
+    onErrorMsg,
+    test,
+    cyKey,
+    options = {},
+    retries = 3,
+    delayMs = 30000,
+  ) {
     let url =
       'https://tcms.aiojiraapps.com/aio-tcms/api/v1/project/MOB/testcycle/' +
       cyKey +
@@ -152,10 +162,18 @@ class Aio {
     const data = { isAutomated: true };
 
     console.log(data);
-    try {
-      await axios.post(url, data, { headers: this.headers });
-    } catch (error) {
-      console.error('Is ' + test + '  already in list?');
+    for (let attempt = 1; attempt <= retries; attempt++) {
+      try {
+        await axios.post(url, data, { headers: this.headers });
+        return 'ok';
+      } catch (error) {
+        if (attempt <= retries) {
+          console.log(`Retry in 30 secs ... (attemp ${attempt + 1})`);
+          await this.delay(delayMs);
+        } else {
+          console.error('Is ' + test + '  already in list?');
+        }
+      }
     }
   }
   async findCycleByUs(onErrorMsg, usName) {

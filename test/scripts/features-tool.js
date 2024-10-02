@@ -44,7 +44,7 @@ async function main() {
       usVersionName = features.getUsNameFromBranch(branchName);
 
     //Comment previous line and use nexts to force a US with tests
-    // usName = 'MOB-122';
+    //    usName = 'MOB-112';
 
     selectedTestTypes = features.getSelectedTestTypes(testTypes);
     console.log(selectedTestTypes);
@@ -94,7 +94,9 @@ async function main() {
           await aio.addTestToCycle(onErrorMsg, test, cyKey);
         }
       } else {
-        console.log('This US has a CY created, for ADD new TCs do it on Jira');
+        console.log(
+          'This US has a CY created, for ADD new TCs do it on Jira ' + cyKey,
+        );
       }
     } else {
       const cyKey = await aio.findCycleByUs(onErrorMsg, usVersionName);
