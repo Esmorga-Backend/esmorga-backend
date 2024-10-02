@@ -151,7 +151,7 @@ class Aio {
     cyKey,
     options = {},
     retries = 3,
-    delayMs = 30000,
+    delayS = 30,
   ) {
     let url =
       'https://tcms.aiojiraapps.com/aio-tcms/api/v1/project/MOB/testcycle/' +
@@ -168,8 +168,8 @@ class Aio {
         return 'ok';
       } catch (error) {
         if (attempt <= retries) {
-          console.log(`Retry in 30 secs ... (attemp ${attempt + 1})`);
-          await this.delay(delayMs);
+          console.log(`Retry in ${delayS}} secs ... (attemp ${attempt + 1})`);
+          await this.delay(delayS * 1000);
         } else {
           console.error('Is ' + test + '  already in list?');
         }
