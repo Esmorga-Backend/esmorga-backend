@@ -43,8 +43,9 @@ async function main() {
     let usName,
       usVersionName = features.getUsNameFromBranch(branchName);
 
-    //Comment previous line and use nexts to force a US with tests
-    //    usName = 'MOB-112';
+    //Comment use nexts to force a US with tests
+    //    usName = 'MOB-1';
+    //    usVersionName = 'MOB-1';
 
     selectedTestTypes = features.getSelectedTestTypes(testTypes);
     console.log(selectedTestTypes);
