@@ -15,8 +15,9 @@ if len(sys.argv)>5:
 else:
     ssh_client.connect(hostname=hostname,port='22',username='ubuntu')
 command = """
+sudo touch  /var/www/html/"""+service+""".flag
 sudo systemctl stop """+service+"""
-sleep 30
+sleep 10
 cd """+service_path+"""
 sudo git reset --hard HEAD
 sudo git clean -df
@@ -39,7 +40,9 @@ cp .env """+service_path+"""
 cd """+service_path+"""
 chown ubuntu -R """+service_path+"""
 npm ci
-sudo systemctl start """+service
+sudo systemctl start """+service+"""
+sleep 10
+sudo rm /var/www/html/"""+service+""".flag"""
 
 stdin, stdout, stderr = ssh_client.exec_command(command)
 for line in stdout.readlines():
