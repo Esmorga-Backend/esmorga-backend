@@ -56,6 +56,10 @@ class EnvVars {
   @IsNumber()
   @IsPositive()
   MAX_LOGIN_ATTEMPTS: number;
+
+  @IsNotEmpty()
+  @IsString()
+  DNS_NAME: string;
 }
 
 /**

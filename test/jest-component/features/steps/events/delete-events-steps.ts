@@ -10,11 +10,11 @@ import {
 import {
   FUTURE_EVENT_MOCK_DB,
   PAIR_OF_TOKENS_MOCK_DB,
-  getAdminUserMockDb,
   getUserMockDb,
 } from '../../../../mocks/db';
 import { EVENT_ID_MOCK } from '../../../../mocks/dtos';
 import { HEADERS } from '../../../../mocks/common-data';
+import { ACCOUNT_ROLES } from '../../../../../src/domain/const';
 
 const PATH = '/v1/events';
 
@@ -57,7 +57,10 @@ export const deleteEventStep: StepDefinitions = ({ given, and }) => {
   });
 
   and('use accessToken valid and eventId event_exist', async () => {
-    const ADMIN_USER = await getAdminUserMockDb();
+    const ADMIN_USER = {
+      ...(await getUserMockDb()),
+      role: ACCOUNT_ROLES.ADMIN,
+    };
 
     jest.spyOn(context.jwtService, 'verifyAsync').mockResolvedValue({});
 

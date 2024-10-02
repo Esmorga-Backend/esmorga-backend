@@ -17,17 +17,6 @@ const USER_MOCK_DB = {
   createdAt: new Date(),
 };
 
-const ADMIN_USER_MOCK_DB = {
-  _id: '665f019c17331ebee550b2f5',
-  name: 'Mike',
-  lastName: 'Tyson',
-  email: 'esmorga.test.04@yopmail.com',
-  password: PASSWORD_MOCK_DB,
-  role: ACCOUNT_ROLES.ADMIN,
-  status: ACCOUNT_STATUS.ACTIVE,
-  createdAt: new Date(),
-};
-
 async function hashPassword(user) {
   return {
     ...user,
@@ -37,8 +26,4 @@ async function hashPassword(user) {
 
 export async function getUserMockDb() {
   return hashPassword(USER_MOCK_DB);
-}
-
-export async function getAdminUserMockDb() {
-  return hashPassword(ADMIN_USER_MOCK_DB);
 }
