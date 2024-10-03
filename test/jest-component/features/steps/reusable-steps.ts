@@ -13,9 +13,10 @@ function check_swagger() {
   const method = context.response.request.method.toLowerCase();
   const status = context.response.status;
 
-  const currentResponse = schema.paths[context.path][method]?.responses[status];
-
-  const schemaExists = currentResponse?.content?.['application/json']?.schema;
+  const schemaExists =
+    schema.paths[context.path][method].responses[status].content?.[
+      'application/json'
+    ].schema;
 
   if (schemaExists) {
     const validate = ajv.compile(schemaExists);
