@@ -125,10 +125,6 @@ export const REGISTER_RESPONSES: { [key: string]: ApiResponseOptions } = {
   CREATED: {
     description:
       'User has successfully created and verification email has been sent',
-    schema: {
-      type: 'object',
-      example: {},
-    },
   },
   BAD_REQUEST_ERROR: {
     description: 'Some inputs are missed or wrong',
