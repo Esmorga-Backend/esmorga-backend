@@ -1,4 +1,3 @@
-import { HttpStatus } from '@nestjs/common';
 import { StepDefinitions } from 'jest-cucumber';
 import * as request from 'supertest';
 import Ajv from 'ajv';
@@ -11,14 +10,20 @@ addFormats(ajv);
 
 function check_swagger() {
   const method = context.response.request.method.toLowerCase();
+
   const reference =
     schema.paths[context.path][method].responses[context.response.status]
-      .content['application/json'].schema;
-  const validate = ajv.compile(reference);
-  const valid = validate(context.response.body);
+      .content?.['application/json'].schema;
 
-  expect(valid).toBe(true);
+  if (reference) {
+    const validate = ajv.compile(reference);
+    const valid = validate(context.response.body);
+    expect(valid).toBe(true);
+  } else {
+    expect(context.response.body).toEqual({});
+  }
 }
+
 export const reusableSteps: StepDefinitions = ({ when, then, and }) => {
   and(/^use row: (.*) with data length: (.*)$/, (row, data_length) => {
     if (row.split('.').length == 2) {
@@ -82,7 +87,7 @@ export const reusableSteps: StepDefinitions = ({ when, then, and }) => {
     (code_n) => {
       expect(context.response.status).toBe(parseInt(code_n));
 
-      if (context.response.status !== HttpStatus.NO_CONTENT) check_swagger();
+      check_swagger();
     },
   );
   and(/^detail in error is (.*) ,description: (.*)$/, async (row) => {
@@ -94,7 +99,7 @@ export const reusableSteps: StepDefinitions = ({ when, then, and }) => {
     (responseCode) => {
       expect(context.response.status).toBe(parseInt(responseCode));
 
-      if (context.response.status !== HttpStatus.NO_CONTENT) check_swagger();
+      check_swagger();
     },
   );
 };

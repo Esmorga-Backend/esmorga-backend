@@ -14,10 +14,6 @@ const PATHS = {
 export const CREATE_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
   CREATED: {
     description: 'Event successfully created',
-    schema: {
-      type: 'object',
-      example: {},
-    },
   },
   BAD_REQUEST_ERROR: {
     description: 'Some inputs are missed or wrong',

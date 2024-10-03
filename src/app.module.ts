@@ -24,8 +24,8 @@ import { RequestIdMiddleware } from './infrastructure/http/middlewares';
         uri: configService.get('MONGODB_URI'),
       }),
     }),
-    EventModule,
     AccountModule,
+    EventModule,
   ],
 })
 export class AppModule implements NestModule {

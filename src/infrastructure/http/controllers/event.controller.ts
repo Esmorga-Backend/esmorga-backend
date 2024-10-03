@@ -87,8 +87,6 @@ export class EventController {
         createEventDto,
         requestId,
       );
-
-      return {};
     } catch (error) {
       this.logger.error(
         `[EventController] [createEvent] - x-request-id:${requestId}, error ${error}`,
