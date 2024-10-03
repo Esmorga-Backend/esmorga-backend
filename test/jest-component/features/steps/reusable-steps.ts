@@ -10,12 +10,10 @@ addFormats(ajv);
 
 function check_swagger() {
   const method = context.response.request.method.toLowerCase();
-  const status = context.response.status;
 
   const reference =
-    schema.paths[context.path][method].responses[status].content?.[
-      'application/json'
-    ].schema;
+    schema.paths[context.path][method].responses[context.response.status]
+      .content?.['application/json'].schema;
 
   if (reference) {
     const validate = ajv.compile(reference);
