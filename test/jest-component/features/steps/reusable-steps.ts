@@ -1,4 +1,3 @@
-// import { HttpStatus } from '@nestjs/common';
 import { StepDefinitions } from 'jest-cucumber';
 import * as request from 'supertest';
 import Ajv from 'ajv';
@@ -13,13 +12,13 @@ function check_swagger() {
   const method = context.response.request.method.toLowerCase();
   const status = context.response.status;
 
-  const schemaExists =
+  const reference =
     schema.paths[context.path][method].responses[status].content?.[
       'application/json'
     ].schema;
 
-  if (schemaExists) {
-    const validate = ajv.compile(schemaExists);
+  if (reference) {
+    const validate = ajv.compile(reference);
     const valid = validate(context.response.body);
     expect(valid).toBe(true);
   } else {
