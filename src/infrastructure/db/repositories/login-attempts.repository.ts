@@ -10,7 +10,7 @@ import { DataBaseInternalError } from '../errors';
 export class LoginAttemptsRepository extends MongoRepository<LoginAttemptsSchema> {
   constructor(
     @InjectModel(LoginAttemptsSchema.name)
-    private loginAttemptsModel: Model<LoginAttemptsSchema>,
+    loginAttemptsModel: Model<LoginAttemptsSchema>,
     private readonly logger: PinoLogger,
   ) {
     super(loginAttemptsModel);

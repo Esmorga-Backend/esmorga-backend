@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PinoLogger } from 'nestjs-pino';
 import {
   AccountRepository,
+  LoginAttemptsRepository,
   TemporalCodeRepository,
 } from '../../../infrastructure/db/repositories';
 import { UpdatePasswordDto } from '../../../infrastructure/http/dtos';
@@ -16,6 +17,7 @@ export class UpdatePasswordService {
     private readonly logger: PinoLogger,
     private readonly accountRepository: AccountRepository,
     private readonly temporalCodeRepository: TemporalCodeRepository,
+    private readonly loginAttemptsRepository: LoginAttemptsRepository,
   ) {}
 
   /**
@@ -44,13 +46,18 @@ export class UpdatePasswordService {
 
       const hashPassword = await encodeValue(password);
 
-      await this.accountRepository.updateAccountPassword(
-        email,
-        hashPassword,
-        requestId,
-      );
+      const { _id: userId } =
+        await this.accountRepository.updateAccountPassword(
+          email,
+          hashPassword,
+          requestId,
+        );
 
       await this.temporalCodeRepository.removeCodeById(id, requestId);
+      await this.loginAttemptsRepository.removeLoginAttempts(
+        userId.toString('hex'),
+        requestId,
+      );
     } catch (error) {
       this.logger.error(
         `[UpdatePasswordService] [updatePassword] - x-request-id: ${requestId}, error: ${error}`,
