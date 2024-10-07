@@ -11,6 +11,7 @@ import {
 import {
   AccountRepository,
   TokensRepository,
+  LoginAttemptsRepository,
 } from '../../../infrastructure/db/repositories';
 import {
   AccountLoggedDto,
@@ -34,6 +35,7 @@ export class LoginService {
     private readonly logger: PinoLogger,
     private readonly generateTokenPair: GenerateTokenPair,
     private readonly accountRepository: AccountRepository,
+    private readonly loginAttemptsRepository: LoginAttemptsRepository,
     private readonly tokensRepository: TokensRepository,
     private readonly validateLoginCredentialsService: ValidateLoginCredentialsService,
     private configService: ConfigService,
@@ -82,6 +84,8 @@ export class LoginService {
         status,
         requestId,
       );
+
+      await this.loginAttemptsRepository.removeLoginAttempts(uuid, requestId);
 
       const { accessToken, refreshToken } =
         await this.generateTokenPair.generateTokens(uuid);
