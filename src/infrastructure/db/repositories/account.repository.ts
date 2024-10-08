@@ -135,7 +135,7 @@ export class AccountRepository extends MongoRepository<UserSchema> {
         `[AccountRepository] [updateAccountPassword] - x-request-id: ${requestId}, email: ${email}`,
       );
 
-      return await this.updatePasswordByEmail(email, password, true);
+      return await this.updatePasswordByEmail(email, password);
     } catch (error) {
       this.logger.error(
         `[AccountRepository] [updateAccountPassword] - x-request-id: ${requestId}, error: ${error}`,

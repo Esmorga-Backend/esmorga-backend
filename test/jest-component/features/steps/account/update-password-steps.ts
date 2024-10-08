@@ -62,7 +62,6 @@ export const updatePasswordSteps: StepDefinitions = ({ given, and }) => {
     ).toHaveBeenCalledWith(
       'esmorga.test.03@yopmail.com',
       expect.stringContaining('$argon2id$v=19$m=65536'),
-      true,
     );
   });
 };
