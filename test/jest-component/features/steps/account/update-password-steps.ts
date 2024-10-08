@@ -49,6 +49,7 @@ export const updatePasswordSteps: StepDefinitions = ({ given, and }) => {
       .spyOn(context.temporalCodeRepository, 'findOneByCodeAndType')
       .mockResolvedValue(null);
   });
+
   and('counter is reset', () => {
     expect(context.loginAttemptsRepository.removeByUuid).toHaveBeenCalledWith(
       USER_MOCK_DB_ID,

@@ -3,7 +3,7 @@ import { DBRepository } from '../../../domain/interfaces';
 import { ACCOUNT_STATUS } from '../../../domain/const';
 
 export class MongoRepository<E> implements DBRepository<E> {
-  constructor(protected readonly entityModel: Model<E>) {}
+  constructor(protected readonly entityModel: Model<E>) { }
 
   /**
    * Return an array with the documents saved in the collection.
@@ -172,29 +172,19 @@ export class MongoRepository<E> implements DBRepository<E> {
   }
 
   /**
-   * Find a document by email and update password, status to ACTIVE and delete expireBlockedAt properties.
+   * Update password by email and unblock the user.
    *
    * @param email - Account email address
    * @param password - New password already hashed
-   * @param unlockUser - Update status to ACTIVE and remove expireBlockedAt field.
    * @returns Account document updated
    */
-  async updatePasswordByEmail(
-    email: string,
-    password: string,
-    unlockUser = false,
-  ) {
-    const extraUpdateFields = unlockUser
-      ? {
-          status: ACCOUNT_STATUS.ACTIVE,
-          $unset: { expireBlockedAt: null },
-        }
-      : {};
+  async updatePasswordByEmail(email: string, password: string) {
     return this.entityModel.findOneAndUpdate(
       { email: { $eq: email } },
       {
         password: password,
-        ...extraUpdateFields,
+        status: ACCOUNT_STATUS.ACTIVE,
+        $unset: { expireBlockedAt: null },
       },
       { new: true },
     );
