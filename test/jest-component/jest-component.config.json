@@ -15,6 +15,8 @@
   "coverageDirectory": "<rootDir>/coverage/component",
   "testEnvironment": "node",
   "coveragePathIgnorePatterns": [
+    "/main\\.ts$",
+    "/index\\.ts$",
     "/src/domain/entities/.*\\.ts$",
     "/src/infrastructure/db/repositories/mongo.repository\\.ts$"
   ],
