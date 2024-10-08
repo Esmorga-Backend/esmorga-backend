@@ -40,7 +40,7 @@ export const updatePasswordSteps: StepDefinitions = ({ given, and }) => {
       .mockResolvedValue(null);
 
     jest
-      .spyOn(context.loginAttemptsRepository, 'removeLoginAttempts')
+      .spyOn(context.loginAttemptsRepository, 'removeByUuid')
       .mockResolvedValue(null);
   });
 
@@ -50,9 +50,9 @@ export const updatePasswordSteps: StepDefinitions = ({ given, and }) => {
       .mockResolvedValue(null);
   });
   and('counter is reset', () => {
-    expect(
-      context.loginAttemptsRepository.removeLoginAttempts,
-    ).toHaveBeenCalledWith(USER_MOCK_DB_ID, expect.any(String));
+    expect(context.loginAttemptsRepository.removeByUuid).toHaveBeenCalledWith(
+      USER_MOCK_DB_ID,
+    );
   });
 
   and('user status has changed to Active', () => {
