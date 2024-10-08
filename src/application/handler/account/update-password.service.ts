@@ -46,18 +46,14 @@ export class UpdatePasswordService {
 
       const hashPassword = await encodeValue(password);
 
-      const { _id: userId } =
-        await this.accountRepository.updateAccountPassword(
-          email,
-          hashPassword,
-          requestId,
-        );
-
-      await this.temporalCodeRepository.removeCodeById(id, requestId);
-      await this.loginAttemptsRepository.removeLoginAttempts(
-        userId.toString('hex'),
+      const { uuid } = await this.accountRepository.updateAccountPassword(
+        email,
+        hashPassword,
         requestId,
       );
+
+      await this.temporalCodeRepository.removeCodeById(id, requestId);
+      await this.loginAttemptsRepository.removeLoginAttempts(uuid, requestId);
     } catch (error) {
       this.logger.error(
         `[UpdatePasswordService] [updatePassword] - x-request-id: ${requestId}, error: ${error}`,

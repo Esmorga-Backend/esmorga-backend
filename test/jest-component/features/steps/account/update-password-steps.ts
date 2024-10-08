@@ -5,8 +5,11 @@ import {
   LoginAttemptsRepository,
   TemporalCodeRepository,
 } from '../../../../../src/infrastructure/db/repositories';
-import { VERIFICATION_CODE_DATA_MOCK_DB } from '../../../../mocks/db';
 import { USER_MOCK_DB_ID } from '../../../../mocks/db/common';
+import {
+  getUserMockDb,
+  VERIFICATION_CODE_DATA_MOCK_DB,
+} from '../../../../mocks/db';
 
 export const updatePasswordSteps: StepDefinitions = ({ given, and }) => {
   given('The PUT password update API is available', () => {
@@ -33,7 +36,7 @@ export const updatePasswordSteps: StepDefinitions = ({ given, and }) => {
 
     jest
       .spyOn(context.accountRepository, 'updatePasswordByEmail')
-      .mockResolvedValue({ _id: USER_MOCK_DB_ID });
+      .mockResolvedValue(getUserMockDb());
 
     jest
       .spyOn(context.temporalCodeRepository, 'removeById')

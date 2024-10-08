@@ -184,7 +184,7 @@ export class MongoRepository<E> implements DBRepository<E> {
       {
         password: password,
         status: ACCOUNT_STATUS.ACTIVE,
-        $unset: { expireBlockedAt: null },
+        expireBlockedAt: null,
       },
       { new: true },
     );
