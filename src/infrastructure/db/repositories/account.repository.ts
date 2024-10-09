@@ -39,11 +39,11 @@ export class AccountRepository extends MongoRepository<UserSchema> {
 
       const user = await this.findOneById(id);
 
+      if (!user) throw new DataBaseUnathorizedError();
+
       const userProfile: UserProfileDto = plainToClass(UserProfileDto, user, {
         excludeExtraneousValues: true,
       });
-
-      if (!userProfile) throw new DataBaseUnathorizedError();
 
       validateObjectDto(userProfile, REQUIRED_DTO_FIELDS.USER_PROFILE);
 
@@ -75,11 +75,11 @@ export class AccountRepository extends MongoRepository<UserSchema> {
 
       const user = await this.findOneByEmail(email);
 
+      if (!user) throw new DataBaseUnathorizedError();
+
       const userProfile: UserProfileDto = plainToClass(UserProfileDto, user, {
         excludeExtraneousValues: true,
       });
-
-      if (!userProfile) throw new DataBaseUnathorizedError();
 
       validateObjectDto(userProfile, REQUIRED_DTO_FIELDS.USER_PROFILE);
 

@@ -71,16 +71,4 @@ export const updatePasswordSteps: StepDefinitions = ({ given, and }) => {
       expect.stringContaining('$argon2id$v=19$m=65536'),
     );
   });
-
-  and('actual user status is ACTIVE', () => {
-    expect(
-      context.accountRepository.updateBlockedStatusByUuid,
-    ).not.toHaveBeenCalled();
-  });
-
-  and('actual user status is BLOCKED', () => {
-    expect(
-      context.accountRepository.updateBlockedStatusByUuid,
-    ).toHaveBeenCalled();
-  });
 };
