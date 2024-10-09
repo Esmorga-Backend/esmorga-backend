@@ -39,6 +39,10 @@ export const updatePasswordSteps: StepDefinitions = ({ given, and }) => {
       .mockResolvedValue(getUserMockDb());
 
     jest
+      .spyOn(context.accountRepository, 'updateBlockedStatusByUuid')
+      .mockResolvedValue(null);
+
+    jest
       .spyOn(context.temporalCodeRepository, 'removeById')
       .mockResolvedValue(null);
 
@@ -59,12 +63,24 @@ export const updatePasswordSteps: StepDefinitions = ({ given, and }) => {
     );
   });
 
-  and('user status has changed to Active', () => {
+  and('user status has changed to ACTIVE', () => {
     expect(
       context.accountRepository.updatePasswordByEmail,
     ).toHaveBeenCalledWith(
       'esmorga.test.03@yopmail.com',
       expect.stringContaining('$argon2id$v=19$m=65536'),
     );
+  });
+
+  and('actual user status is ACTIVE', () => {
+    expect(
+      context.accountRepository.updateBlockedStatusByUuid,
+    ).not.toHaveBeenCalled();
+  });
+
+  and('actual user status is BLOCKED', () => {
+    expect(
+      context.accountRepository.updateBlockedStatusByUuid,
+    ).toHaveBeenCalled();
   });
 };

@@ -42,7 +42,7 @@ class Features {
     const regexV = /\/(MOB-\d+\(\w+\)|MOB-\d+|mob-\d+|mob-\d+\(\w+\))/;
     const matchV = branchName.match(regexV);
     if (match && match.length > 1) {
-      return match[1], matchV[1];
+      return [match[1], matchV[1]];
     }
     console.log(matchV, match);
     return;

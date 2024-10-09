@@ -44,10 +44,9 @@ export const loginSteps: StepDefinitions = async ({ given, and, then }) => {
         }
         return null;
       });
-
     jest
-      .spyOn(context.loginAttemptsRepository, 'updateLoginAttempts')
-      .mockResolvedValue(0);
+      .spyOn(context.accountRepository, 'updateBlockedStatusByUuid')
+      .mockResolvedValue(null);
 
     jest.spyOn(context.generateTokenPair, 'generateTokens').mockResolvedValue({
       accessToken: 'ACCESS_TOKEN',
@@ -57,6 +56,12 @@ export const loginSteps: StepDefinitions = async ({ given, and, then }) => {
     jest.spyOn(context.tokensRepository, 'findByUuid').mockResolvedValue([]);
 
     jest.spyOn(context.tokensRepository, 'save').mockResolvedValue(null);
+  });
+
+  and(/^fail login attempts (\d+)$/, async (result) => {
+    jest
+      .spyOn(context.loginAttemptsRepository, 'findAndUpdateLoginAttempts')
+      .mockResolvedValue(Number(result));
   });
 
   and(
@@ -103,8 +108,9 @@ export const loginSteps: StepDefinitions = async ({ given, and, then }) => {
   });
 
   then(/^the result is that (\d+)$/, async (result) => {
+    const execTimes = result !== '0' ? 1 : 0;
     expect(
-      context.loginAttemptsRepository.updateLoginAttempts,
-    ).toHaveBeenCalledTimes(Number(result));
+      context.loginAttemptsRepository.findAndUpdateLoginAttempts,
+    ).toHaveBeenCalledTimes(execTimes);
   });
 };
