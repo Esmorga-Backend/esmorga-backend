@@ -43,7 +43,6 @@ export class ValidateLoginCredentialsService {
     try {
       if (!(await argon2.verify(userDbPassword, requestPassword))) {
         if (status === ACCOUNT_STATUS.ACTIVE) {
-          debugger
           const updatedAttempts =
             await this.loginAttemptsRepository.updateLoginAttempts(
               uuid,

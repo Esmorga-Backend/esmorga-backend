@@ -1,5 +1,9 @@
 import { StepDefinitions } from 'jest-cucumber';
-import { EMAIL_MOCK_DB, getUserMockDb } from '../../../../mocks/db';
+import {
+  getUserMockDb,
+  EMAIL_MOCK_DB,
+  PASSWORD_MOCK_DB,
+} from '../../../../mocks/db';
 import { context, moduleFixture } from '../../../steps-config';
 import {
   GenerateTokenPair,
@@ -11,7 +15,6 @@ import {
   TokensRepository,
   LoginAttemptsRepository,
 } from '../../../../../src/infrastructure/db/repositories';
-import { ACCOUNT_LOGIN_MOCK } from '../../../../mocks/dtos';
 const TTL = parseInt(process.env.ACCESS_TOKEN_TTL);
 
 export const loginSteps: StepDefinitions = async ({ given, and, then }) => {
@@ -20,7 +23,7 @@ export const loginSteps: StepDefinitions = async ({ given, and, then }) => {
 
     context.user = await getUserMockDb();
 
-    context.mock = ACCOUNT_LOGIN_MOCK;
+    context.mock = { email: EMAIL_MOCK_DB, password: PASSWORD_MOCK_DB };
 
     context.accountRepository =
       moduleFixture.get<AccountRepository>(AccountRepository);
@@ -47,6 +50,17 @@ export const loginSteps: StepDefinitions = async ({ given, and, then }) => {
         }
         return null;
       });
+
+    jest
+      .spyOn(context.accountRepository, 'updateStatusByEmail')
+      .mockImplementation(async (email, status) => {
+        if (email === context.user.email) {
+          context.user = { ...context.user, status };
+          return context.user;
+        }
+        return null;
+      });
+
     jest
       .spyOn(context.accountRepository, 'updateBlockedStatusByUuid')
       .mockResolvedValue(null);
