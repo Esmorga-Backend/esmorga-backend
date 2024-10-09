@@ -1,4 +1,6 @@
 {
   "material-icon-theme.activeIconPack": "nest",
-  "git.ignoreLimitWarning": true
+  "git.ignoreLimitWarning": true,
+  "javascript.preferences.importModuleSpecifier": "relative",
+  "typescript.preferences.importModuleSpecifier": "relative"
 }

@@ -49,9 +49,8 @@ export class ValidateLoginCredentialsService {
               requestId,
             );
 
-          if (
-            updatedAttempts === this.configService.get('MAX_LOGIN_ATTEMPTS')
-          ) {
+          const maxAttempts = this.configService.get('MAX_LOGIN_ATTEMPTS');
+          if (updatedAttempts >= maxAttempts) {
             await this.accountRepository.blockAccountByUuid(uuid, requestId);
             await this.loginAttemptsRepository.removeLoginAttempts(
               uuid,
