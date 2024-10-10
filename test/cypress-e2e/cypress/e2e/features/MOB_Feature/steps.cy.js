@@ -43,10 +43,10 @@ When(/^a GET request is made to (.*) API$/, () => {
 When(/^a POST request is made to (.*) API$/, () => {
   api[use_endpoint].post();
 });
-When(/^a PATCH request is made to (.*) API$/, (endpoint) => {
+When(/^a PATCH request is made to (.*) API$/, () => {
   api[use_endpoint].patch();
 });
-When(/^a PUT request is made to (.*) API$/, (endpoint) => {
+When(/^a PUT request is made to (.*) API$/, () => {
   api[use_endpoint].put();
   //  cy.log('TEST');
 });
@@ -57,6 +57,13 @@ And(/^email: (.*)$/, (email) => {
 
 And(/^password: (.*)$/, (password) => {
   api[use_endpoint].set_password(password);
+});
+And(/^(.*) field correctly filled with (.*)$/, (field, text) => {
+  api[use_endpoint].set_field(field, text);
+});
+
+And(/^default password$/, () => {
+  api[use_endpoint].restore_password();
 });
 
 Then(
