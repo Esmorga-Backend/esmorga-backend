@@ -1,8 +1,9 @@
 import { Model, Types } from 'mongoose';
 import { DBRepository } from '../../../domain/interfaces';
+import { ACCOUNT_STATUS } from '../../../domain/const';
 
 export class MongoRepository<E> implements DBRepository<E> {
-  constructor(protected readonly entityModel: Model<E>) {}
+  constructor(protected readonly entityModel: Model<E>) { }
 
   /**
    * Return an array with the documents saved in the collection.
@@ -171,7 +172,7 @@ export class MongoRepository<E> implements DBRepository<E> {
   }
 
   /**
-   * Find a document by email and update password property
+   * Update password by email and unblock the user.
    *
    * @param email - Account email address
    * @param password - New password already hashed
@@ -180,7 +181,11 @@ export class MongoRepository<E> implements DBRepository<E> {
   async updatePasswordByEmail(email: string, password: string) {
     return this.entityModel.findOneAndUpdate(
       { email: { $eq: email } },
-      { password: password },
+      {
+        password: password,
+        status: ACCOUNT_STATUS.ACTIVE,
+        expireBlockedAt: null,
+      },
       { new: true },
     );
   }

@@ -40,8 +40,7 @@ async function main() {
       branchName = await git.getBranchName();
       console.log(branchName);
     }
-    let usName,
-      usVersionName = features.getUsNameFromBranch(branchName);
+    let [usName, usVersionName] = features.getUsNameFromBranch(branchName);
 
     //Comment use nexts to force a US with tests
     // usName = 'MOB-1';
