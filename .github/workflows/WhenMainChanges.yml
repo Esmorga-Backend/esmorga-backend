@@ -33,43 +33,6 @@ jobs:
     - run: npm run test:create:cycle
     - name: Checkout repository
       uses: actions/checkout@v2
-
-    - name: Run Unit Tests
-      uses: ./.github/actions/runUnitTests
-      with:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-      env:
-        MONGODB_URI: ${{secrets.MONGODB_URI}}
-        NODE_ENV: ${{vars.NODE_ENV}}
-        JWT_SECRET: ${{secrets.JWT_SECRET}}
-        ACCESS_TOKEN_TTL: ${{vars.ACCESS_TOKEN_TTL}}
-        MAX_PAIR_OF_TOKEN: ${{vars.MAX_PAIR_OF_TOKEN}}
-        EMAIL_USER: ${{vars.EMAIL_USER}}
-        EMAIL_PASS: ${{secrets.EMAIL_PASS}}
-        APP_PORT: ${{vars.APP_PORT}}
-        APP_LINK: ${{vars.APP_LINK}}
-
-        LOGIN_ATTEMPTS_TTL: ${{vars.LOGIN_ATTEMPTS_TTL}}
-        MAX_LOGIN_ATTEMPTS: ${{vars.MAX_LOGIN_ATTEMPTS}}
-        DNS_NAME: ${{vars.DNS_NAME}}
-    - name: Run Component Tests
-      uses: ./.github/actions/runComponentTests
-      with:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-      env:
-        MONGODB_URI: ${{secrets.MONGODB_URI}}
-        NODE_ENV: ${{vars.NODE_ENV}}
-        JWT_SECRET: ${{secrets.JWT_SECRET}}
-        ACCESS_TOKEN_TTL: ${{vars.ACCESS_TOKEN_TTL}}
-        MAX_PAIR_OF_TOKEN: ${{vars.MAX_PAIR_OF_TOKEN}}
-        EMAIL_USER: ${{vars.EMAIL_USER}}
-        EMAIL_PASS: ${{secrets.EMAIL_PASS}}
-        APP_PORT: ${{vars.APP_PORT}}
-        APP_LINK: ${{vars.APP_LINK}}
-
-        LOGIN_ATTEMPTS_TTL: ${{vars.LOGIN_ATTEMPTS_TTL}}
-        MAX_LOGIN_ATTEMPTS: ${{vars.MAX_LOGIN_ATTEMPTS}}
-        DNS_NAME: ${{vars.DNS_NAME}}
     - name: Run Service
       uses: ./.github/actions/runService
       env:
@@ -82,7 +45,6 @@ jobs:
         EMAIL_PASS: ${{secrets.EMAIL_PASS}}
         APP_PORT: ${{vars.APP_PORT}}
         APP_LINK: ${{vars.APP_LINK}}
-
         LOGIN_ATTEMPTS_TTL: ${{vars.LOGIN_ATTEMPTS_TTL}}
         MAX_LOGIN_ATTEMPTS: ${{vars.MAX_LOGIN_ATTEMPTS}}
         DNS_NAME: ${{vars.DNS_NAME}}
@@ -91,17 +53,14 @@ jobs:
       with:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         POSTMAN_TOKEN: ${{ secrets.POSTMAN_TOKEN }}
-
     - name: Run E2E Tests
       uses: ./.github/actions/runE2ETests
       with:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-
     - name: Run Reporting
       uses: ./.github/actions/runReporting
       with:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
 
   DeployToQA:
     needs: RunTestsOnUbuntu
