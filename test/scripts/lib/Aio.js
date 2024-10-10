@@ -168,7 +168,7 @@ class Aio {
         return 'ok';
       } catch (error) {
         if (attempt <= retries) {
-          console.log(`Retry in ${delayS}} secs ... (attemp ${attempt + 1})`);
+          console.log(`Retry in ${delayS} secs ... (attemp ${attempt + 1})`);
           await this.delay(delayS * 1000);
         } else {
           console.error('Is ' + test + '  already in list?');
