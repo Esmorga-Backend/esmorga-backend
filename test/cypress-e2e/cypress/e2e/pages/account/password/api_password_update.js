@@ -1,7 +1,7 @@
 import ApiBasics from '../../api_basic';
 class ApiPasswordUpdate extends ApiBasics {
   #url = 'v1/account/password/forgot-update';
-  #password = 'M0!4Much0';
+  #password = 'SuperSecret1!';
   #forgotPasswordCode = '';
   #email = '';
   constructor() {

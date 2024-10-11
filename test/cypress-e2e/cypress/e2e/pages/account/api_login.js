@@ -1,14 +1,9 @@
 import ApiBasics from '../api_basic';
 class ApiLogin extends ApiBasics {
   #url = 'v1/account/login';
-  #email = 'esmorga.test.06@yopmail.com';
-  #password = 'Password!6';
+  #email = 'auto.esmorga.test@1secmail.com';
+  #password = 'SuperSecret1!';
   #defaultPassword = this.#password;
-  /*
-  constructor() {
-    super();
-  }
-  */
   set_email(email) {
     this.#email = email;
   }
@@ -30,12 +25,8 @@ class ApiLogin extends ApiBasics {
         this.#password = text;
         break;
     }
-
-    console.log(this);
   }
   post() {
-    console.log(this);
-    cy.wait(1000);
     super.post(
       this.#url,
       {
