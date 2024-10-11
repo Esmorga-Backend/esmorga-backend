@@ -27,7 +27,6 @@ class ApiLogin extends ApiBasics {
     }
   }
   post() {
-    cy.wait(1000);
     super.post(
       this.#url,
       {
