@@ -34,6 +34,14 @@ export const reusableSteps: StepDefinitions = ({ when, then, and }) => {
     }
   });
 
+  and(/^with empty data in (.*)$/, (row) => {
+    if (row.split('.').length == 2) {
+      context.mock[row.split('.')[0]][row.split('.')[1]] = null;
+    } else {
+      context.mock[row] = '';
+    }
+  });
+
   when(/^a GET request is made to (.*) API$/, async () => {
     context.response = await request(app.getHttpServer())
       .get(context.path)
@@ -71,6 +79,9 @@ export const reusableSteps: StepDefinitions = ({ when, then, and }) => {
   then(
     /^well-formed error response with status code (\d+) returned, description: (.*), expected result: (.*)$/,
     async (code_n, description, result) => {
+      if (context.response.status != code_n) {
+        console.log(context.response.request._data);
+      }
       expect(context.response.status).toBe(parseInt(code_n));
       expect(context.response.body.type).toBe(context.path);
       expect(context.response.body.errors[0]).toBe(result);
