@@ -4,6 +4,7 @@ import Ajv from 'ajv';
 import addFormats from 'ajv-formats';
 import { app, schema, context } from '../../steps-config';
 import { genRandString } from '../../instruments/gen-random';
+import { getRowsDetail } from '../../instruments/swagger-things';
 
 const ajv = new Ajv({ strict: false });
 addFormats(ajv);
@@ -31,6 +32,38 @@ export const reusableSteps: StepDefinitions = ({ when, then, and }) => {
         genRandString(data_length);
     } else {
       context.mock[row] = genRandString(data_length);
+    }
+  });
+
+  and(/^with empty data in (.*)$/, (row) => {
+    if (row.split('.').length == 2) {
+      context.mock[row.split('.')[0]][row.split('.')[1]] = null;
+    } else {
+      context.mock[row] = '';
+    }
+  });
+  and('with the maximum allowed characters in all input fields', () => {
+    const rows = getRowsDetail('maxLength');
+    for (const row in rows) {
+      if (row.split('.').length == 2) {
+        context.mock[row.split('.')[0]][row.split('.')[1]] = genRandString(
+          rows[row],
+        );
+      } else {
+        context.mock[row] = genRandString(rows[row]);
+      }
+    }
+  });
+  and('with the minimum allowed characters in all input fields', () => {
+    const rows = getRowsDetail('minLength');
+    for (const row in rows) {
+      if (row.split('.').length == 2) {
+        context.mock[row.split('.')[0]][row.split('.')[1]] = genRandString(
+          rows[row],
+        );
+      } else {
+        context.mock[row] = genRandString(rows[row]);
+      }
     }
   });
 
