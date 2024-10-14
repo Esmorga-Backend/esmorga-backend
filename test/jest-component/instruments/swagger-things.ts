@@ -13,7 +13,6 @@ export function getRowsDetail(length) {
     if (prop.type == 'string' && prop[length]) {
       rows[row] = prop[length];
     }
-    
     if (prop.type == 'object') {
       for (const subprop in prop.properties) {
         if (
