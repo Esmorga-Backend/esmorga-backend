@@ -1,6 +1,8 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { minutes, ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
 import { LoggerModule } from 'nestjs-pino';
 import { validateEnvVars, getLoggerConfig } from './config';
 import { EventModule, AccountModule } from './infrastructure/http/modules';
@@ -11,6 +13,20 @@ import { RequestIdMiddleware } from './infrastructure/http/middlewares';
     ConfigModule.forRoot({
       isGlobal: true,
       validate: validateEnvVars,
+    }),
+    ThrottlerModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => [
+        {
+          ttl: minutes(config.get('API_RATE_LIMIT_TTL')),
+          limit: config.get('API_RATE_LIMIT'),
+        },
+        {
+          name: 'public',
+          ttl: minutes(config.get('PUBLIC_API_RATE_LIMIT_TTL')),
+          limit: config.get('PUBLIC_API_RATE_LIMIT'),
+        },
+      ],
     }),
     LoggerModule.forRootAsync({
       inject: [ConfigService],
@@ -26,6 +42,12 @@ import { RequestIdMiddleware } from './infrastructure/http/middlewares';
     }),
     AccountModule,
     EventModule,
+  ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
   ],
 })
 export class AppModule implements NestModule {
