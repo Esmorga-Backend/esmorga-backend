@@ -32,6 +32,8 @@
         "--config",
         "./test/jest-component/jest-component.config.json",
         "--detectOpenHandles", 
+        "--testTimeout",
+        "300000",
         "--forceExit"
       ],
       "console": "integratedTerminal",
