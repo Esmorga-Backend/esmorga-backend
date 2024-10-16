@@ -1,14 +1,16 @@
 import {
+  ArgumentsHost,
   BadRequestException,
   Catch,
   ExceptionFilter,
   HttpException,
   InternalServerErrorException,
 } from '@nestjs/common';
+import { ThrottlerException } from '@nestjs/throttler';
 
 @Catch(HttpException)
-export class HttpExceptionFilter implements ExceptionFilter {
-  catch(exception, host) {
+export class HttpExceptionFilter implements ExceptionFilter<HttpException> {
+  catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
     const request = ctx.getRequest();
@@ -28,6 +30,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
       errors: [],
     };
 
+    // unexpected error scenario
     if (exception instanceof InternalServerErrorException) {
       return response.status(status).json({
         ...errorResponse,
@@ -56,6 +59,17 @@ export class HttpExceptionFilter implements ExceptionFilter {
       });
     }
 
+    // IP rate limit reached scenario
+    if (exception instanceof ThrottlerException) {
+      return response.status(status).json({
+        ...errorResponse,
+        title: 'tooManyRequestError',
+        detail: 'request limit achieved',
+        errors: ['IP temporarily blocked'],
+      });
+    }
+
+    // default scenario
     return response.status(status).json({
       title,
       status,
