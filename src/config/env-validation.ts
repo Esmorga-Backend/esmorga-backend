@@ -60,6 +60,22 @@ class EnvVars {
   @IsNotEmpty()
   @IsString()
   DNS_NAME: string;
+
+  @IsNumber()
+  @IsPositive()
+  API_RATE_LIMIT: number = 100;
+
+  @IsNumber()
+  @IsPositive()
+  API_RATE_LIMIT_TTL: number = 1;
+
+  @IsNumber()
+  @IsPositive()
+  PUBLIC_API_RATE_LIMIT: number = 5;
+
+  @IsNumber()
+  @IsPositive()
+  PUBLIC_API_RATE_LIMIT_TTL: number = 1;
 }
 
 /**

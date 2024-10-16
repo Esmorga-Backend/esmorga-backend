@@ -13,6 +13,7 @@ import {
   Put,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { SkipThrottle } from '@nestjs/throttler';
 import { PinoLogger } from 'nestjs-pino';
 import {
   ActivateAccountService,
@@ -101,6 +102,7 @@ export class AccountController {
     }
   }
 
+  @SkipThrottle({ public: false, default: true })
   @Post('/login')
   @SwaggerAccountLogin()
   @HttpCode(200)
@@ -132,6 +134,7 @@ export class AccountController {
     }
   }
 
+  @SkipThrottle({ default: true, public: false })
   @Post('/register')
   @SwaggerAccountRegister()
   async register(
@@ -217,6 +220,7 @@ export class AccountController {
     }
   }
 
+  @SkipThrottle({ public: false, default: true })
   @Put('/activate')
   @SwaggerActivateAccount()
   @HttpCode(200)
@@ -281,6 +285,7 @@ export class AccountController {
     }
   }
 
+  @SkipThrottle({ public: false, default: true })
   @Post('/email/verification')
   @SwaggerSendEmailVerification()
   @HttpCode(204)
@@ -310,6 +315,7 @@ export class AccountController {
     }
   }
 
+  @SkipThrottle({ public: false, default: true })
   @Post('/password/forgot-init')
   @SwaggerForgotPassword()
   @HttpCode(204)
@@ -339,6 +345,7 @@ export class AccountController {
     }
   }
 
+  @SkipThrottle({ public: false, default: true })
   @Put('/password/forgot-update')
   @SwaggerForgotPasswordUpdate()
   @HttpCode(204)
