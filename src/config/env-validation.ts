@@ -71,7 +71,7 @@ class EnvVars {
 
   @IsNumber()
   @IsPositive()
-  PUBLIC_API_RATE_LIMIT: number = 5;
+  PUBLIC_API_RATE_LIMIT: number = 10;
 
   @IsNumber()
   @IsPositive()
