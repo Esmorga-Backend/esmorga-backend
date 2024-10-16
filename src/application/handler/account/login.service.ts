@@ -99,7 +99,7 @@ export class LoginService {
         );
       }
 
-      await this.tokensRepository.saveTokens(uuid, sessionId, requestId);
+      await this.tokensRepository.saveSession(uuid, sessionId, requestId);
 
       const ttl = this.configService.get('ACCESS_TOKEN_TTL');
 

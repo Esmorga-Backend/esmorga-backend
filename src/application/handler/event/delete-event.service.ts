@@ -29,7 +29,7 @@ export class DeleteEventService {
   /**
    * Remove the event document and event participant list that matches with the ID provided.
    *
-   * @param sessionId - Session id allows user a method to authenticate.
+   * @param sessionId - Client session id.
    * @param eventId - Event identifier.
    * @param requestId - Request identifier.
    * @throws NotAdminAccountApiError - User is not admin.

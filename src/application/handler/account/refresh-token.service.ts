@@ -74,7 +74,7 @@ export class RefreshTokenService {
         sessionId: newSessionId,
       } = await this.sessionGenerator.generateSession(uuid);
 
-      await this.tokensRepository.saveTokens(uuid, newSessionId, requestId);
+      await this.tokensRepository.saveSession(uuid, newSessionId, requestId);
 
       await this.tokensRepository.removeTokensById(id, requestId);
 

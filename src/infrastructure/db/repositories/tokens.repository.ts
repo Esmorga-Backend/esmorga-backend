@@ -23,13 +23,13 @@ export class TokensRepository extends MongoRepository<SessionSchema> {
    * Store a new pair of tokens for the user requested them.
    *
    * @param uuid - User identifier.
-   * @param sessionId - Session id to be saved.
+   * @param sessionId - Client session id to be saved.
    * @param requestId - Request identifier for API logger
    */
-  async saveTokens(uuid: string, sessionId: string, requestId?: string) {
+  async saveSession(uuid: string, sessionId: string, requestId?: string) {
     try {
       this.logger.info(
-        `[TokensRepository] [saveTokens] - x-request-id: ${requestId}, uuid: ${uuid}`,
+        `[TokensRepository] [saveSession] - x-request-id: ${requestId}, uuid: ${uuid}`,
       );
 
       const sessionDoc = new this.sessionModel({
@@ -40,7 +40,7 @@ export class TokensRepository extends MongoRepository<SessionSchema> {
       await this.save(sessionDoc);
     } catch (error) {
       this.logger.error(
-        `[TokensRepository] [saveTokens] - x-request-id: ${requestId}, error: ${error}`,
+        `[TokensRepository] [saveSession] - x-request-id: ${requestId}, error: ${error}`,
       );
 
       throw new DataBaseInternalError();
@@ -118,9 +118,9 @@ export class TokensRepository extends MongoRepository<SessionSchema> {
   }
 
   /**
-   * Get sessions with user id related to the refresh provided.
+   * Get sessions with user id related to the client session id provided.
    *
-   * @param sessionId - Refresh token stored.
+   * @param sessionId - Client session id stored.
    * @param requestId - Request identifier for API logger.
    * @returns PairOfTokensDto - Pair of tokens and user id.
    */

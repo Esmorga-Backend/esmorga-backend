@@ -27,7 +27,7 @@ export class DisjoinEventService {
   /**
    * Remove the user authenthicated from the event participant list.
    *
-   * @param sessionId - Token allows user a method to authenticate.
+   * @param sessionId - Client session id.
    * @param eventId - Event identifier.
    * @param requestId - Request identifier.
    * @throws NotAccepteableDisjoinEventApiError - User can not disjoin from a celebrated event.

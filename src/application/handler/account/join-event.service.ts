@@ -27,7 +27,7 @@ export class JoinEventService {
   /**
    * Insert user uuid as particpant for the event that matches with the ID provided.
    *
-   * @param sessionId - Session id allows user a method to authenticate.
+   * @param sessionId - Client session id.
    * @param eventId - Event identifier.
    * @param requestId - Request identifier.
    * @throws NotAcceptableEventApiError - User can not join past events.

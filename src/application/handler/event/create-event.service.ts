@@ -25,7 +25,7 @@ export class CreateEventService {
   /**
    * Create an event.
    *
-   * @param sessionId - The session id to authorise.
+   * @param sessionId - Client session id.
    * @param createEventDto - Data transfer object containing event details.
    * @param requestId - The request ID for loggers.
    */

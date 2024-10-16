@@ -47,7 +47,7 @@ export class MongoRepository<E> implements DBRepository<E> {
   /**
    * Find a document by sessionId field.
    *
-   * @param sessionId - The sessionId to find.
+   * @param sessionId - The Client session id to find.
    * @returns Promise resolved with the document that matches the sessionId provided.
    */
   async findOneBySessionId(sessionId: string): Promise<E | null> {

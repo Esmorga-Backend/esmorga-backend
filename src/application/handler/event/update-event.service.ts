@@ -30,7 +30,7 @@ export class UpdateEventService {
   /**
    * Update an event.
    *
-   * @param sessionId - The session id to authorise.
+   * @param sessionId - Client session id.
    * @param updateEventDto - Data transfer object containing event details.
    * @param requestId - The request ID for loggers.
    */

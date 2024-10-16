@@ -22,7 +22,7 @@ export class GetMyEventsService {
   /**
    * Provide a list of not celebrated events user authenticated joined as participant.
    *
-   * @param sessionId - Session id allows user a method to authenticate.
+   * @param sessionId - Client session id.
    * @param requestId - Request identifier.
    * @returns EventListDto - Object containing the total number of available events and the list of available events.
    */
