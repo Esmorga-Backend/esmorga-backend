@@ -33,6 +33,8 @@ export class AuthGuard implements CanActivate {
         sessionId: string;
       }>(token, { secret: jwtSecret });
 
+      if (!sessionId) throw new InvalidTokenApiError();
+
       req.headers['x-session-id'] = sessionId;
       res.set('x-session-id', sessionId);
 
