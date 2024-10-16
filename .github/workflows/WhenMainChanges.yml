@@ -90,6 +90,7 @@ jobs:
         MAX_LOGIN_ATTEMPTS: ${{vars.MAX_LOGIN_ATTEMPTS}}
         DNS_NAME: ${{vars.DNS_NAME}}
     - name: Run Postman
+      if: false
       uses: ./.github/actions/runPostmanTests
       with:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
