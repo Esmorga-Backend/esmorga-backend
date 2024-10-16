@@ -1,9 +1,10 @@
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { Injectable } from '@nestjs/common';
+import { randomUUID } from 'crypto';
 
 @Injectable()
-export class GenerateTokenPair {
+export class SessionGenerator {
   constructor(
     private jwtService: JwtService,
     private configService: ConfigService,
@@ -14,9 +15,10 @@ export class GenerateTokenPair {
    * @param uuid User id.
    * @returns New pair of tokens.
    */
-  async generateTokens(uuid: string) {
+  async generateSession(uuid: string) {
+    const sessionId = randomUUID();
     const accessToken = await this.jwtService.signAsync(
-      { uuid },
+      { uuid, sessionId },
       {
         secret: this.configService.get('JWT_SECRET'),
         expiresIn: `${this.configService.get('ACCESS_TOKEN_TTL')}s`,
@@ -24,12 +26,12 @@ export class GenerateTokenPair {
     );
 
     const refreshToken = await this.jwtService.signAsync(
-      { uuid },
+      { uuid, sessionId },
       {
         secret: this.configService.get('JWT_SECRET'),
       },
     );
 
-    return { accessToken, refreshToken };
+    return { accessToken, refreshToken, sessionId };
   }
 }

@@ -1,4 +1,5 @@
 import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
 import { Injectable } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
 import { PinoLogger } from 'nestjs-pino';
@@ -7,14 +8,15 @@ import { RefreshTokenDto } from '../../../infrastructure/http/dtos';
 import { NewPairOfTokensDto } from '../../../infrastructure/dtos';
 import { DataBaseUnathorizedError } from '../../../infrastructure/db/errors';
 import { InvalidCredentialsRefreshApiError } from '../../../domain/errors';
-import { GenerateTokenPair } from '../../../domain/services';
+import { SessionGenerator } from '../../../domain/services';
 
 @Injectable()
 export class RefreshTokenService {
   constructor(
     private readonly logger: PinoLogger,
     private configService: ConfigService,
-    private readonly generateTokenPair: GenerateTokenPair,
+    private jwtService: JwtService,
+    private readonly generateTokenPair: SessionGenerator,
     private readonly tokensRepository: TokensRepository,
   ) {}
 
@@ -33,27 +35,46 @@ export class RefreshTokenService {
     try {
       const { refreshToken } = refreshTokenDto;
 
+      const jwtSecret = this.configService.get('JWT_SECRET');
+
+      const { sessionId } = await this.jwtService.verifyAsync<{
+        uuid: string;
+        sessionId: string;
+      }>(refreshToken, { secret: jwtSecret });
+
+      let uuid: string, id: string;
+
+      // accept refreshToken without sessionId
+      if (!sessionId) {
+        const pairOfTokens =
+          await this.tokensRepository.getPairOfTokensByRefreshToken(
+            refreshToken,
+            requestId,
+          );
+
+        id = pairOfTokens.id;
+        uuid = pairOfTokens.uuid;
+      } else {
+        const pairOfTokens = await this.tokensRepository.getBySessionId(
+          sessionId,
+          requestId,
+        );
+
+        id = pairOfTokens.id;
+        uuid = pairOfTokens.uuid;
+      }
+
       this.logger.info(
         `[RegisterService] [refreshToken] - x-request-id:${requestId}, refreshToken ${refreshToken}`,
       );
 
-      const pairOfTokens =
-        await this.tokensRepository.getPairOfTokensByRefreshToken(
-          refreshToken,
-          requestId,
-        );
-
-      const { id, uuid } = pairOfTokens;
-
-      const { accessToken, refreshToken: newRefreshToken } =
-        await this.generateTokenPair.generateTokens(uuid);
-
-      await this.tokensRepository.saveTokens(
-        uuid,
+      const {
         accessToken,
-        newRefreshToken,
-        requestId,
-      );
+        refreshToken: newRefreshToken,
+        sessionId: newSessionId,
+      } = await this.generateTokenPair.generateSession(uuid);
+
+      await this.tokensRepository.saveTokens(uuid, newSessionId, requestId);
 
       await this.tokensRepository.removeTokensById(id, requestId);
 

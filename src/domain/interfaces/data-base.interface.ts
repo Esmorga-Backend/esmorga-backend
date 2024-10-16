@@ -5,7 +5,7 @@ export interface DBRepository<E> {
   findOneByAccessToken(accessToken: string): Promise<E>;
   findOneByEmail(email: string): Promise<E | null>;
   findOneById(id: string): Promise<E>;
-  findOneByRefreshToken(refreshToken: string): Promise<E | null>;
+  findOneBySessionId(refreshToken: string): Promise<E | null>;
   findOneByCodeAndType(code: string, codeType: string): Promise<E | null>;
   findEventParticipant(userId: string): Promise<E[]>;
   findAndUpdateParticipantsList(eventId: string, userId: string);

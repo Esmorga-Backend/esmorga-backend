@@ -6,7 +6,7 @@ import {
 } from '../../../../mocks/db';
 import { context, moduleFixture } from '../../../steps-config';
 import {
-  GenerateTokenPair,
+  SessionGenerator,
   ValidateLoginCredentialsService,
 } from '../../../../../src/domain/services';
 import { ACCOUNT_STATUS } from '../../../../../src/domain/const';
@@ -35,7 +35,7 @@ export const loginSteps: StepDefinitions = async ({ given, and, then }) => {
       moduleFixture.get<LoginAttemptsRepository>(LoginAttemptsRepository);
 
     context.generateTokenPair =
-      moduleFixture.get<GenerateTokenPair>(GenerateTokenPair);
+      moduleFixture.get<SessionGenerator>(SessionGenerator);
 
     context.validateLoginCredentialsService =
       moduleFixture.get<ValidateLoginCredentialsService>(

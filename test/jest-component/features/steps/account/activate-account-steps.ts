@@ -4,7 +4,7 @@ import {
   TokensRepository,
   TemporalCodeRepository,
 } from '../../../../../src/infrastructure/db/repositories';
-import { GenerateTokenPair } from '../../../../../src/domain/services';
+import { SessionGenerator } from '../../../../../src/domain/services';
 import { context, moduleFixture } from '../../../steps-config';
 import {
   VERIFICATION_CODE_DATA_MOCK_DB,
@@ -20,7 +20,7 @@ export const activateAccountSteps: StepDefinitions = ({ given, and }) => {
     };
 
     context.generateTokenPair =
-      moduleFixture.get<GenerateTokenPair>(GenerateTokenPair);
+      moduleFixture.get<SessionGenerator>(SessionGenerator);
 
     context.accountRepository =
       moduleFixture.get<AccountRepository>(AccountRepository);

@@ -3,7 +3,7 @@ import { DBRepository } from '../../../domain/interfaces';
 import { ACCOUNT_STATUS } from '../../../domain/const';
 
 export class MongoRepository<E> implements DBRepository<E> {
-  constructor(protected readonly entityModel: Model<E>) { }
+  constructor(protected readonly entityModel: Model<E>) {}
 
   /**
    * Return an array with the documents saved in the collection.
@@ -45,13 +45,23 @@ export class MongoRepository<E> implements DBRepository<E> {
   }
 
   /**
-   * Find a document by refreshToken field.
+   * @deprecated Find a document by refreshToken field.
    *
    * @param refreshToken - The refresToken to find.
    * @returns Promise resolved with the document that matches the refreshToken provided.
    */
   async findOneByRefreshToken(refreshToken: string): Promise<E | null> {
     return this.entityModel.findOne({ refreshToken: { $eq: refreshToken } });
+  }
+
+  /**
+   * Find a document by sessionId field.
+   *
+   * @param sessionId - The sessionId to find.
+   * @returns Promise resolved with the document that matches the sessionId provided.
+   */
+  async findOneBySessionId(sessionId: string): Promise<E | null> {
+    return this.entityModel.findOne({ sessionId: { $eq: sessionId } });
   }
 
   /**

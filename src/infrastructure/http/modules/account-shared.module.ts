@@ -9,8 +9,8 @@ import {
 import {
   UserSchema,
   User,
-  TokensSchema,
-  Tokens,
+  SessionSchema,
+  Session,
   EventParticipantsSchema,
   EventParticipants,
 } from '../../../infrastructure/db/schema';
@@ -19,7 +19,7 @@ import {
   imports: [
     JwtModule.register({}),
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
-    MongooseModule.forFeature([{ name: Tokens.name, schema: TokensSchema }]),
+    MongooseModule.forFeature([{ name: Session.name, schema: SessionSchema }]),
     MongooseModule.forFeature([
       { name: EventParticipants.name, schema: EventParticipantsSchema },
     ]),

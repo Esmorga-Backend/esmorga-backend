@@ -13,15 +13,12 @@ import {
   TokensRepository,
   LoginAttemptsRepository,
 } from '../../../infrastructure/db/repositories';
-import {
-  AccountLoggedDto,
-  PairOfTokensDto,
-} from '../../../infrastructure/dtos';
+import { AccountLoggedDto, SessionDto } from '../../../infrastructure/dtos';
 import { AccountLoginDto } from '../../../infrastructure/http/dtos';
 import {
   ValidateLoginCredentialsService,
-  getOldestPairOfTokens,
-  GenerateTokenPair,
+  getOldestSession,
+  SessionGenerator,
 } from '../../../domain/services';
 import {
   BlockedUserApiError,
@@ -33,7 +30,7 @@ import {
 export class LoginService {
   constructor(
     private readonly logger: PinoLogger,
-    private readonly generateTokenPair: GenerateTokenPair,
+    private readonly generateTokenPair: SessionGenerator,
     private readonly accountRepository: AccountRepository,
     private readonly loginAttemptsRepository: LoginAttemptsRepository,
     private readonly tokensRepository: TokensRepository,
@@ -87,14 +84,14 @@ export class LoginService {
 
       await this.loginAttemptsRepository.removeLoginAttempts(uuid, requestId);
 
-      const { accessToken, refreshToken } =
-        await this.generateTokenPair.generateTokens(uuid);
+      const { accessToken, refreshToken, sessionId } =
+        await this.generateTokenPair.generateSession(uuid);
 
-      const pairOfTokens: PairOfTokensDto[] =
+      const pairOfTokens: SessionDto[] =
         await this.tokensRepository.getAllTokensByUuid(uuid, requestId);
 
       if (pairOfTokens.length >= this.configService.get('MAX_PAIR_OF_TOKEN')) {
-        const oldestPairOfTokenId = getOldestPairOfTokens(pairOfTokens);
+        const oldestPairOfTokenId = getOldestSession(pairOfTokens);
 
         await this.tokensRepository.removeTokensById(
           oldestPairOfTokenId,
@@ -102,12 +99,7 @@ export class LoginService {
         );
       }
 
-      await this.tokensRepository.saveTokens(
-        uuid,
-        accessToken,
-        refreshToken,
-        requestId,
-      );
+      await this.tokensRepository.saveTokens(uuid, sessionId, requestId);
 
       const ttl = this.configService.get('ACCESS_TOKEN_TTL');
 

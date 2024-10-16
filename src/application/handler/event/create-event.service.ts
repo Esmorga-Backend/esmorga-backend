@@ -25,12 +25,12 @@ export class CreateEventService {
   /**
    * Create an event.
    *
-   * @param accesToken - The accesToken to authorise.
+   * @param sessionId - The session id to authorise.
    * @param createEventDto - Data transfer object containing event details.
    * @param requestId - The request ID for loggers.
    */
   async create(
-    accessToken: string,
+    sessionId: string,
     createEventDto: CreateEventDto,
     requestId?: string,
   ) {
@@ -39,8 +39,8 @@ export class CreateEventService {
         `[CreateEventService] [create] - x-request-id: ${requestId}`,
       );
 
-      const { uuid } = await this.tokensRepository.getPairOfTokensByAccessToken(
-        accessToken,
+      const { uuid } = await this.tokensRepository.getBySessionId(
+        sessionId,
         requestId,
       );
 

@@ -1,6 +1,6 @@
 import { StepDefinitions } from 'jest-cucumber';
 import { context, moduleFixture } from '../../../steps-config';
-import { GenerateTokenPair } from '../../../../../src/domain/services';
+import { SessionGenerator } from '../../../../../src/domain/services';
 import {
   AccountRepository,
   TokensRepository,
@@ -15,7 +15,7 @@ export const refreshTokenSteps: StepDefinitions = ({ given, and }) => {
     context.tokensRepository =
       moduleFixture.get<TokensRepository>(TokensRepository);
     context.generateTokenPair =
-      moduleFixture.get<GenerateTokenPair>(GenerateTokenPair);
+      moduleFixture.get<SessionGenerator>(SessionGenerator);
     context.path = '/v1/account/refresh';
     jest
       .spyOn(context.tokensRepository, 'findOneByRefreshToken')

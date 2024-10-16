@@ -15,7 +15,7 @@ import {
 } from '../../../application/handler/account';
 import {
   GenerateMailService,
-  GenerateTokenPair,
+  SessionGenerator,
   ValidateLoginCredentialsService,
 } from '../../../domain/services';
 import { NodemailerService } from '../../services';
@@ -55,7 +55,7 @@ import {
     DisjoinEventService,
     UpdatePasswordService,
     ActivateAccountService,
-    GenerateTokenPair,
+    SessionGenerator,
     GenerateMailService,
     SendEmailVerificationService,
     ValidateLoginCredentialsService,
