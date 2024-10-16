@@ -28,7 +28,7 @@ export class SessionGenerator {
     const refreshToken = await this.jwtService.signAsync(
       { uuid, sessionId },
       {
-        secret: this.configService.get('JWT_SECRET'),
+        secret: this.configService.get('JWT_REFRESH_SECRET'),
       },
     );
 

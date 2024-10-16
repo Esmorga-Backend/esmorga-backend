@@ -9,10 +9,11 @@ import {
 import {
   FUTURE_EVENT_MOCK_DB,
   OLD_EVENT_MOCK_DB,
-  PAIR_OF_TOKENS_MOCK_DB,
+  SESSION_MOCK_DB,
 } from '../../../../mocks/db';
 import { EVENT_ID_MOCK } from '../../../../mocks/dtos';
 import { HEADERS } from '../../../../mocks/common-data';
+import { SESSION_ID } from '../../../../mocks/db/common';
 
 const PATH = '/v1/account/events';
 
@@ -53,11 +54,13 @@ export const joinEventSteps: StepDefinitions = ({ given, and }) => {
   and('I am authenticated, with valid accessToken and eventId', () => {
     context.headers = HEADERS;
 
-    jest.spyOn(context.jwtService, 'verifyAsync').mockResolvedValue({});
+    jest
+      .spyOn(context.jwtService, 'verifyAsync')
+      .mockResolvedValue({ sessionId: SESSION_ID });
 
     jest
-      .spyOn(context.tokensRepository, 'findOneByAccessToken')
-      .mockResolvedValue(PAIR_OF_TOKENS_MOCK_DB);
+      .spyOn(context.tokensRepository, 'findOneBySessionId')
+      .mockResolvedValue(SESSION_MOCK_DB);
   });
 
   and('the eventDate has not already ended', () => {
@@ -72,20 +75,22 @@ export const joinEventSteps: StepDefinitions = ({ given, and }) => {
     (authenticatedStatus, accessToken) => {
       if (authenticatedStatus === 'unauthenticated') {
         jest
-          .spyOn(context.tokensRepository, 'findOneByAccessToken')
+          .spyOn(context.tokensRepository, 'findOneBySessionId')
           .mockResolvedValue(null);
       }
 
       if (authenticatedStatus === 'authenticated') {
         jest
-          .spyOn(context.tokensRepository, 'findOneByAccessToken')
-          .mockResolvedValue(PAIR_OF_TOKENS_MOCK_DB);
+          .spyOn(context.tokensRepository, 'findOneBySessionId')
+          .mockResolvedValue(SESSION_MOCK_DB);
       }
 
       if (accessToken === 'valid') {
         context.headers = HEADERS;
 
-        jest.spyOn(context.jwtService, 'verifyAsync').mockResolvedValue({});
+        jest
+          .spyOn(context.jwtService, 'verifyAsync')
+          .mockResolvedValue({ sessionId: SESSION_ID });
       }
 
       if (accessToken === 'not_exist') {

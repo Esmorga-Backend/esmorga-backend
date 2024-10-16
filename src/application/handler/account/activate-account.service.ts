@@ -18,7 +18,7 @@ export class ActivateAccountService {
   constructor(
     private readonly logger: PinoLogger,
     private configService: ConfigService,
-    private readonly generateTokenPair: SessionGenerator,
+    private readonly sessionGenerator: SessionGenerator,
     private readonly tokensRepository: TokensRepository,
     private readonly accountRepository: AccountRepository,
     private readonly temporalCodeRepository: TemporalCodeRepository,
@@ -53,7 +53,7 @@ export class ActivateAccountService {
       const { uuid } = userProfileUpdated;
 
       const { accessToken, refreshToken, sessionId } =
-        await this.generateTokenPair.generateSession(uuid);
+        await this.sessionGenerator.generateSession(uuid);
 
       await this.tokensRepository.saveTokens(uuid, sessionId, requestId);
 

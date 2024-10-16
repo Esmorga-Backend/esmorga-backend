@@ -9,12 +9,13 @@ import {
 import {
   getUserMockDb,
   FUTURE_EVENT_MOCK_DB,
-  PAIR_OF_TOKENS_MOCK_DB,
+  SESSION_MOCK_DB,
   UPDATED_EVENT_MOCK_DB,
 } from '../../../../mocks/db';
 import { EVENT_MOCK } from '../../../../mocks/dtos';
 import { HEADERS } from '../../../../mocks/common-data';
 import { ACCOUNT_ROLES } from '../../../../../src/domain/const';
+import { SESSION_ID } from '../../../../mocks/db/common';
 
 export const updateEventSteps: StepDefinitions = ({ given }) => {
   // ###### MOB-TC-73 ######
@@ -40,10 +41,12 @@ export const updateEventSteps: StepDefinitions = ({ given }) => {
       role: ACCOUNT_ROLES.ADMIN,
     };
 
-    jest.spyOn(context.jwtService, 'verifyAsync').mockResolvedValue({});
     jest
-      .spyOn(context.tokensRepository, 'findOneByAccessToken')
-      .mockResolvedValue(PAIR_OF_TOKENS_MOCK_DB);
+      .spyOn(context.jwtService, 'verifyAsync')
+      .mockResolvedValue({ sessionId: SESSION_ID });
+    jest
+      .spyOn(context.tokensRepository, 'findOneBySessionId')
+      .mockResolvedValue(SESSION_MOCK_DB);
     jest
       .spyOn(context.accountRepository, 'findOneById')
       .mockResolvedValue(ADMIN_USER);
@@ -54,7 +57,7 @@ export const updateEventSteps: StepDefinitions = ({ given }) => {
       .spyOn(context.eventRepository, 'updateById')
       .mockResolvedValue(UPDATED_EVENT_MOCK_DB);
     jest
-      .spyOn(context.tokensRepository, 'findOneByAccessToken')
+      .spyOn(context.tokensRepository, 'findOneBySessionId')
       .mockResolvedValue(null);
   });
 };

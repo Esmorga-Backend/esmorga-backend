@@ -34,7 +34,7 @@ export const loginSteps: StepDefinitions = async ({ given, and, then }) => {
     context.loginAttemptsRepository =
       moduleFixture.get<LoginAttemptsRepository>(LoginAttemptsRepository);
 
-    context.generateTokenPair =
+    context.sessionGenerator =
       moduleFixture.get<SessionGenerator>(SessionGenerator);
 
     context.validateLoginCredentialsService =
@@ -65,9 +65,10 @@ export const loginSteps: StepDefinitions = async ({ given, and, then }) => {
       .spyOn(context.accountRepository, 'updateBlockedStatusByUuid')
       .mockResolvedValue(null);
 
-    jest.spyOn(context.generateTokenPair, 'generateTokens').mockResolvedValue({
+    jest.spyOn(context.sessionGenerator, 'generateSession').mockResolvedValue({
       accessToken: 'ACCESS_TOKEN',
       refreshToken: 'REFRESH_TOKEN',
+      sessionId: 'SESSION_ID',
     });
 
     jest.spyOn(context.tokensRepository, 'findByUuid').mockResolvedValue([]);
@@ -108,7 +109,6 @@ export const loginSteps: StepDefinitions = async ({ given, and, then }) => {
       .spyOn(context.accountRepository, 'findOneByEmail')
       .mockImplementation(() => context.user);
   });
-
 
   and('user status is BLOCKED', async () => {
     context.user = {

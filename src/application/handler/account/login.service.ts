@@ -30,7 +30,7 @@ import {
 export class LoginService {
   constructor(
     private readonly logger: PinoLogger,
-    private readonly generateTokenPair: SessionGenerator,
+    private readonly sessionGenerator: SessionGenerator,
     private readonly accountRepository: AccountRepository,
     private readonly loginAttemptsRepository: LoginAttemptsRepository,
     private readonly tokensRepository: TokensRepository,
@@ -85,7 +85,7 @@ export class LoginService {
       await this.loginAttemptsRepository.removeLoginAttempts(uuid, requestId);
 
       const { accessToken, refreshToken, sessionId } =
-        await this.generateTokenPair.generateSession(uuid);
+        await this.sessionGenerator.generateSession(uuid);
 
       const pairOfTokens: SessionDto[] =
         await this.tokensRepository.getAllTokensByUuid(uuid, requestId);

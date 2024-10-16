@@ -1,5 +1,5 @@
 import { ConfigService } from '@nestjs/config';
-import { JwtService } from '@nestjs/jwt';
+import { JsonWebTokenError, JwtService } from '@nestjs/jwt';
 import { Injectable } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
 import { PinoLogger } from 'nestjs-pino';
@@ -16,7 +16,7 @@ export class RefreshTokenService {
     private readonly logger: PinoLogger,
     private configService: ConfigService,
     private jwtService: JwtService,
-    private readonly generateTokenPair: SessionGenerator,
+    private readonly sessionGenerator: SessionGenerator,
     private readonly tokensRepository: TokensRepository,
   ) {}
 
@@ -35,7 +35,7 @@ export class RefreshTokenService {
     try {
       const { refreshToken } = refreshTokenDto;
 
-      const jwtSecret = this.configService.get('JWT_SECRET');
+      const jwtSecret = this.configService.get('JWT_REFRESH_SECRET');
 
       const { sessionId } = await this.jwtService.verifyAsync<{
         uuid: string;
@@ -72,7 +72,7 @@ export class RefreshTokenService {
         accessToken,
         refreshToken: newRefreshToken,
         sessionId: newSessionId,
-      } = await this.generateTokenPair.generateSession(uuid);
+      } = await this.sessionGenerator.generateSession(uuid);
 
       await this.tokensRepository.saveTokens(uuid, newSessionId, requestId);
 
@@ -96,7 +96,10 @@ export class RefreshTokenService {
         `[RegisterService] [refreshToken] - x-request-id:${requestId}, error ${error}`,
       );
 
-      if (error instanceof DataBaseUnathorizedError)
+      if (
+        error instanceof DataBaseUnathorizedError ||
+        error instanceof JsonWebTokenError
+      )
         throw new InvalidCredentialsRefreshApiError();
 
       throw error;

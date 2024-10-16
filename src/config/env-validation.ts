@@ -26,6 +26,10 @@ class EnvVars {
   JWT_SECRET: string;
 
   @IsNotEmpty()
+  @IsString()
+  JWT_REFRESH_SECRET: string;
+
+  @IsNotEmpty()
   @IsNumber()
   @IsPositive()
   ACCESS_TOKEN_TTL: number;

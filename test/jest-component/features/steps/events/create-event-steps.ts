@@ -11,9 +11,10 @@ import {
   TokensRepository,
 } from '../../../../../src/infrastructure/db/repositories';
 import { ACCOUNT_ROLES } from '../../../../../src/domain/const';
-import { getUserMockDb, PAIR_OF_TOKENS_MOCK_DB } from '../../../../mocks/db';
+import { getUserMockDb, SESSION_MOCK_DB } from '../../../../mocks/db';
 
 import { HEADERS } from '../../../../mocks/common-data';
+import { SESSION_ID } from '../../../../mocks/db/common';
 
 export const createEventSteps: StepDefinitions = ({ given, and }) => {
   // ###### TC-19 ######
@@ -34,11 +35,13 @@ export const createEventSteps: StepDefinitions = ({ given, and }) => {
     context.tokensRepository =
       moduleFixture.get<TokensRepository>(TokensRepository);
 
-    jest.spyOn(context.jwtService, 'verifyAsync').mockResolvedValue({});
+    jest
+      .spyOn(context.jwtService, 'verifyAsync')
+      .mockResolvedValue({ sessionId: SESSION_ID });
 
     jest
-      .spyOn(context.tokensRepository, 'findOneByAccessToken')
-      .mockResolvedValue(PAIR_OF_TOKENS_MOCK_DB);
+      .spyOn(context.tokensRepository, 'findOneBySessionId')
+      .mockResolvedValue(SESSION_MOCK_DB);
 
     jest.spyOn(context.eventRepository, 'save').mockResolvedValue(null);
   });
@@ -66,7 +69,7 @@ export const createEventSteps: StepDefinitions = ({ given, and }) => {
   // ###### TC-21 ######
   and('an unauthenticated user', () => {
     jest
-      .spyOn(context.tokensRepository, 'findOneByAccessToken')
+      .spyOn(context.tokensRepository, 'findOneBySessionId')
       .mockResolvedValue(null);
   });
 

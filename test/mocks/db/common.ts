@@ -7,3 +7,5 @@ export const OLD_EVENT_MOCK_DB_ID = '6656e23640e1fdb4ceb23cc8';
 export const USER_MOCK_DB_ID = '665f019c17331ebee550b2ff';
 
 export const TEMPORAL_CODE_DB_ID = '6686785f52eb2b68944aacbc';
+
+export const SESSION_ID = '5c339b2e-f3c3-4cfc-9fae-ef7785638c51';
