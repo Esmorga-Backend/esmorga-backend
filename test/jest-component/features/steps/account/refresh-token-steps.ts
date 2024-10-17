@@ -1,12 +1,14 @@
+import { JwtService } from '@nestjs/jwt';
 import { StepDefinitions } from 'jest-cucumber';
 import { context, moduleFixture } from '../../../steps-config';
-import { GenerateTokenPair } from '../../../../../src/domain/services';
+import { SessionGenerator } from '../../../../../src/domain/services';
 import {
   AccountRepository,
   TokensRepository,
 } from '../../../../../src/infrastructure/db/repositories';
 
-import { PAIR_OF_TOKENS_MOCK_DB, TTL_MOCK_DB } from '../../../../mocks/db';
+import { SESSION_MOCK_DB, TTL_MOCK_DB } from '../../../../mocks/db';
+import { SESSION_ID } from '../../../../mocks/db/common';
 
 export const refreshTokenSteps: StepDefinitions = ({ given, and }) => {
   given('the POST RefreshToken API is available', () => {
@@ -14,16 +16,18 @@ export const refreshTokenSteps: StepDefinitions = ({ given, and }) => {
       moduleFixture.get<AccountRepository>(AccountRepository);
     context.tokensRepository =
       moduleFixture.get<TokensRepository>(TokensRepository);
-    context.generateTokenPair =
-      moduleFixture.get<GenerateTokenPair>(GenerateTokenPair);
+    context.sessionGenerator =
+      moduleFixture.get<SessionGenerator>(SessionGenerator);
+    context.jwtService = moduleFixture.get<JwtService>(JwtService);
     context.path = '/v1/account/refresh';
     jest
-      .spyOn(context.tokensRepository, 'findOneByRefreshToken')
+      .spyOn(context.tokensRepository, 'findOneBySessionId')
       .mockResolvedValue(null);
 
-    jest.spyOn(context.generateTokenPair, 'generateTokens').mockResolvedValue({
+    jest.spyOn(context.sessionGenerator, 'generateSession').mockResolvedValue({
       accessToken: 'newAccessToken',
       refreshToken: 'newRefreshToken',
+      sessionId: 'SESSION_ID',
     });
     jest.spyOn(context.tokensRepository, 'save').mockResolvedValue(null);
 
@@ -36,10 +40,20 @@ export const refreshTokenSteps: StepDefinitions = ({ given, and }) => {
       context.mock.refreshToken = '';
     }
 
-    if (PAIR_OF_TOKENS_MOCK_DB.refreshToken == refreshToken) {
+    if (refreshToken === 'refreshToken') {
       jest
-        .spyOn(context.tokensRepository, 'findOneByRefreshToken')
-        .mockResolvedValue(PAIR_OF_TOKENS_MOCK_DB);
+        .spyOn(context.jwtService, 'verifyAsync')
+        .mockImplementation((_refreshToken) => {
+          if (refreshToken === _refreshToken) {
+            return {
+              sessionId: SESSION_ID,
+            };
+          }
+        });
+
+      jest
+        .spyOn(context.tokensRepository, 'findOneBySessionId')
+        .mockResolvedValue(SESSION_MOCK_DB);
     }
   });
 

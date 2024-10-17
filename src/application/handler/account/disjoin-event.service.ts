@@ -27,21 +27,21 @@ export class DisjoinEventService {
   /**
    * Remove the user authenthicated from the event participant list.
    *
-   * @param accessToken - Token allows user a method to authenticate.
+   * @param sessionId - Client session id.
    * @param eventId - Event identifier.
    * @param requestId - Request identifier.
    * @throws NotAccepteableDisjoinEventApiError - User can not disjoin from a celebrated event.
    * @throws InvalidTokenApiError - No user found for the current session.
    * @throws InvalidEventIdApiError - EventId is not valid follwing DB schema ot not found.
    */
-  async disJoinEvent(accessToken: string, eventId: string, requestId?: string) {
+  async disJoinEvent(sessionId: string, eventId: string, requestId?: string) {
     try {
       this.logger.info(
         `[DisjoinEventService] [disJoinEvent] - x-request-id: ${requestId}, eventId ${eventId}`,
       );
 
-      const { uuid } = await this.tokensRepository.getPairOfTokensByAccessToken(
-        accessToken,
+      const { uuid } = await this.tokensRepository.getBySessionId(
+        sessionId,
         requestId,
       );
 

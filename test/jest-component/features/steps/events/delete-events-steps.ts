@@ -9,12 +9,13 @@ import {
 } from '../../../../../src/infrastructure/db/repositories';
 import {
   FUTURE_EVENT_MOCK_DB,
-  PAIR_OF_TOKENS_MOCK_DB,
+  SESSION_MOCK_DB,
   getUserMockDb,
 } from '../../../../mocks/db';
 import { EVENT_ID_MOCK } from '../../../../mocks/dtos';
 import { HEADERS } from '../../../../mocks/common-data';
 import { ACCOUNT_ROLES } from '../../../../../src/domain/const';
+import { SESSION_ID } from '../../../../mocks/db/common';
 
 const PATH = '/v1/events';
 
@@ -62,11 +63,13 @@ export const deleteEventStep: StepDefinitions = ({ given, and }) => {
       role: ACCOUNT_ROLES.ADMIN,
     };
 
-    jest.spyOn(context.jwtService, 'verifyAsync').mockResolvedValue({});
+    jest
+      .spyOn(context.jwtService, 'verifyAsync')
+      .mockResolvedValue({ sessionId: SESSION_ID });
 
     jest
-      .spyOn(context.tokensRepository, 'findOneByAccessToken')
-      .mockResolvedValue(PAIR_OF_TOKENS_MOCK_DB);
+      .spyOn(context.tokensRepository, 'findOneBySessionId')
+      .mockResolvedValue(SESSION_MOCK_DB);
 
     jest
       .spyOn(context.accountRepository, 'findOneById')
@@ -79,10 +82,12 @@ export const deleteEventStep: StepDefinitions = ({ given, and }) => {
 
   // ###### MOB-TC-36 ######
   and('use accessToken is valid and eventId do not exist', () => {
-    jest.spyOn(context.jwtService, 'verifyAsync').mockResolvedValue({});
+    jest
+      .spyOn(context.jwtService, 'verifyAsync')
+      .mockResolvedValue({ sessionId: SESSION_ID });
 
     jest
-      .spyOn(context.tokensRepository, 'findOneByAccessToken')
+      .spyOn(context.tokensRepository, 'findOneBySessionId')
       .mockResolvedValue(null);
   });
 
@@ -97,11 +102,13 @@ export const deleteEventStep: StepDefinitions = ({ given, and }) => {
     async () => {
       const USER = await getUserMockDb();
 
-      jest.spyOn(context.jwtService, 'verifyAsync').mockResolvedValue({});
+      jest
+        .spyOn(context.jwtService, 'verifyAsync')
+        .mockResolvedValue({ sessionId: SESSION_ID });
 
       jest
-        .spyOn(context.tokensRepository, 'findOneByAccessToken')
-        .mockResolvedValue(PAIR_OF_TOKENS_MOCK_DB);
+        .spyOn(context.tokensRepository, 'findOneBySessionId')
+        .mockResolvedValue(SESSION_MOCK_DB);
 
       jest
         .spyOn(context.accountRepository, 'findOneById')

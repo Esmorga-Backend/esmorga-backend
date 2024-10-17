@@ -10,10 +10,11 @@ import {
   FUTURE_EVENT_MOCK_DB,
   OLD_EVENT_MOCK_DB,
   EVENT_CORE_FIELDS_MOCK_DB,
-  PAIR_OF_TOKENS_MOCK_DB,
+  SESSION_MOCK_DB,
   EVENT_PARTICIPANT_MOCK_DB,
 } from '../../../../mocks/db';
 import { HEADERS } from '../../../../mocks/common-data';
+import { SESSION_ID } from '../../../../mocks/db/common';
 
 const PATH = '/v1/account/events';
 
@@ -48,11 +49,13 @@ export const getMyEventsStepts: StepDefinitions = ({ given, and }) => {
 
   // TC-104 TC-105 TC-107 TC-108
   and('I am authenticated with a valid accessToken', () => {
-    jest.spyOn(context.jwtService, 'verifyAsync').mockResolvedValue({});
+    jest
+      .spyOn(context.jwtService, 'verifyAsync')
+      .mockResolvedValue({ sessionId: SESSION_ID });
 
     jest
-      .spyOn(context.tokensRepository, 'findOneByAccessToken')
-      .mockResolvedValue(PAIR_OF_TOKENS_MOCK_DB);
+      .spyOn(context.tokensRepository, 'findOneBySessionId')
+      .mockResolvedValue(SESSION_MOCK_DB);
   });
 
   // TC-106

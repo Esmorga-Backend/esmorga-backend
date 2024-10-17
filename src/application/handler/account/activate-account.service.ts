@@ -11,14 +11,14 @@ import { TEMPORAL_CODE_TYPE } from '../../../domain/const';
 import { DataBaseNotFoundError } from '../../../infrastructure/db/errors';
 import { InvalidVerificationCodeApiError } from '../../../domain/errors';
 import { AccountLoggedDto } from '../../../infrastructure/dtos';
-import { GenerateTokenPair } from '../../../domain/services';
+import { SessionGenerator } from '../../../domain/services';
 
 @Injectable()
 export class ActivateAccountService {
   constructor(
     private readonly logger: PinoLogger,
     private configService: ConfigService,
-    private readonly generateTokenPair: GenerateTokenPair,
+    private readonly sessionGenerator: SessionGenerator,
     private readonly tokensRepository: TokensRepository,
     private readonly accountRepository: AccountRepository,
     private readonly temporalCodeRepository: TemporalCodeRepository,
@@ -52,15 +52,10 @@ export class ActivateAccountService {
 
       const { uuid } = userProfileUpdated;
 
-      const { accessToken, refreshToken } =
-        await this.generateTokenPair.generateTokens(uuid);
+      const { accessToken, refreshToken, sessionId } =
+        await this.sessionGenerator.generateSession(uuid);
 
-      await this.tokensRepository.saveTokens(
-        uuid,
-        accessToken,
-        refreshToken,
-        requestId,
-      );
+      await this.tokensRepository.saveSession(uuid, sessionId, requestId);
 
       const ttl = this.configService.get('ACCESS_TOKEN_TTL');
 

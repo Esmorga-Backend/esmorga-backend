@@ -74,7 +74,7 @@ export class EventController {
   @SwaggerCreateEvent()
   async createEvent(
     @Body() createEventDto: CreateEventDto,
-    @Headers('Authorization') accessToken: string,
+    @Headers('x-session-id') sessionId: string,
     @RequestId() requestId: string,
   ) {
     try {
@@ -83,7 +83,7 @@ export class EventController {
       );
 
       await this.createEventService.create(
-        accessToken,
+        sessionId,
         createEventDto,
         requestId,
       );
@@ -104,7 +104,7 @@ export class EventController {
   @SwaggerUpdateEvent()
   async updateEvent(
     @Body() updateEventDto: UpdateEventDto,
-    @Headers('Authorization') accessToken: string,
+    @Headers('x-session-id') sessionId: string,
     @RequestId() requestId: string,
   ): Promise<EventDto> {
     try {
@@ -132,7 +132,7 @@ export class EventController {
       validateNotNullableFields(fieldsToValidate);
 
       const response: EventDto = await this.updateEventService.update(
-        accessToken,
+        sessionId,
         updateEventDto,
         requestId,
       );
@@ -154,7 +154,7 @@ export class EventController {
   @HttpCode(204)
   @SwaggerDeleteEvents()
   async deleteEvent(
-    @Headers('Authorization') accessToken: string,
+    @Headers('x-session-id') sessionId: string,
     @Body() joinEventDto: EventIdDto,
     @RequestId() requestId: string,
   ) {
@@ -164,7 +164,7 @@ export class EventController {
       );
 
       await this.deleteEventService.delete(
-        accessToken,
+        sessionId,
         joinEventDto.eventId,
         requestId,
       );

@@ -22,12 +22,12 @@ export class GetMyEventsService {
   /**
    * Provide a list of not celebrated events user authenticated joined as participant.
    *
-   * @param accessToken - Token allows user a method to authenticate.
+   * @param sessionId - Client session id.
    * @param requestId - Request identifier.
    * @returns EventListDto - Object containing the total number of available events and the list of available events.
    */
   async getEvents(
-    accessToken: string,
+    sessionId: string,
     requestId?: string,
   ): Promise<EventListDto> {
     try {
@@ -35,8 +35,8 @@ export class GetMyEventsService {
         `[GetMyEventsService] [getEvents] - x-request-id: ${requestId}`,
       );
 
-      const { uuid } = await this.tokensRepository.getPairOfTokensByAccessToken(
-        accessToken,
+      const { uuid } = await this.tokensRepository.getBySessionId(
+        sessionId,
         requestId,
       );
 

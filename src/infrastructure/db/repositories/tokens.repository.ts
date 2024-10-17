@@ -4,48 +4,43 @@ import { Model } from 'mongoose';
 import { plainToClass } from 'class-transformer';
 import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository } from './mongo.repository';
-import { Tokens as TokensSchema } from '../schema';
+import { Session as SessionSchema } from '../schema';
 import { DataBaseInternalError, DataBaseUnathorizedError } from '../errors';
-import { PairOfTokensDto } from '../../dtos';
+import { SessionDto } from '../../dtos';
+import { PairOfTokensDto } from '../../dtos/pair-of-tokens.dto';
 
 @Injectable()
-export class TokensRepository extends MongoRepository<TokensSchema> {
+export class TokensRepository extends MongoRepository<SessionSchema> {
   constructor(
-    @InjectModel(TokensSchema.name) private tokensModel: Model<TokensSchema>,
+    @InjectModel(SessionSchema.name)
+    private sessionModel: Model<SessionSchema>,
     private readonly logger: PinoLogger,
   ) {
-    super(tokensModel);
+    super(sessionModel);
   }
 
   /**
    * Store a new pair of tokens for the user requested them.
    *
    * @param uuid - User identifier.
-   * @param accessToken - Access token to be saved.
-   * @param refreshToken Refresh token to be saved.
+   * @param sessionId - Client session id to be saved.
    * @param requestId - Request identifier for API logger
    */
-  async saveTokens(
-    uuid: string,
-    accessToken: string,
-    refreshToken: string,
-    requestId?: string,
-  ) {
+  async saveSession(uuid: string, sessionId: string, requestId?: string) {
     try {
       this.logger.info(
-        `[TokensRepository] [saveTokens] - x-request-id: ${requestId}, uuid: ${uuid}`,
+        `[TokensRepository] [saveSession] - x-request-id: ${requestId}, uuid: ${uuid}`,
       );
 
-      const pairOfTokens = new this.tokensModel({
+      const sessionDoc = new this.sessionModel({
         uuid,
-        accessToken,
-        refreshToken,
+        sessionId,
       });
 
-      await this.save(pairOfTokens);
+      await this.save(sessionDoc);
     } catch (error) {
       this.logger.error(
-        `[TokensRepository] [saveTokens] - x-request-id: ${requestId}, error: ${error}`,
+        `[TokensRepository] [saveSession] - x-request-id: ${requestId}, error: ${error}`,
       );
 
       throw new DataBaseInternalError();
@@ -62,7 +57,7 @@ export class TokensRepository extends MongoRepository<TokensSchema> {
   async getAllTokensByUuid(
     uuid: string,
     requestId?: string,
-  ): Promise<PairOfTokensDto[]> {
+  ): Promise<SessionDto[]> {
     try {
       this.logger.info(
         `[TokensRepository] [getAllTokensByUuid] - x-request-id: ${requestId}, uuid: ${uuid}`,
@@ -70,8 +65,8 @@ export class TokensRepository extends MongoRepository<TokensSchema> {
 
       const tokensData = await this.findByUuid(uuid);
 
-      const pairOfTokens: PairOfTokensDto[] = tokensData.map((data) => {
-        return plainToClass(PairOfTokensDto, data, {
+      const pairOfTokens: SessionDto[] = tokensData.map((data) => {
+        return plainToClass(SessionDto, data, {
           excludeExtraneousValues: true,
         });
       });
@@ -87,7 +82,7 @@ export class TokensRepository extends MongoRepository<TokensSchema> {
   }
 
   /**
-   * Get pair of tokens with user id related to the refresh provided.
+   * @deprecated Get pair of tokens with user id related to the refresh provided.
    *
    * @param refreshToken - Refresh token stored.
    * @param requestId - Request identifier for API logger.
@@ -123,33 +118,33 @@ export class TokensRepository extends MongoRepository<TokensSchema> {
   }
 
   /**
-   * Get pair of tokens with user id related to the access provided.
+   * Get sessions with user id related to the client session id provided.
    *
-   * @param acessToken - Access token stored.
+   * @param sessionId - Client session id stored.
    * @param requestId - Request identifier for API logger.
    * @returns PairOfTokensDto - Pair of tokens and user id.
    */
-  async getPairOfTokensByAccessToken(
-    acessToken: string,
+  async getBySessionId(
+    sessionId: string,
     requestId?: string,
-  ): Promise<PairOfTokensDto> {
+  ): Promise<SessionDto> {
     try {
       this.logger.info(
-        `[TokensRepository] [getPairOfTokensByAcessToken] - x-request-id: ${requestId}`,
+        `[TokensRepository] [getBySessionId] - x-request-id:${requestId}, sessionId ${sessionId}`,
       );
 
-      const tokenData = await this.findOneByAccessToken(acessToken);
+      const sessionData = await this.findOneBySessionId(sessionId);
 
-      if (!tokenData) throw new DataBaseUnathorizedError();
+      if (!sessionData) throw new DataBaseUnathorizedError();
 
-      const pairOfTokens = plainToClass(PairOfTokensDto, tokenData, {
+      const pairOfTokens = plainToClass(SessionDto, sessionData, {
         excludeExtraneousValues: true,
       });
 
       return pairOfTokens;
     } catch (error) {
       this.logger.error(
-        `[TokensRepository] [getPairOfTokensByAcessToken] - x-request-id: ${requestId}, error: ${error}`,
+        `[TokensRepository] [getBySessionId] - x-request-id: ${requestId}, error: ${error}`,
       );
 
       if (error instanceof HttpException) throw error;

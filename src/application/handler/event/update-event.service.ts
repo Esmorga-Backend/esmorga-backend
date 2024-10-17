@@ -30,12 +30,12 @@ export class UpdateEventService {
   /**
    * Update an event.
    *
-   * @param accesToken - The accesToken to authorise.
+   * @param sessionId - Client session id.
    * @param updateEventDto - Data transfer object containing event details.
    * @param requestId - The request ID for loggers.
    */
   async update(
-    accessToken: string,
+    sessionId: string,
     updateEventDto: UpdateEventDto,
     requestId?: string,
   ): Promise<EventDto> {
@@ -44,8 +44,8 @@ export class UpdateEventService {
         `[UpdateEventService] [update] - x-request-id:${requestId}`,
       );
 
-      const { uuid } = await this.tokensRepository.getPairOfTokensByAccessToken(
-        accessToken,
+      const { uuid } = await this.tokensRepository.getBySessionId(
+        sessionId,
         requestId,
       );
 

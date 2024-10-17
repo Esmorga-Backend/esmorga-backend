@@ -4,7 +4,7 @@ import {
   TokensRepository,
   TemporalCodeRepository,
 } from '../../../../../src/infrastructure/db/repositories';
-import { GenerateTokenPair } from '../../../../../src/domain/services';
+import { SessionGenerator } from '../../../../../src/domain/services';
 import { context, moduleFixture } from '../../../steps-config';
 import {
   VERIFICATION_CODE_DATA_MOCK_DB,
@@ -19,8 +19,8 @@ export const activateAccountSteps: StepDefinitions = ({ given, and }) => {
       verificationCode: '123456',
     };
 
-    context.generateTokenPair =
-      moduleFixture.get<GenerateTokenPair>(GenerateTokenPair);
+    context.sessionGenerator =
+      moduleFixture.get<SessionGenerator>(SessionGenerator);
 
     context.accountRepository =
       moduleFixture.get<AccountRepository>(AccountRepository);
@@ -42,9 +42,10 @@ export const activateAccountSteps: StepDefinitions = ({ given, and }) => {
       .spyOn(context.accountRepository, 'updateStatusByEmail')
       .mockResolvedValue(USER_MOCK_DB);
 
-    jest.spyOn(context.generateTokenPair, 'generateTokens').mockResolvedValue({
+    jest.spyOn(context.sessionGenerator, 'generateSession').mockResolvedValue({
       accessToken: 'ACCESS_TOKEN',
       refreshToken: 'REFRESH_TOKEN',
+      sessionId: 'SESSION_ID',
     });
 
     jest.spyOn(context.tokensRepository, 'save').mockResolvedValue(null);

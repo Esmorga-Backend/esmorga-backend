@@ -75,7 +75,7 @@ export class AccountController {
   @UseGuards(AuthGuard)
   @SwaggerGetMyEvents()
   async getMyEvents(
-    @Headers('Authorization') accessToken: string,
+    @Headers('x-session-id') sessionId: string,
     @RequestId() requestId: string,
   ): Promise<EventListDto> {
     try {
@@ -84,7 +84,7 @@ export class AccountController {
       );
 
       const response: EventListDto = await this.getMyEventsService.getEvents(
-        accessToken,
+        sessionId,
         requestId,
       );
 
@@ -193,7 +193,7 @@ export class AccountController {
   @SwaggerJoinEvent()
   @HttpCode(204)
   async joinEvent(
-    @Headers('Authorization') accessToken: string,
+    @Headers('x-session-id') sessionId: string,
     @Body() eventIdDto: EventIdDto,
     @RequestId() requestId: string,
   ) {
@@ -203,7 +203,7 @@ export class AccountController {
       );
 
       await this.joinEventService.joinEvent(
-        accessToken,
+        sessionId,
         eventIdDto.eventId,
         requestId,
       );
@@ -258,7 +258,7 @@ export class AccountController {
   @SwaggerDisjoinEvent()
   @HttpCode(204)
   async disJoinEvent(
-    @Headers('Authorization') accessToken: string,
+    @Headers('x-session-id') sessionId: string,
     @Body() eventIdDto: EventIdDto,
     @RequestId() requestId: string,
   ) {
@@ -268,7 +268,7 @@ export class AccountController {
       );
 
       await this.disjoinEventService.disJoinEvent(
-        accessToken,
+        sessionId,
         eventIdDto.eventId,
         requestId,
       );

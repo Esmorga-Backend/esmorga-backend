@@ -13,9 +13,10 @@ export class AuthGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context.switchToHttp().getRequest();
+    const req = context.switchToHttp().getRequest();
+    const res = context.switchToHttp().getResponse();
 
-    const { authorization, ['x-request-id']: requestId } = request.headers;
+    const { authorization, ['x-request-id']: requestId } = req.headers;
 
     this.logger.info(`[AuthGuard] - x-request-id:${requestId}`);
 
@@ -27,9 +28,17 @@ export class AuthGuard implements CanActivate {
 
       const jwtSecret = this.configService.get('JWT_SECRET');
 
-      await this.jwtService.verifyAsync(token, { secret: jwtSecret });
+      const { sessionId } = await this.jwtService.verifyAsync<{
+        uuid: string;
+        sessionId: string;
+      }>(token, { secret: jwtSecret });
 
-      request.headers.authorization = token;
+      if (!sessionId) throw new InvalidTokenApiError();
+
+      req.headers['x-session-id'] = sessionId;
+      res.set('x-session-id', sessionId);
+
+      req.headers.authorization = token;
     } catch (error) {
       this.logger.error(
         `[AuthGuard] - x-request-id:${requestId}, error ${error}`,
