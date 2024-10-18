@@ -13,7 +13,7 @@ export class DataAccessModule {
       case 'mongodb':
       default:
         dbModuleClassLoader = async () =>
-          await import('./mongo/mondo-da.module').then(
+          await import('./mongo/mongo-da.module').then(
             ({ MongoDataAccessModule }) => MongoDataAccessModule,
           );
     }
