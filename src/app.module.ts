@@ -40,7 +40,7 @@ export class AppModule implements NestModule {
             return getLoggerConfig(configService.get('NODE_ENV'));
           },
         }),
-        DataAccessModule.forRootAsync(db),
+        DataAccessModule.forRoot(db),
         EventModule,
         AccountModule,
       ],

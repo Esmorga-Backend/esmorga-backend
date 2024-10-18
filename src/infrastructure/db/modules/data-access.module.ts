@@ -1,7 +1,7 @@
 import { DynamicModule } from '@nestjs/common';
 
 export class DataAccessModule {
-  static async forRootAsync(db: 'mongodb' | 'none'): Promise<DynamicModule> {
+  static async forRoot(db: 'mongodb' | 'none'): Promise<DynamicModule> {
     let dbModuleClassLoader: () => Promise<any>;
     switch (db) {
       case 'none':
