@@ -4,7 +4,7 @@ import { PinoLogger } from 'nestjs-pino';
 import { AccountRegisterDto } from '../..//http/dtos';
 import { DataBaseInternalError, DataBaseUnathorizedError } from '../errors';
 import { UserProfileDto } from '../../dtos';
-import { validateObjectDto } from '../services';
+import { validateObjectDto } from '../utils';
 import { REQUIRED_DTO_FIELDS } from '../consts';
 import { ACCOUNT_STATUS } from '../../../domain/const';
 import { UserDA } from '../modules/none/user-da';

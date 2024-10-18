@@ -1,4 +1,4 @@
-import { validateObjectDto } from '../../../../../src/infrastructure/db/services';
+import { validateObjectDto } from '../../../../../src/infrastructure/db/utils';
 import { REQUIRED_DTO_FIELDS } from '../../../../../src/infrastructure/db/consts';
 import { DataBaseInternalError } from '../../../../../src/infrastructure/db/errors';
 import { EVENT_MOCK, USER_PROFILE_MOCK } from '../../../../mocks/dtos';

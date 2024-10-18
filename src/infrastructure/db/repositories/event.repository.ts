@@ -7,7 +7,7 @@ import {
   DataBaseInternalError,
   DataBaseNotFoundError,
 } from '../errors';
-import { validateObjectDto } from '../services';
+import { validateObjectDto } from '../utils';
 import { REQUIRED_DTO_FIELDS } from '../consts';
 import { EventDA } from '../modules/none/event-da';
 
