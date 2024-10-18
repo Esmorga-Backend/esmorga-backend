@@ -33,12 +33,6 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-    - name: Start MongoDB
-      uses: supercharge/mongodb-github-action@1.11.0
-      with:
-        mongodb-version: '7.0'
-        mongodb-db: esmorga
-        mongodb-port: 27017
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
       with:

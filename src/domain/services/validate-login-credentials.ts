@@ -61,7 +61,6 @@ export class ValidateLoginCredentialsService {
 
         throw new InvalidCredentialsLoginApiError();
       }
-
       if (status === ACCOUNT_STATUS.UNVERIFIED) {
         throw new UnverifiedUserApiError();
       }

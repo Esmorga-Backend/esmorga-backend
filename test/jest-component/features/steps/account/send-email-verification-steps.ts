@@ -1,14 +1,18 @@
 import { StepDefinitions } from 'jest-cucumber';
 import { context, moduleFixture } from '../../../steps-config';
 import { GenerateMailService } from '../../../../../src/domain/services';
-import {
-  AccountRepository,
-  TemporalCodeRepository,
-} from '../../../../../src/infrastructure/db/repositories';
 import { NodemailerService } from '../../../../../src/infrastructure/services';
 import { ACCOUNT_STATUS } from '../../../../../src/domain/const';
 import { EMAIL_MOCK } from '../../../../mocks/dtos';
-import { getUserMockDb } from '../../../../mocks/db';
+import {
+  getUserProfile,
+  PASSWORD_MOCK_DB,
+} from '../../../../mocks/db';
+import {
+  CleanPasswordSymbol,
+  UserDA,
+} from '../../../../../src/infrastructure/db/modules/none/user-da';
+import { TemporalCodeDA } from '../../../../../src/infrastructure/db/modules/none/temporal-code-da';
 
 export const sendEmailVerificationSteps: StepDefinitions = ({ given, and }) => {
   // ###### MOB-TC-182 ######
@@ -25,14 +29,11 @@ export const sendEmailVerificationSteps: StepDefinitions = ({ given, and }) => {
     context.nodemailerService =
       moduleFixture.get<NodemailerService>(NodemailerService);
 
-    context.accountRepository =
-      moduleFixture.get<AccountRepository>(AccountRepository);
+    context.userDA = moduleFixture.get<UserDA>(UserDA);
 
-    context.temporalCodeRepository = moduleFixture.get<TemporalCodeRepository>(
-      TemporalCodeRepository,
-    );
+    context.temporalCodeDA = moduleFixture.get<TemporalCodeDA>(TemporalCodeDA);
 
-    const USER_MOCK_DB = await getUserMockDb();
+    const USER_MOCK_DB = await getUserProfile();
 
     const USER_MOCK_UNVERIFIED_DB = {
       ...USER_MOCK_DB,
@@ -40,11 +41,11 @@ export const sendEmailVerificationSteps: StepDefinitions = ({ given, and }) => {
     };
 
     jest
-      .spyOn(context.accountRepository, 'findOneByEmail')
+      .spyOn(context.userDA, 'findOneByEmail')
       .mockResolvedValue(USER_MOCK_UNVERIFIED_DB);
 
     jest
-      .spyOn(context.temporalCodeRepository, 'findAndUpdateTemporalCode')
+      .spyOn(context.temporalCodeDA, 'findAndUpdateTemporalCode')
       .mockResolvedValue(null);
 
     jest.spyOn(context.nodemailerService, 'sendEmail').mockResolvedValue(null);
@@ -74,17 +75,16 @@ export const sendEmailVerificationSteps: StepDefinitions = ({ given, and }) => {
 
   and(/^email status (.*)$/, async (status) => {
     if (status === 'null') {
-      jest
-        .spyOn(context.accountRepository, 'findOneByEmail')
-        .mockResolvedValue(null);
+      jest.spyOn(context.userDA, 'findOneByEmail').mockResolvedValue(null);
     }
 
     if ((status = ACCOUNT_STATUS.ACTIVE)) {
-      const USER_MOCK_DB = await getUserMockDb();
+      const USER_MOCK_DB = await getUserProfile();
 
-      jest
-        .spyOn(context.accountRepository, 'findOneByEmail')
-        .mockResolvedValue(USER_MOCK_DB);
+      jest.spyOn(context.userDA, 'findOneByEmail').mockResolvedValue({
+        ...USER_MOCK_DB,
+        [CleanPasswordSymbol]: PASSWORD_MOCK_DB,
+      });
     }
   });
 

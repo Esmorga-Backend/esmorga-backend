@@ -1,20 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
 import { PinoLogger } from 'nestjs-pino';
-import { MongoRepository } from './mongo.repository';
-import { LoginAttempts as LoginAttemptsSchema } from '../schema';
 import { DataBaseInternalError } from '../errors';
+import { LoginAttemptsDA } from '../modules/none/login-attempts-da';
 
 @Injectable()
-export class LoginAttemptsRepository extends MongoRepository<LoginAttemptsSchema> {
+export class LoginAttemptsRepository {
   constructor(
-    @InjectModel(LoginAttemptsSchema.name)
-    loginAttemptsModel: Model<LoginAttemptsSchema>,
+    private readonly loginAttemptsDA: LoginAttemptsDA,
     private readonly logger: PinoLogger,
-  ) {
-    super(loginAttemptsModel);
-  }
+  ) {}
 
   /**
    * Updates the login attempts for a user identified by the uuid.
@@ -29,9 +23,7 @@ export class LoginAttemptsRepository extends MongoRepository<LoginAttemptsSchema
         `[LoginAttemptsRepository] [updateLoginAttempts] - x-request-id: ${requestId}`,
       );
 
-      const attemptsUpdated = await this.findAndUpdateLoginAttempts(uuid);
-
-      return attemptsUpdated.loginAttempts;
+      return await this.loginAttemptsDA.findAndUpdateLoginAttempts(uuid);
     } catch (error) {
       this.logger.error(
         `[LoginAttemptsRepository] [updateLoginAttempts] - x-request-id: ${requestId}, error: ${error}`,
@@ -53,7 +45,7 @@ export class LoginAttemptsRepository extends MongoRepository<LoginAttemptsSchema
         `[LoginAttemptsRepository] [removeLoginAttempts] - x-request-id: ${requestId}`,
       );
 
-      await this.removeByUuid(uuid);
+      await this.loginAttemptsDA.removeByUuid(uuid);
     } catch (error) {
       this.logger.error(
         `[LoginAttemptsRepository] [removeLoginAttempts] - x-request-id: ${requestId}, error: ${error}`,

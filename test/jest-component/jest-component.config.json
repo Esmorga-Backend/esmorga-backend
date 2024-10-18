@@ -18,7 +18,9 @@
     "/main\\.ts$",
     "/index\\.ts$",
     "/src/domain/entities/.*\\.ts$",
-    "/src/infrastructure/db/repositories/mongo.repository\\.ts$"
+    "/src/infrastructure/services/.*\\.ts$",
+    "/src/infrastructure/db/modules/.*",
+    "/src/config/execute-migrations\\.ts"
   ],
   "testPathIgnorePatterns": [
     "/node_modules/",

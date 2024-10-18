@@ -1,23 +1,18 @@
 import { HttpException, Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { plainToClass } from 'class-transformer';
 import { PinoLogger } from 'nestjs-pino';
-import { MongoRepository } from './mongo.repository';
-import { Session as SessionSchema } from '../schema';
 import { DataBaseInternalError, DataBaseUnathorizedError } from '../errors';
 import { SessionDto } from '../../dtos';
+import { SessionDA } from '../modules/none/session-da';
 import { PairOfTokensDto } from '../../dtos/pair-of-tokens.dto';
+import { TokensDA } from '../modules/none/tokens-da';
 
 @Injectable()
-export class TokensRepository extends MongoRepository<SessionSchema> {
+export class TokensRepository {
   constructor(
-    @InjectModel(SessionSchema.name)
-    private sessionModel: Model<SessionSchema>,
+    private sessionDA: SessionDA,
+    private tokensDA: TokensDA,
     private readonly logger: PinoLogger,
-  ) {
-    super(sessionModel);
-  }
+  ) {}
 
   /**
    * Store a new pair of tokens for the user requested them.
@@ -31,13 +26,7 @@ export class TokensRepository extends MongoRepository<SessionSchema> {
       this.logger.info(
         `[TokensRepository] [saveSession] - x-request-id: ${requestId}, uuid: ${uuid}`,
       );
-
-      const sessionDoc = new this.sessionModel({
-        uuid,
-        sessionId,
-      });
-
-      await this.save(sessionDoc);
+      await this.sessionDA.create(uuid, sessionId);
     } catch (error) {
       this.logger.error(
         `[TokensRepository] [saveSession] - x-request-id: ${requestId}, error: ${error}`,
@@ -62,16 +51,7 @@ export class TokensRepository extends MongoRepository<SessionSchema> {
       this.logger.info(
         `[TokensRepository] [getAllTokensByUuid] - x-request-id: ${requestId}, uuid: ${uuid}`,
       );
-
-      const tokensData = await this.findByUuid(uuid);
-
-      const pairOfTokens: SessionDto[] = tokensData.map((data) => {
-        return plainToClass(SessionDto, data, {
-          excludeExtraneousValues: true,
-        });
-      });
-
-      return pairOfTokens;
+      return await this.sessionDA.findByUuid(uuid);
     } catch (error) {
       this.logger.error(
         `[TokensRepository] [getAllTokensByUuid] - x-request-id: ${requestId}, error: ${error}`,
@@ -96,23 +76,15 @@ export class TokensRepository extends MongoRepository<SessionSchema> {
       this.logger.info(
         `[TokensRepository] [getPairOfTokensByRefreshToken] - x-request-id:${requestId}, refreshToken ${refreshToken}`,
       );
-
-      const tokenData = await this.findOneByRefreshToken(refreshToken);
-
-      if (!tokenData) throw new DataBaseUnathorizedError();
-
-      const pairOfTokens = plainToClass(PairOfTokensDto, tokenData, {
-        excludeExtraneousValues: true,
-      });
-
+      const pairOfTokens =
+        await this.tokensDA.findOneByRefreshToken(refreshToken);
+      if (!pairOfTokens) throw new DataBaseUnathorizedError();
       return pairOfTokens;
     } catch (error) {
       this.logger.error(
         `[TokensRepository] [getPairOfTokensByRefreshToken] - x-request-id: ${requestId}, error: ${error}`,
       );
-
       if (error instanceof HttpException) throw error;
-
       throw new DataBaseInternalError();
     }
   }
@@ -132,16 +104,9 @@ export class TokensRepository extends MongoRepository<SessionSchema> {
       this.logger.info(
         `[TokensRepository] [getBySessionId] - x-request-id:${requestId}, sessionId ${sessionId}`,
       );
-
-      const sessionData = await this.findOneBySessionId(sessionId);
-
+      const sessionData = await this.sessionDA.findOneBySessionId(sessionId);
       if (!sessionData) throw new DataBaseUnathorizedError();
-
-      const pairOfTokens = plainToClass(SessionDto, sessionData, {
-        excludeExtraneousValues: true,
-      });
-
-      return pairOfTokens;
+      return sessionData;
     } catch (error) {
       this.logger.error(
         `[TokensRepository] [getBySessionId] - x-request-id: ${requestId}, error: ${error}`,
@@ -163,13 +128,11 @@ export class TokensRepository extends MongoRepository<SessionSchema> {
       this.logger.info(
         `[TokensRepository] [removeTokensById] - x-request-id: ${requestId}, tokensId: ${id}`,
       );
-
-      await this.removeById(id);
+      await this.sessionDA.removeById(id);
     } catch (error) {
       this.logger.error(
         `[TokensRepository] [removeTokensById] - x-request-id: ${requestId}, error: ${error}`,
       );
-
       throw new DataBaseInternalError();
     }
   }

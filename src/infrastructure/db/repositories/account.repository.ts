@@ -1,27 +1,21 @@
 import { HttpException, Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
 import { ConfigService } from '@nestjs/config';
-import { Model } from 'mongoose';
-import { plainToClass } from 'class-transformer';
 import { PinoLogger } from 'nestjs-pino';
 import { AccountRegisterDto } from '../..//http/dtos';
-import { MongoRepository } from './mongo.repository';
-import { User as UserSchema } from '../schema';
 import { DataBaseInternalError, DataBaseUnathorizedError } from '../errors';
 import { UserProfileDto } from '../../dtos';
-import { validateObjectDto } from '../services';
+import { validateObjectDto } from '../utils';
 import { REQUIRED_DTO_FIELDS } from '../consts';
 import { ACCOUNT_STATUS } from '../../../domain/const';
+import { UserDA } from '../modules/none/user-da';
 
 @Injectable()
-export class AccountRepository extends MongoRepository<UserSchema> {
+export class AccountRepository {
   constructor(
-    @InjectModel(UserSchema.name) private userModel: Model<UserSchema>,
+    private userDA: UserDA,
     private readonly logger: PinoLogger,
     private configService: ConfigService,
-  ) {
-    super(userModel);
-  }
+  ) { }
 
   /**
    * Find an user by id.
@@ -37,13 +31,9 @@ export class AccountRepository extends MongoRepository<UserSchema> {
         `[AccountRepository] [getUserById] - x-request-id: ${requestId}, id: ${id}`,
       );
 
-      const user = await this.findOneById(id);
+      const userProfile = await this.userDA.findOneById(id);
 
-      if (!user) throw new DataBaseUnathorizedError();
-
-      const userProfile: UserProfileDto = plainToClass(UserProfileDto, user, {
-        excludeExtraneousValues: true,
-      });
+      if (!userProfile) throw new DataBaseUnathorizedError();
 
       validateObjectDto(userProfile, REQUIRED_DTO_FIELDS.USER_PROFILE);
 
@@ -67,23 +57,22 @@ export class AccountRepository extends MongoRepository<UserSchema> {
    * @returns User data following business schema.
    * @throws DataBaseUnathorizedError - User not found.
    */
-  async getUserByEmail(email: string, requestId?: string) {
+  async getUserByEmail(
+    email: string,
+    requestId?: string,
+  ): Promise<UserProfileDto> {
     try {
       this.logger.info(
         `[AccountRepository] [getUserByEmail] - x-request-id: ${requestId}, email: ${email}`,
       );
 
-      const user = await this.findOneByEmail(email);
+      const userProfile = await this.userDA.findOneByEmail(email);
 
-      if (!user) throw new DataBaseUnathorizedError();
-
-      const userProfile: UserProfileDto = plainToClass(UserProfileDto, user, {
-        excludeExtraneousValues: true,
-      });
+      if (!userProfile) return null;
 
       validateObjectDto(userProfile, REQUIRED_DTO_FIELDS.USER_PROFILE);
 
-      return { userProfile, password: user.password };
+      return userProfile;
     } catch (error) {
       this.logger.error(
         `[AccountRepository] [getUserByEmail] - x-request-id: ${requestId}, error: ${error}`,
@@ -102,13 +91,16 @@ export class AccountRepository extends MongoRepository<UserSchema> {
    * @param requestId - Request identifier.
    * @returns User profile data if exist.
    */
-  async accountExist(email: string, requestId?: string) {
+  async accountExist(
+    email: string,
+    requestId?: string,
+  ): Promise<UserProfileDto> {
     try {
       this.logger.info(
         `[AccountRepository] [accountExist] - x-request-id: ${requestId}, email: ${email}`,
       );
 
-      return this.findOneByEmail(email);
+      return this.userDA.findOneByEmail(email);
     } catch (error) {
       this.logger.error(
         `[AccountRepository] [accountExist] - x-request-id: ${requestId}, error: ${error}`,
@@ -135,10 +127,7 @@ export class AccountRepository extends MongoRepository<UserSchema> {
         `[AccountRepository] [updateAccountPassword] - x-request-id: ${requestId}, email: ${email}`,
       );
 
-      const userDoc = await this.updatePasswordByEmail(email, password);
-      return plainToClass(UserProfileDto, userDoc, {
-        excludeExtraneousValues: true,
-      });
+      return await this.userDA.updatePasswordByEmail(email, password);
     } catch (error) {
       this.logger.error(
         `[AccountRepository] [updateAccountPassword] - x-request-id: ${requestId}, error: ${error}`,
@@ -164,17 +153,9 @@ export class AccountRepository extends MongoRepository<UserSchema> {
         `[AccountRepository] [activateAccountByEmail] - x-request-id: ${requestId}, email: ${email}`,
       );
 
-      const account = await this.updateStatusByEmail(
+      const userProfile = await this.userDA.updateStatusByEmail(
         email,
         ACCOUNT_STATUS.ACTIVE,
-      );
-
-      const userProfile: UserProfileDto = plainToClass(
-        UserProfileDto,
-        account,
-        {
-          excludeExtraneousValues: true,
-        },
       );
 
       validateObjectDto(userProfile, REQUIRED_DTO_FIELDS.USER_PROFILE);
@@ -202,20 +183,10 @@ export class AccountRepository extends MongoRepository<UserSchema> {
       this.logger.info(
         `[AccountRepository] [unblockAccountByEmail] - x-request-id: ${requestId}, email: ${email}`,
       );
-
-      const account = await this.updateStatusByEmail(
+      const userProfile = await this.userDA.updateStatusByEmail(
         email,
         ACCOUNT_STATUS.ACTIVE,
       );
-
-      const userProfile: UserProfileDto = plainToClass(
-        UserProfileDto,
-        account,
-        {
-          excludeExtraneousValues: true,
-        },
-      );
-
       return userProfile.status;
     } catch (error) {
       this.logger.error(
@@ -243,7 +214,7 @@ export class AccountRepository extends MongoRepository<UserSchema> {
 
       const unblockDate = new Date(Date.now() + userTimeBlock);
 
-      await this.updateBlockedStatusByUuid(
+      await this.userDA.updateBlockedStatusByUuid(
         uuid,
         ACCOUNT_STATUS.BLOCKED,
         unblockDate,
@@ -268,10 +239,7 @@ export class AccountRepository extends MongoRepository<UserSchema> {
       this.logger.info(
         `[AccountRepository] [saveUser] - x-request-id: ${requestId}, email: ${userData.email}`,
       );
-
-      const user = new this.userModel(userData);
-
-      await this.save(user);
+      await this.userDA.create(userData);
     } catch (error) {
       this.logger.error(
         `[AccountRepository] [saveUser] - x-request-id: ${requestId}, error: ${error}`,

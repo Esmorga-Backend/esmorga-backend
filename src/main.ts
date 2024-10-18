@@ -12,7 +12,9 @@ const DNS_NAME = process.env.DNS_NAME;
 async function main() {
   executeMigrations();
 
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(
+    AppModule.forRoot('mongodb'),
+  );
 
   app.set('trust proxy', true);
 

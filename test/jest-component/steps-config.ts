@@ -15,7 +15,7 @@ let moduleFixture: TestingModule;
 
 beforeEach(async () => {
   moduleFixture = await Test.createTestingModule({
-    imports: [AppModule],
+    imports: [AppModule.forRoot('none')],
   }).compile();
   app = moduleFixture.createNestApplication();
   app.useGlobalPipes(new ValidationPipe());

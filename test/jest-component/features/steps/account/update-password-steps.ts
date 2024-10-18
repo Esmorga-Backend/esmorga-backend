@@ -1,15 +1,13 @@
 import { StepDefinitions } from 'jest-cucumber';
 import { context, moduleFixture } from '../../../steps-config';
-import {
-  AccountRepository,
-  LoginAttemptsRepository,
-  TemporalCodeRepository,
-} from '../../../../../src/infrastructure/db/repositories';
 import { USER_MOCK_DB_ID } from '../../../../mocks/db/common';
 import {
-  getUserMockDb,
+  getUserProfile,
   VERIFICATION_CODE_DATA_MOCK_DB,
 } from '../../../../mocks/db';
+import { UserDA } from '../../../../../src/infrastructure/db/modules/none/user-da';
+import { TemporalCodeDA } from '../../../../../src/infrastructure/db/modules/none/temporal-code-da';
+import { LoginAttemptsDA } from '../../../../../src/infrastructure/db/modules/none/login-attempts-da';
 
 export const updatePasswordSteps: StepDefinitions = ({ given, and }) => {
   given('The PUT password update API is available', () => {
@@ -20,53 +18,44 @@ export const updatePasswordSteps: StepDefinitions = ({ given, and }) => {
       forgotPasswordCode: '123456',
     };
 
-    context.accountRepository =
-      moduleFixture.get<AccountRepository>(AccountRepository);
+    context.userDA = moduleFixture.get<UserDA>(UserDA);
 
-    context.temporalCodeRepository = moduleFixture.get<TemporalCodeRepository>(
-      TemporalCodeRepository,
-    );
+    context.temporalCodeDA = moduleFixture.get<TemporalCodeDA>(TemporalCodeDA);
 
-    context.loginAttemptsRepository =
-      moduleFixture.get<LoginAttemptsRepository>(LoginAttemptsRepository);
+    context.loginAttemptsDA =
+      moduleFixture.get<LoginAttemptsDA>(LoginAttemptsDA);
 
     jest
-      .spyOn(context.temporalCodeRepository, 'findOneByCodeAndType')
+      .spyOn(context.temporalCodeDA, 'findOneByCodeAndType')
       .mockResolvedValue(VERIFICATION_CODE_DATA_MOCK_DB);
 
     jest
-      .spyOn(context.accountRepository, 'updatePasswordByEmail')
-      .mockResolvedValue(getUserMockDb());
+      .spyOn(context.userDA, 'updatePasswordByEmail')
+      .mockResolvedValue(getUserProfile());
 
     jest
-      .spyOn(context.accountRepository, 'updateBlockedStatusByUuid')
+      .spyOn(context.userDA, 'updateBlockedStatusByUuid')
       .mockResolvedValue(null);
 
-    jest
-      .spyOn(context.temporalCodeRepository, 'removeById')
-      .mockResolvedValue(null);
+    jest.spyOn(context.temporalCodeDA, 'removeById').mockResolvedValue(null);
 
-    jest
-      .spyOn(context.loginAttemptsRepository, 'removeByUuid')
-      .mockResolvedValue(null);
+    jest.spyOn(context.loginAttemptsDA, 'removeByUuid').mockResolvedValue(null);
   });
 
   and('forgotPasswordCode provided expired', () => {
     jest
-      .spyOn(context.temporalCodeRepository, 'findOneByCodeAndType')
+      .spyOn(context.temporalCodeDA, 'findOneByCodeAndType')
       .mockResolvedValue(null);
   });
 
   and('counter is reset', () => {
-    expect(context.loginAttemptsRepository.removeByUuid).toHaveBeenCalledWith(
+    expect(context.loginAttemptsDA.removeByUuid).toHaveBeenCalledWith(
       USER_MOCK_DB_ID,
     );
   });
 
   and('user status has changed to ACTIVE', () => {
-    expect(
-      context.accountRepository.updatePasswordByEmail,
-    ).toHaveBeenCalledWith(
+    expect(context.userDA.updatePasswordByEmail).toHaveBeenCalledWith(
       'esmorga.test.03@yopmail.com',
       expect.stringContaining('$argon2id$v=19$m=65536'),
     );

@@ -1,5 +1,5 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
-import { ACCOUNT_ROLES, ACCOUNT_STATUS } from '../../../domain/const';
+import { ACCOUNT_ROLES, ACCOUNT_STATUS } from '../../../../../domain/const';
 
 @Schema({ timestamps: true })
 export class User {

@@ -52,7 +52,7 @@ export class RefreshTokenService {
             requestId,
           );
 
-        id = pairOfTokens.id;
+        id = null;
         uuid = pairOfTokens.uuid;
       } else {
         const pairOfTokens = await this.tokensRepository.getBySessionId(
@@ -67,7 +67,7 @@ export class RefreshTokenService {
       this.logger.info(
         `[RegisterService] [refreshToken] - x-request-id:${requestId}, refreshToken ${refreshToken}`,
       );
-
+      if (!uuid) throw new InvalidCredentialsRefreshApiError();
       const {
         accessToken,
         refreshToken: newRefreshToken,
