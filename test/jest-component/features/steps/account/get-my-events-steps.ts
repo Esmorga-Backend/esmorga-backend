@@ -2,19 +2,17 @@ import { JwtService } from '@nestjs/jwt';
 import { StepDefinitions } from 'jest-cucumber';
 import { context, moduleFixture } from '../../../steps-config';
 import {
-  EventRepository,
-  TokensRepository,
-  EventParticipantsRepository,
-} from '../../../../../src/infrastructure/db/repositories';
-import {
-  FUTURE_EVENT_MOCK_DB,
-  OLD_EVENT_MOCK_DB,
-  EVENT_CORE_FIELDS_MOCK_DB,
   SESSION_MOCK_DB,
   EVENT_PARTICIPANT_MOCK_DB,
+  FUTURE_EVENT_MOCK_DTO,
+  OLD_EVENT_MOCK_DTO,
+  EVENT_CORE_FIELDS_MOCK_DTO,
 } from '../../../../mocks/db';
 import { HEADERS } from '../../../../mocks/common-data';
 import { SESSION_ID } from '../../../../mocks/db/common';
+import { EventDA } from '../../../../../src/infrastructure/db/modules/none/event-da';
+import { EventParticipantsDA } from '../../../../../src/infrastructure/db/modules/none/event-participant-da';
+import { SessionDA } from '../../../../../src/infrastructure/db/modules/none/session-da';
 
 const PATH = '/v1/account/events';
 
@@ -31,19 +29,15 @@ export const getMyEventsStepts: StepDefinitions = ({ given, and }) => {
 
     context.jwtService = moduleFixture.get<JwtService>(JwtService);
 
-    context.eventRepository =
-      moduleFixture.get<EventRepository>(EventRepository);
+    context.eventDA = moduleFixture.get<EventDA>(EventDA);
 
-    context.tokensRepository =
-      moduleFixture.get<TokensRepository>(TokensRepository);
+    context.sessionDA = moduleFixture.get<SessionDA>(SessionDA);
 
-    context.eventParticipantsRepository =
-      moduleFixture.get<EventParticipantsRepository>(
-        EventParticipantsRepository,
-      );
+    context.eventParticipantsDA =
+      moduleFixture.get<EventParticipantsDA>(EventParticipantsDA);
 
     jest
-      .spyOn(context.eventParticipantsRepository, 'findEventParticipant')
+      .spyOn(context.eventParticipantsDA, 'findEventParticipant')
       .mockResolvedValue([EVENT_PARTICIPANT_MOCK_DB]);
   });
 
@@ -54,7 +48,7 @@ export const getMyEventsStepts: StepDefinitions = ({ given, and }) => {
       .mockResolvedValue({ sessionId: SESSION_ID });
 
     jest
-      .spyOn(context.tokensRepository, 'findOneBySessionId')
+      .spyOn(context.sessionDA, 'findOneBySessionId')
       .mockResolvedValue(SESSION_MOCK_DB);
   });
 
@@ -66,31 +60,31 @@ export const getMyEventsStepts: StepDefinitions = ({ given, and }) => {
   // TC-105
   and('there are not upcoming events that I have joined', () => {
     jest
-      .spyOn(context.eventParticipantsRepository, 'findEventParticipant')
+      .spyOn(context.eventParticipantsDA, 'findEventParticipant')
       .mockResolvedValue([]);
 
-    jest.spyOn(context.eventRepository, 'findByEventIds').mockResolvedValue([]);
+    jest.spyOn(context.eventDA, 'findByEventIds').mockResolvedValue([]);
   });
 
   // TC-104
   and('there are upcoming events that I have joined', () => {
     jest
-      .spyOn(context.eventRepository, 'findByEventIds')
-      .mockResolvedValue([FUTURE_EVENT_MOCK_DB]);
+      .spyOn(context.eventDA, 'findByEventIds')
+      .mockResolvedValue([FUTURE_EVENT_MOCK_DTO]);
   });
 
   // TC-107
   and('I only joined celebrated events', () => {
     jest
-      .spyOn(context.eventRepository, 'findByEventIds')
-      .mockResolvedValue([OLD_EVENT_MOCK_DB]);
+      .spyOn(context.eventDA, 'findByEventIds')
+      .mockResolvedValue([OLD_EVENT_MOCK_DTO]);
   });
 
   // TC-108
   and('there are upcoming events I have joined that are missing data', () => {
     jest
-      .spyOn(context.eventRepository, 'findByEventIds')
-      .mockResolvedValue([EVENT_CORE_FIELDS_MOCK_DB]);
+      .spyOn(context.eventDA, 'findByEventIds')
+      .mockResolvedValue([EVENT_CORE_FIELDS_MOCK_DTO]);
   });
 
   // TC-105 TC-107

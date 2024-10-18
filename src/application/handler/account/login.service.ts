@@ -25,6 +25,7 @@ import {
   InvalidCredentialsLoginApiError,
   UnverifiedUserApiError,
 } from '../../../domain/errors';
+import { CleanPasswordSymbol } from '../../../infrastructure/db/modules/none/user-da';
 
 @Injectable()
 export class LoginService {
@@ -59,12 +60,15 @@ export class LoginService {
 
       const { email, password } = accountLoginDto;
 
-      const { userProfile, password: userDbPassword } =
-        await this.accountRepository.getUserByEmail(email, requestId);
-
+      const userProfile = await this.accountRepository.getUserByEmail(
+        email,
+        requestId,
+      );
+      if (!userProfile) {
+        throw new DataBaseUnathorizedError();
+      }
       const { expireBlockedAt, uuid } = userProfile;
       let { status } = userProfile;
-
       const currentDate = new Date();
 
       if (expireBlockedAt && currentDate >= expireBlockedAt) {
@@ -76,7 +80,7 @@ export class LoginService {
 
       await this.validateLoginCredentialsService.validateLoginCredentials(
         uuid,
-        userDbPassword,
+        userProfile[CleanPasswordSymbol],
         password,
         status,
         requestId,

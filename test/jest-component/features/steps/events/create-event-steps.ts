@@ -5,16 +5,14 @@ import {
   CREATE_EVENT_MOCK,
   CREATE_EVENT_WITHOUT_OPTIONAL_FIELDS_MOCK,
 } from '../../../../mocks/dtos';
-import {
-  AccountRepository,
-  EventRepository,
-  TokensRepository,
-} from '../../../../../src/infrastructure/db/repositories';
 import { ACCOUNT_ROLES } from '../../../../../src/domain/const';
-import { getUserMockDb, SESSION_MOCK_DB } from '../../../../mocks/db';
+import { getUserProfile, SESSION_MOCK_DB } from '../../../../mocks/db';
 
 import { HEADERS } from '../../../../mocks/common-data';
 import { SESSION_ID } from '../../../../mocks/db/common';
+import { UserDA } from '../../../../../src/infrastructure/db/modules/none/user-da';
+import { EventDA } from '../../../../../src/infrastructure/db/modules/none/event-da';
+import { SessionDA } from '../../../../../src/infrastructure/db/modules/none/session-da';
 
 export const createEventSteps: StepDefinitions = ({ given, and }) => {
   // ###### TC-19 ######
@@ -26,35 +24,30 @@ export const createEventSteps: StepDefinitions = ({ given, and }) => {
 
     context.jwtService = moduleFixture.get<JwtService>(JwtService);
 
-    context.accountRepository =
-      moduleFixture.get<AccountRepository>(AccountRepository);
+    context.userDA = moduleFixture.get<UserDA>(UserDA);
 
-    context.eventRepository =
-      moduleFixture.get<EventRepository>(EventRepository);
+    context.eventDA = moduleFixture.get<EventDA>(EventDA);
 
-    context.tokensRepository =
-      moduleFixture.get<TokensRepository>(TokensRepository);
+    context.sessionDA = moduleFixture.get<SessionDA>(SessionDA);
 
     jest
       .spyOn(context.jwtService, 'verifyAsync')
       .mockResolvedValue({ sessionId: SESSION_ID });
 
     jest
-      .spyOn(context.tokensRepository, 'findOneBySessionId')
+      .spyOn(context.sessionDA, 'findOneBySessionId')
       .mockResolvedValue(SESSION_MOCK_DB);
 
-    jest.spyOn(context.eventRepository, 'save').mockResolvedValue(null);
+    jest.spyOn(context.eventDA, 'create').mockResolvedValue(null);
   });
 
   and('an authenticated user with admin rights is logged in', async () => {
     const ADMIN_USER = {
-      ...(await getUserMockDb()),
+      ...(await getUserProfile()),
       role: ACCOUNT_ROLES.ADMIN,
     };
 
-    jest
-      .spyOn(context.accountRepository, 'findOneById')
-      .mockResolvedValue(ADMIN_USER);
+    jest.spyOn(context.userDA, 'findOneById').mockResolvedValue(ADMIN_USER);
   });
 
   and(
@@ -68,17 +61,13 @@ export const createEventSteps: StepDefinitions = ({ given, and }) => {
 
   // ###### TC-21 ######
   and('an unauthenticated user', () => {
-    jest
-      .spyOn(context.tokensRepository, 'findOneBySessionId')
-      .mockResolvedValue(null);
+    jest.spyOn(context.sessionDA, 'findOneBySessionId').mockResolvedValue(null);
   });
 
   // ###### TC-22 ######
   and('an authenticated user without admin rights is logged in', async () => {
-    const USER = await getUserMockDb();
+    const USER = await getUserProfile();
 
-    jest
-      .spyOn(context.accountRepository, 'findOneById')
-      .mockResolvedValue(USER);
+    jest.spyOn(context.userDA, 'findOneById').mockResolvedValue(USER);
   });
 };

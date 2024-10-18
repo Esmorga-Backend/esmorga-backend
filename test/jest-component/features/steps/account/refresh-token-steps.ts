@@ -1,37 +1,34 @@
 import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 import { StepDefinitions } from 'jest-cucumber';
 import { context, moduleFixture } from '../../../steps-config';
 import { SessionGenerator } from '../../../../../src/domain/services';
-import {
-  AccountRepository,
-  TokensRepository,
-} from '../../../../../src/infrastructure/db/repositories';
-
-import { SESSION_MOCK_DB, TTL_MOCK_DB } from '../../../../mocks/db';
+import { SESSION_MOCK_DB } from '../../../../mocks/db';
 import { SESSION_ID } from '../../../../mocks/db/common';
+import { UserDA } from '../../../../../src/infrastructure/db/modules/none/user-da';
+import { SessionDA } from '../../../../../src/infrastructure/db/modules/none/session-da';
 
 export const refreshTokenSteps: StepDefinitions = ({ given, and }) => {
+  let TTL = 0;
   given('the POST RefreshToken API is available', () => {
-    context.accountRepository =
-      moduleFixture.get<AccountRepository>(AccountRepository);
-    context.tokensRepository =
-      moduleFixture.get<TokensRepository>(TokensRepository);
+    const configService = moduleFixture.get<ConfigService>(ConfigService);
+    TTL = configService.get('ACCESS_TOKEN_TTL');
+    context.userDA = moduleFixture.get<UserDA>(UserDA);
+    context.sessionDA = moduleFixture.get<SessionDA>(SessionDA);
     context.sessionGenerator =
       moduleFixture.get<SessionGenerator>(SessionGenerator);
     context.jwtService = moduleFixture.get<JwtService>(JwtService);
     context.path = '/v1/account/refresh';
-    jest
-      .spyOn(context.tokensRepository, 'findOneBySessionId')
-      .mockResolvedValue(null);
+    jest.spyOn(context.sessionDA, 'findOneBySessionId').mockResolvedValue(null);
 
     jest.spyOn(context.sessionGenerator, 'generateSession').mockResolvedValue({
       accessToken: 'newAccessToken',
       refreshToken: 'newRefreshToken',
       sessionId: 'SESSION_ID',
     });
-    jest.spyOn(context.tokensRepository, 'save').mockResolvedValue(null);
+    jest.spyOn(context.sessionDA, 'create').mockResolvedValue(null);
 
-    jest.spyOn(context.tokensRepository, 'removeById').mockResolvedValue(null);
+    jest.spyOn(context.sessionDA, 'removeById').mockResolvedValue(null);
   });
 
   and(/^use refreshToken (\w+)$/, (refreshToken) => {
@@ -52,7 +49,7 @@ export const refreshTokenSteps: StepDefinitions = ({ given, and }) => {
         });
 
       jest
-        .spyOn(context.tokensRepository, 'findOneBySessionId')
+        .spyOn(context.sessionDA, 'findOneBySessionId')
         .mockResolvedValue(SESSION_MOCK_DB);
     }
   });
@@ -63,7 +60,7 @@ export const refreshTokenSteps: StepDefinitions = ({ given, and }) => {
       expect(context.response.body).toMatchObject({
         accessToken: 'newAccessToken',
         refreshToken: 'newRefreshToken',
-        ttl: TTL_MOCK_DB,
+        ttl: TTL,
       });
     },
   );

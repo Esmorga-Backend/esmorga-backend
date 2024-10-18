@@ -1,22 +1,24 @@
 import { HttpStatus } from '@nestjs/common';
 import { StepDefinitions } from 'jest-cucumber';
 import { matchers } from 'jest-json-schema';
-import { EventRepository } from '../../../../../src/infrastructure/db/repositories';
 import { context, moduleFixture } from '../../../steps-config';
-import { FUTURE_EVENT_MOCK_DB, OLD_EVENT_MOCK_DB } from '../../../../mocks/db';
+import {
+  FUTURE_EVENT_MOCK_DTO,
+  OLD_EVENT_MOCK_DTO,
+} from '../../../../mocks/db';
+import { EventDA } from '../../../../../src/infrastructure/db/modules/none/event-da';
 
 export const getEventsSteps: StepDefinitions = ({ given, and, then }) => {
   given('the GET Events API is available', () => {
     context.path = '/v1/events';
 
-    context.eventRepository =
-      moduleFixture.get<EventRepository>(EventRepository);
-    jest.spyOn(context.eventRepository, 'find').mockResolvedValue([]);
+    context.eventDA = moduleFixture.get<EventDA>(EventDA);
+    jest.spyOn(context.eventDA, 'find').mockResolvedValue([]);
   });
 
   given('the GET Events API is unavailable', () => {
     context.path = '/v1/events';
-    jest.spyOn(context.eventRepository, 'find').mockRejectedValue(new Error());
+    jest.spyOn(context.eventDA, 'find').mockRejectedValue(new Error());
   });
 
   and(
@@ -24,16 +26,16 @@ export const getEventsSteps: StepDefinitions = ({ given, and, then }) => {
     (events_on_db, expired_events_on_db) => {
       if (expired_events_on_db == 1 && events_on_db == 2) {
         jest
-          .spyOn(context.eventRepository, 'find')
-          .mockResolvedValue([FUTURE_EVENT_MOCK_DB, OLD_EVENT_MOCK_DB]);
+          .spyOn(context.eventDA, 'find')
+          .mockResolvedValue([FUTURE_EVENT_MOCK_DTO, OLD_EVENT_MOCK_DTO]);
       } else if (expired_events_on_db == 1 && events_on_db == 1) {
         jest
-          .spyOn(context.eventRepository, 'find')
-          .mockResolvedValue([OLD_EVENT_MOCK_DB]);
+          .spyOn(context.eventDA, 'find')
+          .mockResolvedValue([OLD_EVENT_MOCK_DTO]);
       } else if (events_on_db == 1) {
         jest
-          .spyOn(context.eventRepository, 'find')
-          .mockResolvedValue([FUTURE_EVENT_MOCK_DB]);
+          .spyOn(context.eventDA, 'find')
+          .mockResolvedValue([FUTURE_EVENT_MOCK_DTO]);
       }
     },
   );
@@ -49,18 +51,7 @@ export const getEventsSteps: StepDefinitions = ({ given, and, then }) => {
       if (events_to_check == 1) {
         expect(context.response.body).toEqual({
           totalEvents: 1,
-          events: [
-            {
-              eventId: FUTURE_EVENT_MOCK_DB._id,
-              eventName: FUTURE_EVENT_MOCK_DB.eventName,
-              eventDate: FUTURE_EVENT_MOCK_DB.eventDate.toISOString(),
-              description: FUTURE_EVENT_MOCK_DB.description,
-              eventType: FUTURE_EVENT_MOCK_DB.eventType,
-              imageUrl: FUTURE_EVENT_MOCK_DB.imageUrl,
-              location: FUTURE_EVENT_MOCK_DB.location,
-              tags: FUTURE_EVENT_MOCK_DB.tags,
-            },
-          ],
+          events: [JSON.parse(JSON.stringify(FUTURE_EVENT_MOCK_DTO))],
         });
       } else if (events_to_check == 0) {
         expect(context.response.body).toEqual({

@@ -1,15 +1,13 @@
 import { StepDefinitions } from 'jest-cucumber';
-import {
-  AccountRepository,
-  TokensRepository,
-  TemporalCodeRepository,
-} from '../../../../../src/infrastructure/db/repositories';
 import { SessionGenerator } from '../../../../../src/domain/services';
 import { context, moduleFixture } from '../../../steps-config';
 import {
   VERIFICATION_CODE_DATA_MOCK_DB,
-  getUserMockDb,
+  getUserProfile,
 } from '../../../../mocks/db';
+import { UserDA } from '../../../../../src/infrastructure/db/modules/none/user-da';
+import { SessionDA } from '../../../../../src/infrastructure/db/modules/none/session-da';
+import { TemporalCodeDA } from '../../../../../src/infrastructure/db/modules/none/temporal-code-da';
 
 export const activateAccountSteps: StepDefinitions = ({ given, and }) => {
   given('The PUT activate account API is available', async () => {
@@ -22,25 +20,21 @@ export const activateAccountSteps: StepDefinitions = ({ given, and }) => {
     context.sessionGenerator =
       moduleFixture.get<SessionGenerator>(SessionGenerator);
 
-    context.accountRepository =
-      moduleFixture.get<AccountRepository>(AccountRepository);
+    context.userDA = moduleFixture.get<UserDA>(UserDA);
 
-    context.tokensRepository =
-      moduleFixture.get<TokensRepository>(TokensRepository);
+    context.sessionDA = moduleFixture.get<SessionDA>(SessionDA);
 
-    context.temporalCodeRepository = moduleFixture.get<TemporalCodeRepository>(
-      TemporalCodeRepository,
-    );
+    context.temporalCodeDA = moduleFixture.get<TemporalCodeDA>(TemporalCodeDA);
 
-    const USER_MOCK_DB = await getUserMockDb();
+    const USER_PROFILE_MOCK = await getUserProfile();
 
     jest
-      .spyOn(context.temporalCodeRepository, 'findOneByCodeAndType')
+      .spyOn(context.temporalCodeDA, 'findOneByCodeAndType')
       .mockResolvedValue(VERIFICATION_CODE_DATA_MOCK_DB);
 
     jest
-      .spyOn(context.accountRepository, 'updateStatusByEmail')
-      .mockResolvedValue(USER_MOCK_DB);
+      .spyOn(context.userDA, 'updateStatusByEmail')
+      .mockResolvedValue(USER_PROFILE_MOCK);
 
     jest.spyOn(context.sessionGenerator, 'generateSession').mockResolvedValue({
       accessToken: 'ACCESS_TOKEN',
@@ -48,16 +42,14 @@ export const activateAccountSteps: StepDefinitions = ({ given, and }) => {
       sessionId: 'SESSION_ID',
     });
 
-    jest.spyOn(context.tokensRepository, 'save').mockResolvedValue(null);
+    jest.spyOn(context.sessionDA, 'create').mockResolvedValue(null);
 
-    jest
-      .spyOn(context.temporalCodeRepository, 'removeById')
-      .mockResolvedValue(null);
+    jest.spyOn(context.temporalCodeDA, 'removeById').mockResolvedValue(null);
   });
 
   and('verificationCode provided expired', () => {
     jest
-      .spyOn(context.temporalCodeRepository, 'findOneByCodeAndType')
+      .spyOn(context.temporalCodeDA, 'findOneByCodeAndType')
       .mockResolvedValue(null);
   });
 };

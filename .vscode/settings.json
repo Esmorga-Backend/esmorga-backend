@@ -2,5 +2,6 @@
   "material-icon-theme.activeIconPack": "nest",
   "git.ignoreLimitWarning": true,
   "javascript.preferences.importModuleSpecifier": "relative",
-  "typescript.preferences.importModuleSpecifier": "relative"
+  "typescript.preferences.importModuleSpecifier": "relative",
+  "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
 }

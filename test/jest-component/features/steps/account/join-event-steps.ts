@@ -2,18 +2,16 @@ import { JwtService } from '@nestjs/jwt';
 import { StepDefinitions } from 'jest-cucumber';
 import { context, moduleFixture } from '../../../steps-config';
 import {
-  EventRepository,
-  TokensRepository,
-  EventParticipantsRepository,
-} from '../../../../../src/infrastructure/db/repositories';
-import {
-  FUTURE_EVENT_MOCK_DB,
-  OLD_EVENT_MOCK_DB,
+  FUTURE_EVENT_MOCK_DTO,
+  OLD_EVENT_MOCK_DTO,
   SESSION_MOCK_DB,
 } from '../../../../mocks/db';
 import { EVENT_ID_MOCK } from '../../../../mocks/dtos';
 import { HEADERS } from '../../../../mocks/common-data';
 import { SESSION_ID } from '../../../../mocks/db/common';
+import { EventDA } from '../../../../../src/infrastructure/db/modules/none/event-da';
+import { SessionDA } from '../../../../../src/infrastructure/db/modules/none/session-da';
+import { EventParticipantsDA } from '../../../../../src/infrastructure/db/modules/none/event-participant-da';
 
 const PATH = '/v1/account/events';
 
@@ -32,22 +30,15 @@ export const joinEventSteps: StepDefinitions = ({ given, and }) => {
 
     context.jwtService = moduleFixture.get<JwtService>(JwtService);
 
-    context.eventRepository =
-      moduleFixture.get<EventRepository>(EventRepository);
+    context.eventDA = moduleFixture.get<EventDA>(EventDA);
 
-    context.tokensRepository =
-      moduleFixture.get<TokensRepository>(TokensRepository);
+    context.sessionDA = moduleFixture.get<SessionDA>(SessionDA);
 
-    context.eventParticipantsRepository =
-      moduleFixture.get<EventParticipantsRepository>(
-        EventParticipantsRepository,
-      );
+    context.eventParticipantsDA =
+      moduleFixture.get<EventParticipantsDA>(EventParticipantsDA);
 
     jest
-      .spyOn(
-        context.eventParticipantsRepository,
-        'findAndUpdateParticipantsList',
-      )
+      .spyOn(context.eventParticipantsDA, 'findAndUpdateParticipantsList')
       .mockResolvedValue(null);
   });
 
@@ -59,14 +50,14 @@ export const joinEventSteps: StepDefinitions = ({ given, and }) => {
       .mockResolvedValue({ sessionId: SESSION_ID });
 
     jest
-      .spyOn(context.tokensRepository, 'findOneBySessionId')
+      .spyOn(context.sessionDA, 'findOneBySessionId')
       .mockResolvedValue(SESSION_MOCK_DB);
   });
 
   and('the eventDate has not already ended', () => {
     jest
-      .spyOn(context.eventRepository, 'findOneById')
-      .mockResolvedValue(FUTURE_EVENT_MOCK_DB);
+      .spyOn(context.eventDA, 'findOneById')
+      .mockResolvedValue(FUTURE_EVENT_MOCK_DTO);
   });
 
   // ###### MOB-TC-54 ######
@@ -75,13 +66,13 @@ export const joinEventSteps: StepDefinitions = ({ given, and }) => {
     (authenticatedStatus, accessToken) => {
       if (authenticatedStatus === 'unauthenticated') {
         jest
-          .spyOn(context.tokensRepository, 'findOneBySessionId')
+          .spyOn(context.sessionDA, 'findOneBySessionId')
           .mockResolvedValue(null);
       }
 
       if (authenticatedStatus === 'authenticated') {
         jest
-          .spyOn(context.tokensRepository, 'findOneBySessionId')
+          .spyOn(context.sessionDA, 'findOneBySessionId')
           .mockResolvedValue(SESSION_MOCK_DB);
       }
 
@@ -114,13 +105,13 @@ export const joinEventSteps: StepDefinitions = ({ given, and }) => {
 
   // ###### MOB-TC-57 ######
   and('the eventId is not in the db', () => {
-    jest.spyOn(context.eventRepository, 'findOneById').mockResolvedValue(null);
+    jest.spyOn(context.eventDA, 'findOneById').mockResolvedValue(null);
   });
 
   // ###### MOB-TC-98 ######
   and('the eventDate has already ended', () => {
     jest
-      .spyOn(context.eventRepository, 'findOneById')
-      .mockResolvedValue(OLD_EVENT_MOCK_DB);
+      .spyOn(context.eventDA, 'findOneById')
+      .mockResolvedValue(OLD_EVENT_MOCK_DTO);
   });
 };

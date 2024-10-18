@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { TEMPORAL_CODE_TYPE } from '../../../domain/const';
+import { TEMPORAL_CODE_TYPE } from '../../../../../domain/const';
 
 @Schema({ timestamps: true })
 export class TemporalCode {

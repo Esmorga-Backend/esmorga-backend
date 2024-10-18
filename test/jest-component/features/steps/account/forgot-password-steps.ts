@@ -1,13 +1,12 @@
 import { StepDefinitions } from 'jest-cucumber';
 import { context, moduleFixture } from '../../../steps-config';
-import {
-  AccountRepository,
-  TemporalCodeRepository,
-} from '../../../../../src/infrastructure/db/repositories';
+import { TemporalCodeRepository } from '../../../../../src/infrastructure/db/repositories';
 import { GenerateMailService } from '../../../../../src/domain/services';
 import { NodemailerService } from '../../../../../src/infrastructure/services';
-import { getUserMockDb } from '../../../../mocks/db';
+import { getUserProfile } from '../../../../mocks/db';
 import { EMAIL_MOCK } from '../../../../mocks/dtos';
+import { UserDA } from '../../../../../src/infrastructure/db/modules/none/user-da';
+import { TemporalCodeDA } from '../../../../../src/infrastructure/db/modules/none/temporal-code-da';
 
 export const forgotPasswordSteps: StepDefinitions = ({ given, and, then }) => {
   given('the POST forgot password API is available', async () => {
@@ -23,30 +22,25 @@ export const forgotPasswordSteps: StepDefinitions = ({ given, and, then }) => {
     context.nodemailerService =
       moduleFixture.get<NodemailerService>(NodemailerService);
 
-    context.accountRepository =
-      moduleFixture.get<AccountRepository>(AccountRepository);
+    context.userDA = moduleFixture.get<UserDA>(UserDA);
 
-    context.temporalCodeRepository = moduleFixture.get<TemporalCodeRepository>(
-      TemporalCodeRepository,
-    );
+    context.temporalCodeDA = moduleFixture.get<TemporalCodeDA>(TemporalCodeDA);
 
-    const USER_MOCK_DB = await getUserMockDb();
+    const USER_PROFILE = await getUserProfile();
 
     jest
-      .spyOn(context.accountRepository, 'findOneByEmail')
-      .mockResolvedValue(USER_MOCK_DB);
+      .spyOn(context.userDA, 'findOneByEmail')
+      .mockResolvedValue(USER_PROFILE);
 
     jest
-      .spyOn(context.temporalCodeRepository, 'findAndUpdateTemporalCode')
+      .spyOn(context.temporalCodeDA, 'findAndUpdateTemporalCode')
       .mockResolvedValue(null);
 
     jest.spyOn(context.nodemailerService, 'sendEmail').mockResolvedValue(null);
   });
 
   and('email does not exist in DB', () => {
-    jest
-      .spyOn(context.accountRepository, 'findOneByEmail')
-      .mockResolvedValue(null);
+    jest.spyOn(context.userDA, 'findOneByEmail').mockResolvedValue(null);
   });
 
   then('reset password email is sent', () => {

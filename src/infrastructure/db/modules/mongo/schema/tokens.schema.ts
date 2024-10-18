@@ -15,4 +15,7 @@ export class Tokens {
   refreshToken: string;
 }
 
+/**
+ * @deprecated This schema was the previous token storage.
+ */
 export const TokensSchema = SchemaFactory.createForClass(Tokens);

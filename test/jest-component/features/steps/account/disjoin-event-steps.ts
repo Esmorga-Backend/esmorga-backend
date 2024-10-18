@@ -2,13 +2,14 @@ import { JwtService } from '@nestjs/jwt';
 import { StepDefinitions } from 'jest-cucumber';
 import { context, moduleFixture } from '../../../steps-config';
 import {
-  EventRepository,
-  TokensRepository,
-  EventParticipantsRepository,
-} from '../../../../../src/infrastructure/db/repositories';
-import { FUTURE_EVENT_MOCK_DB, OLD_EVENT_MOCK_DB } from '../../../../mocks/db';
+  FUTURE_EVENT_MOCK_DTO,
+  OLD_EVENT_MOCK_DTO,
+} from '../../../../mocks/db';
 import { EVENT_ID_MOCK } from '../../../../mocks/dtos';
 import { HEADERS } from '../../../../mocks/common-data';
+import { EventDA } from '../../../../../src/infrastructure/db/modules/none/event-da';
+import { EventParticipantsDA } from '../../../../../src/infrastructure/db/modules/none/event-participant-da';
+import { SessionDA } from '../../../../../src/infrastructure/db/modules/none/session-da';
 
 const PATH = '/v1/account/events';
 
@@ -28,23 +29,19 @@ export const disjoinEventSteps: StepDefinitions = ({ given, and }) => {
 
     context.jwtService = moduleFixture.get<JwtService>(JwtService);
 
-    context.eventRepository =
-      moduleFixture.get<EventRepository>(EventRepository);
+    context.eventDA = moduleFixture.get<EventDA>(EventDA);
 
-    context.tokensRepository =
-      moduleFixture.get<TokensRepository>(TokensRepository);
+    context.sessionDA = moduleFixture.get<SessionDA>(SessionDA);
 
-    context.eventParticipantsRepository =
-      moduleFixture.get<EventParticipantsRepository>(
-        EventParticipantsRepository,
-      );
+    context.eventParticipantsDA =
+      moduleFixture.get<EventParticipantsDA>(EventParticipantsDA);
 
     jest
-      .spyOn(context.eventRepository, 'findOneById')
-      .mockResolvedValue(FUTURE_EVENT_MOCK_DB);
+      .spyOn(context.eventDA, 'findOneById')
+      .mockResolvedValue(FUTURE_EVENT_MOCK_DTO);
 
     jest
-      .spyOn(context.eventParticipantsRepository, 'removePartipantFromList')
+      .spyOn(context.eventParticipantsDA, 'removeParticipantFromList')
       .mockResolvedValue(null);
   });
 
@@ -56,19 +53,19 @@ export const disjoinEventSteps: StepDefinitions = ({ given, and }) => {
   // TC-103
   and('i provide a valid eventId for an event I am not joined', () => {
     jest
-      .spyOn(context.eventRepository, 'findOneById')
-      .mockResolvedValue(FUTURE_EVENT_MOCK_DB);
+      .spyOn(context.eventDA, 'findOneById')
+      .mockResolvedValue(FUTURE_EVENT_MOCK_DTO);
   });
 
   // TC-101
   and('i have provided a eventId that do not exist in the DB', () => {
-    jest.spyOn(context.eventRepository, 'findOneById').mockResolvedValue(null);
+    jest.spyOn(context.eventDA, 'findOneById').mockResolvedValue(null);
   });
 
   // TC-140
   and('i have provided a valid eventId that has a past date', () => {
     jest
-      .spyOn(context.eventRepository, 'findOneById')
-      .mockResolvedValue(OLD_EVENT_MOCK_DB);
+      .spyOn(context.eventDA, 'findOneById')
+      .mockResolvedValue(OLD_EVENT_MOCK_DTO);
   });
 };

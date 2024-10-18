@@ -1,8 +1,10 @@
+import { ConfigService } from '@nestjs/config';
 import { StepDefinitions } from 'jest-cucumber';
+import * as argon2 from 'argon2';
 import {
-  getUserMockDb,
   EMAIL_MOCK_DB,
   PASSWORD_MOCK_DB,
+  getUserProfile,
 } from '../../../../mocks/db';
 import { context, moduleFixture } from '../../../steps-config';
 import {
@@ -11,28 +13,33 @@ import {
 } from '../../../../../src/domain/services';
 import { ACCOUNT_STATUS } from '../../../../../src/domain/const';
 import {
-  AccountRepository,
-  TokensRepository,
-  LoginAttemptsRepository,
-} from '../../../../../src/infrastructure/db/repositories';
-const TTL = parseInt(process.env.ACCESS_TOKEN_TTL);
+  CleanPasswordSymbol,
+  UserDA,
+} from '../../../../../src/infrastructure/db/modules/none/user-da';
+import { SessionDA } from '../../../../../src/infrastructure/db/modules/none/session-da';
+import { LoginAttemptsDA } from '../../../../../src/infrastructure/db/modules/none/login-attempts-da';
 
 export const loginSteps: StepDefinitions = async ({ given, and, then }) => {
+  let TTL = 0;
   given('the POST Login API is available', async () => {
     context.path = '/v1/account/login';
 
-    context.user = await getUserMockDb();
+    context.user = {
+      ...(await getUserProfile()),
+      [CleanPasswordSymbol]: PASSWORD_MOCK_DB,
+    };
+
+    const configService = moduleFixture.get<ConfigService>(ConfigService);
+    TTL = configService.get('ACCESS_TOKEN_TTL');
 
     context.mock = { email: EMAIL_MOCK_DB, password: PASSWORD_MOCK_DB };
 
-    context.accountRepository =
-      moduleFixture.get<AccountRepository>(AccountRepository);
+    context.userDA = moduleFixture.get<UserDA>(UserDA);
 
-    context.tokensRepository =
-      moduleFixture.get<TokensRepository>(TokensRepository);
-
-    context.loginAttemptsRepository =
-      moduleFixture.get<LoginAttemptsRepository>(LoginAttemptsRepository);
+    context.sessionDA = moduleFixture.get<SessionDA>(SessionDA);
+    argon2.verify;
+    context.loginAttemptsDA =
+      moduleFixture.get<LoginAttemptsDA>(LoginAttemptsDA);
 
     context.sessionGenerator =
       moduleFixture.get<SessionGenerator>(SessionGenerator);
@@ -41,28 +48,37 @@ export const loginSteps: StepDefinitions = async ({ given, and, then }) => {
       moduleFixture.get<ValidateLoginCredentialsService>(
         ValidateLoginCredentialsService,
       );
+    jest
+      .spyOn(argon2, 'verify')
+      .mockImplementation(
+        async (password, password2) => password === password2,
+      );
 
     jest
-      .spyOn(context.accountRepository, 'findOneByEmail')
+      .spyOn(context.userDA, 'findOneByEmail')
       .mockImplementation(async (email) => {
         if (email === context.user.email) {
-          return context.user;
+          return { ...context.user, [CleanPasswordSymbol]: PASSWORD_MOCK_DB };
         }
         return null;
       });
 
     jest
-      .spyOn(context.accountRepository, 'updateStatusByEmail')
+      .spyOn(context.userDA, 'updateStatusByEmail')
       .mockImplementation(async (email, status) => {
         if (email === context.user.email) {
-          context.user = { ...context.user, status };
+          context.user = {
+            ...context.user,
+            status,
+            [CleanPasswordSymbol]: PASSWORD_MOCK_DB,
+          };
           return context.user;
         }
         return null;
       });
 
     jest
-      .spyOn(context.accountRepository, 'updateBlockedStatusByUuid')
+      .spyOn(context.userDA, 'updateBlockedStatusByUuid')
       .mockResolvedValue(null);
 
     jest.spyOn(context.sessionGenerator, 'generateSession').mockResolvedValue({
@@ -71,15 +87,16 @@ export const loginSteps: StepDefinitions = async ({ given, and, then }) => {
       sessionId: 'SESSION_ID',
     });
 
-    jest.spyOn(context.tokensRepository, 'findByUuid').mockResolvedValue([]);
+    jest.spyOn(context.sessionDA, 'findByUuid').mockResolvedValue([]);
+    jest.spyOn(context.sessionDA, 'create').mockResolvedValue(null);
 
-    jest.spyOn(context.tokensRepository, 'save').mockResolvedValue(null);
+    jest.spyOn(context.loginAttemptsDA, 'removeByUuid').mockResolvedValue(null);
   });
 
   and(/^fail login attempts (\d+)$/, async (result) => {
     jest
-      .spyOn(context.loginAttemptsRepository, 'findAndUpdateLoginAttempts')
-      .mockResolvedValue({ loginAttempts: Number(result) + 1 });
+      .spyOn(context.loginAttemptsDA, 'findAndUpdateLoginAttempts')
+      .mockResolvedValue(Number(result) + 1);
   });
 
   and(
@@ -103,10 +120,11 @@ export const loginSteps: StepDefinitions = async ({ given, and, then }) => {
     context.user = {
       ...context.user,
       status: ACCOUNT_STATUS.UNVERIFIED,
+      [CleanPasswordSymbol]: PASSWORD_MOCK_DB,
     };
 
     jest
-      .spyOn(context.accountRepository, 'findOneByEmail')
+      .spyOn(context.userDA, 'findOneByEmail')
       .mockImplementation(() => context.user);
   });
 
@@ -114,9 +132,10 @@ export const loginSteps: StepDefinitions = async ({ given, and, then }) => {
     context.user = {
       ...context.user,
       status: ACCOUNT_STATUS.BLOCKED,
+      [CleanPasswordSymbol]: PASSWORD_MOCK_DB,
     };
     jest
-      .spyOn(context.accountRepository, 'findOneByEmail')
+      .spyOn(context.userDA, 'findOneByEmail')
       .mockImplementation(() => context.user);
   });
 
@@ -124,22 +143,23 @@ export const loginSteps: StepDefinitions = async ({ given, and, then }) => {
     context.user = {
       ...context.user,
       expireBlockedAt: new Date('2024-03-09T10:05:30.915Z'),
+      [CleanPasswordSymbol]: PASSWORD_MOCK_DB,
     };
     jest
-      .spyOn(context.accountRepository, 'findOneByEmail')
+      .spyOn(context.userDA, 'findOneByEmail')
       .mockImplementation(() => context.user);
   });
 
   then(/^the result is that (\d+)$/, async (result) => {
     const execTimes = result !== '0' ? 1 : 0;
     expect(
-      context.loginAttemptsRepository.findAndUpdateLoginAttempts,
+      context.loginAttemptsDA.findAndUpdateLoginAttempts,
     ).toHaveBeenCalledTimes(execTimes);
   });
 
   and(/^actual user status is blocked (\w+)/, (isBlocked) => {
-    expect(
-      context.accountRepository.updateBlockedStatusByUuid,
-    ).toHaveBeenCalledTimes(isBlocked === 'true' ? 1 : 0);
+    expect(context.userDA.updateBlockedStatusByUuid).toHaveBeenCalledTimes(
+      isBlocked === 'true' ? 1 : 0,
+    );
   });
 };

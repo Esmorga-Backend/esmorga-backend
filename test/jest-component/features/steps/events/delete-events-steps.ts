@@ -2,20 +2,18 @@ import { JwtService } from '@nestjs/jwt';
 import { StepDefinitions } from 'jest-cucumber';
 import { context, moduleFixture } from '../../../steps-config';
 import {
-  EventRepository,
-  AccountRepository,
-  TokensRepository,
-  EventParticipantsRepository,
-} from '../../../../../src/infrastructure/db/repositories';
-import {
-  FUTURE_EVENT_MOCK_DB,
+  FUTURE_EVENT_MOCK_DTO,
   SESSION_MOCK_DB,
-  getUserMockDb,
+  getUserProfile,
 } from '../../../../mocks/db';
 import { EVENT_ID_MOCK } from '../../../../mocks/dtos';
 import { HEADERS } from '../../../../mocks/common-data';
 import { ACCOUNT_ROLES } from '../../../../../src/domain/const';
 import { SESSION_ID } from '../../../../mocks/db/common';
+import { UserDA } from '../../../../../src/infrastructure/db/modules/none/user-da';
+import { SessionDA } from '../../../../../src/infrastructure/db/modules/none/session-da';
+import { EventDA } from '../../../../../src/infrastructure/db/modules/none/event-da';
+import { EventParticipantsDA } from '../../../../../src/infrastructure/db/modules/none/event-participant-da';
 
 const PATH = '/v1/events';
 
@@ -36,30 +34,25 @@ export const deleteEventStep: StepDefinitions = ({ given, and }) => {
 
     context.jwtService = moduleFixture.get<JwtService>(JwtService);
 
-    context.eventRepository =
-      moduleFixture.get<EventRepository>(EventRepository);
+    context.eventDA = moduleFixture.get<EventDA>(EventDA);
 
-    context.accountRepository =
-      moduleFixture.get<AccountRepository>(AccountRepository);
+    context.userDA = moduleFixture.get<UserDA>(UserDA);
 
-    context.tokensRepository =
-      moduleFixture.get<TokensRepository>(TokensRepository);
+    context.sessionDA = moduleFixture.get<SessionDA>(SessionDA);
 
-    context.eventParticipantsRepository =
-      moduleFixture.get<EventParticipantsRepository>(
-        EventParticipantsRepository,
-      );
+    context.eventParticipantsDA =
+      moduleFixture.get<EventParticipantsDA>(EventParticipantsDA);
 
-    jest.spyOn(context.eventRepository, 'removeById').mockResolvedValue(null);
+    jest.spyOn(context.eventDA, 'removeById').mockResolvedValue(null);
 
     jest
-      .spyOn(context.eventParticipantsRepository, 'removeByEventId')
+      .spyOn(context.eventParticipantsDA, 'removeByEventId')
       .mockResolvedValue(null);
   });
 
   and('use accessToken valid and eventId event_exist', async () => {
     const ADMIN_USER = {
-      ...(await getUserMockDb()),
+      ...(await getUserProfile()),
       role: ACCOUNT_ROLES.ADMIN,
     };
 
@@ -68,27 +61,24 @@ export const deleteEventStep: StepDefinitions = ({ given, and }) => {
       .mockResolvedValue({ sessionId: SESSION_ID });
 
     jest
-      .spyOn(context.tokensRepository, 'findOneBySessionId')
+      .spyOn(context.sessionDA, 'findOneBySessionId')
       .mockResolvedValue(SESSION_MOCK_DB);
 
-    jest
-      .spyOn(context.accountRepository, 'findOneById')
-      .mockResolvedValue(ADMIN_USER);
+    jest.spyOn(context.userDA, 'findOneById').mockResolvedValue(ADMIN_USER);
 
     jest
-      .spyOn(context.eventRepository, 'findOneById')
-      .mockResolvedValue(FUTURE_EVENT_MOCK_DB);
+      .spyOn(context.eventDA, 'findOneById')
+      .mockResolvedValue(FUTURE_EVENT_MOCK_DTO);
   });
 
   // ###### MOB-TC-36 ######
   and('use accessToken is valid and eventId do not exist', () => {
+    jest.spyOn(context.eventDA, 'findOneById').mockResolvedValue(null);
     jest
       .spyOn(context.jwtService, 'verifyAsync')
       .mockResolvedValue({ sessionId: SESSION_ID });
 
-    jest
-      .spyOn(context.tokensRepository, 'findOneBySessionId')
-      .mockResolvedValue(null);
+    jest.spyOn(context.sessionDA, 'findOneBySessionId').mockResolvedValue(null);
   });
 
   // ###### MOB-TC-37 ######
@@ -100,23 +90,21 @@ export const deleteEventStep: StepDefinitions = ({ given, and }) => {
   and(
     'use accessToken without enough privileges and eventId event_exist',
     async () => {
-      const USER = await getUserMockDb();
+      const USER = await getUserProfile();
 
       jest
         .spyOn(context.jwtService, 'verifyAsync')
         .mockResolvedValue({ sessionId: SESSION_ID });
 
       jest
-        .spyOn(context.tokensRepository, 'findOneBySessionId')
+        .spyOn(context.sessionDA, 'findOneBySessionId')
         .mockResolvedValue(SESSION_MOCK_DB);
 
-      jest
-        .spyOn(context.accountRepository, 'findOneById')
-        .mockResolvedValue(USER);
+      jest.spyOn(context.userDA, 'findOneById').mockResolvedValue(USER);
 
       jest
-        .spyOn(context.eventRepository, 'findOneById')
-        .mockResolvedValue(FUTURE_EVENT_MOCK_DB);
+        .spyOn(context.eventDA, 'findOneById')
+        .mockResolvedValue(FUTURE_EVENT_MOCK_DTO);
     },
   );
 };

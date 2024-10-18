@@ -1,22 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
 import { PinoLogger } from 'nestjs-pino';
-import { plainToClass } from 'class-transformer';
-import { MongoRepository } from './mongo.repository';
-import { EventParticipants as EventParticipantschema } from '../schema';
-import { EventParticipantsDto } from '../../dtos';
 import { DataBaseInternalError } from '../errors';
+import { EventParticipantsDA } from '../modules/none/event-participant-da';
 
 @Injectable()
-export class EventParticipantsRepository extends MongoRepository<EventParticipantschema> {
+export class EventParticipantsRepository {
   constructor(
-    @InjectModel(EventParticipantschema.name)
-    private eventParticipantsModel: Model<EventParticipantschema>,
+    private eventParticipantDA: EventParticipantsDA,
     private readonly logger: PinoLogger,
-  ) {
-    super(eventParticipantsModel);
-  }
+  ) {}
 
   /**
    * Add the user ID to the event participant list.
@@ -35,7 +27,10 @@ export class EventParticipantsRepository extends MongoRepository<EventParticipan
         `[EventParticipantsRepository] [updateParticipantList] - x-request-id: ${requestId}, eventId: ${eventId}, userId: ${userId}`,
       );
 
-      await this.findAndUpdateParticipantsList(eventId, userId);
+      await this.eventParticipantDA.findAndUpdateParticipantsList(
+        eventId,
+        userId,
+      );
     } catch (error) {
       this.logger.error(
         `[EventParticipantsRepository] [updateParticipantList] - x-request-id: ${requestId}, error: ${error}`,
@@ -57,7 +52,7 @@ export class EventParticipantsRepository extends MongoRepository<EventParticipan
         `[EventParticipantsRepository] [removeEventParticipant] - x-request-id:${requestId}, eventId ${eventId}`,
       );
 
-      await this.removeByEventId(eventId);
+      await this.eventParticipantDA.removeByEventId(eventId);
     } catch (error) {
       this.logger.error(
         `[EventParticipantsRepository] [removeEventParticipant] - x-request-id:${requestId}, error ${error}`,
@@ -79,25 +74,7 @@ export class EventParticipantsRepository extends MongoRepository<EventParticipan
       this.logger.info(
         `[EventParticipantsRepository] [getEventParticipant] - x-request-id: ${requestId}, userId: ${userId}`,
       );
-
-      const eventParticipantsDb: EventParticipantschema[] =
-        await this.findEventParticipant(userId);
-
-      const eventIdJoined: string[] = eventParticipantsDb.map(
-        (singleEventParticipanstDb) => {
-          const eventParticipants: EventParticipantsDto = plainToClass(
-            EventParticipantsDto,
-            singleEventParticipanstDb,
-            {
-              excludeExtraneousValues: true,
-            },
-          );
-
-          return eventParticipants.eventId;
-        },
-      );
-
-      return eventIdJoined;
+      return await this.eventParticipantDA.findEventParticipant(userId);
     } catch (error) {
       this.logger.error(
         `[EventParticipantsRepository] [getEventParticipant] - x-request-id: ${requestId}, error: ${error}`,
@@ -122,7 +99,7 @@ export class EventParticipantsRepository extends MongoRepository<EventParticipan
         `[EventParticipantsRepository] [disjoinParticipantList] - x-request-id: ${requestId}, eventId: ${eventId}, userId: ${userId}`,
       );
 
-      await this.removePartipantFromList(eventId, userId);
+      await this.eventParticipantDA.removeParticipantFromList(eventId, userId);
     } catch (error) {
       this.logger.error(
         `[EventParticipantsRepository] [disjoinParticipantList] - x-request-id: ${requestId}, error: ${error}`,

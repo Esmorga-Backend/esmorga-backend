@@ -1,12 +1,7 @@
 import { HttpException, Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { plainToClass } from 'class-transformer';
 import { PinoLogger } from 'nestjs-pino';
 import { EventDto } from '../../dtos';
 import { CreateEventDto } from '../../http/dtos';
-import { MongoRepository } from './mongo.repository';
-import { Event as EventSchema } from '../schema';
 import {
   DataBaseBadRequestError,
   DataBaseInternalError,
@@ -14,15 +9,14 @@ import {
 } from '../errors';
 import { validateObjectDto } from '../services';
 import { REQUIRED_DTO_FIELDS } from '../consts';
+import { EventDA } from '../modules/none/event-da';
 
 @Injectable()
-export class EventRepository extends MongoRepository<EventSchema> {
+export class EventRepository {
   constructor(
-    @InjectModel(EventSchema.name) private eventModel: Model<EventSchema>,
+    private readonly eventDA: EventDA,
     private readonly logger: PinoLogger,
-  ) {
-    super(eventModel);
-  }
+  ) {}
 
   /**
    * Store a new event document.
@@ -40,12 +34,7 @@ export class EventRepository extends MongoRepository<EventSchema> {
         `[EventRepository] [createEvent] - x-request-id: ${requestId}`,
       );
 
-      const event = new this.eventModel({
-        ...createEventDto,
-        createdBy: email,
-      });
-
-      await this.save(event);
+      await this.eventDA.create(createEventDto, email);
     } catch (error) {
       this.logger.error(
         `[EventRepository] [createEvent] - x-request-id: ${requestId}, error: ${error}`,
@@ -71,18 +60,10 @@ export class EventRepository extends MongoRepository<EventSchema> {
       this.logger.info(
         `[EventRepository] [findOneByEventId] - x-request-id: ${requestId}, eventId: ${eventId} `,
       );
-
-      const event = await this.findOneById(eventId);
-
+      const event = await this.eventDA.findOneById(eventId);
       if (!event) throw new DataBaseBadRequestError();
-
-      const adaptedEvent: EventDto = plainToClass(EventDto, event, {
-        excludeExtraneousValues: true,
-      });
-
-      validateObjectDto(adaptedEvent, REQUIRED_DTO_FIELDS.UPDATE_EVENT);
-
-      return adaptedEvent;
+      validateObjectDto(event, REQUIRED_DTO_FIELDS.UPDATE_EVENT);
+      return event;
     } catch (error) {
       this.logger.error(
         `[EventRepository] [findOneByEventId] - x-request-id: ${requestId}, error: ${error}`,
@@ -107,20 +88,11 @@ export class EventRepository extends MongoRepository<EventSchema> {
       this.logger.info(
         `[EventRepository] [getEventList] - x-request-id: ${requestId}`,
       );
-
-      const events = await this.find();
-
-      const adaptedEvents: EventDto[] = events.map((event) => {
-        const eventDto = plainToClass(EventDto, event, {
-          excludeExtraneousValues: true,
-        });
-
-        validateObjectDto(eventDto, REQUIRED_DTO_FIELDS.EVENTS);
-
-        return eventDto;
+      const events = await this.eventDA.find();
+      events.forEach((event) => {
+        validateObjectDto(event, REQUIRED_DTO_FIELDS.EVENTS);
       });
-
-      return adaptedEvents;
+      return events;
     } catch (error) {
       this.logger.error(
         `[EventRepository] [getEventList] - x-request-id: ${requestId}, error: ${error}`,
@@ -150,18 +122,12 @@ export class EventRepository extends MongoRepository<EventSchema> {
         `[EventRepository] [updateEvent] - x-request-id: ${requestId}, eventId: ${eventId}`,
       );
 
-      const updatedEvent = await this.updateById(eventId, {
+      const updatedEvent = await this.eventDA.updateById(eventId, {
         ...fieldsToUpdate,
         updatedBy: uuid,
       });
-
-      const adaptedEvent: EventDto = plainToClass(EventDto, updatedEvent, {
-        excludeExtraneousValues: true,
-      });
-
-      validateObjectDto(adaptedEvent, REQUIRED_DTO_FIELDS.EVENTS);
-
-      return adaptedEvent;
+      validateObjectDto(updatedEvent, REQUIRED_DTO_FIELDS.EVENTS);
+      return updatedEvent;
     } catch (error) {
       this.logger.error(
         `[EventRepository] [updateEvent] - x-request-id: ${requestId}, error: ${error}`,
@@ -185,20 +151,11 @@ export class EventRepository extends MongoRepository<EventSchema> {
       this.logger.info(
         `[EventRepository] [getEventListByEventsIds] - x-request-id:${requestId}`,
       );
-
-      const events: EventSchema[] = await this.findByEventIds(eventIds);
-
-      const adaptedEvents: EventDto[] = events.map((event) => {
-        const eventDto = plainToClass(EventDto, event, {
-          excludeExtraneousValues: true,
-        });
-
-        validateObjectDto(eventDto, REQUIRED_DTO_FIELDS.EVENTS);
-
-        return eventDto;
+      const events = await this.eventDA.findByEventIds(eventIds);
+      events.forEach((event) => {
+        validateObjectDto(event, REQUIRED_DTO_FIELDS.EVENTS);
       });
-
-      return adaptedEvents;
+      return events;
     } catch (error) {
       this.logger.error(
         `[EventRepository] [getEventListByEventsIds] - x-request-id:${requestId}, error ${error}`,
@@ -219,18 +176,10 @@ export class EventRepository extends MongoRepository<EventSchema> {
       this.logger.info(
         `[EventRepository] [getEvent] - x-request-id: ${requestId}`,
       );
-
-      const event = await this.findOneById(eventId);
-
+      const event = await this.eventDA.findOneById(eventId);
       if (!event) throw new DataBaseNotFoundError();
-
-      const eventDto: EventDto = plainToClass(EventDto, event, {
-        excludeExtraneousValues: true,
-      });
-
-      validateObjectDto(eventDto, REQUIRED_DTO_FIELDS.EVENTS);
-
-      return eventDto;
+      validateObjectDto(event, REQUIRED_DTO_FIELDS.EVENTS);
+      return event;
     } catch (error) {
       this.logger.error(
         `[EventRepository] [getEvent] - x-request-id: ${requestId}, error: ${error}`,
@@ -255,13 +204,11 @@ export class EventRepository extends MongoRepository<EventSchema> {
       this.logger.info(
         `[EventRepository] [removeEvent] - x-request-id: ${requestId}, eventId: ${eventId}`,
       );
-
-      await this.removeById(eventId);
+      await this.eventDA.removeById(eventId);
     } catch (error) {
       this.logger.error(
         `[EventRepository] [removeEvent] - x-request-id: ${requestId}, error: ${error}`,
       );
-
       throw new DataBaseInternalError();
     }
   }

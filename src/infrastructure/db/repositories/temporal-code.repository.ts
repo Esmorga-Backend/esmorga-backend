@@ -1,22 +1,14 @@
 import { HttpException, Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
 import { PinoLogger } from 'nestjs-pino';
-import { Model } from 'mongoose';
-import { plainToClass } from 'class-transformer';
-import { MongoRepository } from './mongo.repository';
-import { TemporalCode as TemporalCodeSchema } from '../schema';
 import { DataBaseInternalError, DataBaseNotFoundError } from '../errors';
-import { TemporalCodeDto } from '../../dtos';
+import { TemporalCodeDA } from '../modules/none/temporal-code-da';
 
 @Injectable()
-export class TemporalCodeRepository extends MongoRepository<TemporalCodeSchema> {
+export class TemporalCodeRepository {
   constructor(
-    @InjectModel(TemporalCodeSchema.name)
-    private temporalCodeModel: Model<TemporalCodeSchema>,
+    private temporalCodeDA: TemporalCodeDA,
     private readonly logger: PinoLogger,
-  ) {
-    super(temporalCodeModel);
-  }
+  ) {}
 
   /**
    * Find a verificationCode document related to the email and update the code.
@@ -38,7 +30,11 @@ export class TemporalCodeRepository extends MongoRepository<TemporalCodeSchema> 
         `[TemporalCodeRepository] [saveCode] - x-request-id: ${requestId}`,
       );
 
-      await this.findAndUpdateTemporalCode(code, codeType, email);
+      await this.temporalCodeDA.findAndUpdateTemporalCode(
+        code,
+        codeType,
+        email,
+      );
     } catch (error) {
       this.logger.error(
         `[TemporalCodeRepository] [saveCode] - x-request-id: ${requestId}, error: ${error}`,
@@ -63,19 +59,12 @@ export class TemporalCodeRepository extends MongoRepository<TemporalCodeSchema> 
         `[TemporalCodeRepository] [getCode] - x-request-id: ${requestId}`,
       );
 
-      const codeDocumentData = await this.findOneByCodeAndType(code, codeType);
-
-      const codeData: TemporalCodeDto = plainToClass(
-        TemporalCodeDto,
-        codeDocumentData,
-        {
-          excludeExtraneousValues: true,
-        },
+      const tempCodeDto = await this.temporalCodeDA.findOneByCodeAndType(
+        code,
+        codeType,
       );
-
-      if (!codeData) throw new DataBaseNotFoundError();
-
-      return codeData;
+      if (!tempCodeDto) throw new DataBaseNotFoundError();
+      return tempCodeDto;
     } catch (error) {
       this.logger.error(
         `[TemporalCodeRepository] [getCode] - x-request-id: ${requestId}, error: ${error}`,
@@ -99,7 +88,7 @@ export class TemporalCodeRepository extends MongoRepository<TemporalCodeSchema> 
         `[TemporalCodeRepository] [removeCodeById] - x-request-id: ${requestId}, tokensId: ${id}`,
       );
 
-      await this.removeById(id);
+      await this.temporalCodeDA.removeById(id);
     } catch (error) {
       this.logger.error(
         `[TemporalCodeRepository] [removeCodeById] - x-request-id: ${requestId}, error: ${error}`,

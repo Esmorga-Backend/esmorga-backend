@@ -1,8 +1,10 @@
+import { plainToClass } from 'class-transformer';
 import {
   FUTURE_EVENT_MOCK_DB_ID,
   EVENT_CORE_FIELDS_MOCK_DB_ID,
   OLD_EVENT_MOCK_DB_ID,
 } from './common';
+import { EventDto } from '../../../src/infrastructure/dtos';
 
 const currentDate: Date = new Date();
 
@@ -30,6 +32,11 @@ export const UPDATED_EVENT_MOCK_DB = {
   updatedBy: '665f019c17331ebee550b2f5',
 };
 
+export const UPDATED_EVENT_MOCK_DTO = plainToClass(
+  EventDto,
+  UPDATED_EVENT_MOCK_DB,
+);
+
 export const FUTURE_EVENT_MOCK_DB = {
   _id: FUTURE_EVENT_MOCK_DB_ID,
   eventName: 'MobgenFest',
@@ -47,6 +54,11 @@ export const FUTURE_EVENT_MOCK_DB = {
   updatedAt: currentDate,
 };
 
+export const FUTURE_EVENT_MOCK_DTO = plainToClass(
+  EventDto,
+  FUTURE_EVENT_MOCK_DB,
+);
+
 // Event with only mandatory fields
 export const EVENT_CORE_FIELDS_MOCK_DB = {
   _id: EVENT_CORE_FIELDS_MOCK_DB_ID,
@@ -61,6 +73,12 @@ export const EVENT_CORE_FIELDS_MOCK_DB = {
   createdAt: currentDate,
   updatedAt: currentDate,
 };
+
+
+export const EVENT_CORE_FIELDS_MOCK_DTO = plainToClass(
+  EventDto,
+  EVENT_CORE_FIELDS_MOCK_DB,
+);
 
 // Event celebrated
 export const OLD_EVENT_MOCK_DB = {
@@ -79,3 +97,5 @@ export const OLD_EVENT_MOCK_DB = {
   createdAt: currentDate,
   updatedAt: currentDate,
 };
+
+export const OLD_EVENT_MOCK_DTO = plainToClass(EventDto, OLD_EVENT_MOCK_DB);

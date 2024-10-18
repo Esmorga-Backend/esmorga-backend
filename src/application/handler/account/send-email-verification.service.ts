@@ -32,15 +32,15 @@ export class SendEmailVerificationService {
         `[SendEmailVerificationService] [sendEmailVerification] - x-request-id:${requestId}, email: ${email}`,
       );
 
-      const isRegistered = await this.accountRepository.accountExist(
+      const userProfile = await this.accountRepository.accountExist(
         email,
         requestId,
       );
 
       if (
-        isRegistered &&
-        isRegistered.status !== ACCOUNT_STATUS.ACTIVE &&
-        isRegistered.status !== ACCOUNT_STATUS.BLOCKED
+        userProfile &&
+        userProfile.status !== ACCOUNT_STATUS.ACTIVE &&
+        userProfile.status !== ACCOUNT_STATUS.BLOCKED
       ) {
         const verificationCode = generateTemporalCode();
 

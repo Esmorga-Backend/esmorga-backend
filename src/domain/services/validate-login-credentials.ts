@@ -41,6 +41,13 @@ export class ValidateLoginCredentialsService {
     requestId?: string,
   ) {
     try {
+      if (status === ACCOUNT_STATUS.UNVERIFIED) {
+        throw new UnverifiedUserApiError();
+      }
+
+      if (status === ACCOUNT_STATUS.BLOCKED) {
+        throw new BlockedUserApiError();
+      }
       if (!(await argon2.verify(userDbPassword, requestPassword))) {
         if (status === ACCOUNT_STATUS.ACTIVE) {
           const updatedAttempts =
@@ -60,14 +67,6 @@ export class ValidateLoginCredentialsService {
         }
 
         throw new InvalidCredentialsLoginApiError();
-      }
-
-      if (status === ACCOUNT_STATUS.UNVERIFIED) {
-        throw new UnverifiedUserApiError();
-      }
-
-      if (status === ACCOUNT_STATUS.BLOCKED) {
-        throw new BlockedUserApiError();
       }
     } catch (error) {
       if (error instanceof HttpException) throw error;

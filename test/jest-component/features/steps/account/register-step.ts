@@ -1,13 +1,11 @@
 import { StepDefinitions } from 'jest-cucumber';
 import { context, moduleFixture } from '../../../steps-config';
 import { GenerateMailService } from '../../../../../src/domain/services';
-import {
-  AccountRepository,
-  TemporalCodeRepository,
-} from '../../../../../src/infrastructure/db/repositories';
 import { ACCOUNT_REGISTER } from '../../../../mocks/dtos';
-import { getUserMockDb } from '../../../../mocks/db';
 import { NodemailerService } from '../../../../../src/infrastructure/services';
+import { UserDA } from '../../../../../src/infrastructure/db/modules/none/user-da';
+import { TemporalCodeDA } from '../../../../../src/infrastructure/db/modules/none/temporal-code-da';
+import { getUserProfile } from '../../../../mocks/db';
 
 export const registerSteps: StepDefinitions = ({ given, and }) => {
   given('the POST Register API is available', async () => {
@@ -17,34 +15,29 @@ export const registerSteps: StepDefinitions = ({ given, and }) => {
     context.nodemailerService =
       moduleFixture.get<NodemailerService>(NodemailerService);
 
-    context.accountRepository =
-      moduleFixture.get<AccountRepository>(AccountRepository);
+    context.userDA = moduleFixture.get<UserDA>(UserDA);
 
-    context.temporalCodeRepository = moduleFixture.get<TemporalCodeRepository>(
-      TemporalCodeRepository,
-    );
+    context.temporalCodeDA = moduleFixture.get<TemporalCodeDA>(TemporalCodeDA);
 
     context.mock = { ...ACCOUNT_REGISTER };
     context.path = '/v1/account/register';
 
-    jest
-      .spyOn(context.accountRepository, 'findOneByEmail')
-      .mockResolvedValue(null);
+    jest.spyOn(context.userDA, 'findOneByEmail').mockResolvedValue(null);
 
-    jest.spyOn(context.accountRepository, 'save').mockResolvedValue(null);
+    jest.spyOn(context.userDA, 'create').mockResolvedValue(null);
 
     jest
-      .spyOn(context.temporalCodeRepository, 'findAndUpdateTemporalCode')
+      .spyOn(context.temporalCodeDA, 'findAndUpdateTemporalCode')
       .mockResolvedValue(null);
 
     jest.spyOn(context.nodemailerService, 'sendEmail').mockResolvedValue(null);
   });
 
   and('a registered user is entered', async () => {
-    const USER_MOCK_DB = await getUserMockDb();
+    const USER_MOCK_DB = await getUserProfile();
 
     jest
-      .spyOn(context.accountRepository, 'findOneByEmail')
+      .spyOn(context.userDA, 'findOneByEmail')
       .mockResolvedValue(USER_MOCK_DB);
   });
 

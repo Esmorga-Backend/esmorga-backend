@@ -2,20 +2,18 @@ import { JwtService } from '@nestjs/jwt';
 import { StepDefinitions } from 'jest-cucumber';
 import { context, moduleFixture } from '../../../steps-config';
 import {
-  AccountRepository,
-  EventRepository,
-  TokensRepository,
-} from '../../../../../src/infrastructure/db/repositories';
-import {
-  getUserMockDb,
-  FUTURE_EVENT_MOCK_DB,
+  FUTURE_EVENT_MOCK_DTO,
+  getUserProfile,
   SESSION_MOCK_DB,
-  UPDATED_EVENT_MOCK_DB,
+  UPDATED_EVENT_MOCK_DTO,
 } from '../../../../mocks/db';
 import { EVENT_MOCK } from '../../../../mocks/dtos';
 import { HEADERS } from '../../../../mocks/common-data';
 import { ACCOUNT_ROLES } from '../../../../../src/domain/const';
 import { SESSION_ID } from '../../../../mocks/db/common';
+import { UserDA } from '../../../../../src/infrastructure/db/modules/none/user-da';
+import { SessionDA } from '../../../../../src/infrastructure/db/modules/none/session-da';
+import { EventDA } from '../../../../../src/infrastructure/db/modules/none/event-da';
 
 export const updateEventSteps: StepDefinitions = ({ given }) => {
   // ###### MOB-TC-73 ######
@@ -27,17 +25,14 @@ export const updateEventSteps: StepDefinitions = ({ given }) => {
 
     context.jwtService = moduleFixture.get<JwtService>(JwtService);
 
-    context.accountRepository =
-      moduleFixture.get<AccountRepository>(AccountRepository);
+    context.userDA = moduleFixture.get<UserDA>(UserDA);
 
-    context.eventRepository =
-      moduleFixture.get<EventRepository>(EventRepository);
+    context.eventDA = moduleFixture.get<EventDA>(EventDA);
 
-    context.tokensRepository =
-      moduleFixture.get<TokensRepository>(TokensRepository);
+    context.sessionDA = moduleFixture.get<SessionDA>(SessionDA);
 
     const ADMIN_USER = {
-      ...(await getUserMockDb()),
+      ...(await getUserProfile()),
       role: ACCOUNT_ROLES.ADMIN,
     };
 
@@ -45,19 +40,15 @@ export const updateEventSteps: StepDefinitions = ({ given }) => {
       .spyOn(context.jwtService, 'verifyAsync')
       .mockResolvedValue({ sessionId: SESSION_ID });
     jest
-      .spyOn(context.tokensRepository, 'findOneBySessionId')
+      .spyOn(context.sessionDA, 'findOneBySessionId')
       .mockResolvedValue(SESSION_MOCK_DB);
+    jest.spyOn(context.userDA, 'findOneById').mockResolvedValue(ADMIN_USER);
     jest
-      .spyOn(context.accountRepository, 'findOneById')
-      .mockResolvedValue(ADMIN_USER);
+      .spyOn(context.eventDA, 'findOneById')
+      .mockResolvedValue(FUTURE_EVENT_MOCK_DTO);
     jest
-      .spyOn(context.eventRepository, 'findOneById')
-      .mockResolvedValue(FUTURE_EVENT_MOCK_DB);
-    jest
-      .spyOn(context.eventRepository, 'updateById')
-      .mockResolvedValue(UPDATED_EVENT_MOCK_DB);
-    jest
-      .spyOn(context.tokensRepository, 'findOneBySessionId')
-      .mockResolvedValue(null);
+      .spyOn(context.eventDA, 'updateById')
+      .mockResolvedValue(UPDATED_EVENT_MOCK_DTO);
+    jest.spyOn(context.sessionDA, 'findOneBySessionId').mockResolvedValue(null);
   });
 };

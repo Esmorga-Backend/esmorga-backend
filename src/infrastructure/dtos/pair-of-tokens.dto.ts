@@ -1,6 +1,9 @@
 import { Expose, Transform } from 'class-transformer';
 import { IsDate, IsString } from 'class-validator';
 
+/**
+ * @deprecated Old token storage model.
+ */
 export class PairOfTokensDto {
   @Transform((value) => value.obj._id.toString())
   @Expose({ name: '_id' })

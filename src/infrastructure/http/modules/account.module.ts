@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
 import { AccountController } from '../controllers';
 import {
   ForgotPasswordService,
@@ -26,24 +25,9 @@ import {
   LoginAttemptsRepository,
   TemporalCodeRepository,
 } from '../../db/repositories';
-import {
-  LoginAttemptsSchema,
-  LoginAttempts,
-  TemporalCodeSchema,
-  TemporalCode,
-} from '../../../infrastructure/db/schema';
 
 @Module({
-  imports: [
-    AccountSharedModule,
-    EventSharedModule,
-    MongooseModule.forFeature([
-      { name: LoginAttempts.name, schema: LoginAttemptsSchema },
-    ]),
-    MongooseModule.forFeature([
-      { name: TemporalCode.name, schema: TemporalCodeSchema },
-    ]),
-  ],
+  imports: [AccountSharedModule, EventSharedModule],
   controllers: [AccountController],
   providers: [
     ForgotPasswordService,
@@ -64,7 +48,6 @@ import {
     NodemailerService,
     AuthGuard,
     TemporalCodeRepository,
-    MongooseModule,
   ],
 })
 export class AccountModule {}
