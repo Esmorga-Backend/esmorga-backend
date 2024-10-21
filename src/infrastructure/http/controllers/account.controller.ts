@@ -11,7 +11,7 @@ import {
   Delete,
   Put,
 } from '@nestjs/common';
-import { ApiHideProperty, ApiTags } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 import { SkipThrottle } from '@nestjs/throttler';
 import { PinoLogger } from 'nestjs-pino';
 import {
@@ -73,7 +73,6 @@ export class AccountController {
   @Get('/events')
   @UseGuards(AuthGuard)
   @SwaggerGetMyEvents()
-  @ApiHideProperty()
   async getMyEvents(
     @SessionId() sessionId: string,
     @RequestId() requestId: string,
