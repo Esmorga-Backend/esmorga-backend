@@ -5,14 +5,13 @@ import {
   HttpException,
   InternalServerErrorException,
   UseFilters,
-  Headers,
   Body,
   HttpCode,
   UseGuards,
   Delete,
   Put,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiHideProperty, ApiTags } from '@nestjs/swagger';
 import { SkipThrottle } from '@nestjs/throttler';
 import { PinoLogger } from 'nestjs-pino';
 import {
@@ -50,7 +49,7 @@ import {
   SwaggerSendEmailVerification,
 } from '../swagger/decorators/account';
 import { AccountLoggedDto, NewPairOfTokensDto, EventListDto } from '../../dtos';
-import { RequestId } from '../req-decorators';
+import { RequestId, SessionId } from '../req-decorators';
 import { AuthGuard } from '../guards';
 
 @Controller('/v1/account')
@@ -74,8 +73,9 @@ export class AccountController {
   @Get('/events')
   @UseGuards(AuthGuard)
   @SwaggerGetMyEvents()
+  @ApiHideProperty()
   async getMyEvents(
-    @Headers('x-session-id') sessionId: string,
+    @SessionId() sessionId: string,
     @RequestId() requestId: string,
   ): Promise<EventListDto> {
     try {
@@ -193,7 +193,7 @@ export class AccountController {
   @SwaggerJoinEvent()
   @HttpCode(204)
   async joinEvent(
-    @Headers('x-session-id') sessionId: string,
+    @SessionId() sessionId: string,
     @Body() eventIdDto: EventIdDto,
     @RequestId() requestId: string,
   ) {
@@ -258,7 +258,7 @@ export class AccountController {
   @SwaggerDisjoinEvent()
   @HttpCode(204)
   async disJoinEvent(
-    @Headers('x-session-id') sessionId: string,
+    @SessionId() sessionId: string,
     @Body() eventIdDto: EventIdDto,
     @RequestId() requestId: string,
   ) {
