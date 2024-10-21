@@ -25,7 +25,7 @@ import {
   InvalidCredentialsLoginApiError,
   UnverifiedUserApiError,
 } from '../../../domain/errors';
-import { CleanPasswordSymbol } from '../../../infrastructure/db/modules/none/user-da';
+import { PasswordSymbol } from '../../../infrastructure/db/modules/none/user-da';
 
 @Injectable()
 export class LoginService {
@@ -80,7 +80,7 @@ export class LoginService {
 
       await this.validateLoginCredentialsService.validateLoginCredentials(
         uuid,
-        userProfile[CleanPasswordSymbol],
+        userProfile[PasswordSymbol],
         password,
         status,
         requestId,
