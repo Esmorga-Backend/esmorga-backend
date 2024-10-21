@@ -2,7 +2,7 @@ import { Injectable, NotImplementedException } from '@nestjs/common';
 import { UserProfileDto } from '../../../dtos';
 import { AccountRegisterDto } from '../../../http/dtos';
 
-export const CleanPasswordSymbol = Symbol('_password');
+export const PasswordSymbol = Symbol('_password');
 
 @Injectable()
 export class UserDA {
@@ -11,7 +11,7 @@ export class UserDA {
   }
   findOneByEmail(
     _email: string,
-  ): Promise<UserProfileDto & { [CleanPasswordSymbol]: string }> {
+  ): Promise<UserProfileDto & { [PasswordSymbol]: string }> {
     throw new NotImplementedException();
   }
   async updateStatusByEmail(

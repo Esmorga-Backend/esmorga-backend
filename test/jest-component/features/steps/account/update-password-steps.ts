@@ -3,15 +3,24 @@ import { context, moduleFixture } from '../../../steps-config';
 import { USER_MOCK_DB_ID } from '../../../../mocks/db/common';
 import {
   getUserProfile,
+  PASSWORD_MOCK_DB,
   VERIFICATION_CODE_DATA_MOCK_DB,
 } from '../../../../mocks/db';
-import { UserDA } from '../../../../../src/infrastructure/db/modules/none/user-da';
+import {
+  PasswordSymbol,
+  UserDA,
+} from '../../../../../src/infrastructure/db/modules/none/user-da';
 import { TemporalCodeDA } from '../../../../../src/infrastructure/db/modules/none/temporal-code-da';
 import { LoginAttemptsDA } from '../../../../../src/infrastructure/db/modules/none/login-attempts-da';
 
 export const updatePasswordSteps: StepDefinitions = ({ given, and }) => {
-  given('The PUT password update API is available', () => {
+  given('The PUT password update API is available', async () => {
     context.path = '/v1/account/password/forgot-update';
+
+    context.user = {
+      ...(await getUserProfile()),
+      [PasswordSymbol]: PASSWORD_MOCK_DB,
+    };
 
     context.mock = {
       password: 'SuperSecret1!',
