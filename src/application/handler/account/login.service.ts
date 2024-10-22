@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import { PinoLogger } from 'nestjs-pino';
 
 import {
@@ -107,7 +107,7 @@ export class LoginService {
 
       const ttl = this.configService.get('ACCESS_TOKEN_TTL');
 
-      const accountLoggedDto: AccountLoggedDto = plainToClass(
+      const accountLoggedDto: AccountLoggedDto = plainToInstance(
         AccountLoggedDto,
         {
           profile: userProfile,

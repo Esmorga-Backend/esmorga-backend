@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { type Model } from 'mongoose';
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import { TemporalCode } from './schema';
 import { TemporalCodeDA } from '../none/temporal-code-da';
 import { TemporalCodeDto } from '../../../dtos';
@@ -31,7 +31,7 @@ export class TemporalCodeMongoDA implements TemporalCodeDA {
       code: { $eq: code },
       type: { $eq: codeType },
     });
-    return plainToClass(TemporalCodeDto, tempCodeDoc, {
+    return plainToInstance(TemporalCodeDto, tempCodeDoc, {
       excludeExtraneousValues: true,
     });
   }

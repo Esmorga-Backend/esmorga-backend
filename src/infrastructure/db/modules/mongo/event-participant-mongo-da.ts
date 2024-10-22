@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import { EventParticipantsDA } from '../none/event-participant-da';
 import { EventParticipants } from './schema';
 import { EventParticipantsDto } from '../../../dtos';
@@ -17,7 +17,7 @@ export class EventParticipantsMongoDA implements EventParticipantsDA {
       participants: { $in: [userId] },
     });
     return eventParticipantsDocs.map((singleEventParticipanstDb) => {
-      const eventParticipants: EventParticipantsDto = plainToClass(
+      const eventParticipants: EventParticipantsDto = plainToInstance(
         EventParticipantsDto,
         singleEventParticipanstDb,
         {
@@ -62,7 +62,7 @@ export class EventParticipantsMongoDA implements EventParticipantsDA {
 
     if (!eventParcipantsDoc) return null;
 
-    return plainToClass(EventParticipantsDto, eventParcipantsDoc, {
+    return plainToInstance(EventParticipantsDto, eventParcipantsDoc, {
       excludeExtraneousValues: true,
     });
   }

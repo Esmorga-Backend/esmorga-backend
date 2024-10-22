@@ -1,4 +1,4 @@
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import {
   FUTURE_EVENT_MOCK_DB_ID,
   EVENT_CORE_FIELDS_MOCK_DB_ID,
@@ -32,7 +32,7 @@ export const UPDATED_EVENT_MOCK_DB = {
   updatedBy: '665f019c17331ebee550b2f5',
 };
 
-export const UPDATED_EVENT_MOCK_DTO = plainToClass(
+export const UPDATED_EVENT_MOCK_DTO = plainToInstance(
   EventDto,
   UPDATED_EVENT_MOCK_DB,
 );
@@ -54,7 +54,7 @@ export const FUTURE_EVENT_MOCK_DB = {
   updatedAt: currentDate,
 };
 
-export const FUTURE_EVENT_MOCK_DTO = plainToClass(
+export const FUTURE_EVENT_MOCK_DTO = plainToInstance(
   EventDto,
   FUTURE_EVENT_MOCK_DB,
 );
@@ -74,8 +74,7 @@ export const EVENT_CORE_FIELDS_MOCK_DB = {
   updatedAt: currentDate,
 };
 
-
-export const EVENT_CORE_FIELDS_MOCK_DTO = plainToClass(
+export const EVENT_CORE_FIELDS_MOCK_DTO = plainToInstance(
   EventDto,
   EVENT_CORE_FIELDS_MOCK_DB,
 );
@@ -98,4 +97,4 @@ export const OLD_EVENT_MOCK_DB = {
   updatedAt: currentDate,
 };
 
-export const OLD_EVENT_MOCK_DTO = plainToClass(EventDto, OLD_EVENT_MOCK_DB);
+export const OLD_EVENT_MOCK_DTO = plainToInstance(EventDto, OLD_EVENT_MOCK_DB);

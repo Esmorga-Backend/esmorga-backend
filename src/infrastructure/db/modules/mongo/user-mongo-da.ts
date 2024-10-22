@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { plainToClass, plainToInstance } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import type { Model } from 'mongoose';
 import { UserProfileDto } from '../../../dtos';
 import { AccountRegisterDto } from '../../../http/dtos';
@@ -15,7 +15,7 @@ export class UserMongoDA implements UserDA {
   ): Promise<UserProfileDto & { [PasswordSymbol]: string }> {
     const user = await this.userModel.findOne({ email: { $eq: email } });
     if (!user) return null;
-    const userProfile = plainToClass(UserProfileDto, user, {
+    const userProfile = plainToInstance(UserProfileDto, user, {
       excludeExtraneousValues: true,
     });
     return { ...userProfile, [PasswordSymbol]: user.password };
@@ -34,7 +34,7 @@ export class UserMongoDA implements UserDA {
       { new: true },
     );
     if (!user) return null;
-    return plainToClass(UserProfileDto, user, {
+    return plainToInstance(UserProfileDto, user, {
       excludeExtraneousValues: true,
     });
   }
@@ -42,7 +42,7 @@ export class UserMongoDA implements UserDA {
   async findOneById(uuid: string): Promise<UserProfileDto | null> {
     const user = await this.userModel.findById({ _id: uuid });
     if (!user) return null;
-    return plainToClass(UserProfileDto, user, {
+    return plainToInstance(UserProfileDto, user, {
       excludeExtraneousValues: true,
     });
   }
@@ -73,7 +73,7 @@ export class UserMongoDA implements UserDA {
       { new: true },
     );
     if (!user) return null;
-    return plainToClass(UserProfileDto, user, {
+    return plainToInstance(UserProfileDto, user, {
       excludeExtraneousValues: true,
     });
   }
