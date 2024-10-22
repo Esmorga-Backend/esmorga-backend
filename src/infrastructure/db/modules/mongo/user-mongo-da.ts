@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { plainToClass } from 'class-transformer';
+import { plainToClass, plainToInstance } from 'class-transformer';
 import type { Model } from 'mongoose';
 import { UserProfileDto } from '../../../dtos';
 import { AccountRegisterDto } from '../../../http/dtos';
@@ -9,7 +9,7 @@ import { User } from './schema';
 import { ACCOUNT_STATUS } from '../../../../domain/const';
 @Injectable({})
 export class UserMongoDA implements UserDA {
-  constructor(@InjectModel(User.name) private userModel: Model<User>) { }
+  constructor(@InjectModel(User.name) private userModel: Model<User>) {}
   async findOneByEmail(
     email: string,
   ): Promise<UserProfileDto & { [CleanPasswordSymbol]: string }> {
@@ -38,12 +38,29 @@ export class UserMongoDA implements UserDA {
       excludeExtraneousValues: true,
     });
   }
+
   async findOneById(uuid: string): Promise<UserProfileDto | null> {
     const user = await this.userModel.findById({ _id: uuid });
     if (!user) return null;
     return plainToClass(UserProfileDto, user, {
       excludeExtraneousValues: true,
     });
+  }
+
+  async findUsersByUuid(
+    participants: string[],
+  ): Promise<UserProfileDto[] | null> {
+    const users = await this.userModel.find({
+      _id: { $in: participants },
+    });
+
+    if (!users) return null;
+
+    const userProfiles = plainToInstance(UserProfileDto, users, {
+      excludeExtraneousValues: true,
+    });
+
+    return userProfiles;
   }
 
   async updateStatusByEmail(
@@ -60,6 +77,7 @@ export class UserMongoDA implements UserDA {
       excludeExtraneousValues: true,
     });
   }
+
   async updateBlockedStatusByUuid(
     uuid: string,
     newStatus: string,
@@ -75,6 +93,7 @@ export class UserMongoDA implements UserDA {
       },
     );
   }
+
   async create(userData: AccountRegisterDto): Promise<void> {
     await new this.userModel(userData).save();
   }

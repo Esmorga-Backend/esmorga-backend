@@ -1,5 +1,5 @@
 import { ApiResponseOptions } from '@nestjs/swagger';
-import { EventListDto, EventDto } from '../../../dtos';
+import { EventListDto, EventDto, UserListDto } from '../../../dtos';
 import {
   BAD_REQUEST_ERROR_COMMON_PROPERTIES,
   FORBIDDEN_INVALID_ROLE_COMMON_PROPERTIES,
@@ -9,6 +9,7 @@ import {
 
 const PATHS = {
   EVENTS: '/v1/events',
+  GET_EVENT_USERS: '/v1/events/users',
 };
 
 export const CREATE_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
@@ -176,3 +177,55 @@ export const DELETE_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
     },
   },
 };
+
+export const GET_EVENT_USERS_RESPONSES: { [key: string]: ApiResponseOptions } =
+  {
+    OK: {
+      description: 'List of users',
+      type: UserListDto,
+    },
+    BAD_REQUEST_ERROR: {
+      description: 'Some inputs are missed or wrong',
+      schema: {
+        type: 'object',
+        properties: {
+          ...BAD_REQUEST_ERROR_COMMON_PROPERTIES,
+          type: { example: PATHS.GET_EVENT_USERS },
+          errors: {
+            type: 'array',
+            example: ['eventId should not be empty'],
+          },
+        },
+      },
+    },
+    UNAUTHORIZED_ERROR: {
+      description: 'Invalid credentials',
+      schema: {
+        type: 'object',
+        properties: {
+          ...UNAUTHORIZED_INVALID_TOKEN_COMMON_PROPERTIES,
+          type: { type: 'string', example: PATHS.GET_EVENT_USERS },
+        },
+      },
+    },
+    FORBIDDEN_ERROR: {
+      description: 'Invalid credentials',
+      schema: {
+        type: 'object',
+        properties: {
+          ...FORBIDDEN_INVALID_ROLE_COMMON_PROPERTIES,
+          type: { example: PATHS.GET_EVENT_USERS },
+        },
+      },
+    },
+    INTERNAL_ERROR: {
+      description: 'Error not handled',
+      schema: {
+        type: 'object',
+        properties: {
+          ...INTERNAL_ERROR_COMMON_PROPERTIES,
+          type: { type: 'string', example: PATHS.EVENTS },
+        },
+      },
+    },
+  };

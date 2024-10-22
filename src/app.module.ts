@@ -41,8 +41,8 @@ export class AppModule implements NestModule {
           },
         }),
         DataAccessModule.forRoot(db),
-        EventModule,
         AccountModule,
+        EventModule,
       ],
       providers: [
         {

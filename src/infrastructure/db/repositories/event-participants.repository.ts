@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { PinoLogger } from 'nestjs-pino';
-import { DataBaseInternalError } from '../errors';
+import { DataBaseInternalError, DataBaseNotFoundError } from '../errors';
 import { EventParticipantsDA } from '../modules/none/event-participant-da';
+import { EventParticipantsDto } from '../../dtos';
 
 @Injectable()
 export class EventParticipantsRepository {
@@ -106,6 +107,32 @@ export class EventParticipantsRepository {
       );
 
       throw error;
+    }
+  }
+
+  /**
+   * Return the event with the participants.
+   *
+   * @param eventId - Event identifier.
+   * @param requestId - Request identifier for API logger.
+   * @returns The data of the participants who have joined the eventId provided.
+   */
+  async getEventParticipantList(
+    eventId: string,
+    requestId?: string,
+  ): Promise<EventParticipantsDto> {
+    try {
+      this.logger.info(
+        `[EventParticipantsRepository] [getEventParticipantsList] - x-request-id: ${requestId}, eventId: ${eventId}`,
+      );
+      const event: EventParticipantsDto =
+        await this.eventParticipantDA.findEvent(eventId);
+      if (!event) throw new DataBaseNotFoundError();
+      return event;
+    } catch (error) {
+      this.logger.error(
+        `[EventParticipantsRepository] [getEventParticipantsList] - x-request-id: ${requestId}, error: ${error}`,
+      );
     }
   }
 }

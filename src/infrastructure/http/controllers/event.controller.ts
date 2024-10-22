@@ -19,15 +19,17 @@ import {
   GetEventListService,
   UpdateEventService,
   DeleteEventService,
+  GetEventUsersListService,
 } from '../../../application/handler/event';
 import { HttpExceptionFilter } from '../errors';
 import {
   SwaggerCreateEvent,
-  SwaggerGetEvents,
-  SwaggerUpdateEvent,
   SwaggerDeleteEvents,
+  SwaggerGetEvents,
+  SwaggerGetEventUsers,
+  SwaggerUpdateEvent,
 } from '../swagger/decorators/events';
-import { EventDto, EventListDto } from '../../dtos';
+import { EventDto, EventListDto, UserListDto } from '../../dtos';
 import { CreateEventDto, UpdateEventDto, EventIdDto } from '../dtos';
 import { RequestId } from '../req-decorators';
 import { AuthGuard } from '../guards';
@@ -40,6 +42,7 @@ export class EventController {
   constructor(
     private readonly logger: PinoLogger,
     private readonly getEventListService: GetEventListService,
+    private getEventUsersListService: GetEventUsersListService,
     private readonly createEventService: CreateEventService,
     private readonly updateEventService: UpdateEventService,
     private readonly deleteEventService: DeleteEventService,
@@ -171,6 +174,41 @@ export class EventController {
     } catch (error) {
       this.logger.error(
         `[EventController] [deleteEvent] - x-request-id:${requestId}, error ${error}`,
+      );
+
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new InternalServerErrorException();
+    }
+  }
+
+  @Get('/users')
+  @UseGuards(AuthGuard)
+  @SwaggerGetEventUsers()
+  async getEventUsers(
+    @Headers('x-session-id') sessionId: string,
+    @Body() eventIdDto: EventIdDto,
+    @RequestId() requestId: string,
+  ): Promise<UserListDto> {
+    try {
+      this.logger.info(
+        `[EventController] [getEventUsers] - x-request-id:${requestId}`,
+      );
+
+      const { eventId } = eventIdDto;
+
+      const response: UserListDto =
+        await this.getEventUsersListService.getUsers(
+          sessionId,
+          eventId,
+          requestId,
+        );
+
+      return response;
+    } catch (error) {
+      this.logger.error(
+        `[EventController] [getEventUsers] - x-request-id:${requestId}, error ${error}`,
       );
 
       if (error instanceof HttpException) {

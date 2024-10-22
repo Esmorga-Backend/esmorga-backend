@@ -27,11 +27,13 @@ export class EventParticipantsMongoDA implements EventParticipantsDA {
       return eventParticipants.eventId;
     });
   }
+
   async removeByEventId(eventId: string): Promise<void> {
     await this.eventParticipantsModel.findOneAndDelete({
       eventId: { $eq: eventId },
     });
   }
+
   async findAndUpdateParticipantsList(
     eventId: string,
     userId: string,
@@ -42,6 +44,7 @@ export class EventParticipantsMongoDA implements EventParticipantsDA {
       { upsert: true },
     );
   }
+
   async removeParticipantFromList(
     eventId: string,
     userId: string,
@@ -50,5 +53,17 @@ export class EventParticipantsMongoDA implements EventParticipantsDA {
       { eventId },
       { $pull: { participants: userId } },
     );
+  }
+
+  async findEvent(eventId: string): Promise<EventParticipantsDto | null> {
+    const eventParcipantsDoc = await this.eventParticipantsModel.findOne({
+      eventId: eventId,
+    });
+
+    if (!eventParcipantsDoc) return null;
+
+    return plainToClass(EventParticipantsDto, eventParcipantsDoc, {
+      excludeExtraneousValues: true,
+    });
   }
 }
