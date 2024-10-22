@@ -1,6 +1,6 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 
-export const RequestId = createParamDecorator(
+export const SessionId = createParamDecorator(
   (_, ctx: ExecutionContext) =>
-    ctx.switchToHttp().getRequest().headers['x-request-id'],
+    ctx.switchToHttp().getRequest().headers['x-session-id'],
 );

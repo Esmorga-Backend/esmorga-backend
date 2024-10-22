@@ -4,12 +4,9 @@ import { GenerateMailService } from '../../../../../src/domain/services';
 import { NodemailerService } from '../../../../../src/infrastructure/services';
 import { ACCOUNT_STATUS } from '../../../../../src/domain/const';
 import { EMAIL_MOCK } from '../../../../mocks/dtos';
+import { getUserProfile, PASSWORD_MOCK_DB } from '../../../../mocks/db';
 import {
-  getUserProfile,
-  PASSWORD_MOCK_DB,
-} from '../../../../mocks/db';
-import {
-  CleanPasswordSymbol,
+  PasswordSymbol,
   UserDA,
 } from '../../../../../src/infrastructure/db/modules/none/user-da';
 import { TemporalCodeDA } from '../../../../../src/infrastructure/db/modules/none/temporal-code-da';
@@ -76,14 +73,12 @@ export const sendEmailVerificationSteps: StepDefinitions = ({ given, and }) => {
   and(/^email status (.*)$/, async (status) => {
     if (status === 'null') {
       jest.spyOn(context.userDA, 'findOneByEmail').mockResolvedValue(null);
-    }
-
-    if ((status = ACCOUNT_STATUS.ACTIVE)) {
-      const USER_MOCK_DB = await getUserProfile();
+    } else if (status === ACCOUNT_STATUS.ACTIVE) {
+      const USER_MOCK_PROFILE = await getUserProfile();
 
       jest.spyOn(context.userDA, 'findOneByEmail').mockResolvedValue({
-        ...USER_MOCK_DB,
-        [CleanPasswordSymbol]: PASSWORD_MOCK_DB,
+        ...USER_MOCK_PROFILE,
+        [PasswordSymbol]: PASSWORD_MOCK_DB,
       });
     }
   });

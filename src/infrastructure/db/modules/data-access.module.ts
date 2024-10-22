@@ -1,7 +1,26 @@
-import { DynamicModule } from '@nestjs/common';
+import { ConfigurableModuleBuilder, DynamicModule } from '@nestjs/common';
+export type SupportedDataStorage = 'mongodb' | 'none';
+export type DataAccessModuleOptions = { db: SupportedDataStorage };
 
-export class DataAccessModule {
-  static async forRoot(db: 'mongodb' | 'none'): Promise<DynamicModule> {
+const { ConfigurableModuleClass } = new ConfigurableModuleBuilder<object>()
+  .setExtras<{ db: SupportedDataStorage }>(
+    {
+      db: 'mongodb',
+    },
+    (definition, extras) => {
+      const moduleRef = { module: null };
+      return {
+        ...definition,
+        global: true,
+        imports: [loadDbModule(extras.db, moduleRef)],
+        exports: [moduleRef],
+      };
+    },
+  )
+  .build();
+
+function loadDbModule(db: SupportedDataStorage, moduleRef: { module: any }) {
+  return new Promise<DynamicModule>(async (resolve) => {
     let dbModuleClassLoader: () => Promise<any>;
     switch (db) {
       case 'none':
@@ -11,19 +30,18 @@ export class DataAccessModule {
           );
         break;
       case 'mongodb':
-      default:
         dbModuleClassLoader = async () =>
           await import('./mongo/mongo-da.module').then(
             ({ MongoDataAccessModule }) => MongoDataAccessModule,
           );
+        break;
+      default:
+        throw new Error(`Unsupported db ${db}`);
     }
     const dbModuleClass = await dbModuleClassLoader();
-    return {
-      module: DataAccessModule,
-      global: true,
-      providers: [],
-      imports: [dbModuleClass],
-      exports: [dbModuleClass],
-    };
-  }
+    moduleRef.module = dbModuleClass;
+    resolve({ module: dbModuleClass });
+  });
 }
+
+export class DataAccessModule extends ConfigurableModuleClass {}

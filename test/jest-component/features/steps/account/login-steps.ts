@@ -13,7 +13,7 @@ import {
 } from '../../../../../src/domain/services';
 import { ACCOUNT_STATUS } from '../../../../../src/domain/const';
 import {
-  CleanPasswordSymbol,
+  PasswordSymbol,
   UserDA,
 } from '../../../../../src/infrastructure/db/modules/none/user-da';
 import { SessionDA } from '../../../../../src/infrastructure/db/modules/none/session-da';
@@ -26,7 +26,7 @@ export const loginSteps: StepDefinitions = async ({ given, and, then }) => {
 
     context.user = {
       ...(await getUserProfile()),
-      [CleanPasswordSymbol]: PASSWORD_MOCK_DB,
+      [PasswordSymbol]: PASSWORD_MOCK_DB,
     };
 
     const configService = moduleFixture.get<ConfigService>(ConfigService);
@@ -58,7 +58,7 @@ export const loginSteps: StepDefinitions = async ({ given, and, then }) => {
       .spyOn(context.userDA, 'findOneByEmail')
       .mockImplementation(async (email) => {
         if (email === context.user.email) {
-          return { ...context.user, [CleanPasswordSymbol]: PASSWORD_MOCK_DB };
+          return context.user;
         }
         return null;
       });
@@ -67,11 +67,7 @@ export const loginSteps: StepDefinitions = async ({ given, and, then }) => {
       .spyOn(context.userDA, 'updateStatusByEmail')
       .mockImplementation(async (email, status) => {
         if (email === context.user.email) {
-          context.user = {
-            ...context.user,
-            status,
-            [CleanPasswordSymbol]: PASSWORD_MOCK_DB,
-          };
+          context.user.status = status;
           return context.user;
         }
         return null;
@@ -117,34 +113,21 @@ export const loginSteps: StepDefinitions = async ({ given, and, then }) => {
   );
 
   and('user status is UNVERIFIED', async () => {
-    context.user = {
-      ...context.user,
-      status: ACCOUNT_STATUS.UNVERIFIED,
-      [CleanPasswordSymbol]: PASSWORD_MOCK_DB,
-    };
-
+    context.user.status = ACCOUNT_STATUS.UNVERIFIED;
     jest
       .spyOn(context.userDA, 'findOneByEmail')
       .mockImplementation(() => context.user);
   });
 
   and('user status is BLOCKED', async () => {
-    context.user = {
-      ...context.user,
-      status: ACCOUNT_STATUS.BLOCKED,
-      [CleanPasswordSymbol]: PASSWORD_MOCK_DB,
-    };
+    context.user.status = ACCOUNT_STATUS.BLOCKED;
     jest
       .spyOn(context.userDA, 'findOneByEmail')
       .mockImplementation(() => context.user);
   });
 
   and('expireBlockedAt is in the past', () => {
-    context.user = {
-      ...context.user,
-      expireBlockedAt: new Date('2024-03-09T10:05:30.915Z'),
-      [CleanPasswordSymbol]: PASSWORD_MOCK_DB,
-    };
+    context.user.expireBlockedAt = new Date('2024-03-09T10:05:30.915Z');
     jest
       .spyOn(context.userDA, 'findOneByEmail')
       .mockImplementation(() => context.user);

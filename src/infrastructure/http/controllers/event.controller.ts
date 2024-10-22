@@ -2,7 +2,6 @@ import {
   Body,
   Controller,
   Get,
-  Headers,
   Post,
   Delete,
   HttpException,
@@ -31,7 +30,7 @@ import {
 } from '../swagger/decorators/events';
 import { EventDto, EventListDto, UserListDto } from '../../dtos';
 import { CreateEventDto, UpdateEventDto, EventIdDto } from '../dtos';
-import { RequestId } from '../req-decorators';
+import { RequestId, SessionId } from '../req-decorators';
 import { AuthGuard } from '../guards';
 import { validateNotNullableFields } from '../services';
 
@@ -77,7 +76,7 @@ export class EventController {
   @SwaggerCreateEvent()
   async createEvent(
     @Body() createEventDto: CreateEventDto,
-    @Headers('x-session-id') sessionId: string,
+    @SessionId() sessionId: string,
     @RequestId() requestId: string,
   ) {
     try {
@@ -107,7 +106,7 @@ export class EventController {
   @SwaggerUpdateEvent()
   async updateEvent(
     @Body() updateEventDto: UpdateEventDto,
-    @Headers('x-session-id') sessionId: string,
+    @SessionId() sessionId: string,
     @RequestId() requestId: string,
   ): Promise<EventDto> {
     try {
@@ -157,7 +156,7 @@ export class EventController {
   @HttpCode(204)
   @SwaggerDeleteEvents()
   async deleteEvent(
-    @Headers('x-session-id') sessionId: string,
+    @SessionId() sessionId: string,
     @Body() joinEventDto: EventIdDto,
     @RequestId() requestId: string,
   ) {

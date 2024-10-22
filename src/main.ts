@@ -13,7 +13,7 @@ async function main() {
   executeMigrations();
 
   const app = await NestFactory.create<NestExpressApplication>(
-    AppModule.forRoot('mongodb'),
+    AppModule.register({ db: 'mongodb' }),
   );
 
   app.set('trust proxy', true);

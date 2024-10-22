@@ -4,7 +4,7 @@ import { plainToClass, plainToInstance } from 'class-transformer';
 import type { Model } from 'mongoose';
 import { UserProfileDto } from '../../../dtos';
 import { AccountRegisterDto } from '../../../http/dtos';
-import { CleanPasswordSymbol, UserDA } from '../none/user-da';
+import { PasswordSymbol, UserDA } from '../none/user-da';
 import { User } from './schema';
 import { ACCOUNT_STATUS } from '../../../../domain/const';
 @Injectable({})
@@ -12,13 +12,13 @@ export class UserMongoDA implements UserDA {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
   async findOneByEmail(
     email: string,
-  ): Promise<UserProfileDto & { [CleanPasswordSymbol]: string }> {
+  ): Promise<UserProfileDto & { [PasswordSymbol]: string }> {
     const user = await this.userModel.findOne({ email: { $eq: email } });
     if (!user) return null;
     const userProfile = plainToClass(UserProfileDto, user, {
       excludeExtraneousValues: true,
     });
-    return { ...userProfile, [CleanPasswordSymbol]: user.password };
+    return { ...userProfile, [PasswordSymbol]: user.password };
   }
   async updatePasswordByEmail(
     email: string,
