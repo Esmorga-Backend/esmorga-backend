@@ -33,7 +33,7 @@ export class GetEventUsersListService {
   ): Promise<UserListDto> {
     try {
       this.logger.info(
-        `[GetEventUsersListService] [find] - x-request-id: ${requestId}, eventId ${eventId}`,
+        `[GetEventUsersListService] [getUsers] - x-request-id: ${requestId}, eventId ${eventId}`,
       );
 
       const { uuid } = await this.tokensRepository.getBySessionId(
@@ -69,7 +69,7 @@ export class GetEventUsersListService {
       };
     } catch (error) {
       this.logger.error(
-        `[GetEventUsersListService] [find] - x-request-id: ${requestId}, error: ${error}`,
+        `[GetEventUsersListService] [getUsers] - x-request-id: ${requestId}, error: ${error}`,
       );
 
       throw error;

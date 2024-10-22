@@ -186,7 +186,7 @@ export class EventController {
   @UseGuards(AuthGuard)
   @SwaggerGetEventUsers()
   async getEventUsers(
-    @Headers('x-session-id') sessionId: string,
+    @SessionId() sessionId: string,
     @Body() eventIdDto: EventIdDto,
     @RequestId() requestId: string,
   ): Promise<UserListDto> {
