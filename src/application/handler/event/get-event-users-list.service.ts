@@ -6,11 +6,15 @@ import {
   EventParticipantsRepository,
 } from '../../../infrastructure/db/repositories';
 import { ACCOUNT_ROLES } from '../../../domain/const';
-import { NotAdminAccountApiError } from '../../../domain/errors';
+import {
+  InvalidEventIdApiError,
+  NotAdminAccountApiError,
+} from '../../../domain/errors';
 import {
   EventParticipantsDto,
   UserListDto,
 } from '../../../infrastructure/dtos';
+import { DataBaseBadRequestError } from '../../../infrastructure/db/errors';
 
 @Injectable()
 export class GetEventUsersListService {
@@ -71,6 +75,9 @@ export class GetEventUsersListService {
       this.logger.error(
         `[GetEventUsersListService] [getUsers] - x-request-id: ${requestId}, error: ${error}`,
       );
+
+      if (error instanceof DataBaseBadRequestError)
+        throw new InvalidEventIdApiError();
 
       throw error;
     }

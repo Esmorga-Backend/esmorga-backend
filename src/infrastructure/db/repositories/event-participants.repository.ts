@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PinoLogger } from 'nestjs-pino';
-import { DataBaseInternalError, DataBaseNotFoundError } from '../errors';
+import { DataBaseInternalError, DataBaseBadRequestError } from '../errors';
 import { EventParticipantsDA } from '../modules/none/event-participant-da';
 import { EventParticipantsDto } from '../../dtos';
 
@@ -127,12 +127,14 @@ export class EventParticipantsRepository {
       );
       const event: EventParticipantsDto =
         await this.eventParticipantDA.findEvent(eventId);
-      if (!event) throw new DataBaseNotFoundError();
+      if (!event) throw new DataBaseBadRequestError();
       return event;
     } catch (error) {
       this.logger.error(
         `[EventParticipantsRepository] [getEventParticipantsList] - x-request-id: ${requestId}, error: ${error}`,
       );
+
+      throw error;
     }
   }
 }
