@@ -86,11 +86,10 @@ export class AccountRepository {
 
   /**
    * Finds the names of the users related to the provided array of uuid.
-   * !  Poner bien este comentario
+   *
    * @param participants - Array of users uuid.
    * @param requestId - Request identifier.
    * @returns User data following business schema.
-   * @throws DataBaseUnathorizedError - User not found.
    */
   async getUserNames(participants: string[], requestId?: string) {
     try {

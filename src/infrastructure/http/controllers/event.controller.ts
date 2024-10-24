@@ -198,7 +198,7 @@ export class EventController {
       const { eventId } = eventIdDto;
 
       const response: UserListDto =
-        await this.getEventUsersListService.getUsers(
+        await this.getEventUsersListService.getUsersList(
           sessionId,
           eventId,
           requestId,

@@ -30,7 +30,7 @@ export class GetEventUsersListService {
    *
    * @returns - Object containing the total number of joined users and the list of their names.
    */
-  async getUsers(
+  async getUsersList(
     sessionId: string,
     eventId: string,
     requestId?: string,

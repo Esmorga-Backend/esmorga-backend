@@ -8,6 +8,6 @@ export class UserListDto {
 
   @IsArray()
   @IsString({ each: true })
-  @ApiProperty({ type: [String], example: '[ Mia Thermopolis, Phoebe Buffay]' })
+  @ApiProperty({ example: ['Mia Thermopolis', 'Phoebe Buffay'] })
   users: string[];
 }
