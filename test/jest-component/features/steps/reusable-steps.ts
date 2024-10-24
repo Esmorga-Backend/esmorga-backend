@@ -118,6 +118,7 @@ export const reusableSteps: StepDefinitions = ({ when, then, and }) => {
   then(
     /^well-formed success response with status code (\d+) returned$/,
     (code_n) => {
+      console.log(context.response.error);
       expect(context.response.status).toBe(parseInt(code_n));
 
       check_swagger();
