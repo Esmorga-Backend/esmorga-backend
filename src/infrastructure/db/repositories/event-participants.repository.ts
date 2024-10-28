@@ -127,7 +127,7 @@ export class EventParticipantsRepository {
       );
       const event: EventParticipantsDto =
         await this.eventParticipantDA.findEvent(eventId);
-      if (!event) throw new DataBaseBadRequestError();
+
       return event;
     } catch (error) {
       this.logger.error(

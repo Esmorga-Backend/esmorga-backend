@@ -4,10 +4,11 @@ import {
   AccountRepository,
   TokensRepository,
   EventParticipantsRepository,
+  EventRepository,
 } from '../../../infrastructure/db/repositories';
 import { ACCOUNT_ROLES } from '../../../domain/const';
 import {
-  InvalidEventIdApiError,
+  NotFoundEventIdApiError,
   NotAdminAccountApiError,
 } from '../../../domain/errors';
 import {
@@ -23,6 +24,7 @@ export class GetEventUsersListService {
     private readonly accountRepository: AccountRepository,
     private readonly tokensRepository: TokensRepository,
     private readonly eventParticipantsRepository: EventParticipantsRepository,
+    private readonly eventRepository: EventRepository,
   ) {}
 
   /**
@@ -52,16 +54,20 @@ export class GetEventUsersListService {
 
       if (role !== ACCOUNT_ROLES.ADMIN) throw new NotAdminAccountApiError();
 
+      await this.eventRepository.findOneByEventId(eventId);
+
       const participantList: EventParticipantsDto =
         await this.eventParticipantsRepository.getEventParticipantList(
           eventId,
           requestId,
         );
 
-      const participantNames = await this.accountRepository.getUserNames(
-        participantList.participants,
-        requestId,
-      );
+      const participantNames = participantList
+        ? await this.accountRepository.getUserNames(
+            participantList.participants,
+            requestId,
+          )
+        : [];
 
       const sortedParticipantNames = participantNames.sort((a, b) =>
         a.localeCompare(b),
@@ -75,9 +81,9 @@ export class GetEventUsersListService {
       this.logger.error(
         `[GetEventUsersListService] [getUsers] - x-request-id: ${requestId}, error: ${error}`,
       );
-
-      if (error instanceof DataBaseBadRequestError)
-        throw new InvalidEventIdApiError();
+      if (error instanceof DataBaseBadRequestError) {
+        throw new NotFoundEventIdApiError();
+      }
 
       throw error;
     }

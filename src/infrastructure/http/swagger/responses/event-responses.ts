@@ -4,12 +4,13 @@ import {
   BAD_REQUEST_ERROR_COMMON_PROPERTIES,
   FORBIDDEN_INVALID_ROLE_COMMON_PROPERTIES,
   INTERNAL_ERROR_COMMON_PROPERTIES,
+  NOT_FOUND_ERROR_COMMON_PROPERTIES,
   UNAUTHORIZED_INVALID_TOKEN_COMMON_PROPERTIES,
 } from './common-response-properties';
 
 const PATHS = {
   EVENTS: '/v1/events',
-  GET_EVENT_USERS: '/v1/events/users',
+  GET_EVENT_USERS: '/v1/events/eventId/users',
 };
 
 export const CREATE_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
@@ -215,6 +216,20 @@ export const GET_EVENT_USERS_RESPONSES: { [key: string]: ApiResponseOptions } =
         properties: {
           ...FORBIDDEN_INVALID_ROLE_COMMON_PROPERTIES,
           type: { example: PATHS.GET_EVENT_USERS },
+        },
+      },
+    },
+    NOT_FOUND_ERROR: {
+      description: 'EventId not found',
+      schema: {
+        type: 'object',
+        properties: {
+          ...NOT_FOUND_ERROR_COMMON_PROPERTIES,
+          type: { example: PATHS.GET_EVENT_USERS },
+          errors: {
+            type: 'array',
+            example: ['eventId not found'],
+          },
         },
       },
     },

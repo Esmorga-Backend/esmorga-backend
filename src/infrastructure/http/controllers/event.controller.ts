@@ -10,6 +10,7 @@ import {
   UseFilters,
   UseGuards,
   HttpCode,
+  Param,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { PinoLogger } from 'nestjs-pino';
@@ -182,12 +183,13 @@ export class EventController {
     }
   }
 
-  @Get('/users')
+  @Get(':eventId/users')
   @UseGuards(AuthGuard)
   @SwaggerGetEventUsers()
+  @HttpCode(200)
   async getEventUsers(
     @SessionId() sessionId: string,
-    @Body() eventIdDto: EventIdDto,
+    @Param() params: EventIdDto,
     @RequestId() requestId: string,
   ): Promise<UserListDto> {
     try {
@@ -195,7 +197,7 @@ export class EventController {
         `[EventController] [getEventUsers] - x-request-id:${requestId}`,
       );
 
-      const { eventId } = eventIdDto;
+      const { eventId } = params;
 
       const response: UserListDto =
         await this.getEventUsersListService.getUsersList(

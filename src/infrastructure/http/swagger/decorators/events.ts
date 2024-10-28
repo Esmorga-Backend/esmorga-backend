@@ -7,8 +7,10 @@ import {
   ApiHeader,
   ApiInternalServerErrorResponse,
   ApiNoContentResponse,
+  ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
+  ApiParam,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { applyDecorators } from '@nestjs/common';
@@ -27,6 +29,7 @@ import {
   GET_EVENT_USERS_RESPONSES,
   UPDATE_EVENT_RESPONSES,
 } from '../responses/event-responses';
+import { GET_EVENT_USERS_LIST_PARAM } from '../params';
 
 export function SwaggerCreateEvent() {
   return applyDecorators(
@@ -90,10 +93,12 @@ export function SwaggerGetEventUsers() {
     ApiBearerAuth(),
     ApiHeader(GET_EVENT_USERS_HEADERS.AUTHORIZATION_BEARER),
     ApiHeader(GET_EVENT_USERS_HEADERS.CONTENT_TYPE),
+    ApiParam(GET_EVENT_USERS_LIST_PARAM),
     ApiOkResponse(GET_EVENT_USERS_RESPONSES.OK),
     ApiBadRequestResponse(GET_EVENT_USERS_RESPONSES.BAD_REQUEST_ERROR),
     ApiUnauthorizedResponse(GET_EVENT_USERS_RESPONSES.UNAUTHORIZED_ERROR),
     ApiForbiddenResponse(GET_EVENT_USERS_RESPONSES.FORBIDDEN_ERROR),
+    ApiNotFoundResponse(GET_EVENT_USERS_RESPONSES.NOT_FOUND_ERROR),
     ApiInternalServerErrorResponse(GET_EVENT_USERS_RESPONSES.INTERNAL_ERROR),
   );
 }
