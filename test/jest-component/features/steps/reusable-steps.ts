@@ -12,6 +12,10 @@ addFormats(ajv);
 function check_swagger() {
   const method = context.response.request.method.toLowerCase();
 
+  console.log(context.path, method);
+
+  console.log(schema.paths[context.path]);
+
   const reference =
     schema.paths[context.path][method].responses[context.response.status]
       .content?.['application/json'].schema;

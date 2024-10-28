@@ -189,15 +189,13 @@ export class EventController {
   @HttpCode(200)
   async getEventUsers(
     @SessionId() sessionId: string,
-    @Param() params: EventIdDto,
+    @Param('eventId') eventId: string,
     @RequestId() requestId: string,
   ): Promise<UserListDto> {
     try {
       this.logger.info(
         `[EventController] [getEventUsers] - x-request-id:${requestId}`,
       );
-
-      const { eventId } = params;
 
       const response: UserListDto =
         await this.getEventUsersListService.getUsersList(
