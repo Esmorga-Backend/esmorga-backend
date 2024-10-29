@@ -183,7 +183,7 @@ export class EventController {
     }
   }
 
-  @Get(':eventId/users')
+  @Get('/:eventId/users')
   @UseGuards(AuthGuard)
   @SwaggerGetEventUsers()
   @HttpCode(200)

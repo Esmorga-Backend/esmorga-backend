@@ -31,6 +31,8 @@ export class GetEventUsersListService {
    * Provide a list of users  who have joined the event.
    *
    * @returns - Object containing the total number of joined users and the list of their names.
+   * @throws NotAdminAccountApiError - User is not admin.
+   * @throws NotFoundEventIdApiError - EventId is not valid following DB schema ot not found.
    */
   async getUsersList(
     sessionId: string,

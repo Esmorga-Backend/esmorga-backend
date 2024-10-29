@@ -1,7 +1,7 @@
 import { JwtService } from '@nestjs/jwt';
 import { StepDefinitions } from 'jest-cucumber';
 import { context, moduleFixture } from '../../../steps-config';
-import { EVENT_ID_MOCK, EVENT_MOCK } from '../../../../mocks/dtos';
+import { EVENT_MOCK } from '../../../../mocks/dtos';
 import { HEADERS } from '../../../../mocks/common-data';
 import {
   EVENT_PARTICIPANT_MOCK_DB,
