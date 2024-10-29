@@ -19,7 +19,7 @@ function comparePathSegments(
   if (pathSegments.length !== pathSchemaSegments.length) {
     return false;
   }
-  for (let i = 0; i < pathSegments.length; i++) {
+  for (let i = 0; i < pathSchemaSegments.length; i++) {
     const isParam =
       pathSchemaSegments[i].startsWith('{') &&
       pathSchemaSegments[i].endsWith('}');
