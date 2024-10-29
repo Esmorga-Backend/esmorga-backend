@@ -20,10 +20,10 @@ function comparePathSegments(
     return false;
   }
   for (let i = 0; i < pathSchemaSegments.length; i++) {
+    const pathSchemaSegment = pathSchemaSegments[i];
     const isParam =
-      pathSchemaSegments[i].startsWith('{') &&
-      pathSchemaSegments[i].endsWith('}');
-    if (!isParam && pathSegments[i] !== pathSchemaSegments[i]) {
+      pathSchemaSegment.startsWith('{') && pathSchemaSegment.endsWith('}');
+    if (!isParam && pathSegments[i] !== pathSchemaSegment) {
       return false;
     }
   }
