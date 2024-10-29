@@ -9,17 +9,36 @@ import { getRowsDetail } from '../../instruments/swagger-things';
 const ajv = new Ajv({ strict: false });
 addFormats(ajv);
 
+function getPathSegments(path: string) {
+  return path.split('/').filter((i) => !!i.length);
+}
+function comparePathSegments(_pathParts: string[], pathParts: string[]) {
+  if (pathParts.length !== _pathParts.length) {
+    return false;
+  }
+  for (let i = 0; i < pathParts.length; i++) {
+    const isParam =
+      _pathParts[i].startsWith('{') && _pathParts[i].endsWith('}');
+    if (!isParam && pathParts[i] !== _pathParts[i]) {
+      return false;
+    }
+  }
+  return true;
+}
+function getPathSchemaEntryMatcher(path: string) {
+  const pathParts = getPathSegments(path);
+  return (pathSchemaEntry: [string, any]) =>
+    comparePathSegments(getPathSegments(pathSchemaEntry[0]), pathParts);
+}
 function check_swagger() {
   const method = context.response.request.method.toLowerCase();
-
-  console.log(context.path, method);
-
-  console.log(schema.paths[context.path]);
-
+  const pathsSchemas = schema.paths;
+  const matcherFn = getPathSchemaEntryMatcher(context.path);
+  const pathSchemaEntry = Object.entries(pathsSchemas).find(matcherFn);
   const reference =
-    schema.paths[context.path][method].responses[context.response.status]
-      .content?.['application/json'].schema;
-
+    pathSchemaEntry?.[1][method].responses[context.response.status].content?.[
+      'application/json'
+    ].schema;
   if (reference) {
     const validate = ajv.compile(reference);
     const valid = validate(context.response.body);
