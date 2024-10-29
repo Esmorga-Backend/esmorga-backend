@@ -12,23 +12,27 @@ addFormats(ajv);
 function getPathSegments(path: string) {
   return path.split('/').filter((i) => !!i.length);
 }
-function comparePathSegments(_pathParts: string[], pathParts: string[]) {
-  if (pathParts.length !== _pathParts.length) {
+function comparePathSegments(
+  pathSchemaSegments: string[],
+  pathSegments: string[],
+) {
+  if (pathSegments.length !== pathSchemaSegments.length) {
     return false;
   }
-  for (let i = 0; i < pathParts.length; i++) {
+  for (let i = 0; i < pathSegments.length; i++) {
     const isParam =
-      _pathParts[i].startsWith('{') && _pathParts[i].endsWith('}');
-    if (!isParam && pathParts[i] !== _pathParts[i]) {
+      pathSchemaSegments[i].startsWith('{') &&
+      pathSchemaSegments[i].endsWith('}');
+    if (!isParam && pathSegments[i] !== pathSchemaSegments[i]) {
       return false;
     }
   }
   return true;
 }
 function getPathSchemaEntryMatcher(path: string) {
-  const pathParts = getPathSegments(path);
+  const pathSegments = getPathSegments(path);
   return (pathSchemaEntry: [string, any]) =>
-    comparePathSegments(getPathSegments(pathSchemaEntry[0]), pathParts);
+    comparePathSegments(getPathSegments(pathSchemaEntry[0]), pathSegments);
 }
 function check_swagger() {
   const method = context.response.request.method.toLowerCase();
