@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Types, type Model } from 'mongoose';
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import { EventDA } from '../none/event-da';
 import { Event } from './schema';
 import { EventDto } from '../../../dtos';
@@ -13,7 +13,7 @@ export class EventMongoDA implements EventDA {
   async find(): Promise<EventDto[]> {
     const events = await this.eventModel.find();
     return events.map((event) =>
-      plainToClass(EventDto, event, {
+      plainToInstance(EventDto, event, {
         excludeExtraneousValues: true,
       }),
     );
@@ -27,7 +27,7 @@ export class EventMongoDA implements EventDA {
   async findOneById(eventId: string): Promise<EventDto | null> {
     const eventDoc = await this.eventModel.findById({ _id: eventId });
     if (!eventDoc) return null;
-    return plainToClass(EventDto, eventDoc, {
+    return plainToInstance(EventDto, eventDoc, {
       excludeExtraneousValues: true,
     });
   }
@@ -38,7 +38,7 @@ export class EventMongoDA implements EventDA {
     });
     const events = await this.eventModel.find({ _id: { $in: objectIds } });
     return events.map((event) =>
-      plainToClass(EventDto, event, {
+      plainToInstance(EventDto, event, {
         excludeExtraneousValues: true,
       }),
     );
@@ -52,7 +52,7 @@ export class EventMongoDA implements EventDA {
       { $set: eventUpdate },
       { new: true },
     );
-    return plainToClass(EventDto, updatedEvent, {
+    return plainToInstance(EventDto, updatedEvent, {
       excludeExtraneousValues: true,
     });
   }

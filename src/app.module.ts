@@ -59,8 +59,8 @@ const { ConfigurableModuleClass } =
         return getLoggerConfig(configService.get('NODE_ENV'));
       },
     }),
-    EventModule,
     AccountModule,
+    EventModule,
   ],
   providers: [
     {

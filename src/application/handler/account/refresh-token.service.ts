@@ -1,7 +1,7 @@
 import { ConfigService } from '@nestjs/config';
 import { JsonWebTokenError, JwtService } from '@nestjs/jwt';
 import { Injectable } from '@nestjs/common';
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import { PinoLogger } from 'nestjs-pino';
 import { TokensRepository } from '../../../infrastructure/db/repositories';
 import { RefreshTokenDto } from '../../../infrastructure/http/dtos';
@@ -80,7 +80,7 @@ export class RefreshTokenService {
 
       const ttl = this.configService.get('ACCESS_TOKEN_TTL');
 
-      const newPairOfTokens = plainToClass(
+      const newPairOfTokens = plainToInstance(
         NewPairOfTokensDto,
         {
           accessToken,

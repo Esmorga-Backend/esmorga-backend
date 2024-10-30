@@ -1,6 +1,5 @@
 import { StepDefinitions } from 'jest-cucumber';
 import { context, moduleFixture } from '../../../steps-config';
-import { TemporalCodeRepository } from '../../../../../src/infrastructure/db/repositories';
 import { GenerateMailService } from '../../../../../src/domain/services';
 import { NodemailerService } from '../../../../../src/infrastructure/services';
 import { getUserProfile } from '../../../../mocks/db';

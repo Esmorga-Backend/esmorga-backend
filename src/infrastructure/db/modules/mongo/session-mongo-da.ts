@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { type Model } from 'mongoose';
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import { Session } from './schema';
 import { SessionDA } from '../none/session-da';
 import { SessionDto } from '../../../dtos';
@@ -20,7 +20,7 @@ export class SessionMongoDA implements SessionDA {
   async findByUuid(uuid: string): Promise<SessionDto[]> {
     const sessionDoc = await this.sessionModel.find({ uuid: uuid });
     return sessionDoc.map((data) =>
-      plainToClass(SessionDto, data, {
+      plainToInstance(SessionDto, data, {
         excludeExtraneousValues: true,
       }),
     );
@@ -29,7 +29,7 @@ export class SessionMongoDA implements SessionDA {
     const sessionData = await this.sessionModel.findOne({
       sessionId: { $eq: sessionId },
     });
-    return plainToClass(SessionDto, sessionData, {
+    return plainToInstance(SessionDto, sessionData, {
       excludeExtraneousValues: true,
     });
   }

@@ -1,5 +1,5 @@
 import * as argon2 from 'argon2';
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import { USER_MOCK_DB_ID } from './common';
 import { ACCOUNT_ROLES, ACCOUNT_STATUS } from '../../../src/domain/const';
 import { UserProfileDto } from '../../../src/infrastructure/dtos';
@@ -31,5 +31,5 @@ export async function getUserMockDb() {
 }
 
 export async function getUserProfile() {
-  return plainToClass(UserProfileDto, getUserMockDb());
+  return plainToInstance(UserProfileDto, getUserMockDb());
 }

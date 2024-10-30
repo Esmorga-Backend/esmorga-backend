@@ -5,6 +5,7 @@ import {
   CreateEventService,
   DeleteEventService,
   GetEventListService,
+  GetEventUsersListService,
   UpdateEventService,
 } from '../../../application/handler/event';
 import { EventSharedModule } from './event-shared.module';
@@ -18,6 +19,7 @@ import { AccountSharedModule } from './account-shared.module';
     CreateEventService,
     DeleteEventService,
     GetEventListService,
+    GetEventUsersListService,
     UpdateEventService,
   ],
 })

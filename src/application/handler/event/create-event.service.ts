@@ -28,6 +28,8 @@ export class CreateEventService {
    * @param sessionId - Client session id.
    * @param createEventDto - Data transfer object containing event details.
    * @param requestId - The request ID for loggers.
+   * @throws NotAdminAccountApiError - User is not admin.
+   * @throws InvalidTokenApiError - No user found for the current session.
    */
   async create(
     sessionId: string,

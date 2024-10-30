@@ -1,14 +1,16 @@
 import { ApiResponseOptions } from '@nestjs/swagger';
-import { EventListDto, EventDto } from '../../../dtos';
+import { EventListDto, EventDto, UserListDto } from '../../../dtos';
 import {
   BAD_REQUEST_ERROR_COMMON_PROPERTIES,
   FORBIDDEN_INVALID_ROLE_COMMON_PROPERTIES,
   INTERNAL_ERROR_COMMON_PROPERTIES,
+  NOT_FOUND_ERROR_COMMON_PROPERTIES,
   UNAUTHORIZED_INVALID_TOKEN_COMMON_PROPERTIES,
 } from './common-response-properties';
 
 const PATHS = {
   EVENTS: '/v1/events',
+  GET_EVENT_USERS: '/v1/events/eventId/users',
 };
 
 export const CREATE_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
@@ -176,3 +178,55 @@ export const DELETE_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
     },
   },
 };
+
+export const GET_EVENT_USERS_RESPONSES: { [key: string]: ApiResponseOptions } =
+  {
+    OK: {
+      description: 'List of users',
+      type: UserListDto,
+    },
+    UNAUTHORIZED_ERROR: {
+      description: 'Invalid credentials',
+      schema: {
+        type: 'object',
+        properties: {
+          ...UNAUTHORIZED_INVALID_TOKEN_COMMON_PROPERTIES,
+          type: { type: 'string', example: PATHS.GET_EVENT_USERS },
+        },
+      },
+    },
+    FORBIDDEN_ERROR: {
+      description: 'Invalid credentials',
+      schema: {
+        type: 'object',
+        properties: {
+          ...FORBIDDEN_INVALID_ROLE_COMMON_PROPERTIES,
+          type: { example: PATHS.GET_EVENT_USERS },
+        },
+      },
+    },
+    NOT_FOUND_ERROR: {
+      description: 'EventId not found',
+      schema: {
+        type: 'object',
+        properties: {
+          ...NOT_FOUND_ERROR_COMMON_PROPERTIES,
+          type: { example: PATHS.GET_EVENT_USERS },
+          errors: {
+            type: 'array',
+            example: ['eventId not found'],
+          },
+        },
+      },
+    },
+    INTERNAL_ERROR: {
+      description: 'Error not handled',
+      schema: {
+        type: 'object',
+        properties: {
+          ...INTERNAL_ERROR_COMMON_PROPERTIES,
+          type: { type: 'string', example: PATHS.EVENTS },
+        },
+      },
+    },
+  };

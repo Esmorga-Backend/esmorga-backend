@@ -59,6 +59,18 @@ export const NOT_ACCEPTABLE_ERROR_COMMON_PROPERTIES = {
   },
 };
 
+export const NOT_FOUND_ERROR_COMMON_PROPERTIES = {
+  title: {
+    type: 'string',
+    example: 'notFoundError',
+  },
+  status: { type: 'number', example: HttpStatus.NOT_FOUND },
+  detail: {
+    type: 'string',
+    example: 'not found',
+  },
+};
+
 export const INTERNAL_ERROR_COMMON_PROPERTIES = {
   title: {
     type: 'string',

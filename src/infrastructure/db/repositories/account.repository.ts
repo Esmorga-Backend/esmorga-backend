@@ -15,7 +15,7 @@ export class AccountRepository {
     private userDA: UserDA,
     private readonly logger: PinoLogger,
     private configService: ConfigService,
-  ) { }
+  ) {}
 
   /**
    * Find an user by id.
@@ -76,6 +76,41 @@ export class AccountRepository {
     } catch (error) {
       this.logger.error(
         `[AccountRepository] [getUserByEmail] - x-request-id: ${requestId}, error: ${error}`,
+      );
+
+      if (error instanceof HttpException) throw error;
+
+      throw new DataBaseInternalError();
+    }
+  }
+
+  /**
+   * Finds the names of the users related to the provided array of uuid.
+   *
+   * @param uuids - Array of users uuid.
+   * @param requestId - Request identifier.
+   * @returns User data following business schema.
+   */
+  async getUserNames(uuids: string[], requestId?: string) {
+    try {
+      this.logger.info(
+        `[AccountRepository] [getUserNames] - x-request-id: ${requestId}`,
+      );
+
+      const userProfiles = await this.userDA.findUsersByUuids(uuids);
+
+      if (!userProfiles) return null;
+
+      const userNames = userProfiles.map((user) => {
+        validateObjectDto(user, REQUIRED_DTO_FIELDS.USER_PROFILE);
+        const { name, lastName } = user;
+        return `${name} ${lastName}`;
+      });
+
+      return userNames;
+    } catch (error) {
+      this.logger.error(
+        `[AccountRepository] [getUserNames] - x-request-id: ${requestId}, error: ${error}`,
       );
 
       if (error instanceof HttpException) throw error;

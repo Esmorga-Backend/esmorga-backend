@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import { EventParticipantsDA } from '../none/event-participant-da';
 import { EventParticipants } from './schema';
 import { EventParticipantsDto } from '../../../dtos';
@@ -17,7 +17,7 @@ export class EventParticipantsMongoDA implements EventParticipantsDA {
       participants: { $in: [userId] },
     });
     return eventParticipantsDocs.map((singleEventParticipanstDb) => {
-      const eventParticipants: EventParticipantsDto = plainToClass(
+      const eventParticipants: EventParticipantsDto = plainToInstance(
         EventParticipantsDto,
         singleEventParticipanstDb,
         {
@@ -27,11 +27,13 @@ export class EventParticipantsMongoDA implements EventParticipantsDA {
       return eventParticipants.eventId;
     });
   }
+
   async removeByEventId(eventId: string): Promise<void> {
     await this.eventParticipantsModel.findOneAndDelete({
       eventId: { $eq: eventId },
     });
   }
+
   async findAndUpdateParticipantsList(
     eventId: string,
     userId: string,
@@ -42,6 +44,7 @@ export class EventParticipantsMongoDA implements EventParticipantsDA {
       { upsert: true },
     );
   }
+
   async removeParticipantFromList(
     eventId: string,
     userId: string,
@@ -50,5 +53,17 @@ export class EventParticipantsMongoDA implements EventParticipantsDA {
       { eventId },
       { $pull: { participants: userId } },
     );
+  }
+
+  async findEvent(eventId: string): Promise<EventParticipantsDto | null> {
+    const eventParcipantsDoc = await this.eventParticipantsModel.findOne({
+      eventId: eventId,
+    });
+
+    if (!eventParcipantsDoc) return null;
+
+    return plainToInstance(EventParticipantsDto, eventParcipantsDoc, {
+      excludeExtraneousValues: true,
+    });
   }
 }

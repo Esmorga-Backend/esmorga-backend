@@ -33,7 +33,8 @@ export class DeleteEventService {
    * @param eventId - Event identifier.
    * @param requestId - Request identifier.
    * @throws NotAdminAccountApiError - User is not admin.
-   * @throws InvalidEventIdApiError - EventId is not valid follwing DB schema ot not found.
+   * @throws InvalidEventIdApiError - EventId is not valid following DB schema ot not found.
+   * @throws InvalidTokenApiError - No user found for the current session.
    */
   async delete(sessionId: string, eventId: string, requestId?: string) {
     try {

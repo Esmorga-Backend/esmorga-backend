@@ -33,6 +33,9 @@ export class UpdateEventService {
    * @param sessionId - Client session id.
    * @param updateEventDto - Data transfer object containing event details.
    * @param requestId - The request ID for loggers.
+   * @throws NotAdminAccountApiError - User is not admin.
+   * @throws InvalidEventIdApiError - EventId is not valid following DB schema ot not found.
+   * @throws InvalidTokenApiError - No user found for the current session.
    */
   async update(
     sessionId: string,
