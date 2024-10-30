@@ -185,20 +185,6 @@ export const GET_EVENT_USERS_RESPONSES: { [key: string]: ApiResponseOptions } =
       description: 'List of users',
       type: UserListDto,
     },
-    BAD_REQUEST_ERROR: {
-      description: 'Some inputs are missed or wrong',
-      schema: {
-        type: 'object',
-        properties: {
-          ...BAD_REQUEST_ERROR_COMMON_PROPERTIES,
-          type: { example: PATHS.GET_EVENT_USERS },
-          errors: {
-            type: 'array',
-            example: ['eventId should not be empty'],
-          },
-        },
-      },
-    },
     UNAUTHORIZED_ERROR: {
       description: 'Invalid credentials',
       schema: {
