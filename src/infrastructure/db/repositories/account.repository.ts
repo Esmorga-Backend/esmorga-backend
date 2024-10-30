@@ -87,17 +87,17 @@ export class AccountRepository {
   /**
    * Finds the names of the users related to the provided array of uuid.
    *
-   * @param participants - Array of users uuid.
+   * @param uuids - Array of users uuid.
    * @param requestId - Request identifier.
    * @returns User data following business schema.
    */
-  async getUserNames(participants: string[], requestId?: string) {
+  async getUserNames(uuids: string[], requestId?: string) {
     try {
       this.logger.info(
         `[AccountRepository] [getUserNames] - x-request-id: ${requestId}`,
       );
 
-      const userProfiles = await this.userDA.findUsersByUuid(participants);
+      const userProfiles = await this.userDA.findUsersByUuids(uuids);
 
       if (!userProfiles) return null;
 

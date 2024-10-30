@@ -16,7 +16,7 @@ export class UserDA {
     throw new NotImplementedException();
   }
 
-  findUsersByUuid(_participants: string[]): Promise<UserProfileDto[] | null> {
+  findUsersByUuids(_uuids: string[]): Promise<UserProfileDto[] | null> {
     throw new NotImplementedException();
   }
 

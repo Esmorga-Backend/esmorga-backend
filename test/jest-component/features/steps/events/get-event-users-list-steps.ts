@@ -56,7 +56,7 @@ export const getEventUsersList: StepDefinitions = ({ given, and }) => {
     const USER_MOCK_DB = await getUserProfile();
 
     jest
-      .spyOn(context.userDA, 'findUsersByUuid')
+      .spyOn(context.userDA, 'findUsersByUuids')
       .mockResolvedValue([USER_MOCK_DB]);
   });
 

@@ -20,6 +20,7 @@ export class UserMongoDA implements UserDA {
     });
     return { ...userProfile, [PasswordSymbol]: user.password };
   }
+
   async updatePasswordByEmail(
     email: string,
     password: string,
@@ -47,11 +48,9 @@ export class UserMongoDA implements UserDA {
     });
   }
 
-  async findUsersByUuid(
-    participants: string[],
-  ): Promise<UserProfileDto[] | null> {
+  async findUsersByUuids(uuids: string[]): Promise<UserProfileDto[] | null> {
     const users = await this.userModel.find({
-      _id: { $in: participants },
+      _id: { $in: uuids },
     });
 
     if (!users) return null;
