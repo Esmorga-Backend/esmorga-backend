@@ -97,7 +97,6 @@ jobs:
         DNS_NAME: ${{vars.DNS_NAME}}
         JWT_REFRESH_SECRET: ${{secrets.JWT_REFRESH_SECRET}}
     - name: Run Postman
-      if: false
       uses: ./.github/actions/runPostmanTests
       with:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
