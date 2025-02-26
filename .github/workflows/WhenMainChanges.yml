@@ -97,6 +97,9 @@ jobs:
       with:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         POSTMAN_TOKEN: ${{ secrets.POSTMAN_TOKEN }}
+        DESPOSABLE_EMAIL_USER: ${{secrets.DESPOSABLE_EMAIL_USER}}
+        DESPOSABLE_EMAIL_PASS: ${{secrets.DESPOSABLE_EMAIL_PASS}}
+
     - name: Run E2E Tests
       uses: ./.github/actions/runE2ETests
       with:
