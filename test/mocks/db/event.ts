@@ -9,10 +9,10 @@ import { EventDto } from '../../../src/infrastructure/dtos';
 const currentDate: Date = new Date();
 
 const futureDate: Date = new Date();
-futureDate.setFullYear(2025);
+futureDate.setFullYear(new Date().getFullYear() + 1);
 
 const oldDate: Date = new Date();
-oldDate.setFullYear(2023);
+oldDate.setFullYear(new Date().getFullYear() - 1);
 
 export const UPDATED_EVENT_MOCK_DB = {
   _id: '6656e23640e1fdb4ceb23cc9',

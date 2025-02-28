@@ -1,28 +1,28 @@
-function makeRequestWithRetries(url, options, retries = 3, delay = 15000) {
-  return new Cypress.Promise((resolve, reject) => {
-    cy.request({
-      url,
-      ...options,
-      failOnStatusCode: false,
-    }).then((response) => {
-      if (response.status === 500 && retries > 0) {
-        cy.wait(delay).then(() => {
-          makeRequestWithRetries(url, options, retries - 1, delay)
-            .then(resolve)
-            .catch(reject);
-        });
-      } else if (response.status === 500) {
-        reject(new Error('Server returned 500 after all retries'));
-      } else {
-        resolve(response);
-      }
-    });
-  });
-}
 class Api1Secmail {
   #login = 'auto.esmorga.test';
   #domain = '1secmail.com';
-
+  #name = '1secmail';
+  constructor() {}
+  get_name() {
+    return this.#name;
+  }
+  check_if_service_is_up() {
+    cy.request({
+      url: 'https://www.1secmail.com/api/v1/',
+      options: {
+        method: 'GET',
+      },
+      failOnStatusCode: false,
+    }).then((response) => {
+      if (response.status == 200) {
+        cy.log('Service is up');
+        return true;
+      } else {
+        cy.log('Service is dwon');
+        return false;
+      }
+    });
+  }
   get_emails() {
     makeRequestWithRetries(
       'https://www.1secmail.com/api/v1/?action=getMessages&login=' +
