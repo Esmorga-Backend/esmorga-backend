@@ -6,6 +6,7 @@ import ApiLogin from '../../pages/account/api_login';
 import ApiJoinEvent from '../../pages/account/api_join_event';
 import ApiForgotPassword from '../../pages/account/password/api_forgot_password';
 import ApiPasswordUpdate from '../../pages/account/password/api_password_update';
+import ApiRegisteter from '../../pages/account/api_register';
 
 const api_events = new ApiEvents();
 const api_refresh_token = new ApiRefreshToken();
@@ -13,6 +14,7 @@ const api_login = new ApiLogin();
 const api_forgot_password = new ApiForgotPassword();
 const api_join_event = new ApiJoinEvent();
 const api_password_update = new ApiPasswordUpdate();
+const api_register = new ApiRegisteter();
 
 var use_endpoint = '';
 const api = {
@@ -22,6 +24,7 @@ const api = {
   Login: api_login,
   'Forgot Password': api_forgot_password,
   'Password Update': api_password_update,
+  Register: api_register,
 };
 
 Given(/^the GET (.*) API is available$/, (endpoint) => {
