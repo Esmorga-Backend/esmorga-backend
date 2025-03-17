@@ -3,11 +3,15 @@ import AllApis from '../../lib/all_mail_apis';
 const allapis = new AllApis();
 class ApiRegister extends ApiBasics {
   #url = 'v1/account/register';
-  #email = 'auto.esmorga.test@1secmail.com';
+  #email = '';
   #password = 'SuperSecret1!';
   #name = 'Auto Esmorga';
   #lastName = 'Test';
   #defaultPassword = this.#password;
+
+  constructor() {
+    super();
+  }
   set_email(email) {
     this.#email = email;
   }
@@ -37,6 +41,10 @@ class ApiRegister extends ApiBasics {
     }
   }
   post() {
+    if (this.#email == '') {
+      allapis.check_if_service_is_up();
+      this.#email = allapis.get_email_dir();
+    }
     super.post(
       this.#url,
       {
@@ -53,17 +61,8 @@ class ApiRegister extends ApiBasics {
   }
   check_email() {
     allapis.print_name();
-    cy.wait(30000);
+    cy.log('Checking ' + allapis.get_email_dir() + ' email');
     allapis.get_email();
-    /*
-    api_1secmail.get_emails();
-    cy.get('@response').then((response) => {
-      api_1secmail.get_email(response.body[0].id);
-      cy.get('@response').then((response) => {
-        cy.wrap(response.body).as('email');
-      });
-    });
-    */
   }
 }
 export default ApiRegister;

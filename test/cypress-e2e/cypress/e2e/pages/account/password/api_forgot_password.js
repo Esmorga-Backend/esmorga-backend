@@ -3,10 +3,11 @@ import AllApis from '../../../lib/all_mail_apis';
 const allapis = new AllApis();
 class ApiForgotPassword extends ApiBasics {
   #url = 'v1/account/password/forgot-init';
-  #email = 'auto.esmorga.test@1secmail.com';
+  #email = '';
   constructor() {
     super();
   }
+
   update_email() {
     this.#email = allapis.get_email_dir();
   }
@@ -16,7 +17,10 @@ class ApiForgotPassword extends ApiBasics {
   }
 
   post() {
-    this.update_email();
+    if (this.#email == '') {
+      allapis.check_if_service_is_up();
+      this.#email = allapis.get_email_dir();
+    }
     super.post(
       this.#url,
       {
@@ -30,7 +34,7 @@ class ApiForgotPassword extends ApiBasics {
   }
   check_email() {
     allapis.print_name();
-    cy.wait(30000);
+    cy.wait(3000);
     allapis.get_email();
     /*
     api_1secmail.get_emails();

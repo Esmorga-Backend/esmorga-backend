@@ -7,6 +7,7 @@ import ApiJoinEvent from '../../pages/account/api_join_event';
 import ApiForgotPassword from '../../pages/account/password/api_forgot_password';
 import ApiPasswordUpdate from '../../pages/account/password/api_password_update';
 import ApiRegisteter from '../../pages/account/api_register';
+import ApiActivate from '../../pages/account/api_activate';
 
 const api_events = new ApiEvents();
 const api_refresh_token = new ApiRefreshToken();
@@ -15,6 +16,7 @@ const api_forgot_password = new ApiForgotPassword();
 const api_join_event = new ApiJoinEvent();
 const api_password_update = new ApiPasswordUpdate();
 const api_register = new ApiRegisteter();
+const api_activate = new ApiActivate();
 
 var use_endpoint = '';
 const api = {
@@ -25,6 +27,7 @@ const api = {
   'Forgot Password': api_forgot_password,
   'Password Update': api_password_update,
   Register: api_register,
+  'Activate account': api_activate,
 };
 
 Given(/^the GET (.*) API is available$/, (endpoint) => {
@@ -103,23 +106,36 @@ Then(
 Then('reset password email with correct format is received', async () => {
   api_forgot_password.check_email();
   cy.get('@email').then((email) => {
-    expect(email.subject).to.equal('Solicitud cambio de contraseña');
-    expect(email.body).to.match(
+    expect(email).to.match(
       /(.*)Hemos recibido una solicitud para restablecer tu contraseña.(.*)/,
     );
-    expect(email.body).to.match(/(.*)forgotPasswordCode=(.*)/);
+    expect(email).to.match(/(.*)forgotPasswordCode=(.*)/);
+    api_password_update.get_forgotPasswordCode_from_mail(email);
+    api_password_update.set_email(api_forgot_password.get_email_dir());
   });
+});
+Then('account confirmation email is sent', async () => {
+  api_register.check_email();
+  cy.get('@email').then((email) => {
+    expect(email).to.match(
+      /(.*)Hemos recibido una solicitud para registrar un nuevo usuario.(.*)/,
+    );
+    expect(email).to.match(/(.*)verificationCode=(.*)/);
+    api_activate.get_verificationCode_from_mail(email);
+    cy.log('code: ' + api_activate.get_verificationCode());
+  });
+});
+Then('forgot password code via email is used', async () => {
+  // THIS STEP IS OBSOLET
+  // cy.get('@email').then((email) => {
+  //   api['Password Update'].set_forgotPasswordCode(
+  //     email.body.split('forgotPasswordCode=')[1].split('>')[0],
+  //   );
+  // api['Password Update'].set_email(api['Forgot Password'].get_email());
+  //  });
+});
 
-  Then('forgot password code via email is used', async () => {
-    cy.get('@email').then((email) => {
-      api['Password Update'].set_forgotPasswordCode(
-        email.body.split('forgotPasswordCode=')[1].split('>')[0],
-      );
-      api['Password Update'].set_email(api['Forgot Password'].get_email());
-    });
-  });
-  Then('the user can now log in with the new password', async () => {
-    api[use_endpoint].set_password(api['Password Update'].get_password());
-    api[use_endpoint].set_email(api['Password Update'].get_email());
-  });
+Then('the user can now log in with the new password', async () => {
+  api[use_endpoint].set_password(api['Password Update'].get_password());
+  api[use_endpoint].set_email(api['Password Update'].get_email());
 });

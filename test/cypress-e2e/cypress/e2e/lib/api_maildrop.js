@@ -1,6 +1,6 @@
 //https://api.maildrop.cc/graphql
 class ApiMailDrop {
-  #login = 'auto.esmorga.test';
+  #login = '';
   #name = 'maildrop';
   #domain = 'maildrop.cc';
   constructor() {}
@@ -30,7 +30,14 @@ class ApiMailDrop {
       });
     });
   }
+  set_login(login) {
+    this.#login = login;
+  }
   get_email_dir() {
+    if (this.#login == '') {
+      this.#login =
+        'esmorga.autotest.' + Math.floor(Date.now() / 1000).toString();
+    }
     return this.#login + '@' + this.#domain;
   }
 
@@ -56,30 +63,80 @@ class ApiMailDrop {
       }
     });
   }
+  get_emails() {
+    return new Cypress.Promise((resolve, reject) => {
+      cy.request({
+        url: 'https://api.maildrop.cc/graphql',
+        method: 'POST',
+        headers: {
+          accept: 'application/json',
+          'content-type': 'application/json',
+        },
+        failOnStatusCode: false,
+        body: {
+          query:
+            'query  { inbox(mailbox: "' +
+            this.get_email_dir() +
+            '") { id mailfrom headerfrom subject date} }',
+        },
+      }).then((response) => {
+        if (response.status == 200) {
+          resolve(response.body.data.inbox);
+        } else {
+          reject('');
+        }
+      });
+    });
+  }
   get_email() {
-    cy.request({
-      url: 'https://api.maildrop.cc/graphql',
-      method: 'POST',
-      headers: {
-        accept: 'application/json',
-        'content-type': 'application/json',
-      },
-      failOnStatusCode: false,
-      body: {
-        query:
-          'query PingSample { \
-          ping(message: "Hello, world!") \
-        }',
-      },
-    }).then((response) => {
-      if (response.status == 200) {
-        cy.log('Service is up');
-        return true;
-      } else {
-        cy.log('Service is dwon');
-        return false;
-      }
+    return new Cypress.Promise((resolve, reject) => {
+      cy.request({
+        url: 'https://api.maildrop.cc/graphql',
+        method: 'POST',
+        headers: {
+          accept: 'application/json',
+          'content-type': 'application/json',
+        },
+        failOnStatusCode: false,
+        query: `query { inbox(mailbox: "${this.get_email_dir()}") { id mailfrom headerfrom subject date} }`,
+      }).then((response) => {
+        if (response.status == 200) {
+          cy.log('Service is up' + response);
+          resolve(response);
+        } else {
+          cy.log('Service is dwon');
+          reject('');
+        }
+      });
+    });
+  }
+  get_status() {
+    return new Cypress.Promise((resolve, reject) => {
+      cy.request({
+        url: 'https://api.maildrop.cc/graphql',
+        method: 'POST',
+        headers: {
+          accept: 'application/json',
+          'content-type': 'application/json',
+        },
+        failOnStatusCode: false,
+        body: {
+          query:
+            'query PingSample { \
+            ping(message: "Hello, world!") \
+          }',
+        },
+      }).then((response) => {
+        if (response.status == 200) {
+          cy.log('Service is up');
+          resolve(true);
+        } else {
+          cy.log('Service is dwon');
+          reject(false);
+        }
+      });
     });
   }
 }
+//query: `query { inbox(mailbox: "${get_email_dir()}") { id mailfrom headerfrom subject date} }`,
 export default ApiMailDrop;
