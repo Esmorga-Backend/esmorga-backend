@@ -396,19 +396,9 @@ describe('[unit-test] [CreateEventDto]', () => {
     });
 
     it('Should only accept string values', async () => {
-      const event = {
-        eventName: 'Mobgen Fest',
-        eventDate: '2025-03-08T10:05:30.915Z',
-        description: 'Hello World',
-        eventType: 'Party',
-        imageUrl: 'img.url',
-        location: {
-          lat: 43.35525182148881,
-          long: -8.41937931298951,
-          name: 123,
-        },
-        tags: ['Meal', 'Music'],
-      };
+      const event = JSON.parse(JSON.stringify(CREATE_EVENT_MOCK));
+
+      event.location.name = 123;
 
       const createEventDto = plainToInstance(CreateEventDto, event);
 

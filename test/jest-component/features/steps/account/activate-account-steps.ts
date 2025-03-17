@@ -10,7 +10,7 @@ import { SessionDA } from '../../../../../src/infrastructure/db/modules/none/ses
 import { TemporalCodeDA } from '../../../../../src/infrastructure/db/modules/none/temporal-code-da';
 
 export const activateAccountSteps: StepDefinitions = ({ given, and }) => {
-  given('The PUT activate account API is available', async () => {
+  given('The PUT Activate account API is available', async () => {
     context.path = '/v1/account/activate';
 
     context.mock = {

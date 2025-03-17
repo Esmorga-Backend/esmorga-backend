@@ -7,6 +7,11 @@ class ApiPasswordUpdate extends ApiBasics {
   constructor() {
     super();
   }
+  get_forgotPasswordCode_from_mail(email) {
+    this.#forgotPasswordCode = email
+      .split('forgotPasswordCode=')[1]
+      .split('>')[0];
+  }
   set_forgotPasswordCode(forgotPasswordCode) {
     this.#forgotPasswordCode = forgotPasswordCode;
     cy.log(this.#forgotPasswordCode);
@@ -26,6 +31,7 @@ class ApiPasswordUpdate extends ApiBasics {
   get_email() {
     return this.#email;
   }
+
   put() {
     super.put(
       this.#url,

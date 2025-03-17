@@ -1,5 +1,7 @@
+require('dotenv').config();
 const { defineConfig } = require('cypress');
 const cucumber = require('cypress-cucumber-preprocessor').default;
+
 module.exports = defineConfig({
   e2e: {
     screenshotsFolder: 'test/cypress-e2e/cypress/e2e/screenshots',
@@ -9,6 +11,10 @@ module.exports = defineConfig({
     specPattern: 'test/cypress-e2e/cypress/e2e/**/*.feature',
     setupNodeEvents(on, config) {
       on('file:preprocessor', cucumber());
+    },
+    env: {
+      MOCK_SERVER_USERNAME: process.env.MOCK_SERVER_USERNAME,
+      MOCK_SERVER_PASSWORD: process.env.MOCK_SERVER_PASSWORD,
     },
   },
 

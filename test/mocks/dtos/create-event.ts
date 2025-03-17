@@ -1,9 +1,12 @@
 import { CreateEventDto } from '../../../src/infrastructure/http/dtos';
 import { EVENT_TYPE } from '../../../src/domain/const';
 
+const futureDate: Date = new Date();
+futureDate.setFullYear(new Date().getFullYear() + 1);
+
 export const CREATE_EVENT_MOCK: CreateEventDto = {
   eventName: 'MobgenFest',
-  eventDate: '2025-03-08T10:05:30.915Z',
+  eventDate: futureDate.toISOString(),
   description: 'Hello World',
   eventType: EVENT_TYPE.PARTY,
   imageUrl: 'img.url',
@@ -17,7 +20,7 @@ export const CREATE_EVENT_MOCK: CreateEventDto = {
 
 export const CREATE_EVENT_WITHOUT_OPTIONAL_FIELDS_MOCK: CreateEventDto = {
   eventName: 'MobgenFest',
-  eventDate: '2025-03-08T10:05:30.915Z',
+  eventDate: futureDate.toISOString(),
   description: 'Hello World',
   eventType: EVENT_TYPE.PARTY,
   location: {
