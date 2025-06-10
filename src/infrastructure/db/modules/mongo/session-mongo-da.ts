@@ -36,4 +36,7 @@ export class SessionMongoDA implements SessionDA {
   async removeById(id: string): Promise<void> {
     await this.sessionModel.findOneAndDelete({ _id: id });
   }
+  async removeBySessionId(sessionId: string): Promise<void> {
+    await this.sessionModel.findOneAndDelete({ sessionId: sessionId });
+  }
 }

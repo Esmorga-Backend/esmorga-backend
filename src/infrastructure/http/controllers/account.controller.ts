@@ -10,12 +10,16 @@ import {
   UseGuards,
   Delete,
   Put,
+  Req,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { SkipThrottle } from '@nestjs/throttler';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 import { PinoLogger } from 'nestjs-pino';
 import {
   ActivateAccountService,
+  CloseCurrentSessionService,
   DisjoinEventService,
   UpdatePasswordService,
   ForgotPasswordService,
@@ -40,6 +44,7 @@ import {
   SwaggerAccountLogin,
   SwaggerActivateAccount,
   SwaggerAccountRegister,
+  SwaggerCloseCurrentSession,
   SwaggerDisjoinEvent,
   SwaggerForgotPassword,
   SwaggerForgotPasswordUpdate,
@@ -51,6 +56,7 @@ import {
 import { AccountLoggedDto, NewPairOfTokensDto, EventListDto } from '../../dtos';
 import { RequestId, SessionId } from '../req-decorators';
 import { AuthGuard } from '../guards';
+import { InvalidEmptyTokenApiError } from '../../../domain/errors';
 
 @Controller('/v1/account')
 @ApiTags('Account')
@@ -59,6 +65,7 @@ export class AccountController {
   constructor(
     private readonly logger: PinoLogger,
     private readonly activateAccountService: ActivateAccountService,
+    private readonly closeCurrentSessionService: CloseCurrentSessionService,
     private readonly disjoinEventService: DisjoinEventService,
     private readonly forgotPasswordService: ForgotPasswordService,
     private readonly getMyEventsService: GetMyEventsService,
@@ -68,6 +75,8 @@ export class AccountController {
     private readonly registerService: RegisterService,
     private readonly sendEmailVerificationService: SendEmailVerificationService,
     private readonly updatePasswordService: UpdatePasswordService,
+    private configService: ConfigService,
+    private jwtService: JwtService,
   ) {}
 
   @Get('/events')
@@ -371,6 +380,49 @@ export class AccountController {
       }
 
       throw new InternalServerErrorException();
+    }
+  }
+
+  @Delete('/session')
+  @SwaggerCloseCurrentSession()
+  @HttpCode(204)
+  async closeAccountSession(
+    @Req() req: Request,
+    @RequestId() requestId: string,
+  ) {
+    try {
+      this.logger.info(
+        `[AccountController] [closeAccountSession] - x-request-id: ${requestId}`,
+      );
+
+      const authorization = req.headers['authorization'];
+
+      if (!authorization) throw new InvalidEmptyTokenApiError();
+
+      const [type, token] = authorization.split(' ');
+
+      if (!token || type !== 'Bearer') return;
+
+      const jwtSecret = this.configService.get('JWT_SECRET');
+
+      const { sessionId } = await this.jwtService.verifyAsync<{
+        uuid: string;
+        sessionId: string;
+      }>(token, { secret: jwtSecret });
+
+      if (!sessionId) return;
+
+      await this.closeCurrentSessionService.delete(sessionId, requestId);
+    } catch (error) {
+      this.logger.error(
+        `[AccountController] [closeAccountSession] - x-request-id: ${requestId}, error: ${error}`,
+      );
+
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      return;
     }
   }
 }

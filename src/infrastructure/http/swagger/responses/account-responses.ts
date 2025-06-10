@@ -14,6 +14,7 @@ import {
 
 const PATHS = {
   ACTIVATE_ACCOUNT: '/v1/account/activate',
+  CLOSE_CURRENT_SESSION: '/v1/account/session',
   FORGOT_PASSWORD: '/v1/account/password/forgot-init',
   JOIN_EVENT: '/v1/account/events',
   LOGIN: '/v1/account/login',
@@ -476,6 +477,43 @@ export const FORGOT_PASSWORD_UPDATE_RESPONSE: {
       properties: {
         ...INTERNAL_ERROR_COMMON_PROPERTIES,
         type: { type: 'string', example: PATHS.FORGOT_PASSWORD_UPDATE },
+      },
+    },
+  },
+};
+
+export const CLOSE_CURRENT_SESSION_RESPONSES: {
+  [key: string]: ApiResponseOptions;
+} = {
+  NO_CONTENT: {
+    description: 'The current session has been closed successfully',
+  },
+  BAD_REQUEST_ERROR: {
+    description: 'Some inputs are missed or wrong',
+    schema: {
+      type: 'object',
+      properties: {
+        ...BAD_REQUEST_ERROR_COMMON_PROPERTIES,
+        type: { type: 'string', example: PATHS.CLOSE_CURRENT_SESSION },
+        detail: {
+          type: 'string',
+          example: 'Authorization is missing',
+        },
+        errors: {
+          type: 'array',
+          example: ['authorization should not be empty'],
+        },
+      },
+    },
+  },
+  INTERNAL_ERROR: {
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Error not handled',
+    schema: {
+      type: 'object',
+      properties: {
+        ...INTERNAL_ERROR_COMMON_PROPERTIES,
+        type: { type: 'string', example: PATHS.CLOSE_CURRENT_SESSION },
       },
     },
   },
