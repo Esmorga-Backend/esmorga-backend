@@ -497,11 +497,11 @@ export const CLOSE_CURRENT_SESSION_RESPONSES: {
         type: { type: 'string', example: PATHS.CLOSE_CURRENT_SESSION },
         detail: {
           type: 'string',
-          example: 'Authorization is missing',
+          example: 'Authorization',
         },
         errors: {
           type: 'array',
-          example: ['authorization should not be empty'],
+          example: ['Authorization should not be empty'],
         },
       },
     },
