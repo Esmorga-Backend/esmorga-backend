@@ -3,7 +3,6 @@ import { StepDefinitions } from 'jest-cucumber';
 import { context, moduleFixture } from '../../../steps-config';
 
 import { HEADERS } from '../../../../mocks/common-data';
-// import { SESSION_ID } from '../../../../mocks/db/common';
 import { SessionDA } from '../../../../../src/infrastructure/db/modules/none/session-da';
 
 const PATH = '/v1/account/session';
