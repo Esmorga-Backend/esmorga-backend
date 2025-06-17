@@ -16,6 +16,7 @@ import { applyDecorators } from '@nestjs/common';
 import {
   ACTIVATE_ACCOUNT_HEADERS,
   FORGOT_PASSWORD_UPDATE_HEADERS,
+  CLOSE_CURRENT_SESSION_HEADERS,
   DISJOIN_EVENT_HEADERS,
   FORGOT_PASSWORD_HEADER,
   GET_MY_EVENT_HEADERS,
@@ -27,9 +28,10 @@ import {
 } from '../headers';
 import {
   ACTIVATE_ACCOUNT_RESPONSES,
-  FORGOT_PASSWORD_UPDATE_RESPONSE,
+  CLOSE_CURRENT_SESSION_RESPONSES,
   DISJOIN_EVENT_RESPONSES,
   FORGOT_PASSWORD_RESPONSES,
+  FORGOT_PASSWORD_UPDATE_RESPONSE,
   GET_MY_EVENTS_RESPONSES,
   JOIN_EVENT_RESPONSES,
   LOGIN_RESPONSES,
@@ -173,5 +175,21 @@ export function SwaggerActivateAccount() {
     ApiOkResponse(ACTIVATE_ACCOUNT_RESPONSES.OK),
     ApiBadRequestResponse(ACTIVATE_ACCOUNT_RESPONSES.BAD_REQUEST_ERROR),
     ApiInternalServerErrorResponse(ACTIVATE_ACCOUNT_RESPONSES.INTERNAL_ERROR),
+  );
+}
+
+export function SwaggerCloseCurrentSession() {
+  return applyDecorators(
+    ApiOperation({
+      summary: 'Close current session.',
+    }),
+    ApiBearerAuth(),
+    ApiHeader(CLOSE_CURRENT_SESSION_HEADERS.AUTHORIZATION_BEARER),
+    ApiHeader(CLOSE_CURRENT_SESSION_HEADERS.CONTENT_TYPE),
+    ApiNoContentResponse(CLOSE_CURRENT_SESSION_RESPONSES.NO_CONTENT),
+    ApiBadRequestResponse(CLOSE_CURRENT_SESSION_RESPONSES.BAD_REQUEST_ERROR),
+    ApiInternalServerErrorResponse(
+      CLOSE_CURRENT_SESSION_RESPONSES.INTERNAL_ERROR,
+    ),
   );
 }

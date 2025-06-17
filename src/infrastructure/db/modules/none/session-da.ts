@@ -15,4 +15,7 @@ export class SessionDA {
   removeById(_id: string): Promise<void> {
     throw new NotImplementedException();
   }
+  removeBySessionId(_sessionId: string): Promise<void> {
+    throw new NotImplementedException();
+  }
 }

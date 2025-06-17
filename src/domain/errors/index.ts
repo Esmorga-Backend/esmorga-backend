@@ -4,6 +4,7 @@ export * from './invalid-credential-login-error';
 export * from './invalid-credential-refresh-error';
 export * from './invalid-eventId-error';
 export * from './invalid-forgot-password-code';
+export * from './invalid-empty-token-error';
 export * from './invalid-token-error';
 export * from './invalid-verification-code';
 export * from './not-acceptable-disjoin-event-error';

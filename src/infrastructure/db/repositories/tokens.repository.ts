@@ -136,4 +136,23 @@ export class TokensRepository {
       throw new DataBaseInternalError();
     }
   }
+
+  /**
+   * Remove session document by session ID.
+   * @param sessionId - Session identifier.
+   * @param requestId - Request identifier for API logger.
+   */
+  async removeTokensBySessionId(sessionId: string, requestId?: string) {
+    try {
+      this.logger.info(
+        `[TokensRepository] [removeTokensBySessionId] - x-request-id: ${requestId}, sessionId: ${sessionId}`,
+      );
+      await this.sessionDA.removeBySessionId(sessionId);
+    } catch (error) {
+      this.logger.error(
+        `[TokensRepository] [removeTokensBySessionId] - x-request-id: ${requestId}, error: ${error}`,
+      );
+      throw new DataBaseInternalError();
+    }
+  }
 }
