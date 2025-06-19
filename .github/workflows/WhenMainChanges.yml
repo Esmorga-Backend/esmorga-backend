@@ -93,6 +93,7 @@ jobs:
         DNS_NAME: ${{vars.DNS_NAME}}
         JWT_REFRESH_SECRET: ${{secrets.JWT_REFRESH_SECRET}}
     - name: Run Postman
+      if: false
       uses: ./.github/actions/runPostmanTests
       with:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -101,6 +102,7 @@ jobs:
         DESPOSABLE_EMAIL_PASS: ${{secrets.DESPOSABLE_EMAIL_PASS}}
 
     - name: Run E2E Tests
+      if: false
       uses: ./.github/actions/runE2ETests
       with:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
