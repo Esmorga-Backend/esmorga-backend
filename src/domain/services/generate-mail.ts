@@ -28,7 +28,7 @@ export class GenerateMailService {
             <p>El equipo de Esmorga</p>
         </div>
         <div>
-            <p>&copy; 2024 Esmorga. Todos los derechos reservados.</p>
+            <p>&copy; 2025 Esmorga. Todos los derechos reservados.</p>
         </div>`;
 
     return { from, subject, html };
@@ -57,7 +57,7 @@ export class GenerateMailService {
             <p>El equipo de Esmorga</p>
         </div>
         <div>
-            <p>&copy; 2024 Esmorga. Todos los derechos reservados.</p>
+            <p>&copy; 2025 Esmorga. Todos los derechos reservados.</p>
         </div>`;
 
     return { from, subject, html };
