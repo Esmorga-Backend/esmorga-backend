@@ -5,6 +5,7 @@ import {
   FORBIDDEN_INVALID_ROLE_COMMON_PROPERTIES,
   INTERNAL_ERROR_COMMON_PROPERTIES,
   NOT_FOUND_ERROR_COMMON_PROPERTIES,
+  TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES,
   UNAUTHORIZED_INVALID_TOKEN_COMMON_PROPERTIES,
 } from './common-response-properties';
 
@@ -41,6 +42,16 @@ export const CREATE_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
       },
     },
   },
+  TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES: {
+    description: 'Too many requests, rate limit exceeded',
+    schema: {
+      type: 'object',
+      properties: {
+        ...TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES,
+        type: { type: 'string', example: PATHS.EVENTS },
+      },
+    },
+  },
   INTERNAL_ERROR: {
     description: 'Error not handled',
     schema: {
@@ -67,6 +78,16 @@ export const GET_EVENTS_RESPONSES: { [key: string]: ApiResponseOptions } = {
   OK: {
     description: 'List of avaliable events',
     type: EventListDto,
+  },
+  TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES: {
+    description: 'Too many requests, rate limit exceeded',
+    schema: {
+      type: 'object',
+      properties: {
+        ...TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES,
+        type: { type: 'string', example: PATHS.EVENTS },
+      },
+    },
   },
   INTERNAL_ERROR: {
     description: 'Error not handled',
@@ -104,6 +125,16 @@ export const UPDATE_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
       properties: {
         ...FORBIDDEN_INVALID_ROLE_COMMON_PROPERTIES,
         type: { example: PATHS.EVENTS },
+      },
+    },
+  },
+  TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES: {
+    description: 'Too many requests, rate limit exceeded',
+    schema: {
+      type: 'object',
+      properties: {
+        ...TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES,
+        type: { type: 'string', example: PATHS.EVENTS },
       },
     },
   },
@@ -167,6 +198,16 @@ export const DELETE_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
       },
     },
   },
+  TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES: {
+    description: 'Too many requests, rate limit exceeded',
+    schema: {
+      type: 'object',
+      properties: {
+        ...TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES,
+        type: { type: 'string', example: PATHS.EVENTS },
+      },
+    },
+  },
   INTERNAL_ERROR: {
     description: 'Error not handled',
     schema: {
@@ -219,13 +260,23 @@ export const GET_EVENT_USERS_RESPONSES: { [key: string]: ApiResponseOptions } =
         },
       },
     },
+    TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES: {
+      description: 'Too many requests, rate limit exceeded',
+      schema: {
+        type: 'object',
+        properties: {
+          ...TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES,
+          type: { type: 'string', example: PATHS.GET_EVENT_USERS },
+        },
+      },
+    },
     INTERNAL_ERROR: {
       description: 'Error not handled',
       schema: {
         type: 'object',
         properties: {
           ...INTERNAL_ERROR_COMMON_PROPERTIES,
-          type: { type: 'string', example: PATHS.EVENTS },
+          type: { type: 'string', example: PATHS.GET_EVENT_USERS },
         },
       },
     },

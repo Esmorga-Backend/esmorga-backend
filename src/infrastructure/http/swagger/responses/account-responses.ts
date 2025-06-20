@@ -9,6 +9,7 @@ import {
   BAD_REQUEST_ERROR_COMMON_PROPERTIES,
   INTERNAL_ERROR_COMMON_PROPERTIES,
   NOT_ACCEPTABLE_ERROR_COMMON_PROPERTIES,
+  TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES,
   UNAUTHORIZED_INVALID_TOKEN_COMMON_PROPERTIES,
 } from './common-response-properties';
 
@@ -141,6 +142,20 @@ export const REGISTER_RESPONSES: { [key: string]: ApiResponseOptions } = {
       },
     },
   },
+  TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES: {
+    description: 'Some inputs are missed or wrong',
+    schema: {
+      type: 'object',
+      properties: {
+        ...BAD_REQUEST_ERROR_COMMON_PROPERTIES,
+        type: { type: 'string', example: PATHS.REGISTER },
+        errors: {
+          type: 'array',
+          example: ['email should not be empty'],
+        },
+      },
+    },
+  },
   INTERNAL_ERROR: {
     description: 'Error not handled',
     schema: {
@@ -195,6 +210,16 @@ export const REFRESH_TOKEN_RESPONSES: { [key: string]: ApiResponseOptions } = {
       },
     },
   },
+  TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES: {
+    description: 'Too many requests, rate limit exceeded',
+    schema: {
+      type: 'object',
+      properties: {
+        ...TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES,
+        type: { type: 'string', example: PATHS.REFRESH_TOKEN },
+      },
+    },
+  },
   INTERNAL_ERROR: {
     description: 'Error not handled',
     schema: {
@@ -246,6 +271,16 @@ export const JOIN_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
           type: 'array',
           example: ['cannot join past events'],
         },
+      },
+    },
+  },
+  TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES: {
+    description: 'Too many requests, rate limit exceeded',
+    schema: {
+      type: 'object',
+      properties: {
+        ...TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES,
+        type: { type: 'string', example: PATHS.JOIN_EVENT },
       },
     },
   },
@@ -305,6 +340,16 @@ export const DISJOIN_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
       },
     },
   },
+  TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES: {
+    description: 'Too many requests, rate limit exceeded',
+    schema: {
+      type: 'object',
+      properties: {
+        ...TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES,
+        type: { type: 'string', example: PATHS.JOIN_EVENT },
+      },
+    },
+  },
   INTERNAL_ERROR: {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Error not handled',
@@ -330,6 +375,16 @@ export const GET_MY_EVENTS_RESPONSES: { [key: string]: ApiResponseOptions } = {
       type: 'object',
       properties: {
         ...UNAUTHORIZED_INVALID_TOKEN_COMMON_PROPERTIES,
+        type: { type: 'string', example: PATHS.JOIN_EVENT },
+      },
+    },
+  },
+  TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES: {
+    description: 'Too many requests, rate limit exceeded',
+    schema: {
+      type: 'object',
+      properties: {
+        ...TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES,
         type: { type: 'string', example: PATHS.JOIN_EVENT },
       },
     },
@@ -368,6 +423,16 @@ export const FORGOT_PASSWORD_RESPONSES: { [key: string]: ApiResponseOptions } =
         },
       },
     },
+    TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES: {
+      description: 'Too many requests, rate limit exceeded',
+      schema: {
+        type: 'object',
+        properties: {
+          ...TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES,
+          type: { type: 'string', example: PATHS.FORGOT_PASSWORD },
+        },
+      },
+    },
     INTERNAL_ERROR: {
       status: HttpStatus.INTERNAL_SERVER_ERROR,
       description: 'Error not handled',
@@ -400,6 +465,16 @@ export const SEND_EMAIL_VERIFICATION_RESPONSES: {
           type: 'array',
           example: ['email should not be empty'],
         },
+      },
+    },
+  },
+  TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES: {
+    description: 'Too many requests, rate limit exceeded',
+    schema: {
+      type: 'object',
+      properties: {
+        ...TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES,
+        type: { type: 'string', example: PATHS.SEND_EMAIL_VERIFICATION },
       },
     },
   },
@@ -436,6 +511,16 @@ export const ACTIVATE_ACCOUNT_RESPONSES: { [key: string]: ApiResponseOptions } =
         },
       },
     },
+    TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES: {
+      description: 'Too many requests, rate limit exceeded',
+      schema: {
+        type: 'object',
+        properties: {
+          ...TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES,
+          type: { type: 'string', example: PATHS.ACTIVATE_ACCOUNT },
+        },
+      },
+    },
     INTERNAL_ERROR: {
       status: HttpStatus.INTERNAL_SERVER_ERROR,
       description: 'Error not handled',
@@ -466,6 +551,16 @@ export const FORGOT_PASSWORD_UPDATE_RESPONSE: {
           type: 'array',
           example: ['forgotPasswordCode should not be empty'],
         },
+      },
+    },
+  },
+  TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES: {
+    description: 'Too many requests, rate limit exceeded',
+    schema: {
+      type: 'object',
+      properties: {
+        ...TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES,
+        type: { type: 'string', example: PATHS.FORGOT_PASSWORD_UPDATE },
       },
     },
   },
@@ -503,6 +598,16 @@ export const CLOSE_CURRENT_SESSION_RESPONSES: {
           type: 'array',
           example: ['Authorization should not be empty'],
         },
+      },
+    },
+  },
+  TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES: {
+    description: 'Too many requests, rate limit exceeded',
+    schema: {
+      type: 'object',
+      properties: {
+        ...TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES,
+        type: { type: 'string', example: PATHS.CLOSE_CURRENT_SESSION },
       },
     },
   },
