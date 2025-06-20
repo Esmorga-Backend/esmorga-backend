@@ -63,7 +63,7 @@ export class HttpExceptionFilter implements ExceptionFilter<HttpException> {
     if (exception instanceof ThrottlerException) {
       return response.status(status).json({
         ...errorResponse,
-        title: 'tooManyRequestError',
+        title: 'tooManyRequestsError',
         detail: 'request limit achieved',
         errors: ['IP temporarily blocked'],
       });
