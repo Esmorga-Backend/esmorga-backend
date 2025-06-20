@@ -1,1 +1,1 @@
-feature/MOB-173-3
+release/esmorga-1.0.2
