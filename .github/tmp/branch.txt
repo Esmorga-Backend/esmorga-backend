@@ -1,1 +1,1 @@
-release/esmorga-1.0.0
+release/esmorga-1.0.1
