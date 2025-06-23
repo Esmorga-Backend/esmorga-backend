@@ -20,7 +20,7 @@ runs:
           shell: bash
           run: |
            npm ci
-#           npm run test:e2e-run-cypress
+           npm run test:e2e-run-cypress
         - name: Run Reporting
           uses: ./.github/actions/SlackCom
           with: 
