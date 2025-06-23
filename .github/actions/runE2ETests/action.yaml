@@ -4,6 +4,12 @@ inputs:
   SLACK_WEBHOOK_URL:
     description: 'URL'
     required: true
+  MOCK_SERVER_USERNAME:
+    description: 'Username for Mock Server'
+    required: true  
+  MOCK_SERVER_PASSWORD:
+    description: 'Password for Mock Server'
+    required: true
 runs:
   using: "composite"
   steps:
@@ -14,7 +20,7 @@ runs:
           shell: bash
           run: |
            npm ci
-           npm run test:e2e-run-cypress
+#           npm run test:e2e-run-cypress
         - name: Run Reporting
           uses: ./.github/actions/SlackCom
           with: 

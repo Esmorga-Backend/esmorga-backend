@@ -86,7 +86,7 @@ export class UpdateEventDto {
   eventName?: string;
 
   @ApiPropertyOptional({
-    example: '2025-03-08T10:05:30.915Z',
+    example: '3000-03-08T10:05:30.915Z',
     format: 'date-time',
   })
   @IsNotPastDate({ message: 'eventDate cannot be in the past' })

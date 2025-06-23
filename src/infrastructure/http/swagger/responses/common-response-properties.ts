@@ -71,6 +71,23 @@ export const NOT_FOUND_ERROR_COMMON_PROPERTIES = {
   },
 };
 
+export const TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES = {
+  title: {
+    type: 'string',
+    example: 'tooManyRequestsError',
+  },
+  status: { type: 'number', example: HttpStatus.TOO_MANY_REQUESTS },
+  type: { type: 'string', example: '' },
+  detail: {
+    type: 'string',
+    example: 'request limit achieved',
+  },
+  errors: {
+    type: 'array',
+    example: ['IP temporarily blocked'],
+  },
+};
+
 export const INTERNAL_ERROR_COMMON_PROPERTIES = {
   title: {
     type: 'string',

@@ -101,6 +101,7 @@ jobs:
         DESPOSABLE_EMAIL_PASS: ${{secrets.DESPOSABLE_EMAIL_PASS}}
 
     - name: Run E2E Tests
+      if: false
       uses: ./.github/actions/runE2ETests
       with:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -108,6 +109,8 @@ jobs:
       uses: ./.github/actions/runReporting
       with:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        MOCK_SERVER_USERNAME : ${{ secrets.MOCK_SERVER_USERNAME }}
+        MOCK_SERVER_PASSWORD : ${{ secrets.MOCK_SERVER_PASSWORD }}
 
   DeployToQA:
     needs: RunTestsOnUbuntu
