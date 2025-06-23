@@ -4,6 +4,12 @@ inputs:
   SLACK_WEBHOOK_URL:
     description: 'URL'
     required: true
+  MOCK_SERVER_USERNAME:
+    description: 'Username for Mock Server'
+    required: true  
+  MOCK_SERVER_PASSWORD:
+    description: 'Password for Mock Server'
+    required: true
 runs:
   using: "composite"
   steps:

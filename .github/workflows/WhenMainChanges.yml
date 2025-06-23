@@ -108,6 +108,8 @@ jobs:
       uses: ./.github/actions/runReporting
       with:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        MOCK_SERVER_USERNAME : ${{ secrets.MOCK_SERVER_USERNAME }}
+        MOCK_SERVER_PASSWORD : ${{ secrets.MOCK_SERVER_PASSWORD }}
 
   DeployToQA:
     needs: RunTestsOnUbuntu
