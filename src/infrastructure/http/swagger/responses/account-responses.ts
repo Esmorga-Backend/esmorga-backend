@@ -111,6 +111,16 @@ export const LOGIN_RESPONSES: { [key: string]: ApiResponseOptions } = {
       },
     },
   },
+  TOO_MANY_REQUESTS_ERROR: {
+    description: 'Too many requests, rate limit exceeded',
+    schema: {
+      type: 'object',
+      properties: {
+        ...TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES,
+        type: { type: 'string', example: PATHS.LOGIN },
+      },
+    },
+  },
   INTERNAL_ERROR: {
     description: 'Error not handled',
     schema: {
@@ -142,17 +152,13 @@ export const REGISTER_RESPONSES: { [key: string]: ApiResponseOptions } = {
       },
     },
   },
-  TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES: {
-    description: 'Some inputs are missed or wrong',
+  TOO_MANY_REQUESTS_ERROR: {
+    description: 'Too many requests, rate limit exceeded',
     schema: {
       type: 'object',
       properties: {
-        ...BAD_REQUEST_ERROR_COMMON_PROPERTIES,
+        ...TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES,
         type: { type: 'string', example: PATHS.REGISTER },
-        errors: {
-          type: 'array',
-          example: ['email should not be empty'],
-        },
       },
     },
   },
@@ -210,7 +216,7 @@ export const REFRESH_TOKEN_RESPONSES: { [key: string]: ApiResponseOptions } = {
       },
     },
   },
-  TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES: {
+  TOO_MANY_REQUESTS_ERROR: {
     description: 'Too many requests, rate limit exceeded',
     schema: {
       type: 'object',
@@ -274,7 +280,7 @@ export const JOIN_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
       },
     },
   },
-  TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES: {
+  TOO_MANY_REQUESTS_ERROR: {
     description: 'Too many requests, rate limit exceeded',
     schema: {
       type: 'object',
@@ -340,7 +346,7 @@ export const DISJOIN_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
       },
     },
   },
-  TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES: {
+  TOO_MANY_REQUESTS_ERROR: {
     description: 'Too many requests, rate limit exceeded',
     schema: {
       type: 'object',
@@ -379,7 +385,7 @@ export const GET_MY_EVENTS_RESPONSES: { [key: string]: ApiResponseOptions } = {
       },
     },
   },
-  TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES: {
+  TOO_MANY_REQUESTS_ERROR: {
     description: 'Too many requests, rate limit exceeded',
     schema: {
       type: 'object',
@@ -423,7 +429,7 @@ export const FORGOT_PASSWORD_RESPONSES: { [key: string]: ApiResponseOptions } =
         },
       },
     },
-    TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES: {
+    TOO_MANY_REQUESTS_ERROR: {
       description: 'Too many requests, rate limit exceeded',
       schema: {
         type: 'object',
@@ -468,7 +474,7 @@ export const SEND_EMAIL_VERIFICATION_RESPONSES: {
       },
     },
   },
-  TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES: {
+  TOO_MANY_REQUESTS_ERROR: {
     description: 'Too many requests, rate limit exceeded',
     schema: {
       type: 'object',
@@ -511,7 +517,7 @@ export const ACTIVATE_ACCOUNT_RESPONSES: { [key: string]: ApiResponseOptions } =
         },
       },
     },
-    TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES: {
+    TOO_MANY_REQUESTS_ERROR: {
       description: 'Too many requests, rate limit exceeded',
       schema: {
         type: 'object',
@@ -554,7 +560,7 @@ export const FORGOT_PASSWORD_UPDATE_RESPONSE: {
       },
     },
   },
-  TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES: {
+  TOO_MANY_REQUESTS_ERROR: {
     description: 'Too many requests, rate limit exceeded',
     schema: {
       type: 'object',
@@ -601,7 +607,7 @@ export const CLOSE_CURRENT_SESSION_RESPONSES: {
       },
     },
   },
-  TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES: {
+  TOO_MANY_REQUESTS_ERROR: {
     description: 'Too many requests, rate limit exceeded',
     schema: {
       type: 'object',

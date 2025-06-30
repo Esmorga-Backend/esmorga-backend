@@ -42,7 +42,7 @@ export const CREATE_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
       },
     },
   },
-  TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES: {
+  TOO_MANY_REQUESTS_ERROR: {
     description: 'Too many requests, rate limit exceeded',
     schema: {
       type: 'object',
@@ -79,7 +79,7 @@ export const GET_EVENTS_RESPONSES: { [key: string]: ApiResponseOptions } = {
     description: 'List of avaliable events',
     type: EventListDto,
   },
-  TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES: {
+  TOO_MANY_REQUESTS_ERROR: {
     description: 'Too many requests, rate limit exceeded',
     schema: {
       type: 'object',
@@ -128,7 +128,7 @@ export const UPDATE_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
       },
     },
   },
-  TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES: {
+  TOO_MANY_REQUESTS_ERROR: {
     description: 'Too many requests, rate limit exceeded',
     schema: {
       type: 'object',
@@ -198,7 +198,7 @@ export const DELETE_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
       },
     },
   },
-  TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES: {
+  TOO_MANY_REQUESTS_ERROR: {
     description: 'Too many requests, rate limit exceeded',
     schema: {
       type: 'object',
@@ -260,7 +260,7 @@ export const GET_EVENT_USERS_RESPONSES: { [key: string]: ApiResponseOptions } =
         },
       },
     },
-    TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES: {
+    TOO_MANY_REQUESTS_ERROR: {
       description: 'Too many requests, rate limit exceeded',
       schema: {
         type: 'object',
