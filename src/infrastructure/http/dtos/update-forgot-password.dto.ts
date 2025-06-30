@@ -8,7 +8,7 @@ import {
 } from 'class-validator';
 import { ACCOUNT_REGEX } from '../../../domain/regex';
 
-export class UpdatePasswordDto {
+export class UpdateForgotPasswordDto {
   @Matches(ACCOUNT_REGEX.PASSWORD, {
     message:
       'password must include at least one digit, one letter and one symbol',

@@ -21,7 +21,7 @@ import {
   ActivateAccountService,
   CloseCurrentSessionService,
   DisjoinEventService,
-  UpdatePasswordService,
+  UpdateForgotPasswordService,
   ForgotPasswordService,
   GetMyEventsService,
   JoinEventService,
@@ -34,7 +34,7 @@ import { HttpExceptionFilter } from '../errors';
 import {
   AccountLoginDto,
   AccountRegisterDto,
-  UpdatePasswordDto,
+  UpdateForgotPasswordDto,
   ActivateAccountDto,
   EmailDto,
   EventIdDto,
@@ -74,7 +74,7 @@ export class AccountController {
     private readonly refreshTokenService: RefreshTokenService,
     private readonly registerService: RegisterService,
     private readonly sendEmailVerificationService: SendEmailVerificationService,
-    private readonly updatePasswordService: UpdatePasswordService,
+    private readonly updateForgotPasswordService: UpdateForgotPasswordService,
     private configService: ConfigService,
     private jwtService: JwtService,
   ) {}
@@ -358,7 +358,7 @@ export class AccountController {
   @SwaggerForgotPasswordUpdate()
   @HttpCode(204)
   async passwordFotgotUpdate(
-    @Body() updatePasswordDto: UpdatePasswordDto,
+    @Body() updateForgotPasswordDto: UpdateForgotPasswordDto,
     @RequestId() requestId: string,
   ) {
     try {
@@ -366,8 +366,8 @@ export class AccountController {
         `[AccountController] [passwordFotgotUpdate] - x-request-id: ${requestId}`,
       );
 
-      await this.updatePasswordService.updatePassword(
-        updatePasswordDto,
+      await this.updateForgotPasswordService.updatePassword(
+        updateForgotPasswordDto,
         requestId,
       );
     } catch (error) {

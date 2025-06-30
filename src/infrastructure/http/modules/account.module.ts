@@ -9,7 +9,7 @@ import {
   GetMyEventsService,
   CloseCurrentSessionService,
   DisjoinEventService,
-  UpdatePasswordService,
+  UpdateForgotPasswordService,
   ActivateAccountService,
   SendEmailVerificationService,
 } from '../../../application/handler/account';
@@ -39,7 +39,7 @@ import {
     GetMyEventsService,
     CloseCurrentSessionService,
     DisjoinEventService,
-    UpdatePasswordService,
+    UpdateForgotPasswordService,
     ActivateAccountService,
     SessionGenerator,
     GenerateMailService,
