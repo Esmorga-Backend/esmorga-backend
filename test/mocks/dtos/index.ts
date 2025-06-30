@@ -7,5 +7,5 @@ export * from './event';
 export * from './event-id';
 export * from './refresh-token';
 export * from './update-event';
-export * from './update-password';
+export * from './update-forgot- password';
 export * from './user-profile';
