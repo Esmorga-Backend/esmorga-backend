@@ -5,14 +5,14 @@ import {
   LoginAttemptsRepository,
   TemporalCodeRepository,
 } from '../../../infrastructure/db/repositories';
-import { UpdatePasswordDto } from '../../../infrastructure/http/dtos';
+import { UpdateForgotPasswordDto } from '../../../infrastructure/http/dtos';
 import { encodeValue } from '../../../domain/services';
 import { TEMPORAL_CODE_TYPE } from '../../../domain/const';
 import { DataBaseNotFoundError } from '../../../infrastructure/db/errors';
 import { InvalidForgotPasswordCodeApiError } from '../../../domain/errors';
 
 @Injectable()
-export class UpdatePasswordService {
+export class UpdateForgotPasswordService {
   constructor(
     private readonly logger: PinoLogger,
     private readonly accountRepository: AccountRepository,
@@ -28,7 +28,7 @@ export class UpdatePasswordService {
    * @throws InvalidForgotPasswordCodeApiError - Error for invalid/expired/used code.
    */
   async updatePassword(
-    updatePasswordDto: UpdatePasswordDto,
+    updateForgotPasswordDto: UpdateForgotPasswordDto,
     requestId?: string,
   ) {
     try {
@@ -36,7 +36,7 @@ export class UpdatePasswordService {
         `[UpdatePasswordService] [updatePassword] - x-request-id: ${requestId}`,
       );
 
-      const { password, forgotPasswordCode } = updatePasswordDto;
+      const { password, forgotPasswordCode } = updateForgotPasswordDto;
 
       const { id, email } = await this.temporalCodeRepository.getCode(
         forgotPasswordCode,

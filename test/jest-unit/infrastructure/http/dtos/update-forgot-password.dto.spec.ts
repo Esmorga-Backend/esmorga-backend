@@ -1,13 +1,13 @@
 import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
-import { UpdatePasswordDto } from '../../../../../src/infrastructure/http/dtos';
+import { UpdateForgotPasswordDto } from '../../../../../src/infrastructure/http/dtos';
 import { UPDATE_PASSWORD } from '../../../../mocks/dtos';
 import { ACCOUNT_REGEX } from '../../../../../src/domain/regex';
 
-describe('[unit-test] [UpdatePasswordDto]', () => {
+describe('[unit-test] [UpdateForgotPasswordDto]', () => {
   it('Should validate all fields successfully', async () => {
     const updatePasswordDto = plainToInstance(
-      UpdatePasswordDto,
+      UpdateForgotPasswordDto,
       UPDATE_PASSWORD,
     );
 
@@ -18,13 +18,13 @@ describe('[unit-test] [UpdatePasswordDto]', () => {
     expect(errors.length).toBe(0);
   });
 
-  describe('[UpdatePasswordDto] [forgotPasswordCode]', () => {
+  describe('[UpdateForgotPasswordDto] [forgotPasswordCode]', () => {
     it('Should not accept an empty value', async () => {
       const updatePasswordData = { ...UPDATE_PASSWORD };
 
       delete updatePasswordData.forgotPasswordCode;
 
-      const data = plainToInstance(UpdatePasswordDto, updatePasswordData);
+      const data = plainToInstance(UpdateForgotPasswordDto, updatePasswordData);
 
       const errors = await validate(data, { stopAtFirstError: true });
 
@@ -41,7 +41,7 @@ describe('[unit-test] [UpdatePasswordDto]', () => {
         forgotPasswordCode: 123456,
       };
 
-      const data = plainToInstance(UpdatePasswordDto, updatePasswordData);
+      const data = plainToInstance(UpdateForgotPasswordDto, updatePasswordData);
 
       const errors = await validate(data, { stopAtFirstError: true });
 
@@ -53,13 +53,13 @@ describe('[unit-test] [UpdatePasswordDto]', () => {
     });
   });
 
-  describe('[UpdatePasswordDto] [password]', () => {
+  describe('[UpdateForgotPasswordDto] [password]', () => {
     it('Should not accept an empty value', async () => {
       const updatePasswordData = { ...UPDATE_PASSWORD };
 
       delete updatePasswordData.password;
 
-      const data = plainToInstance(UpdatePasswordDto, updatePasswordData);
+      const data = plainToInstance(UpdateForgotPasswordDto, updatePasswordData);
 
       const errors = await validate(data, { stopAtFirstError: true });
 
@@ -75,7 +75,7 @@ describe('[unit-test] [UpdatePasswordDto]', () => {
 
       updatePasswordData.password = 'AA';
 
-      const data = plainToInstance(UpdatePasswordDto, updatePasswordData);
+      const data = plainToInstance(UpdateForgotPasswordDto, updatePasswordData);
 
       const errors = await validate(data, { stopAtFirstError: true });
 
@@ -91,7 +91,7 @@ describe('[unit-test] [UpdatePasswordDto]', () => {
 
       updatePasswordData.password = 'A'.repeat(51);
 
-      const data = plainToInstance(UpdatePasswordDto, updatePasswordData);
+      const data = plainToInstance(UpdateForgotPasswordDto, updatePasswordData);
 
       const errors = await validate(data, { stopAtFirstError: true });
 
@@ -108,7 +108,7 @@ describe('[unit-test] [UpdatePasswordDto]', () => {
         forgotPasswordCode: '123456',
       };
 
-      const data = plainToInstance(UpdatePasswordDto, updatePasswordData);
+      const data = plainToInstance(UpdateForgotPasswordDto, updatePasswordData);
 
       const errors = await validate(data, { stopAtFirstError: true });
 
