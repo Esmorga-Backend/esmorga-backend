@@ -67,7 +67,7 @@ export class LoginService {
       if (!userProfile) {
         throw new DataBaseUnathorizedError();
       }
-      const { expireBlockedAt, uuid } = userProfile;
+      const { expireBlockedAt, uuid, role } = userProfile;
       let { status } = userProfile;
       const currentDate = new Date();
 
@@ -110,7 +110,7 @@ export class LoginService {
       const accountLoggedDto: AccountLoggedDto = plainToInstance(
         AccountLoggedDto,
         {
-          profile: userProfile,
+          profile: { ...userProfile, role },
           accessToken,
           refreshToken,
           ttl,

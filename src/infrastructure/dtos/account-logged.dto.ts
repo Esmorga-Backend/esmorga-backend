@@ -14,6 +14,10 @@ class Profile {
   @Expose()
   @IsString()
   email: string;
+
+  @Expose()
+  @IsString()
+  role: string;
 }
 
 export class AccountLoggedDto {
@@ -56,6 +60,10 @@ export class AccountLoggedDto {
         type: 'string',
         example: 'eventslogin01@yopmail.com',
         maxLength: 100,
+      },
+      role: {
+        type: 'string',
+        example: 'USER',
       },
     },
   })

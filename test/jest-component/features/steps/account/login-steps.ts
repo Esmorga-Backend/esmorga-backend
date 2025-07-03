@@ -106,7 +106,9 @@ export const loginSteps: StepDefinitions = async ({ given, and, then }) => {
         ttl: TTL,
         profile: {
           name: USER_MOCK_DB.name,
+          lastName: USER_MOCK_DB.lastName,
           email: USER_MOCK_DB.email,
+          role: USER_MOCK_DB.role,
         },
       });
     },
