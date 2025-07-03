@@ -69,6 +69,11 @@ export const reusableSteps: StepDefinitions = ({ when, then, and }) => {
       context.mock[row] = '';
     }
   });
+
+  and(/^user role is (.*)$/, async (role) => {
+    context.user.role = role;
+  });
+
   and('with the maximum allowed characters in all input fields', () => {
     const rows = getRowsDetail('maxLength');
     for (const row in rows) {
