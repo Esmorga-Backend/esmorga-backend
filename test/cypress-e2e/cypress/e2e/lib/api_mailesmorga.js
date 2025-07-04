@@ -70,6 +70,8 @@ class ApiMailEsmorga {
       filtred_emails = res.filter((emails) =>
         emails.recipients.includes('<' + this.get_email_dir() + '>'),
       );
+      cy.log(this.get_email_dir());
+
       cy.log(filtred_emails);
 
       cy.log(JSON.stringify(filtred_emails[filtred_emails.length - 1]));
