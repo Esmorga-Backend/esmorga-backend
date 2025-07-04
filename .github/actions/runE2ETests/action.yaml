@@ -20,13 +20,9 @@ runs:
           shell: bash
           run: |
            npm ci
-#           npm run test:e2e-run-cypress
-        - name: Run Reporting
-          uses: ./.github/actions/SlackCom
-          with: 
-            msg: "Backend  E2E Test Fails"
-            SLACK_WEBHOOK_URL: ${{ inputs.SLACK_WEBHOOK_URL }}
-          if: failure()
+           echo "MOCK_SERVER_USERNAME=${{ inputs.MOCK_SERVER_USERNAME }}" > test/cypress-e2e/.env
+           echo "MOCK_SERVER_PASSWORD=${{ inputs.MOCK_SERVER_PASSWORD }}" >> test/cypress-e2e/.env
+           npm run test:e2e-run-cypress
         - name : Upload Results
           shell: bash
           if: always()
@@ -34,3 +30,7 @@ runs:
                 if [ "${GITHUB_HEAD_REF}" == "" ]; then
                 node test/scripts/features-tool.js report/junit-e2e.xml --Upload-Results 
                 fi
+        - name: remove env file
+          shell: bash
+          run: |
+            rm test/cypress-e2e/.env

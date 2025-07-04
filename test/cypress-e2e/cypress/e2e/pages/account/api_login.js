@@ -1,7 +1,7 @@
 import ApiBasics from '../api_basic';
 class ApiLogin extends ApiBasics {
   #url = 'v1/account/login';
-  #email = 'auto.esmorga.test@1secmail.com';
+  #email = 'auto.esmorga.test@esmorga.canarte.org';
   #password = 'SuperSecret1!';
   #defaultPassword = this.#password;
   set_email(email) {
