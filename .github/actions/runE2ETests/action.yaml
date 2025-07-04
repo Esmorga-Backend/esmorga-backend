@@ -21,12 +21,6 @@ runs:
           run: |
            npm ci
            npm run test:e2e-run-cypress
-        - name: Run Reporting
-          uses: ./.github/actions/SlackCom
-          with: 
-            msg: "Backend  E2E Test Fails"
-            SLACK_WEBHOOK_URL: ${{ inputs.SLACK_WEBHOOK_URL }}
-          if: failure()
         - name : Upload Results
           shell: bash
           if: always()
