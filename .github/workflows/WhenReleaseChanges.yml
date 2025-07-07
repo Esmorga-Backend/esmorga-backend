@@ -28,10 +28,13 @@ jobs:
       with:
         node-version: '22.1'
 
-    - run: npm ci
 
     - name: Checkout repository
       uses: actions/checkout@v2
+
+    - run: npm ci
+    - run: npm run test:create:cycle
+
     - name: Run Unit Tests
       uses: ./.github/actions/runUnitTests
       with:
