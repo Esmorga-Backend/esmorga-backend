@@ -42,7 +42,7 @@ async function main() {
     } else if (branchName.startsWith('release/')) {
       git.fixedBranchName();
       branchName =
-        (await git.getBranchName().split('(')[0]) + '(release/esmorga-1.0.3)';
+        (await git.getBranchName().split('(')[0]) + '(' + branchName + ')';
       console.log(branchName);
     }
     let [usName, usVersionName] = features.getUsNameFromBranch(branchName);
