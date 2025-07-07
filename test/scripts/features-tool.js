@@ -39,6 +39,11 @@ async function main() {
       git.fixedBranchName();
       branchName = await git.getBranchName();
       console.log(branchName);
+    } else if (branchName.startsWith('release/')) {
+      git.fixedBranchName();
+      branchName =
+        (await git.getBranchName().split('(')[0]) + '(' + branchName + ')';
+      console.log(branchName);
     }
     let [usName, usVersionName] = features.getUsNameFromBranch(branchName);
 
@@ -86,8 +91,9 @@ async function main() {
         Tests = await features.getTestFromQuerys(Data, onErrorMsg);
         TESTS.push(...Tests);
       }
-      console.log('Create Cycle for', usName, 'with tests', TESTS);
+      console.log('Create Cycle for', usVersionName, 'with tests', TESTS);
       let cyKey = await aio.findCycleByUs(onErrorMsg, usVersionName);
+
       if (cyKey == null) {
         cyKey = await aio.createCycle(onErrorMsg, usName, usVersionName);
         for (test of TESTS) {
