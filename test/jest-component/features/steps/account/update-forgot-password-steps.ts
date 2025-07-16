@@ -13,7 +13,7 @@ import {
 import { TemporalCodeDA } from '../../../../../src/infrastructure/db/modules/none/temporal-code-da';
 import { LoginAttemptsDA } from '../../../../../src/infrastructure/db/modules/none/login-attempts-da';
 
-export const updatePasswordSteps: StepDefinitions = ({ given, and }) => {
+export const updateForgotPasswordSteps: StepDefinitions = ({ given, and }) => {
   given('The PUT password update API is available', async () => {
     context.path = '/v1/account/password/forgot-update';
 

@@ -29,16 +29,18 @@ import {
   RefreshTokenService,
   RegisterService,
   SendEmailVerificationService,
+  UpdatePasswordService,
 } from '../../../application/handler/account';
 import { HttpExceptionFilter } from '../errors';
 import {
   AccountLoginDto,
   AccountRegisterDto,
-  UpdateForgotPasswordDto,
   ActivateAccountDto,
   EmailDto,
   EventIdDto,
   RefreshTokenDto,
+  UpdateForgotPasswordDto,
+  UpdatePasswordDto,
 } from '../dtos';
 import {
   SwaggerAccountLogin,
@@ -52,6 +54,7 @@ import {
   SwaggerJoinEvent,
   SwaggerRefreshToken,
   SwaggerSendEmailVerification,
+  SwaggerUpdatePassword,
 } from '../swagger/decorators/account';
 import { AccountLoggedDto, NewPairOfTokensDto, EventListDto } from '../../dtos';
 import { RequestId, SessionId } from '../req-decorators';
@@ -75,6 +78,7 @@ export class AccountController {
     private readonly registerService: RegisterService,
     private readonly sendEmailVerificationService: SendEmailVerificationService,
     private readonly updateForgotPasswordService: UpdateForgotPasswordService,
+    private readonly updatePasswordService: UpdatePasswordService,
     private configService: ConfigService,
     private jwtService: JwtService,
   ) {}
@@ -373,6 +377,40 @@ export class AccountController {
     } catch (error) {
       this.logger.error(
         `[AccountController] [passwordFotgotUpdate] - x-request-id: ${requestId}, error: ${error}`,
+      );
+
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      throw new InternalServerErrorException();
+    }
+  }
+
+  @SkipThrottle({ public: false, default: true })
+  @Put('/password')
+  @UseGuards(AuthGuard)
+  @SwaggerUpdatePassword()
+  async updatePassword(
+    @SessionId() sessionId: string,
+    @Body() updatePasswordDto: UpdatePasswordDto,
+    @RequestId() requestId: string,
+  ) {
+    try {
+      this.logger.info(
+        `[AccountController] [updatePassword] - x-request-id: ${requestId}`,
+      );
+
+      const response: NewPairOfTokensDto =
+        await this.updatePasswordService.updatePassword(
+          sessionId,
+          updatePasswordDto,
+          requestId,
+        );
+      return response;
+    } catch (error) {
+      this.logger.error(
+        `[AccountController] [updatePassword] - x-request-id: ${requestId}, error: ${error}`,
       );
 
       if (error instanceof HttpException) {

@@ -2,7 +2,11 @@ import { HttpException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PinoLogger } from 'nestjs-pino';
 import { AccountRegisterDto } from '../..//http/dtos';
-import { DataBaseInternalError, DataBaseUnathorizedError } from '../errors';
+import {
+  DataBaseInternalError,
+  DataBaseUnathorizedError,
+  DataBaseUnprocesableContentError,
+} from '../errors';
 import { UserProfileDto } from '../../dtos';
 import { validateObjectDto } from '../utils';
 import { REQUIRED_DTO_FIELDS } from '../consts';
@@ -146,26 +150,63 @@ export class AccountRepository {
   }
 
   /**
+   * Find an account by uuid and update the password with the value encoded provided
+   *
+   * @param uuid - User identifier.
+   * @param currentPassword - User current password.
+   * @param newPassword - User new password.
+   * @param requestId - Request identifier.
+   */
+  async updateAccountPassword(
+    uuid: string,
+    currentPassword: string,
+    newPassword: string,
+    requestId?: string,
+  ) {
+    try {
+      this.logger.info(
+        `[AccountRepository] [updateAccountPassword] - x-request-id: ${requestId}, uuid: ${uuid}`,
+      );
+
+      const updatedPassword = await this.userDA.updatePasswordByUuid(
+        uuid,
+        currentPassword,
+        newPassword,
+      );
+
+      if (!updatedPassword) throw new DataBaseUnprocesableContentError();
+    } catch (error) {
+      this.logger.error(
+        `[AccountRepository] [updateAccountPassword] - x-request-id: ${requestId}, error: ${error}`,
+      );
+
+      if (error instanceof HttpException) throw error;
+
+      throw new DataBaseInternalError();
+    }
+  }
+
+  /**
    * Find an account by email and update the password with the value encoded provided
    *
    * @param email - User email.
    * @param password - User password to update.
    * @param requestId - Request identifier.
    */
-  async updateAccountPassword(
+  async updateAccountForgotPassword(
     email: string,
     password: string,
     requestId?: string,
   ) {
     try {
       this.logger.info(
-        `[AccountRepository] [updateAccountPassword] - x-request-id: ${requestId}, email: ${email}`,
+        `[AccountRepository] [updateAccountForgotPassword] - x-request-id: ${requestId}, email: ${email}`,
       );
 
       return await this.userDA.updatePasswordByEmail(email, password);
     } catch (error) {
       this.logger.error(
-        `[AccountRepository] [updateAccountPassword] - x-request-id: ${requestId}, error: ${error}`,
+        `[AccountRepository] [updateAccountForgotPassword] - x-request-id: ${requestId}, error: ${error}`,
       );
 
       throw new DataBaseInternalError();

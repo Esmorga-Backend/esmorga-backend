@@ -138,6 +138,25 @@ export class TokensRepository {
   }
 
   /**
+   * Remove all pair of token documents related to uuid provided.
+   * @param uuid - User identifier.
+   * @param requestId - Request identifier for API logger.
+   */
+  async removeAllSessionsByUuid(uuid: string, requestId?: string) {
+    try {
+      this.logger.info(
+        `[TokensRepository] [removeAllSessionsByUuid] - x-request-id: ${requestId}, uuid: ${uuid}`,
+      );
+      await this.sessionDA.removeAllByUuid(uuid);
+    } catch (error) {
+      this.logger.error(
+        `[TokensRepository] [removeAllSessionsByUuid] - x-request-id: ${requestId}, error: ${error}`,
+      );
+      throw new DataBaseInternalError();
+    }
+  }
+
+  /**
    * Remove session document by session ID.
    * @param sessionId - Session identifier.
    * @param requestId - Request identifier for API logger.

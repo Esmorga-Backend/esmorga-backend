@@ -12,6 +12,9 @@ export class SessionDA {
   findOneBySessionId(_sessionId: string): Promise<SessionDto | null> {
     throw new NotImplementedException();
   }
+  removeAllByUuid(_uuid: string): Promise<void> {
+    throw new NotImplementedException();
+  }
   removeById(_id: string): Promise<void> {
     throw new NotImplementedException();
   }

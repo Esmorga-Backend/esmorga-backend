@@ -23,7 +23,7 @@ export class UpdateForgotPasswordService {
   /**
    * Update account password related to code provided.
    *
-   * @param updatePasswordDto - DTO that contains the new password and code to exchange.
+   * @param updateForgotPasswordDto - DTO that contains the new password and code to exchange.
    * @param requestId - Request identifier for API logger.
    * @throws InvalidForgotPasswordCodeApiError - Error for invalid/expired/used code.
    */
@@ -33,7 +33,7 @@ export class UpdateForgotPasswordService {
   ) {
     try {
       this.logger.info(
-        `[UpdatePasswordService] [updatePassword] - x-request-id: ${requestId}`,
+        `[UpdateForgotPasswordService] [updatePassword] - x-request-id: ${requestId}`,
       );
 
       const { password, forgotPasswordCode } = updateForgotPasswordDto;
@@ -46,7 +46,7 @@ export class UpdateForgotPasswordService {
 
       const hashPassword = await encodeValue(password);
 
-      const { uuid } = await this.accountRepository.updateAccountPassword(
+      const { uuid } = await this.accountRepository.updateAccountForgotPassword(
         email,
         hashPassword,
         requestId,
@@ -56,7 +56,7 @@ export class UpdateForgotPasswordService {
       await this.loginAttemptsRepository.removeLoginAttempts(uuid, requestId);
     } catch (error) {
       this.logger.error(
-        `[UpdatePasswordService] [updatePassword] - x-request-id: ${requestId}, error: ${error}`,
+        `[UpdateForgotPasswordService] [updatePassword] - x-request-id: ${requestId}, error: ${error}`,
       );
 
       if (error instanceof DataBaseNotFoundError) {

@@ -33,6 +33,9 @@ export class SessionMongoDA implements SessionDA {
       excludeExtraneousValues: true,
     });
   }
+  async removeAllByUuid(uuid: string): Promise<void> {
+    await this.sessionModel.deleteMany({ uuid });
+  }
   async removeById(id: string): Promise<void> {
     await this.sessionModel.findOneAndDelete({ _id: id });
   }
