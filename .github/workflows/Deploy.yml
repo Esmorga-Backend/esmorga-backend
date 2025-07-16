@@ -55,7 +55,7 @@ jobs:
       shell: bash
       run: |
         python -m pip install --upgrade pip paramiko 
-        python .github/workflows/scripts/DeployToEnv.py esmorga.canarte.org ${{vars.SERVICE}} ${{vars.SERVER_PATH}} $GITHUB_REF ${{secrets.SSHRSA}}
+        python .github/workflows/scripts/DeployToEnv.py esmorga.canarte.org ${{vars.SERVICE}} ${{vars.SERVER_PATH}} ${{ github.head_ref }} ${{secrets.SSHRSA}}
 
       # - name: Run Reporting
       #   uses: ./.github/actions/SlackCom
