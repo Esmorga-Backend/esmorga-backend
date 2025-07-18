@@ -16,10 +16,10 @@ export class UpdatePasswordDto {
 
   @Matches(ACCOUNT_REGEX.PASSWORD, {
     message:
-      'password must include at least one digit, one letter and one symbol',
+      'newPassword must include at least one digit, one letter and one symbol',
   })
-  @MinLength(8, { message: 'password must have min 8 characters' })
-  @MaxLength(50, { message: 'password must have max 50 characters' })
+  @MinLength(8, { message: 'newPassword must have min 8 characters' })
+  @MaxLength(50, { message: 'newPassword must have max 50 characters' })
   @IsString()
   @IsNotEmpty()
   @ApiProperty({ example: 'SuperSecret2!', minLength: 8, maxLength: 50 })

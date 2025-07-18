@@ -29,6 +29,6 @@ export const closeCurrentSessionStep: StepDefinitions = ({ and, given }) => {
   });
 
   and('none token pair is removed from the system', () => {
-    expect(context.sessionDA.removeBySessionId).not.toHaveBeenCalledWith();
+    expect(context.sessionDA.removeBySessionId).not.toHaveBeenCalled();
   });
 };
