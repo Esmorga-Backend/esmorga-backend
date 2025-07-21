@@ -37,6 +37,15 @@ async function main() {
     .setVersion('1.0')
     .addServer(`${DNS_NAME}`)
     .setDescription(description)
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        in: 'header',
+      },
+      'access-token', // nombre del esquema
+    )
     .build();
 
   const document = SwaggerModule.createDocument(app, swaggerConfig);

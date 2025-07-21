@@ -12,7 +12,7 @@ import {
   Put,
   Req,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { SkipThrottle } from '@nestjs/throttler';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
@@ -201,6 +201,7 @@ export class AccountController {
   }
 
   @Post('/events')
+  @ApiBearerAuth('access-token')
   @UseGuards(AuthGuard)
   @SwaggerJoinEvent()
   @HttpCode(204)
@@ -266,6 +267,7 @@ export class AccountController {
   }
 
   @Delete('/events')
+  @ApiBearerAuth('access-token')
   @UseGuards(AuthGuard)
   @SwaggerDisjoinEvent()
   @HttpCode(204)
@@ -389,6 +391,7 @@ export class AccountController {
 
   @SkipThrottle({ public: false, default: true })
   @Put('/password')
+  @ApiBearerAuth('access-token')
   @UseGuards(AuthGuard)
   @SwaggerUpdatePassword()
   async updatePassword(
@@ -422,6 +425,7 @@ export class AccountController {
   }
 
   @Delete('/session')
+  @ApiBearerAuth('access-token')
   @SwaggerCloseCurrentSession()
   @HttpCode(204)
   async closeAccountSession(
