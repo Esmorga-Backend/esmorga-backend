@@ -544,9 +544,8 @@ export const ACTIVATE_ACCOUNT_RESPONSES: { [key: string]: ApiResponseOptions } =
 export const FORGOT_PASSWORD_UPDATE_RESPONSE: {
   [key: string]: ApiResponseOptions;
 } = {
-  OK: {
-    description: 'User status succesfully updated to ACTIVE',
-    type: AccountLoggedDto,
+  NO_CONTENT: {
+    description: 'ForgotPasswordCode used to update password',
   },
   BAD_REQUEST_ERROR: {
     description: 'Some inputs are missed or wrong',
