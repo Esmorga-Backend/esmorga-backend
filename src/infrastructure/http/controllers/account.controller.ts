@@ -84,6 +84,7 @@ export class AccountController {
   ) {}
 
   @Get('/events')
+  @ApiBearerAuth('access-token')
   @UseGuards(AuthGuard)
   @SwaggerGetMyEvents()
   async getMyEvents(
