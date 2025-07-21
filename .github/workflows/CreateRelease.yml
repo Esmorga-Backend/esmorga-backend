@@ -27,4 +27,7 @@ jobs:
         git config --local user.email "actions@github.com"
         git config --local user.name "Github Actions"
         git checkout -b release/esmorga-${{ inputs.release_num }}
+        echo "release/esmorga-${{ inputs.release_num }}" >> ./README.md
+        git add ./README.md
+        git commit -m "${{ inputs.usKey }}"
         git push -u origin "release/esmorga-${{ inputs.release_num }}"
