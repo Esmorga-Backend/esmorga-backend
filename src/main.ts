@@ -34,9 +34,18 @@ async function main() {
 
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Esmorga API')
-    .setVersion('1.0')
+    .setVersion('1.1.1')
     .addServer(`${DNS_NAME}`)
     .setDescription(description)
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        in: 'header',
+      },
+      'access-token',
+    )
     .build();
 
   const document = SwaggerModule.createDocument(app, swaggerConfig);
