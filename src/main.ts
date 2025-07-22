@@ -44,7 +44,7 @@ async function main() {
         bearerFormat: 'JWT',
         in: 'header',
       },
-      'access-token', // nombre del esquema
+      'access-token',
     )
     .build();
 
