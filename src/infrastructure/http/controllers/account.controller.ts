@@ -12,7 +12,7 @@ import {
   Put,
   Req,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { SkipThrottle } from '@nestjs/throttler';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
@@ -80,6 +80,7 @@ export class AccountController {
   ) {}
 
   @Get('/events')
+  @ApiBearerAuth('access-token')
   @UseGuards(AuthGuard)
   @SwaggerGetMyEvents()
   async getMyEvents(
@@ -197,6 +198,7 @@ export class AccountController {
   }
 
   @Post('/events')
+  @ApiBearerAuth('access-token')
   @UseGuards(AuthGuard)
   @SwaggerJoinEvent()
   @HttpCode(204)
@@ -262,6 +264,7 @@ export class AccountController {
   }
 
   @Delete('/events')
+  @ApiBearerAuth('access-token')
   @UseGuards(AuthGuard)
   @SwaggerDisjoinEvent()
   @HttpCode(204)
