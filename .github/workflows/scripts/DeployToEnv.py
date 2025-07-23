@@ -27,7 +27,7 @@ if branch[:8]=="release/":
     command=command+"""sudo git checkout """+branch
 command=command+"""
 sudo git pull"""
-print(command)
+
 
 stdin, stdout, stderr = ssh_client.exec_command(command)
 for line in stdout.readlines():
