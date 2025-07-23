@@ -21,11 +21,11 @@ sleep 10
 cd """+service_path+"""
 sudo git reset --hard HEAD
 sudo git clean -df
+sudo git fetch
 """
 if branch[:8]=="release/":
     command=command+"""sudo git checkout """+branch
 command=command+"""
-sudo git fetch
 sudo git pull"""
 print(command)
 
