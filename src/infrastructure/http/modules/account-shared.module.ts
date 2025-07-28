@@ -2,17 +2,21 @@ import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import {
   AccountRepository,
-  TokensRepository,
+  SessionRepository,
   EventParticipantsRepository,
 } from '../../../infrastructure/db/repositories';
 
 @Module({
   imports: [JwtModule.register({})],
   controllers: [],
-  providers: [AccountRepository, TokensRepository, EventParticipantsRepository],
+  providers: [
+    AccountRepository,
+    SessionRepository,
+    EventParticipantsRepository,
+  ],
   exports: [
     AccountRepository,
-    TokensRepository,
+    SessionRepository,
     EventParticipantsRepository,
     JwtModule,
   ],

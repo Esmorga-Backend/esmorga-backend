@@ -4,7 +4,7 @@ import { PinoLogger } from 'nestjs-pino';
 import { plainToInstance } from 'class-transformer';
 import {
   AccountRepository,
-  TokensRepository,
+  SessionRepository,
 } from '../../../infrastructure/db/repositories';
 import { UpdatePasswordDto } from '../../../infrastructure/http/dtos';
 import { NewPairOfTokensDto } from '../../../infrastructure/dtos';
@@ -21,7 +21,7 @@ export class UpdatePasswordService {
     private readonly logger: PinoLogger,
     private configService: ConfigService,
     private readonly accountRepository: AccountRepository,
-    private readonly tokensRepository: TokensRepository,
+    private readonly sessionRepository: SessionRepository,
     private readonly sessionGenerator: SessionGenerator,
   ) {}
 
@@ -48,7 +48,7 @@ export class UpdatePasswordService {
       if (currentPassword === newPassword)
         throw new InvalidSamePasswordApiError();
 
-      const { uuid } = await this.tokensRepository.getBySessionId(
+      const { uuid } = await this.sessionRepository.getBySessionId(
         sessionId,
         requestId,
       );
@@ -60,15 +60,25 @@ export class UpdatePasswordService {
         requestId,
       );
 
-      await this.tokensRepository.removeAllSessionsByUuid(uuid, requestId);
+      await this.sessionRepository.removeAllSessionsByUuid(
+        uuid,
+        sessionId,
+        requestId,
+      );
 
       const {
         accessToken,
         refreshToken,
         sessionId: newSessionId,
+        refreshTokenId,
       } = await this.sessionGenerator.generateSession(uuid);
 
-      await this.tokensRepository.saveSession(uuid, newSessionId, requestId);
+      await this.sessionRepository.saveSession(
+        uuid,
+        newSessionId,
+        refreshTokenId,
+        requestId,
+      );
 
       const ttl = this.configService.get('ACCESS_TOKEN_TTL');
 

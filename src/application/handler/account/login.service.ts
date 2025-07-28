@@ -10,7 +10,7 @@ import {
 } from '../../../infrastructure/db/errors';
 import {
   AccountRepository,
-  TokensRepository,
+  SessionRepository,
   LoginAttemptsRepository,
 } from '../../../infrastructure/db/repositories';
 import { AccountLoggedDto, SessionDto } from '../../../infrastructure/dtos';
@@ -34,7 +34,7 @@ export class LoginService {
     private readonly sessionGenerator: SessionGenerator,
     private readonly accountRepository: AccountRepository,
     private readonly loginAttemptsRepository: LoginAttemptsRepository,
-    private readonly tokensRepository: TokensRepository,
+    private readonly sessionRepository: SessionRepository,
     private readonly validateLoginCredentialsService: ValidateLoginCredentialsService,
     private configService: ConfigService,
   ) {}
@@ -88,22 +88,27 @@ export class LoginService {
 
       await this.loginAttemptsRepository.removeLoginAttempts(uuid, requestId);
 
-      const { accessToken, refreshToken, sessionId } =
+      const { accessToken, refreshToken, sessionId, refreshTokenId } =
         await this.sessionGenerator.generateSession(uuid);
 
       const pairOfTokens: SessionDto[] =
-        await this.tokensRepository.getAllTokensByUuid(uuid, requestId);
+        await this.sessionRepository.getAllTokensByUuid(uuid, requestId);
 
       if (pairOfTokens.length >= this.configService.get('MAX_PAIR_OF_TOKEN')) {
         const oldestPairOfTokenId = getOldestSession(pairOfTokens);
 
-        await this.tokensRepository.removeTokensById(
+        await this.sessionRepository.removeTokensById(
           oldestPairOfTokenId,
           requestId,
         );
       }
 
-      await this.tokensRepository.saveSession(uuid, sessionId, requestId);
+      await this.sessionRepository.saveSession(
+        uuid,
+        sessionId,
+        refreshTokenId,
+        requestId,
+      );
 
       const ttl = this.configService.get('ACCESS_TOKEN_TTL');
 

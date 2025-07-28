@@ -6,7 +6,7 @@ import {
 } from '../../../infrastructure/db/errors';
 import {
   EventRepository,
-  TokensRepository,
+  SessionRepository,
   EventParticipantsRepository,
 } from '../../../infrastructure/db/repositories';
 import {
@@ -20,7 +20,7 @@ export class JoinEventService {
   constructor(
     private readonly logger: PinoLogger,
     private readonly eventRepository: EventRepository,
-    private readonly tokensRepository: TokensRepository,
+    private readonly sessionRepository: SessionRepository,
     private readonly eventParticipantsRepository: EventParticipantsRepository,
   ) {}
 
@@ -40,7 +40,7 @@ export class JoinEventService {
         `[JoinEventService] [joinEvent] - x-request-id: ${requestId}, eventId ${eventId}`,
       );
 
-      const { uuid } = await this.tokensRepository.getBySessionId(
+      const { uuid } = await this.sessionRepository.getBySessionId(
         sessionId,
         requestId,
       );

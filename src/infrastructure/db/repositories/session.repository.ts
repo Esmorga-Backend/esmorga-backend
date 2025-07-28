@@ -7,7 +7,7 @@ import { PairOfTokensDto } from '../../dtos/pair-of-tokens.dto';
 import { TokensDA } from '../modules/none/tokens-da';
 
 @Injectable()
-export class TokensRepository {
+export class SessionRepository {
   constructor(
     private sessionDA: SessionDA,
     private tokensDA: TokensDA,
@@ -21,15 +21,20 @@ export class TokensRepository {
    * @param sessionId - Client session id to be saved.
    * @param requestId - Request identifier for API logger
    */
-  async saveSession(uuid: string, sessionId: string, requestId?: string) {
+  async saveSession(
+    uuid: string,
+    sessionId: string,
+    refreshTokenId: string,
+    requestId?: string,
+  ) {
     try {
       this.logger.info(
-        `[TokensRepository] [saveSession] - x-request-id: ${requestId}, uuid: ${uuid}`,
+        `[SessionRepository] [saveSession] - x-request-id: ${requestId}, uuid: ${uuid}`,
       );
-      await this.sessionDA.create(uuid, sessionId);
+      await this.sessionDA.create(uuid, sessionId, refreshTokenId);
     } catch (error) {
       this.logger.error(
-        `[TokensRepository] [saveSession] - x-request-id: ${requestId}, error: ${error}`,
+        `[SessionRepository] [saveSession] - x-request-id: ${requestId}, error: ${error}`,
       );
 
       throw new DataBaseInternalError();
@@ -49,12 +54,12 @@ export class TokensRepository {
   ): Promise<SessionDto[]> {
     try {
       this.logger.info(
-        `[TokensRepository] [getAllTokensByUuid] - x-request-id: ${requestId}, uuid: ${uuid}`,
+        `[SessionRepository] [getAllTokensByUuid] - x-request-id: ${requestId}, uuid: ${uuid}`,
       );
       return await this.sessionDA.findByUuid(uuid);
     } catch (error) {
       this.logger.error(
-        `[TokensRepository] [getAllTokensByUuid] - x-request-id: ${requestId}, error: ${error}`,
+        `[SessionRepository] [getAllTokensByUuid] - x-request-id: ${requestId}, error: ${error}`,
       );
 
       throw new DataBaseInternalError();
@@ -74,7 +79,7 @@ export class TokensRepository {
   ): Promise<PairOfTokensDto> {
     try {
       this.logger.info(
-        `[TokensRepository] [getPairOfTokensByRefreshToken] - x-request-id:${requestId}, refreshToken ${refreshToken}`,
+        `[SessionRepository] [getPairOfTokensByRefreshToken] - x-request-id:${requestId}, refreshToken ${refreshToken}`,
       );
       const pairOfTokens =
         await this.tokensDA.findOneByRefreshToken(refreshToken);
@@ -82,7 +87,7 @@ export class TokensRepository {
       return pairOfTokens;
     } catch (error) {
       this.logger.error(
-        `[TokensRepository] [getPairOfTokensByRefreshToken] - x-request-id: ${requestId}, error: ${error}`,
+        `[SessionRepository] [getPairOfTokensByRefreshToken] - x-request-id: ${requestId}, error: ${error}`,
       );
       if (error instanceof HttpException) throw error;
       throw new DataBaseInternalError();
@@ -102,14 +107,14 @@ export class TokensRepository {
   ): Promise<SessionDto> {
     try {
       this.logger.info(
-        `[TokensRepository] [getBySessionId] - x-request-id:${requestId}, sessionId ${sessionId}`,
+        `[SessionRepository] [getBySessionId] - x-request-id:${requestId}, sessionId ${sessionId}`,
       );
       const sessionData = await this.sessionDA.findOneBySessionId(sessionId);
       if (!sessionData) throw new DataBaseUnathorizedError();
       return sessionData;
     } catch (error) {
       this.logger.error(
-        `[TokensRepository] [getBySessionId] - x-request-id: ${requestId}, error: ${error}`,
+        `[SessionRepository] [getBySessionId] - x-request-id: ${requestId}, error: ${error}`,
       );
 
       if (error instanceof HttpException) throw error;
@@ -126,12 +131,12 @@ export class TokensRepository {
   async removeTokensById(id: string, requestId?: string) {
     try {
       this.logger.info(
-        `[TokensRepository] [removeTokensById] - x-request-id: ${requestId}, tokensId: ${id}`,
+        `[SessionRepository] [removeTokensById] - x-request-id: ${requestId}, tokensId: ${id}`,
       );
       await this.sessionDA.removeById(id);
     } catch (error) {
       this.logger.error(
-        `[TokensRepository] [removeTokensById] - x-request-id: ${requestId}, error: ${error}`,
+        `[SessionRepository] [removeTokensById] - x-request-id: ${requestId}, error: ${error}`,
       );
       throw new DataBaseInternalError();
     }
@@ -142,15 +147,19 @@ export class TokensRepository {
    * @param uuid - User identifier.
    * @param requestId - Request identifier for API logger.
    */
-  async removeAllSessionsByUuid(uuid: string, requestId?: string) {
+  async removeAllSessionsByUuid(
+    uuid: string,
+    sessionId: string,
+    requestId?: string,
+  ) {
     try {
       this.logger.info(
-        `[TokensRepository] [removeAllSessionsByUuid] - x-request-id: ${requestId}, uuid: ${uuid}`,
+        `[SessionRepository] [removeAllSessionsByUuid] - x-request-id: ${requestId}, uuid: ${uuid}`,
       );
-      await this.sessionDA.removeAllByUuid(uuid);
+      await this.sessionDA.removeAllByUuid(uuid, sessionId);
     } catch (error) {
       this.logger.error(
-        `[TokensRepository] [removeAllSessionsByUuid] - x-request-id: ${requestId}, error: ${error}`,
+        `[SessionRepository] [removeAllSessionsByUuid] - x-request-id: ${requestId}, error: ${error}`,
       );
       throw new DataBaseInternalError();
     }
@@ -164,12 +173,37 @@ export class TokensRepository {
   async removeTokensBySessionId(sessionId: string, requestId?: string) {
     try {
       this.logger.info(
-        `[TokensRepository] [removeTokensBySessionId] - x-request-id: ${requestId}, sessionId: ${sessionId}`,
+        `[SessionRepository] [removeTokensBySessionId] - x-request-id: ${requestId}, sessionId: ${sessionId}`,
       );
       await this.sessionDA.removeBySessionId(sessionId);
     } catch (error) {
       this.logger.error(
-        `[TokensRepository] [removeTokensBySessionId] - x-request-id: ${requestId}, error: ${error}`,
+        `[SessionRepository] [removeTokensBySessionId] - x-request-id: ${requestId}, error: ${error}`,
+      );
+      throw new DataBaseInternalError();
+    }
+  }
+
+  /**
+   * Update refresh token ID session document by session ID.
+   * @param sessionId - Session identifier.
+   * @param refreshTokenId - Refresh token identifier.
+   * @param requestId - Request identifier for API logger.
+   */
+  async updateRefreshTokenId(
+    sessionId: string,
+    refreshTokenId: string,
+    requestId?: string,
+  ) {
+    try {
+      this.logger.info(
+        `[SessionRepository] [updateRefreshTokenId] - x-request-id: ${requestId}, sessionId: ${sessionId}, refreshTokenId: ${refreshTokenId}`,
+      );
+
+      await this.sessionDA.updateById(sessionId, { refreshTokenId });
+    } catch (error) {
+      this.logger.error(
+        `[SessionRepository] [updateRefreshTokenId] - x-request-id: ${requestId}, error: ${error}`,
       );
       throw new DataBaseInternalError();
     }

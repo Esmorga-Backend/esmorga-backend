@@ -3,7 +3,7 @@ import { JsonWebTokenError, JwtService } from '@nestjs/jwt';
 import { Injectable } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { PinoLogger } from 'nestjs-pino';
-import { TokensRepository } from '../../../infrastructure/db/repositories';
+import { SessionRepository } from '../../../infrastructure/db/repositories';
 import { RefreshTokenDto } from '../../../infrastructure/http/dtos';
 import { NewPairOfTokensDto } from '../../../infrastructure/dtos';
 import { DataBaseUnathorizedError } from '../../../infrastructure/db/errors';
@@ -17,7 +17,7 @@ export class RefreshTokenService {
     private configService: ConfigService,
     private jwtService: JwtService,
     private readonly sessionGenerator: SessionGenerator,
-    private readonly tokensRepository: TokensRepository,
+    private readonly sessionRepository: SessionRepository,
   ) {}
 
   /**
@@ -37,46 +37,36 @@ export class RefreshTokenService {
 
       const jwtSecret = this.configService.get('JWT_REFRESH_SECRET');
 
-      const { sessionId } = await this.jwtService.verifyAsync<{
-        uuid: string;
-        sessionId: string;
-      }>(refreshToken, { secret: jwtSecret });
+      const { sessionId, id: refreshTokenId } =
+        await this.jwtService.verifyAsync<{
+          uuid: string;
+          sessionId: string;
+          id: string; // refreshTokenId
+        }>(refreshToken, { secret: jwtSecret });
 
-      let uuid: string, id: string;
-
-      // accept refreshToken without sessionId
-      if (!sessionId) {
-        const pairOfTokens =
-          await this.tokensRepository.getPairOfTokensByRefreshToken(
-            refreshToken,
-            requestId,
-          );
-
-        id = null;
-        uuid = pairOfTokens.uuid;
-      } else {
-        const pairOfTokens = await this.tokensRepository.getBySessionId(
-          sessionId,
-          requestId,
-        );
-
-        id = pairOfTokens.id;
-        uuid = pairOfTokens.uuid;
-      }
+      const session = await this.sessionRepository.getBySessionId(
+        sessionId,
+        requestId,
+      );
 
       this.logger.info(
         `[RegisterService] [refreshToken] - x-request-id:${requestId}, refreshToken ${refreshToken}`,
       );
-      if (!uuid) throw new InvalidCredentialsRefreshApiError();
+      if (!session?.uuid) throw new InvalidCredentialsRefreshApiError();
+      if (session.refreshTokenId && session.refreshTokenId !== refreshTokenId)
+        throw new InvalidCredentialsRefreshApiError();
+
       const {
         accessToken,
         refreshToken: newRefreshToken,
-        sessionId: newSessionId,
-      } = await this.sessionGenerator.generateSession(uuid);
+        refreshTokenId: newRefreshTokenId,
+      } = await this.sessionGenerator.generateTokens(session.uuid, sessionId);
 
-      await this.tokensRepository.saveSession(uuid, newSessionId, requestId);
-
-      await this.tokensRepository.removeTokensById(id, requestId);
+      await this.sessionRepository.updateRefreshTokenId(
+        sessionId,
+        newRefreshTokenId,
+        requestId,
+      );
 
       const ttl = this.configService.get('ACCESS_TOKEN_TTL');
 

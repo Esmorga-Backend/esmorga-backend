@@ -3,7 +3,11 @@ import { SessionDto } from '../../../dtos';
 
 @Injectable()
 export class SessionDA {
-  create(_uuid: string, _sessionId: string): Promise<void> {
+  create(
+    _uuid: string,
+    _sessionId: string,
+    _refreshTokenId: string,
+  ): Promise<void> {
     throw new NotImplementedException();
   }
   findByUuid(_uuid: string): Promise<SessionDto[]> {
@@ -12,7 +16,10 @@ export class SessionDA {
   findOneBySessionId(_sessionId: string): Promise<SessionDto | null> {
     throw new NotImplementedException();
   }
-  removeAllByUuid(_uuid: string): Promise<void> {
+  updateById(_sessionId: string, _refreshTokenId: Partial<SessionDto>) {
+    throw new NotImplementedException();
+  }
+  removeAllByUuid(_uuid: string, _sessionId: string): Promise<void> {
     throw new NotImplementedException();
   }
   removeById(_id: string): Promise<void> {
