@@ -40,6 +40,7 @@ export const updatePasswordSteps: StepDefinitions = ({ given, and, then }) => {
       accessToken: 'newAccessToken',
       refreshToken: 'newRefreshToken',
       sessionId: 'SESSION_ID',
+      refreshTokenId: 'newRefreshTokenId',
     });
 
     jest.spyOn(context.sessionDA, 'create').mockResolvedValue(null);

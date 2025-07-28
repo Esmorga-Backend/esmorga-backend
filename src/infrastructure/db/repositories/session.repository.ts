@@ -19,6 +19,7 @@ export class SessionRepository {
    *
    * @param uuid - User identifier.
    * @param sessionId - Client session id to be saved.
+   * @param refreshTokenId - Refresh token identifier.
    * @param requestId - Request identifier for API logger
    */
   async saveSession(

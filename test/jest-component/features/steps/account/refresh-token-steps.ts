@@ -25,6 +25,7 @@ export const refreshTokenSteps: StepDefinitions = ({ given, and }) => {
       accessToken: 'newAccessToken',
       refreshToken: 'newRefreshToken',
       sessionId: 'SESSION_ID',
+      refreshTokenId: 'newRefreshTokenId',
     });
     jest.spyOn(context.sessionDA, 'create').mockResolvedValue(null);
 

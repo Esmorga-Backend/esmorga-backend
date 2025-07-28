@@ -40,6 +40,7 @@ export const activateAccountSteps: StepDefinitions = ({ given, and }) => {
       accessToken: 'ACCESS_TOKEN',
       refreshToken: 'REFRESH_TOKEN',
       sessionId: 'SESSION_ID',
+      refreshTokenId: 'newRefreshTokenId',
     });
 
     jest.spyOn(context.sessionDA, 'create').mockResolvedValue(null);
