@@ -12,7 +12,7 @@ export class SessionGenerator {
 
   /**
    * Generate an accessToken and refreshToken using the uuid as payload.
-   * @param uuid User id.
+   * @param uuid - User id.
    * @returns New pair of tokens.
    */
   async generateSession(uuid: string) {
@@ -25,7 +25,8 @@ export class SessionGenerator {
 
   /**
    * Generate an accessToken and refreshToken using the uuid as payload.
-   * @param uuid User id.
+   * @param uuid - User id.
+   * @param sessionId - Session id.
    * @returns New pair of tokens.
    */
   async generateTokens(uuid: string, sessionId: string) {

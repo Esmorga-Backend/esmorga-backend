@@ -17,10 +17,10 @@ export class SessionRepository {
   /**
    * Store a new pair of tokens for the user requested them.
    *
-   * @param uuid - User identifier.
+   * @param uuid - User id.
    * @param sessionId - Client session id to be saved.
-   * @param refreshTokenId - Refresh token identifier.
-   * @param requestId - Request identifier for API logger
+   * @param refreshTokenId - Refresh token id.
+   * @param requestId - Request id for API logger
    */
   async saveSession(
     uuid: string,
@@ -45,8 +45,8 @@ export class SessionRepository {
   /**
    * Get all tokens generated for the user with that uuid/id.
    *
-   * @param uuid - User identifier.
-   * @param requestId - Request identifier for API logger.
+   * @param uuid - User id.
+   * @param requestId - Request id for API logger.
    * @returns PairOfTokensDto[] - Array with tokens pairs.
    */
   async getAllTokensByUuid(
@@ -71,7 +71,7 @@ export class SessionRepository {
    * @deprecated Get pair of tokens with user id related to the refresh provided.
    *
    * @param refreshToken - Refresh token stored.
-   * @param requestId - Request identifier for API logger.
+   * @param requestId - Request id for API logger.
    * @returns PairOfTokensDto - Pair of tokens and user id.
    */
   async getPairOfTokensByRefreshToken(
@@ -99,7 +99,7 @@ export class SessionRepository {
    * Get sessions with user id related to the client session id provided.
    *
    * @param sessionId - Client session id stored.
-   * @param requestId - Request identifier for API logger.
+   * @param requestId - Request id for API logger.
    * @returns PairOfTokensDto - Pair of tokens and user id.
    */
   async getBySessionId(
@@ -126,8 +126,8 @@ export class SessionRepository {
 
   /**
    * Remove pair of tokens document by document's ID.
-   * @param id - Document identifier.
-   * @param requestId - Request identifier for API logger.
+   * @param id - Document id.
+   * @param requestId - Request id for API logger.
    */
   async removeTokensById(id: string, requestId?: string) {
     try {
@@ -144,9 +144,10 @@ export class SessionRepository {
   }
 
   /**
-   * Remove all pair of token documents related to uuid provided.
-   * @param uuid - User identifier.
-   * @param requestId - Request identifier for API logger.
+   * Remove all pair of token documents related to uuid provided except the current session.
+   * @param uuid - User id.
+   * @param sessionId - Session id.
+   * @param requestId - Request id for API logger.
    */
   async removeAllSessionsByUuid(
     uuid: string,
@@ -168,8 +169,8 @@ export class SessionRepository {
 
   /**
    * Remove session document by session ID.
-   * @param sessionId - Session identifier.
-   * @param requestId - Request identifier for API logger.
+   * @param sessionId - Session id.
+   * @param requestId - Request id for API logger.
    */
   async removeTokensBySessionId(sessionId: string, requestId?: string) {
     try {
@@ -187,9 +188,9 @@ export class SessionRepository {
 
   /**
    * Update refresh token ID session document by session ID.
-   * @param sessionId - Session identifier.
-   * @param refreshTokenId - Refresh token identifier.
-   * @param requestId - Request identifier for API logger.
+   * @param sessionId - Session id.
+   * @param refreshTokenId - Refresh token id.
+   * @param requestId - Request id for API logger.
    */
   async updateRefreshTokenId(
     sessionId: string,

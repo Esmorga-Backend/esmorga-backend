@@ -41,7 +41,7 @@ export class RefreshTokenService {
         await this.jwtService.verifyAsync<{
           uuid: string;
           sessionId: string;
-          id: string; // refreshTokenId
+          id: string;
         }>(refreshToken, { secret: jwtSecret });
 
       const session = await this.sessionRepository.getBySessionId(
