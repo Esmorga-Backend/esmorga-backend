@@ -9,11 +9,15 @@ import {
 import { UpdatePasswordDto } from '../../../infrastructure/http/dtos';
 import { NewPairOfTokensDto } from '../../../infrastructure/dtos';
 import { SessionGenerator } from '../../../domain/services';
-import { DataBaseUnprocesableContentError } from '../../../infrastructure/db/errors';
 import {
+  InvalidCredentialsRefreshApiError,
   InvalidCurrentPasswordError,
   InvalidSamePasswordApiError,
 } from '../../../domain/errors';
+import {
+  DataBaseUnathorizedError,
+  DataBaseUnprocesableContentError,
+} from '../../../infrastructure/db/errors';
 
 @Injectable()
 export class UpdatePasswordService {
@@ -48,20 +52,22 @@ export class UpdatePasswordService {
       if (currentPassword === newPassword)
         throw new InvalidSamePasswordApiError();
 
-      const { uuid } = await this.sessionRepository.getBySessionId(
+      const session = await this.sessionRepository.getBySessionId(
         sessionId,
         requestId,
       );
 
+      if (!session?.uuid) throw new InvalidCredentialsRefreshApiError();
+
       await this.accountRepository.updateAccountPassword(
-        uuid,
+        session.uuid,
         currentPassword,
         newPassword,
         requestId,
       );
 
       await this.sessionRepository.removeAllSessionsByUuid(
-        uuid,
+        session.uuid,
         sessionId,
         requestId,
       );
@@ -69,14 +75,12 @@ export class UpdatePasswordService {
       const {
         accessToken,
         refreshToken,
-        sessionId: newSessionId,
-        refreshTokenId,
-      } = await this.sessionGenerator.generateSession(uuid);
+        refreshTokenId: newRefreshTokenId,
+      } = await this.sessionGenerator.generateTokens(session.uuid, sessionId);
 
-      await this.sessionRepository.saveSession(
-        uuid,
-        newSessionId,
-        refreshTokenId,
+      await this.sessionRepository.updateRefreshTokenId(
+        sessionId,
+        newRefreshTokenId,
         requestId,
       );
 
@@ -100,6 +104,10 @@ export class UpdatePasswordService {
 
       if (error instanceof DataBaseUnprocesableContentError) {
         throw new InvalidCurrentPasswordError();
+      }
+
+      if (error instanceof DataBaseUnathorizedError) {
+        throw new InvalidCredentialsRefreshApiError();
       }
 
       throw error;

@@ -36,14 +36,14 @@ export const updatePasswordSteps: StepDefinitions = ({ given, and, then }) => {
 
     jest.spyOn(context.sessionDA, 'removeAllByUuid').mockResolvedValue(null);
 
-    jest.spyOn(context.sessionGenerator, 'generateSession').mockResolvedValue({
+    jest.spyOn(context.sessionGenerator, 'generateTokens').mockResolvedValue({
       accessToken: 'newAccessToken',
       refreshToken: 'newRefreshToken',
       sessionId: 'SESSION_ID',
       refreshTokenId: 'newRefreshTokenId',
     });
 
-    jest.spyOn(context.sessionDA, 'create').mockResolvedValue(null);
+    jest.spyOn(context.sessionDA, 'updateById').mockResolvedValue(null);
   });
 
   and('currentPassword and newPassword are the same', () => {
