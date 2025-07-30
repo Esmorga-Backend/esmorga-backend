@@ -20,21 +20,29 @@ export class UserDA {
     throw new NotImplementedException();
   }
 
-  async updateStatusByEmail(
+  updateStatusByEmail(
     _email: string,
     _status: string,
   ): Promise<UserProfileDto | null> {
     throw new NotImplementedException();
   }
 
-  async updatePasswordByEmail(
+  updatePasswordByEmail(
     _email: string,
     _password: string,
   ): Promise<UserProfileDto | null> {
     throw new NotImplementedException();
   }
 
-  async updateBlockedStatusByUuid(
+  updatePasswordByUuid(
+    _uuid: string,
+    _currentPassword: string,
+    _newPassword: string,
+  ): Promise<boolean> {
+    throw new NotImplementedException();
+  }
+
+  updateBlockedStatusByUuid(
     _uuid: string,
     _newStatus: string,
     _unblockDate: Date,
@@ -42,7 +50,7 @@ export class UserDA {
     throw new NotImplementedException();
   }
 
-  async create(_userData: AccountRegisterDto) {
+  create(_userData: AccountRegisterDto) {
     throw new NotImplementedException();
   }
 }

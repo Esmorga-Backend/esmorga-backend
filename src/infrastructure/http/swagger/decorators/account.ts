@@ -12,6 +12,7 @@ import {
   ApiResponse,
   ApiTooManyRequestsResponse,
   ApiUnauthorizedResponse,
+  ApiUnprocessableEntityResponse,
 } from '@nestjs/swagger';
 import { applyDecorators } from '@nestjs/common';
 import {
@@ -26,6 +27,7 @@ import {
   REFRESH_TOKEN_HEADERS,
   REGISTER_HEADER,
   SEND_EMAIL_VERIFICATION_HEADER,
+  UPDATE_PASSWORD_HEADERS,
 } from '../headers';
 import {
   ACTIVATE_ACCOUNT_RESPONSES,
@@ -39,6 +41,7 @@ import {
   REFRESH_TOKEN_RESPONSES,
   REGISTER_RESPONSES,
   SEND_EMAIL_VERIFICATION_RESPONSES,
+  UPDATE_PASSWORD_RESPONSES,
 } from '../responses';
 
 export function SwaggerAccountLogin() {
@@ -193,6 +196,27 @@ export function SwaggerActivateAccount() {
       ACTIVATE_ACCOUNT_RESPONSES.TOO_MANY_REQUESTS_ERROR,
     ),
     ApiInternalServerErrorResponse(ACTIVATE_ACCOUNT_RESPONSES.INTERNAL_ERROR),
+  );
+}
+
+export function SwaggerUpdatePassword() {
+  return applyDecorators(
+    ApiOperation({
+      summary: 'Update password.',
+    }),
+    ApiBearerAuth(),
+    ApiHeader(UPDATE_PASSWORD_HEADERS.AUTHORIZATION_BEARER),
+    ApiHeader(UPDATE_PASSWORD_HEADERS.CONTENT_TYPE),
+    ApiOkResponse(UPDATE_PASSWORD_RESPONSES.OK),
+    ApiBadRequestResponse(UPDATE_PASSWORD_RESPONSES.BAD_REQUEST_ERROR),
+    ApiUnauthorizedResponse(UPDATE_PASSWORD_RESPONSES.UNAUTHORIZED_ERROR),
+    ApiUnprocessableEntityResponse(
+      UPDATE_PASSWORD_RESPONSES.UNPROCESABLE_CONTENT_ERROR,
+    ),
+    ApiTooManyRequestsResponse(
+      UPDATE_PASSWORD_RESPONSES.TOO_MANY_REQUESTS_ERROR,
+    ),
+    ApiInternalServerErrorResponse(UPDATE_PASSWORD_RESPONSES.INTERNAL_ERROR),
   );
 }
 

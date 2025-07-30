@@ -11,10 +11,15 @@ export class SessionMongoDA implements SessionDA {
   constructor(
     @InjectModel(Session.name) private sessionModel: Model<Session>,
   ) {}
-  async create(uuid: string, sessionId: string): Promise<void> {
+  async create(
+    uuid: string,
+    sessionId: string,
+    refreshTokenId: string,
+  ): Promise<void> {
     await new this.sessionModel({
       uuid,
       sessionId,
+      refreshTokenId,
     }).save();
   }
   async findByUuid(uuid: string): Promise<SessionDto[]> {
@@ -31,6 +36,18 @@ export class SessionMongoDA implements SessionDA {
     });
     return plainToInstance(SessionDto, sessionData, {
       excludeExtraneousValues: true,
+    });
+  }
+  async updateById(sessionId: string, refreshTokenId: Partial<SessionDto>) {
+    await this.sessionModel.findOneAndUpdate(
+      { sessionId },
+      { $set: refreshTokenId },
+    );
+  }
+  async removeAllByUuid(uuid: string, sessionId: string): Promise<void> {
+    await this.sessionModel.deleteMany({
+      uuid,
+      sessionId: { $ne: sessionId },
     });
   }
   async removeById(id: string): Promise<void> {

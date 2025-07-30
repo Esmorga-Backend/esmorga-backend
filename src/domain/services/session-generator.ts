@@ -12,11 +12,25 @@ export class SessionGenerator {
 
   /**
    * Generate an accessToken and refreshToken using the uuid as payload.
-   * @param uuid User id.
+   * @param uuid - User id.
    * @returns New pair of tokens.
    */
   async generateSession(uuid: string) {
     const sessionId = randomUUID();
+    const { accessToken, refreshToken, refreshTokenId } =
+      await this.generateTokens(uuid, sessionId);
+
+    return { accessToken, refreshToken, sessionId, refreshTokenId };
+  }
+
+  /**
+   * Generate an accessToken and refreshToken using the uuid as payload.
+   * @param uuid - User id.
+   * @param sessionId - Session id.
+   * @returns New pair of tokens.
+   */
+  async generateTokens(uuid: string, sessionId: string) {
+    const refreshTokenId = randomUUID();
     const accessToken = await this.jwtService.signAsync(
       { uuid, sessionId },
       {
@@ -26,12 +40,12 @@ export class SessionGenerator {
     );
 
     const refreshToken = await this.jwtService.signAsync(
-      { uuid, sessionId },
+      { uuid, sessionId, id: refreshTokenId },
       {
         secret: this.configService.get('JWT_REFRESH_SECRET'),
       },
     );
 
-    return { accessToken, refreshToken, sessionId };
+    return { accessToken, refreshToken, sessionId, refreshTokenId };
   }
 }

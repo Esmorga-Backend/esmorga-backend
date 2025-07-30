@@ -21,14 +21,14 @@ export const refreshTokenSteps: StepDefinitions = ({ given, and }) => {
     context.path = '/v1/account/refresh';
     jest.spyOn(context.sessionDA, 'findOneBySessionId').mockResolvedValue(null);
 
-    jest.spyOn(context.sessionGenerator, 'generateSession').mockResolvedValue({
+    jest.spyOn(context.sessionGenerator, 'generateTokens').mockResolvedValue({
       accessToken: 'newAccessToken',
       refreshToken: 'newRefreshToken',
       sessionId: 'SESSION_ID',
+      refreshTokenId: 'newRefreshTokenId',
     });
-    jest.spyOn(context.sessionDA, 'create').mockResolvedValue(null);
 
-    jest.spyOn(context.sessionDA, 'removeById').mockResolvedValue(null);
+    jest.spyOn(context.sessionDA, 'updateById').mockResolvedValue(null);
   });
 
   and(/^use refreshToken (\w+)$/, (refreshToken) => {

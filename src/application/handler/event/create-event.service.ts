@@ -3,7 +3,7 @@ import { PinoLogger } from 'nestjs-pino';
 import {
   AccountRepository,
   EventRepository,
-  TokensRepository,
+  SessionRepository,
 } from '../../../infrastructure/db/repositories';
 import {
   NotAdminAccountApiError,
@@ -19,7 +19,7 @@ export class CreateEventService {
     private readonly logger: PinoLogger,
     private readonly accountRepository: AccountRepository,
     private readonly eventRepository: EventRepository,
-    private readonly tokensRepository: TokensRepository,
+    private readonly sessionRepository: SessionRepository,
   ) {}
 
   /**
@@ -41,7 +41,7 @@ export class CreateEventService {
         `[CreateEventService] [create] - x-request-id: ${requestId}`,
       );
 
-      const { uuid } = await this.tokensRepository.getBySessionId(
+      const { uuid } = await this.sessionRepository.getBySessionId(
         sessionId,
         requestId,
       );
