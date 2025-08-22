@@ -3,6 +3,7 @@ export * from './close-current-session.service';
 export * from './disjoin-event.service';
 export * from './forgot-password.service';
 export * from './get-my-events.service';
+export * from './get-profile.service';
 export * from './join-event.service';
 export * from './login.service';
 export * from './register.service';
