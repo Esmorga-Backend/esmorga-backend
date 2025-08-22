@@ -4,6 +4,7 @@ import {
   AccountLoggedDto,
   NewPairOfTokensDto,
   EventListDto,
+  ProfileDto,
 } from '../../../dtos';
 import {
   BAD_REQUEST_ERROR_COMMON_PROPERTIES,
@@ -634,7 +635,7 @@ export const CLOSE_CURRENT_SESSION_RESPONSES: {
 export const GET_PROFILE_RESPONSES: { [key: string]: ApiResponseOptions } = {
   OK: {
     description: 'User profile',
-    type: EventListDto,
+    type: ProfileDto,
   },
   UNAUTHORIZED_ERROR: {
     status: HttpStatus.UNAUTHORIZED,
