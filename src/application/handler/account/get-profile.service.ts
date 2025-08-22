@@ -4,7 +4,7 @@ import { plainToInstance } from 'class-transformer';
 import { ProfileDto} from '../../../infrastructure/dtos';
 import {
   AccountRepository,
-  TokensRepository,
+  SessionRepository,
 } from '../../../infrastructure/db/repositories';
 import { DataBaseUnathorizedError } from '../../../infrastructure/db/errors';
 import { InvalidTokenApiError } from '../../../domain/errors';
@@ -14,7 +14,7 @@ export class GetProfileService {
   constructor(
     private readonly logger: PinoLogger,
     private readonly accountRepository: AccountRepository,
-    private readonly tokensRepository: TokensRepository,
+    private readonly tokensRepository: SessionRepository,
   ) {}
 
   /**

@@ -250,7 +250,7 @@ export function SwaggerGetProfile() {
     ApiHeader(GET_PROFILE_HEADERS.AUTHORIZATION_BEARER),
     ApiHeader(GET_PROFILE_HEADERS.CONTENT_TYPE),
     ApiOkResponse(GET_PROFILE_RESPONSES.OK),
-    ApiBadRequestResponse(GET_PROFILE_RESPONSES.BAD_REQUEST_ERROR),
+    ApiUnauthorizedResponse(GET_PROFILE_RESPONSES.UNAUTHORIZED_ERROR),
     ApiTooManyRequestsResponse(
       GET_PROFILE_RESPONSES.TOO_MANY_REQUESTS_ERROR, 
     ),

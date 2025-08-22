@@ -14,7 +14,7 @@ const PATH = '/v1/account/profile';
 
 const METHOD = 'get';
 
-export const getProfileStepts: StepDefinitions = ({ given, and }) => {
+export const getProfileStepts: StepDefinitions = ({ given }) => {
   given('the GET Account Profile API is available', async () => {
     context.path = PATH;
 
