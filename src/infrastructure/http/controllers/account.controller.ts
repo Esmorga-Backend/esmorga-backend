@@ -394,7 +394,6 @@ export class AccountController {
     }
   }
 
-  @SkipThrottle({ public: false, default: true })
   @Put('/password')
   @ApiBearerAuth('access-token')
   @UseGuards(AuthGuard)
@@ -429,7 +428,6 @@ export class AccountController {
     }
   }
 
-  @SkipThrottle({ default: true, public: false })
   @Delete('/session')
   @ApiBearerAuth('access-token')
   @SwaggerCloseCurrentSession()
