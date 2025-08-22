@@ -10,3 +10,4 @@ export * from './register.service';
 export * from './refresh-token.service';
 export * from './send-email-verification.service';
 export * from './update-forgot-password.service';
+export * from './update-password.service';

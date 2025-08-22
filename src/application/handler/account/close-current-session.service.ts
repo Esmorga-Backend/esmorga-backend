@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { PinoLogger } from 'nestjs-pino';
-import { TokensRepository } from '../../../infrastructure/db/repositories';
+import { SessionRepository } from '../../../infrastructure/db/repositories';
 @Injectable()
 export class CloseCurrentSessionService {
   constructor(
     private readonly logger: PinoLogger,
-    private readonly tokensRepository: TokensRepository,
+    private readonly sessionRepository: SessionRepository,
   ) {}
 
   /**
@@ -21,7 +21,10 @@ export class CloseCurrentSessionService {
         `[CloseCurrentSessionService] [delete] - x-request-id: ${requestId}`,
       );
 
-      await this.tokensRepository.removeTokensBySessionId(sessionId, requestId);
+      await this.sessionRepository.removeTokensBySessionId(
+        sessionId,
+        requestId,
+      );
     } catch (error) {
       this.logger.error(
         `[CloseCurrentSessionService] [delete] - x-request-id:${requestId}, error ${error}`,

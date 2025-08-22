@@ -11,6 +11,7 @@ import {
   CloseCurrentSessionService,
   DisjoinEventService,
   UpdateForgotPasswordService,
+  UpdatePasswordService,
   ActivateAccountService,
   SendEmailVerificationService,
 } from '../../../application/handler/account';
@@ -42,6 +43,7 @@ import {
     CloseCurrentSessionService,
     DisjoinEventService,
     UpdateForgotPasswordService,
+    UpdatePasswordService,
     ActivateAccountService,
     SessionGenerator,
     GenerateMailService,

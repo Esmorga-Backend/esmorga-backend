@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { PinoLogger } from 'nestjs-pino';
 import { plainToInstance } from 'class-transformer';
 import {
-  TokensRepository,
+  SessionRepository,
   AccountRepository,
   TemporalCodeRepository,
 } from '../../../infrastructure/db/repositories';
@@ -19,7 +19,7 @@ export class ActivateAccountService {
     private readonly logger: PinoLogger,
     private configService: ConfigService,
     private readonly sessionGenerator: SessionGenerator,
-    private readonly tokensRepository: TokensRepository,
+    private readonly sessionRepository: SessionRepository,
     private readonly accountRepository: AccountRepository,
     private readonly temporalCodeRepository: TemporalCodeRepository,
   ) {}
@@ -52,10 +52,15 @@ export class ActivateAccountService {
 
       const { uuid } = userProfileUpdated;
 
-      const { accessToken, refreshToken, sessionId } =
+      const { accessToken, refreshToken, sessionId, refreshTokenId } =
         await this.sessionGenerator.generateSession(uuid);
 
-      await this.tokensRepository.saveSession(uuid, sessionId, requestId);
+      await this.sessionRepository.saveSession(
+        uuid,
+        sessionId,
+        refreshTokenId,
+        requestId,
+      );
 
       const ttl = this.configService.get('ACCESS_TOKEN_TTL');
 

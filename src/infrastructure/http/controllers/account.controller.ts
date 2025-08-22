@@ -12,7 +12,7 @@ import {
   Put,
   Req,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { SkipThrottle } from '@nestjs/throttler';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
@@ -30,16 +30,18 @@ import {
   RefreshTokenService,
   RegisterService,
   SendEmailVerificationService,
+  UpdatePasswordService,
 } from '../../../application/handler/account';
 import { HttpExceptionFilter } from '../errors';
 import {
   AccountLoginDto,
   AccountRegisterDto,
-  UpdateForgotPasswordDto,
   ActivateAccountDto,
   EmailDto,
   EventIdDto,
   RefreshTokenDto,
+  UpdateForgotPasswordDto,
+  UpdatePasswordDto,
 } from '../dtos';
 import {
   SwaggerAccountLogin,
@@ -54,6 +56,7 @@ import {
   SwaggerJoinEvent,
   SwaggerRefreshToken,
   SwaggerSendEmailVerification,
+  SwaggerUpdatePassword,
 } from '../swagger/decorators/account';
 import { AccountLoggedDto, NewPairOfTokensDto, EventListDto, ProfileDto } from '../../dtos';
 import { RequestId, SessionId } from '../req-decorators';
@@ -78,11 +81,13 @@ export class AccountController {
     private readonly registerService: RegisterService,
     private readonly sendEmailVerificationService: SendEmailVerificationService,
     private readonly updateForgotPasswordService: UpdateForgotPasswordService,
+    private readonly updatePasswordService: UpdatePasswordService,
     private configService: ConfigService,
     private jwtService: JwtService,
   ) {}
 
   @Get('/events')
+  @ApiBearerAuth('access-token')
   @UseGuards(AuthGuard)
   @SwaggerGetMyEvents()
   async getMyEvents(
@@ -201,6 +206,7 @@ export class AccountController {
   }
 
   @Post('/events')
+  @ApiBearerAuth('access-token')
   @UseGuards(AuthGuard)
   @SwaggerJoinEvent()
   @HttpCode(204)
@@ -266,6 +272,7 @@ export class AccountController {
   }
 
   @Delete('/events')
+  @ApiBearerAuth('access-token')
   @UseGuards(AuthGuard)
   @SwaggerDisjoinEvent()
   @HttpCode(204)
@@ -387,8 +394,44 @@ export class AccountController {
     }
   }
 
+  @SkipThrottle({ public: false, default: true })
+  @Put('/password')
+  @ApiBearerAuth('access-token')
+  @UseGuards(AuthGuard)
+  @SwaggerUpdatePassword()
+  async updatePassword(
+    @SessionId() sessionId: string,
+    @Body() updatePasswordDto: UpdatePasswordDto,
+    @RequestId() requestId: string,
+  ) {
+    try {
+      this.logger.info(
+        `[AccountController] [updatePassword] - x-request-id: ${requestId}`,
+      );
+
+      const response: NewPairOfTokensDto =
+        await this.updatePasswordService.updatePassword(
+          sessionId,
+          updatePasswordDto,
+          requestId,
+        );
+      return response;
+    } catch (error) {
+      this.logger.error(
+        `[AccountController] [updatePassword] - x-request-id: ${requestId}, error: ${error}`,
+      );
+
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      throw new InternalServerErrorException();
+    }
+  }
+
   @SkipThrottle({ default: true, public: false })
   @Delete('/session')
+  @ApiBearerAuth('access-token')
   @SwaggerCloseCurrentSession()
   @HttpCode(204)
   async closeAccountSession(

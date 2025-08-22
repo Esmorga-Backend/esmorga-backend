@@ -29,6 +29,11 @@ export const JOIN_EVENT_HEADERS = {
   AUTHORIZATION_BEARER,
 };
 
+export const UPDATE_PASSWORD_HEADERS = {
+  CONTENT_TYPE,
+  AUTHORIZATION_BEARER,
+};
+
 export const LOGIN_HEADERS = {
   ...CONTENT_TYPE,
 };

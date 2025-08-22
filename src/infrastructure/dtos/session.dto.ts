@@ -15,6 +15,11 @@ export class SessionDto {
   @IsString()
   sessionId: string;
 
+  @Transform(({ value }) => (value ? value : undefined))
+  @Expose()
+  @IsString()
+  refreshTokenId?: string;
+
   @Expose()
   @Transform(({ value }) => new Date(value))
   @IsDate()

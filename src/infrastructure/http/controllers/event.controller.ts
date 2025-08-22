@@ -12,7 +12,7 @@ import {
   HttpCode,
   Param,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { PinoLogger } from 'nestjs-pino';
 import {
   CreateEventService,
@@ -73,6 +73,7 @@ export class EventController {
   }
 
   @Post('/')
+  @ApiBearerAuth('access-token')
   @UseGuards(AuthGuard)
   @SwaggerCreateEvent()
   async createEvent(
@@ -103,6 +104,7 @@ export class EventController {
   }
 
   @Patch('/')
+  @ApiBearerAuth('access-token')
   @UseGuards(AuthGuard)
   @SwaggerUpdateEvent()
   async updateEvent(
@@ -153,6 +155,7 @@ export class EventController {
   }
 
   @Delete('/')
+  @ApiBearerAuth('access-token')
   @UseGuards(AuthGuard)
   @HttpCode(204)
   @SwaggerDeleteEvents()
@@ -184,6 +187,7 @@ export class EventController {
   }
 
   @Get('/:eventId/users')
+  @ApiBearerAuth('access-token')
   @UseGuards(AuthGuard)
   @SwaggerGetEventUsers()
   @HttpCode(200)

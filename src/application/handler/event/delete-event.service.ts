@@ -3,7 +3,7 @@ import { PinoLogger } from 'nestjs-pino';
 import {
   EventRepository,
   AccountRepository,
-  TokensRepository,
+  SessionRepository,
   EventParticipantsRepository,
 } from '../../../infrastructure/db/repositories';
 import { ACCOUNT_ROLES } from '../../../domain/const';
@@ -22,7 +22,7 @@ export class DeleteEventService {
     private readonly logger: PinoLogger,
     private readonly eventRepository: EventRepository,
     private readonly accountRepository: AccountRepository,
-    private readonly tokensRepository: TokensRepository,
+    private readonly sessionRepository: SessionRepository,
     private readonly eventParticipantsRepository: EventParticipantsRepository,
   ) {}
 
@@ -44,7 +44,7 @@ export class DeleteEventService {
 
       await this.eventRepository.getEvent(eventId, requestId);
 
-      const { uuid } = await this.tokensRepository.getBySessionId(
+      const { uuid } = await this.sessionRepository.getBySessionId(
         sessionId,
         requestId,
       );

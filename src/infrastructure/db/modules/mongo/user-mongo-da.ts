@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import * as argon2 from 'argon2';
 import { plainToInstance } from 'class-transformer';
 import type { Model } from 'mongoose';
 import { UserProfileDto } from '../../../dtos';
@@ -14,7 +15,9 @@ export class UserMongoDA implements UserDA {
     email: string,
   ): Promise<UserProfileDto & { [PasswordSymbol]: string }> {
     const user = await this.userModel.findOne({ email: { $eq: email } });
+
     if (!user) return null;
+
     const userProfile = plainToInstance(UserProfileDto, user, {
       excludeExtraneousValues: true,
     });
@@ -40,9 +43,27 @@ export class UserMongoDA implements UserDA {
     });
   }
 
+  async updatePasswordByUuid(
+    uuid: string,
+    currentPassword: string,
+    newPassword: string,
+  ): Promise<boolean> {
+    const user = await this.userModel.findById({ _id: uuid });
+    const passwordMatch = await argon2.verify(user.password, currentPassword);
+
+    if (!passwordMatch) return false;
+
+    const newHashedPassword = await argon2.hash(newPassword);
+    user.password = newHashedPassword;
+    await user.save();
+    return true;
+  }
+
   async findOneById(uuid: string): Promise<UserProfileDto | null> {
     const user = await this.userModel.findById({ _id: uuid });
+
     if (!user) return null;
+
     return plainToInstance(UserProfileDto, user, {
       excludeExtraneousValues: true,
     });
@@ -58,7 +79,6 @@ export class UserMongoDA implements UserDA {
     const userProfiles = plainToInstance(UserProfileDto, users, {
       excludeExtraneousValues: true,
     });
-
     return userProfiles;
   }
 

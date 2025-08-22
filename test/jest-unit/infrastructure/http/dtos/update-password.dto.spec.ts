@@ -1,14 +1,14 @@
 import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
-import { UpdateForgotPasswordDto } from '../../../../../src/infrastructure/http/dtos';
-import { UPDATE_FORGOT_PASSWORD } from '../../../../mocks/dtos';
+import { UpdatePasswordDto } from '../../../../../src/infrastructure/http/dtos';
+import { UPDATE_PASSWORD } from '../../../../mocks/dtos';
 import { ACCOUNT_REGEX } from '../../../../../src/domain/regex';
 
-describe('[unit-test] [UpdateForgotPasswordDto]', () => {
+describe('[unit-test] [UpdatePasswordDto]', () => {
   it('Should validate all fields successfully', async () => {
     const updatePasswordDto = plainToInstance(
-      UpdateForgotPasswordDto,
-      UPDATE_FORGOT_PASSWORD,
+      UpdatePasswordDto,
+      UPDATE_PASSWORD,
     );
 
     const errors = await validate(updatePasswordDto, {
@@ -18,108 +18,105 @@ describe('[unit-test] [UpdateForgotPasswordDto]', () => {
     expect(errors.length).toBe(0);
   });
 
-  describe('[UpdateForgotPasswordDto] [forgotPasswordCode]', () => {
+  describe('[UpdatePasswordDto] [currentPassword]', () => {
     it('Should not accept an empty value', async () => {
-      const updatePasswordData = { ...UPDATE_FORGOT_PASSWORD };
+      const updatePasswordData = { ...UPDATE_PASSWORD };
 
-      delete updatePasswordData.forgotPasswordCode;
+      delete updatePasswordData.currentPassword;
 
-      const data = plainToInstance(UpdateForgotPasswordDto, updatePasswordData);
+      const data = plainToInstance(UpdatePasswordDto, updatePasswordData);
 
       const errors = await validate(data, { stopAtFirstError: true });
 
       expect(errors.length).toEqual(1);
-      expect(errors[0].property).toEqual('forgotPasswordCode');
+      expect(errors[0].property).toEqual('currentPassword');
       expect(errors[0].constraints).toEqual({
-        isNotEmpty: 'forgotPasswordCode should not be empty',
+        isNotEmpty: 'currentPassword should not be empty',
       });
     });
 
     it('Should only accept string values', async () => {
       const updatePasswordData = {
-        password: UPDATE_FORGOT_PASSWORD.password,
-        forgotPasswordCode: 123456,
+        ...UPDATE_PASSWORD,
+        currentPassword: 123456,
       };
 
-      const data = plainToInstance(UpdateForgotPasswordDto, updatePasswordData);
+      const data = plainToInstance(UpdatePasswordDto, updatePasswordData);
 
       const errors = await validate(data, { stopAtFirstError: true });
 
       expect(errors.length).toEqual(1);
-      expect(errors[0].property).toEqual('forgotPasswordCode');
+      expect(errors[0].property).toEqual('currentPassword');
       expect(errors[0].constraints).toEqual({
-        isString: 'forgotPasswordCode must be a string',
+        isString: 'currentPassword must be a string',
       });
     });
   });
 
-  describe('[UpdateForgotPasswordDto] [password]', () => {
+  describe('[UpdatePasswordDto] [newPassword]', () => {
     it('Should not accept an empty value', async () => {
-      const updatePasswordData = { ...UPDATE_FORGOT_PASSWORD };
+      const updatePasswordData = { ...UPDATE_PASSWORD };
 
-      delete updatePasswordData.password;
+      delete updatePasswordData.newPassword;
 
-      const data = plainToInstance(UpdateForgotPasswordDto, updatePasswordData);
+      const data = plainToInstance(UpdatePasswordDto, updatePasswordData);
 
       const errors = await validate(data, { stopAtFirstError: true });
 
       expect(errors.length).toEqual(1);
-      expect(errors[0].property).toEqual('password');
+      expect(errors[0].property).toEqual('newPassword');
       expect(errors[0].constraints).toEqual({
-        isNotEmpty: 'password should not be empty',
+        isNotEmpty: 'newPassword should not be empty',
       });
     });
 
     it('Should not accept less than 8 characters', async () => {
-      const updatePasswordData = { ...UPDATE_FORGOT_PASSWORD };
+      const updatePasswordData = { ...UPDATE_PASSWORD };
 
-      updatePasswordData.password = 'AA';
+      updatePasswordData.newPassword = 'AA';
 
-      const data = plainToInstance(UpdateForgotPasswordDto, updatePasswordData);
+      const data = plainToInstance(UpdatePasswordDto, updatePasswordData);
 
       const errors = await validate(data, { stopAtFirstError: true });
 
       expect(errors.length).toEqual(1);
-      expect(errors[0].property).toEqual('password');
+      expect(errors[0].property).toEqual('newPassword');
       expect(errors[0].constraints).toEqual({
-        minLength: 'password must have min 8 characters',
+        minLength: 'newPassword must have min 8 characters',
       });
     });
 
     it('Should not accept more than 50 characters', async () => {
-      const updatePasswordData = { ...UPDATE_FORGOT_PASSWORD };
+      const updatePasswordData = { ...UPDATE_PASSWORD };
 
-      updatePasswordData.password = 'A'.repeat(51);
+      updatePasswordData.newPassword = 'A'.repeat(51);
 
-      const data = plainToInstance(UpdateForgotPasswordDto, updatePasswordData);
+      const data = plainToInstance(UpdatePasswordDto, updatePasswordData);
 
       const errors = await validate(data, { stopAtFirstError: true });
 
       expect(errors.length).toEqual(1);
-      expect(errors[0].property).toEqual('password');
+      expect(errors[0].property).toEqual('newPassword');
       expect(errors[0].constraints).toEqual({
-        maxLength: 'password must have max 50 characters',
+        maxLength: 'newPassword must have max 50 characters',
       });
     });
 
     it('Should only accept string values', async () => {
-      const updatePasswordData = {
-        password: 123,
-        forgotPasswordCode: '123456',
-      };
+      const updatePasswordData = { ...UPDATE_PASSWORD, newPassword: 123456 };
 
-      const data = plainToInstance(UpdateForgotPasswordDto, updatePasswordData);
+      const data = plainToInstance(UpdatePasswordDto, updatePasswordData);
 
       const errors = await validate(data, { stopAtFirstError: true });
 
       expect(errors.length).toEqual(1);
-      expect(errors[0].property).toEqual('password');
+      expect(errors[0].property).toEqual('newPassword');
       expect(errors[0].constraints).toEqual({
-        isString: 'password must be a string',
+        isString: 'newPassword must be a string',
       });
     });
 
-    it('Regex used for password property force to include at least one digit and one symbol', async () => {
+    it('Regex used for newPassword property force to include at least one digit and one symbol', async () => {
       const validExamples: string[] = [
         'Password!1',
         'Password!123',

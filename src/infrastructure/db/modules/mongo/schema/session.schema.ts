@@ -7,6 +7,9 @@ export class Session {
 
   @Prop({ required: true, unique: true, index: true })
   sessionId: string;
+
+  @Prop({ required: true, unique: true, index: true })
+  refreshTokenId: string;
 }
 
 export const SessionSchema = SchemaFactory.createForClass(Session);

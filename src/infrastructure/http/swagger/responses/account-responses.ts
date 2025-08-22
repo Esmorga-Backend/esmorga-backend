@@ -24,6 +24,7 @@ const PATHS = {
   REGISTER: '/v1/account/register',
   REFRESH_TOKEN: '/v1/account/refresh',
   SEND_EMAIL_VERIFICATION: '/v1/account/email/verification',
+  UPDATE_PASSWORD: '/v1/account/password',
   FORGOT_PASSWORD_UPDATE: '/v1/account/password/forgot-update',
 };
 
@@ -580,6 +581,82 @@ export const FORGOT_PASSWORD_UPDATE_RESPONSE: {
       properties: {
         ...INTERNAL_ERROR_COMMON_PROPERTIES,
         type: { type: 'string', example: PATHS.FORGOT_PASSWORD_UPDATE },
+      },
+    },
+  },
+};
+
+export const UPDATE_PASSWORD_RESPONSES: {
+  [key: string]: ApiResponseOptions;
+} = {
+  OK: {
+    description: 'User password succesfully updated',
+    type: NewPairOfTokensDto,
+  },
+  BAD_REQUEST_ERROR: {
+    description: 'Some inputs are missed or wrong',
+    schema: {
+      type: 'object',
+      properties: {
+        ...BAD_REQUEST_ERROR_COMMON_PROPERTIES,
+        type: { type: 'string', example: PATHS.UPDATE_PASSWORD },
+        errors: {
+          type: 'array',
+          example: ['forgotPasswordCode should not be empty'],
+        },
+      },
+    },
+  },
+  UNAUTHORIZED_ERROR: {
+    description: 'Invalid credentials',
+    schema: {
+      type: 'object',
+      properties: {
+        ...UNAUTHORIZED_INVALID_TOKEN_COMMON_PROPERTIES,
+        type: { type: 'string', example: PATHS.UPDATE_PASSWORD },
+      },
+    },
+  },
+  UNPROCESABLE_CONTENT_ERROR: {
+    description: 'Some inputs are invalid',
+    schema: {
+      type: 'object',
+      properties: {
+        title: {
+          type: 'string',
+          example: 'unprocesableContentError',
+        },
+        status: { type: 'number', example: HttpStatus.UNPROCESSABLE_ENTITY },
+        type: { type: 'string', example: PATHS.UPDATE_PASSWORD },
+        detail: {
+          type: 'string',
+          example: 'invalid credentials',
+        },
+        errors: {
+          type: 'array',
+          example: ['unable to change password'],
+        },
+      },
+    },
+  },
+  TOO_MANY_REQUESTS_ERROR: {
+    description: 'Too many requests, rate limit exceeded',
+    schema: {
+      type: 'object',
+      properties: {
+        ...TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES,
+        type: { type: 'string', example: PATHS.UPDATE_PASSWORD },
+      },
+    },
+  },
+  INTERNAL_ERROR: {
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Error not handled',
+    schema: {
+      type: 'object',
+      properties: {
+        ...INTERNAL_ERROR_COMMON_PROPERTIES,
+        type: { type: 'string', example: PATHS.UPDATE_PASSWORD },
       },
     },
   },

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PinoLogger } from 'nestjs-pino';
 import { EventDto, EventListDto } from '../../../infrastructure/dtos';
 import {
-  TokensRepository,
+  SessionRepository,
   EventRepository,
   EventParticipantsRepository,
 } from '../../../infrastructure/db/repositories';
@@ -14,7 +14,7 @@ import { InvalidTokenApiError } from '../../../domain/errors';
 export class GetMyEventsService {
   constructor(
     private readonly logger: PinoLogger,
-    private readonly tokensRepository: TokensRepository,
+    private readonly sessionRepository: SessionRepository,
     private readonly eventRepository: EventRepository,
     private readonly eventParticipantsRepository: EventParticipantsRepository,
   ) {}
@@ -35,7 +35,7 @@ export class GetMyEventsService {
         `[GetMyEventsService] [getEvents] - x-request-id: ${requestId}`,
       );
 
-      const { uuid } = await this.tokensRepository.getBySessionId(
+      const { uuid } = await this.sessionRepository.getBySessionId(
         sessionId,
         requestId,
       );

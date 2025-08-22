@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PinoLogger } from 'nestjs-pino';
 import {
   AccountRepository,
-  TokensRepository,
+  SessionRepository,
   EventParticipantsRepository,
   EventRepository,
 } from '../../../infrastructure/db/repositories';
@@ -22,7 +22,7 @@ export class GetEventUsersListService {
   constructor(
     private readonly logger: PinoLogger,
     private readonly accountRepository: AccountRepository,
-    private readonly tokensRepository: TokensRepository,
+    private readonly sessionRepository: SessionRepository,
     private readonly eventParticipantsRepository: EventParticipantsRepository,
     private readonly eventRepository: EventRepository,
   ) {}
@@ -44,7 +44,7 @@ export class GetEventUsersListService {
         `[GetEventUsersListService] [getUsers] - x-request-id: ${requestId}, eventId ${eventId}`,
       );
 
-      const { uuid } = await this.tokensRepository.getBySessionId(
+      const { uuid } = await this.sessionRepository.getBySessionId(
         sessionId,
         requestId,
       );
