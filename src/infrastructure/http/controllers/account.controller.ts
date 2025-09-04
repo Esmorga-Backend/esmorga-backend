@@ -24,7 +24,7 @@ import {
   UpdateForgotPasswordService,
   ForgotPasswordService,
   GetMyEventsService,
-  GetUserCreatedEventsService,
+  GetEventsCreatedByUserService,
   JoinEventService,
   LoginService,
   RefreshTokenService,
@@ -52,7 +52,7 @@ import {
   SwaggerForgotPassword,
   SwaggerForgotPasswordUpdate,
   SwaggerGetMyEvents,
-  SwaggerGetUserCreatedEvents,
+  SwaggerGetEventsCreatedByUser,
   SwaggerJoinEvent,
   SwaggerRefreshToken,
   SwaggerSendEmailVerification,
@@ -74,7 +74,7 @@ export class AccountController {
     private readonly disjoinEventService: DisjoinEventService,
     private readonly forgotPasswordService: ForgotPasswordService,
     private readonly getMyEventsService: GetMyEventsService,
-    private readonly getUserCreatedEventsService: GetUserCreatedEventsService,
+    private readonly getEventsCreatedByUserService: GetEventsCreatedByUserService,
     private readonly joinEventService: JoinEventService,
     private readonly loginService: LoginService,
     private readonly refreshTokenService: RefreshTokenService,
@@ -121,8 +121,8 @@ export class AccountController {
   @Get('/events/created')
   @ApiBearerAuth('access-token')
   @UseGuards(AuthGuard)
-  @SwaggerGetUserCreatedEvents()
-  async getUserCreatedEvents(
+  @SwaggerGetEventsCreatedByUser()
+  async getEventsCreatedByUser(
     @SessionId() sessionId: string,
     @RequestId() requestId: string,
   ): Promise<EventListWithCreatorFlagDto> {
@@ -131,7 +131,7 @@ export class AccountController {
         `[AccountController] [getUserCreatedEvents] - x-request-id: ${requestId}`,
       );
 
-      const response: EventListWithCreatorFlagDto = await this.getUserCreatedEventsService.getEvents(
+      const response: EventListWithCreatorFlagDto = await this.getEventsCreatedByUserService.getEvents(
         sessionId,
         requestId,
       );

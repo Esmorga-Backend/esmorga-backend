@@ -12,7 +12,7 @@ import { ACCOUNT_ROLES } from '../../../domain/const';
 import { plainToInstance } from 'class-transformer';
 
 @Injectable()
-export class GetUserCreatedEventsService {
+export class GetEventsCreatedByUserService {
   constructor(
     private readonly logger: PinoLogger,
     private readonly sessionRepository: SessionRepository,
