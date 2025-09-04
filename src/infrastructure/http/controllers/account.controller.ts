@@ -24,6 +24,7 @@ import {
   UpdateForgotPasswordService,
   ForgotPasswordService,
   GetMyEventsService,
+  GetUserCreatedEventsService,
   JoinEventService,
   LoginService,
   RefreshTokenService,
@@ -51,12 +52,13 @@ import {
   SwaggerForgotPassword,
   SwaggerForgotPasswordUpdate,
   SwaggerGetMyEvents,
+  SwaggerGetUserCreatedEvents,
   SwaggerJoinEvent,
   SwaggerRefreshToken,
   SwaggerSendEmailVerification,
   SwaggerUpdatePassword,
 } from '../swagger/decorators/account';
-import { AccountLoggedDto, NewPairOfTokensDto, EventListDto } from '../../dtos';
+import { AccountLoggedDto, NewPairOfTokensDto, EventListDto, EventListWithCreatorFlagDto } from '../../dtos';
 import { RequestId, SessionId } from '../req-decorators';
 import { AuthGuard } from '../guards';
 import { InvalidEmptyTokenApiError } from '../../../domain/errors';
@@ -72,6 +74,7 @@ export class AccountController {
     private readonly disjoinEventService: DisjoinEventService,
     private readonly forgotPasswordService: ForgotPasswordService,
     private readonly getMyEventsService: GetMyEventsService,
+    private readonly getUserCreatedEventsService: GetUserCreatedEventsService,
     private readonly joinEventService: JoinEventService,
     private readonly loginService: LoginService,
     private readonly refreshTokenService: RefreshTokenService,
@@ -105,6 +108,38 @@ export class AccountController {
     } catch (error) {
       this.logger.error(
         `[AccountController] [getMyEvents] - x-request-id: ${requestId}, error: ${error}`,
+      );
+
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      throw new InternalServerErrorException();
+    }
+  }
+
+  @Get('/events/created')
+  @ApiBearerAuth('access-token')
+  @UseGuards(AuthGuard)
+  @SwaggerGetUserCreatedEvents()
+  async getUserCreatedEvents(
+    @SessionId() sessionId: string,
+    @RequestId() requestId: string,
+  ): Promise<EventListWithCreatorFlagDto> {
+    try {
+      this.logger.info(
+        `[AccountController] [getUserCreatedEvents] - x-request-id: ${requestId}`,
+      );
+
+      const response: EventListWithCreatorFlagDto = await this.getUserCreatedEventsService.getEvents(
+        sessionId,
+        requestId,
+      );
+
+      return response;
+    } catch (error) {
+      this.logger.error(
+        `[AccountController] [getUserCreatedEvents] - x-request-id: ${requestId}, error: ${error}`,
       );
 
       if (error instanceof HttpException) {

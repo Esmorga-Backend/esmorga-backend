@@ -1,5 +1,9 @@
 import { CONTENT_TYPE, AUTHORIZATION_BEARER } from './common';
 
+export const ACTIVATE_ACCOUNT_HEADERS = {
+  ...CONTENT_TYPE,
+};
+
 export const CLOSE_CURRENT_SESSION_HEADERS = {
   CONTENT_TYPE,
   AUTHORIZATION_BEARER,
@@ -14,7 +18,16 @@ export const FORGOT_PASSWORD_HEADER = {
   ...CONTENT_TYPE,
 };
 
+export const FORGOT_PASSWORD_UPDATE_HEADERS = {
+  ...CONTENT_TYPE,
+};
+
 export const GET_MY_EVENT_HEADERS = {
+  CONTENT_TYPE,
+  AUTHORIZATION_BEARER,
+};
+
+export const GET_USER_CREATED_EVENTS_HEADERS = {
   CONTENT_TYPE,
   AUTHORIZATION_BEARER,
 };
@@ -24,13 +37,13 @@ export const JOIN_EVENT_HEADERS = {
   AUTHORIZATION_BEARER,
 };
 
+export const LOGIN_HEADERS = {
+  ...CONTENT_TYPE,
+};
+
 export const UPDATE_PASSWORD_HEADERS = {
   CONTENT_TYPE,
   AUTHORIZATION_BEARER,
-};
-
-export const LOGIN_HEADERS = {
-  ...CONTENT_TYPE,
 };
 
 export const REFRESH_TOKEN_HEADERS = {
@@ -41,14 +54,6 @@ export const REGISTER_HEADER = {
   ...CONTENT_TYPE,
 };
 
-export const ACTIVATE_ACCOUNT_HEADERS = {
-  ...CONTENT_TYPE,
-};
-
 export const SEND_EMAIL_VERIFICATION_HEADER = {
-  ...CONTENT_TYPE,
-};
-
-export const FORGOT_PASSWORD_UPDATE_HEADERS = {
   ...CONTENT_TYPE,
 };

@@ -1,6 +1,6 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { PinoLogger } from 'nestjs-pino';
-import { EventDto } from '../../dtos';
+import { EventDto, EventWithCreatorFlagDto } from '../../dtos';
 import { CreateEventDto } from '../../http/dtos';
 import {
   DataBaseBadRequestError,
@@ -160,6 +160,33 @@ export class EventRepository {
       this.logger.error(
         `[EventRepository] [getEventListByEventsIds] - x-request-id:${requestId}, error ${error}`,
       );
+
+      throw new DataBaseInternalError();
+    }
+  }
+
+  /**
+   * Return single event related to email provided
+   * @param email - User email
+   * @param requestId - Request identifier for API logger
+   * @returns Promise of EventWithCreatorFlagDto
+   */
+  async getEventsCreatedByEmail(email: string, requestId?: string): Promise<EventWithCreatorFlagDto[]> {
+    try {
+      this.logger.info(
+        `[EventRepository] [getEventsCreatedByEmail] - x-request-id: ${requestId}, email: ${email}`,
+      );
+      const events = await this.eventDA.findByEmail(email);
+      events.forEach((event) => {
+        validateObjectDto(event, REQUIRED_DTO_FIELDS.EVENTS);
+      });
+      return events;
+    } catch (error) {
+      this.logger.error(
+        `[EventRepository] [getEventsCreatedByEmail] - x-request-id: ${requestId}, error: ${error}`,
+      );
+
+      if (error instanceof HttpException) throw error;
 
       throw new DataBaseInternalError();
     }
