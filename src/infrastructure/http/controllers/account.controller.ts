@@ -58,7 +58,12 @@ import {
   SwaggerSendEmailVerification,
   SwaggerUpdatePassword,
 } from '../swagger/decorators/account';
-import { AccountLoggedDto, NewPairOfTokensDto, EventListDto, ProfileDto } from '../../dtos';
+import {
+  AccountLoggedDto,
+  NewPairOfTokensDto,
+  EventListDto,
+  ProfileDto,
+} from '../../dtos';
 import { RequestId, SessionId } from '../req-decorators';
 import { AuthGuard } from '../guards';
 import { InvalidEmptyTokenApiError } from '../../../domain/errors';
@@ -478,7 +483,7 @@ export class AccountController {
   async getProfile(
     @SessionId() sessionId: string,
     @RequestId() requestId: string,
-  ): Promise<ProfileDto>{
+  ): Promise<ProfileDto> {
     try {
       this.logger.info(
         `[AccountController] [getProfile] - x-request-id: ${requestId}`,

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PinoLogger } from 'nestjs-pino';
 import { plainToInstance } from 'class-transformer';
-import { ProfileDto} from '../../../infrastructure/dtos';
+import { ProfileDto } from '../../../infrastructure/dtos';
 import {
   AccountRepository,
   SessionRepository,
@@ -24,10 +24,7 @@ export class GetProfileService {
    * @param requestId - Request id.
    * @returns UserProfileDto - Object containing the user profile.
    */
-  async getProfile(
-    sessionId: string,
-    requestId?: string,
-  ): Promise<ProfileDto>{
+  async getProfile(sessionId: string, requestId?: string): Promise<ProfileDto> {
     try {
       this.logger.info(
         `[GetProfileService] [getProfile] - x-request-id: ${requestId}`,
@@ -47,10 +44,9 @@ export class GetProfileService {
         throw new DataBaseUnathorizedError();
       }
 
-      const profileDto: ProfileDto = plainToInstance(
-              ProfileDto, userProfile,
-              { excludeExtraneousValues: true },
-            );
+      const profileDto: ProfileDto = plainToInstance(ProfileDto, userProfile, {
+        excludeExtraneousValues: true,
+      });
 
       return profileDto;
     } catch (error) {

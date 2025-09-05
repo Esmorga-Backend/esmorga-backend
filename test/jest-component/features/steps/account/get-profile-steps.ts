@@ -1,10 +1,7 @@
 import { JwtService } from '@nestjs/jwt';
 import { StepDefinitions } from 'jest-cucumber';
 import { context, moduleFixture } from '../../../steps-config';
-import {
-  SESSION_MOCK_DB,
-  getUserProfile,
-} from '../../../../mocks/db';
+import { SESSION_MOCK_DB, getUserProfile } from '../../../../mocks/db';
 import { HEADERS } from '../../../../mocks/common-data';
 import { SESSION_ID } from '../../../../mocks/db/common';
 import { SessionDA } from '../../../../../src/infrastructure/db/modules/none/session-da';
@@ -37,7 +34,7 @@ export const getProfileStepts: StepDefinitions = ({ given }) => {
       .mockResolvedValue(SESSION_MOCK_DB);
 
     const USER = await getUserProfile();
-    
+
     jest.spyOn(context.userDA, 'findOneById').mockResolvedValue(USER);
   });
 };
