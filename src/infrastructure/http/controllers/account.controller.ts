@@ -24,6 +24,7 @@ import {
   UpdateForgotPasswordService,
   ForgotPasswordService,
   GetMyEventsService,
+  GetProfileService,
   JoinEventService,
   LoginService,
   RefreshTokenService,
@@ -51,12 +52,18 @@ import {
   SwaggerForgotPassword,
   SwaggerForgotPasswordUpdate,
   SwaggerGetMyEvents,
+  SwaggerGetProfile,
   SwaggerJoinEvent,
   SwaggerRefreshToken,
   SwaggerSendEmailVerification,
   SwaggerUpdatePassword,
 } from '../swagger/decorators/account';
-import { AccountLoggedDto, NewPairOfTokensDto, EventListDto } from '../../dtos';
+import {
+  AccountLoggedDto,
+  NewPairOfTokensDto,
+  EventListDto,
+  ProfileDto,
+} from '../../dtos';
 import { RequestId, SessionId } from '../req-decorators';
 import { AuthGuard } from '../guards';
 import { InvalidEmptyTokenApiError } from '../../../domain/errors';
@@ -72,6 +79,7 @@ export class AccountController {
     private readonly disjoinEventService: DisjoinEventService,
     private readonly forgotPasswordService: ForgotPasswordService,
     private readonly getMyEventsService: GetMyEventsService,
+    private readonly getProfileService: GetProfileService,
     private readonly joinEventService: JoinEventService,
     private readonly loginService: LoginService,
     private readonly refreshTokenService: RefreshTokenService,
@@ -173,6 +181,7 @@ export class AccountController {
     }
   }
 
+  @SkipThrottle({ default: true, public: false })
   @Post('/refresh')
   @SwaggerRefreshToken()
   @HttpCode(200)
@@ -390,7 +399,6 @@ export class AccountController {
     }
   }
 
-  @SkipThrottle({ public: false, default: true })
   @Put('/password')
   @ApiBearerAuth('access-token')
   @UseGuards(AuthGuard)
@@ -466,6 +474,37 @@ export class AccountController {
       }
 
       return;
+    }
+  }
+
+  @Get('/profile')
+  @UseGuards(AuthGuard)
+  @SwaggerGetProfile()
+  async getProfile(
+    @SessionId() sessionId: string,
+    @RequestId() requestId: string,
+  ): Promise<ProfileDto> {
+    try {
+      this.logger.info(
+        `[AccountController] [getProfile] - x-request-id: ${requestId}`,
+      );
+
+      const response: ProfileDto = await this.getProfileService.getProfile(
+        sessionId,
+        requestId,
+      );
+
+      return response;
+    } catch (error) {
+      this.logger.error(
+        `[AccountController] [getProfile] - x-request-id: ${requestId}, error: ${error}`,
+      );
+
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      throw new InternalServerErrorException();
     }
   }
 }

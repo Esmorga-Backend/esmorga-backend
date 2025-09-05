@@ -22,6 +22,7 @@ import {
   DISJOIN_EVENT_HEADERS,
   FORGOT_PASSWORD_HEADER,
   GET_MY_EVENT_HEADERS,
+  GET_PROFILE_HEADERS,
   JOIN_EVENT_HEADERS,
   LOGIN_HEADERS,
   REFRESH_TOKEN_HEADERS,
@@ -36,6 +37,7 @@ import {
   FORGOT_PASSWORD_RESPONSES,
   FORGOT_PASSWORD_UPDATE_RESPONSE,
   GET_MY_EVENTS_RESPONSES,
+  GET_PROFILE_RESPONSES,
   JOIN_EVENT_RESPONSES,
   LOGIN_RESPONSES,
   REFRESH_TOKEN_RESPONSES,
@@ -235,6 +237,25 @@ export function SwaggerCloseCurrentSession() {
     ),
     ApiInternalServerErrorResponse(
       CLOSE_CURRENT_SESSION_RESPONSES.INTERNAL_ERROR,
+    ),
+  );
+}
+
+export function SwaggerGetProfile() {
+  return applyDecorators(
+    ApiOperation({
+      summary: 'Get profile.',
+    }),
+    ApiBearerAuth(),
+    ApiHeader(GET_PROFILE_HEADERS.AUTHORIZATION_BEARER),
+    ApiHeader(GET_PROFILE_HEADERS.CONTENT_TYPE),
+    ApiOkResponse(GET_PROFILE_RESPONSES.OK),
+    ApiUnauthorizedResponse(GET_PROFILE_RESPONSES.UNAUTHORIZED_ERROR),
+    ApiTooManyRequestsResponse(
+      GET_PROFILE_RESPONSES.TOO_MANY_REQUESTS_ERROR, 
+    ),
+    ApiInternalServerErrorResponse(
+      GET_PROFILE_RESPONSES.INTERNAL_ERROR,
     ),
   );
 }
