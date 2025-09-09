@@ -1,5 +1,5 @@
 import { Injectable, NotImplementedException } from '@nestjs/common';
-import { EventDto, EventWithCreatorFlagDto } from '../../../dtos';
+import { EventDto } from '../../../dtos';
 import { CreateEventDto } from '../../../http/dtos';
 
 @Injectable()
@@ -13,7 +13,7 @@ export class EventDA {
   findOneById(_eventId: string): Promise<EventDto | null> {
     throw new NotImplementedException();
   }
-  findByEmail(_email: string): Promise<EventWithCreatorFlagDto[]> {
+  findByEmail(_email: string): Promise<EventDto[]> {
     throw new NotImplementedException();
   }
   findByEventIds(_eventIds: string[]): Promise<EventDto[]> {

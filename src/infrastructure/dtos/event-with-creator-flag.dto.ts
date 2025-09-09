@@ -1,9 +1,9 @@
-import { IntersectionType, ApiProperty } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { IsBoolean } from 'class-validator';
 import { EventDto } from './event.dto';
 
-class CreatorFlagDto {
+export class EventWithCreatorFlagDto extends EventDto {
   @Expose()
   @IsBoolean()
   @ApiProperty({
@@ -11,7 +11,5 @@ class CreatorFlagDto {
     description: 'Indicates if the current user created the event',
     default: true,
   })
-  isCreatedByCurrentUser: boolean = true;
+  isCreatedByCurrentUser: boolean;
 }
-
-export class EventWithCreatorFlagDto extends IntersectionType(EventDto, CreatorFlagDto) {}

@@ -4,7 +4,7 @@ import { Types, type Model } from 'mongoose';
 import { plainToInstance } from 'class-transformer';
 import { EventDA } from '../none/event-da';
 import { Event } from './schema';
-import { EventDto, EventWithCreatorFlagDto } from '../../../dtos';
+import { EventDto } from '../../../dtos';
 import { CreateEventDto } from '../../../http/dtos';
 
 @Injectable({})
@@ -43,10 +43,11 @@ export class EventMongoDA implements EventDA {
       }),
     );
   }
-  async findByEmail(email: string): Promise<EventWithCreatorFlagDto[]> {
+  async findByEmail(email: string): Promise<EventDto[]> {
     const events = await this.eventModel.find({ createdBy: email });
+
     return events.map((event) =>
-      plainToInstance(EventWithCreatorFlagDto, { ...event.toObject(), isCreatedByCurrentUser: true }, {
+      plainToInstance(EventDto, event, {
         excludeExtraneousValues: true,
       }),
     );

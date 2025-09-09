@@ -5,11 +5,16 @@ import {
   EventRepository,
   SessionRepository,
 } from '../../../infrastructure/db/repositories';
-import { EventWithCreatorFlagDto, EventListWithCreatorFlagDto } from '../../../infrastructure/dtos';
+import {
+  EventWithCreatorFlagDto,
+  EventListWithCreatorFlagDto,
+} from '../../../infrastructure/dtos';
 import { DataBaseUnathorizedError } from '../../../infrastructure/db/errors';
-import { InvalidTokenApiError, NotAdminAccountApiError } from '../../../domain/errors';
+import {
+  InvalidTokenApiError,
+  NotAdminAccountApiError,
+} from '../../../domain/errors';
 import { ACCOUNT_ROLES } from '../../../domain/const';
-import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class GetEventsCreatedByUserService {
@@ -49,12 +54,12 @@ export class GetEventsCreatedByUserService {
       if (role !== ACCOUNT_ROLES.ADMIN) throw new NotAdminAccountApiError();
 
       const events: EventWithCreatorFlagDto[] =
-              await this.eventRepository.getEventsCreatedByEmail(email, requestId);
+        await this.eventRepository.getEventsCreatedByEmail(email, requestId);
 
       const eventList: EventListWithCreatorFlagDto = {
-              totalEvents: events.length,
-              events: events,
-            };
+        totalEvents: events.length,
+        events: events,
+      };
 
       return eventList;
     } catch (error) {

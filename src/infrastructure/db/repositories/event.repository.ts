@@ -1,5 +1,6 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { PinoLogger } from 'nestjs-pino';
+import { instanceToPlain, plainToInstance } from 'class-transformer';
 import { EventDto, EventWithCreatorFlagDto } from '../../dtos';
 import { CreateEventDto } from '../../http/dtos';
 import {
@@ -171,7 +172,10 @@ export class EventRepository {
    * @param requestId - Request identifier for API logger
    * @returns Promise of EventWithCreatorFlagDto
    */
-  async getEventsCreatedByEmail(email: string, requestId?: string): Promise<EventWithCreatorFlagDto[]> {
+  async getEventsCreatedByEmail(
+    email: string,
+    requestId?: string,
+  ): Promise<EventWithCreatorFlagDto[]> {
     try {
       this.logger.info(
         `[EventRepository] [getEventsCreatedByEmail] - x-request-id: ${requestId}, email: ${email}`,
@@ -180,7 +184,17 @@ export class EventRepository {
       events.forEach((event) => {
         validateObjectDto(event, REQUIRED_DTO_FIELDS.EVENTS);
       });
-      return events;
+      const eventsWithFlag = events.map((event) => {
+        const plain = instanceToPlain(event, { exposeUnsetFields: false });
+        return plainToInstance(
+          EventWithCreatorFlagDto,
+          { ...plain, isCreatedByCurrentUser: true },
+          {
+            excludeExtraneousValues: true,
+          },
+        );
+      });
+      return eventsWithFlag;
     } catch (error) {
       this.logger.error(
         `[EventRepository] [getEventsCreatedByEmail] - x-request-id: ${requestId}, error: ${error}`,

@@ -137,16 +137,21 @@ export function SwaggerGetMyEvents() {
 export function SwaggerGetEventsCreatedByUser() {
   return applyDecorators(
     ApiOperation({
-      summary:
-        'Return a list of events created by the user.',
+      summary: 'Return a list of events created by the user.',
     }),
     ApiHeader(GET_EVENTS_CREATED_BY_USER_HEADERS.AUTHORIZATION_BEARER),
     ApiHeader(GET_EVENTS_CREATED_BY_USER_HEADERS.CONTENT_TYPE),
     ApiOkResponse(GET_EVENTS_CREATED_BY_USER_RESPONSES.OK),
-    ApiUnauthorizedResponse(GET_EVENTS_CREATED_BY_USER_RESPONSES.UNAUTHORIZED_ERROR),
+    ApiUnauthorizedResponse(
+      GET_EVENTS_CREATED_BY_USER_RESPONSES.UNAUTHORIZED_ERROR,
+    ),
     ApiForbiddenResponse(GET_EVENTS_CREATED_BY_USER_RESPONSES.FORBIDDEN_ERROR),
-    ApiTooManyRequestsResponse(GET_EVENTS_CREATED_BY_USER_RESPONSES.TOO_MANY_REQUESTS_ERROR),
-    ApiInternalServerErrorResponse(GET_EVENTS_CREATED_BY_USER_RESPONSES.INTERNAL_ERROR),
+    ApiTooManyRequestsResponse(
+      GET_EVENTS_CREATED_BY_USER_RESPONSES.TOO_MANY_REQUESTS_ERROR,
+    ),
+    ApiInternalServerErrorResponse(
+      GET_EVENTS_CREATED_BY_USER_RESPONSES.INTERNAL_ERROR,
+    ),
   );
 }
 

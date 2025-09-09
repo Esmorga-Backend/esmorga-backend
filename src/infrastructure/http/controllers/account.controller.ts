@@ -58,7 +58,12 @@ import {
   SwaggerSendEmailVerification,
   SwaggerUpdatePassword,
 } from '../swagger/decorators/account';
-import { AccountLoggedDto, NewPairOfTokensDto, EventListDto, EventListWithCreatorFlagDto } from '../../dtos';
+import {
+  AccountLoggedDto,
+  NewPairOfTokensDto,
+  EventListDto,
+  EventListWithCreatorFlagDto,
+} from '../../dtos';
 import { RequestId, SessionId } from '../req-decorators';
 import { AuthGuard } from '../guards';
 import { InvalidEmptyTokenApiError } from '../../../domain/errors';
@@ -131,10 +136,11 @@ export class AccountController {
         `[AccountController] [getUserCreatedEvents] - x-request-id: ${requestId}`,
       );
 
-      const response: EventListWithCreatorFlagDto = await this.getEventsCreatedByUserService.getEvents(
-        sessionId,
-        requestId,
-      );
+      const response: EventListWithCreatorFlagDto =
+        await this.getEventsCreatedByUserService.getEvents(
+          sessionId,
+          requestId,
+        );
 
       return response;
     } catch (error) {
