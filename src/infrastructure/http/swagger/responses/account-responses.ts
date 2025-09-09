@@ -5,6 +5,7 @@ import {
   NewPairOfTokensDto,
   EventListDto,
   EventListWithCreatorFlagDto,
+  ProfileDto,
 } from '../../../dtos';
 import {
   BAD_REQUEST_ERROR_COMMON_PROPERTIES,
@@ -20,6 +21,7 @@ const PATHS = {
   CLOSE_CURRENT_SESSION: '/v1/account/session',
   FORGOT_PASSWORD: '/v1/account/password/forgot-init',
   GET_EVENTS_CREATED_BY_USER: '/v1/account/events/created',
+  GET_PROFILE: '/v1/accout/profile',
   JOIN_EVENT: '/v1/account/events',
   LOGIN: '/v1/account/login',
   REGISTER: '/v1/account/register',
@@ -755,6 +757,45 @@ export const GET_EVENTS_CREATED_BY_USER_RESPONSES: {
       properties: {
         ...INTERNAL_ERROR_COMMON_PROPERTIES,
         type: { type: 'string', example: PATHS.GET_EVENTS_CREATED_BY_USER },
+      },
+    },
+  },
+};
+
+export const GET_PROFILE_RESPONSES: { [key: string]: ApiResponseOptions } = {
+  OK: {
+    description: 'User profile',
+    type: ProfileDto,
+  },
+  UNAUTHORIZED_ERROR: {
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Invalid credentials',
+    schema: {
+      type: 'object',
+      properties: {
+        ...UNAUTHORIZED_INVALID_TOKEN_COMMON_PROPERTIES,
+        type: { type: 'string', example: PATHS.GET_PROFILE },
+      },
+    },
+  },
+  TOO_MANY_REQUESTS_ERROR: {
+    description: 'Too many requests, rate limit exceeded',
+    schema: {
+      type: 'object',
+      properties: {
+        ...TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES,
+        type: { type: 'string', example: PATHS.GET_PROFILE },
+      },
+    },
+  },
+  INTERNAL_ERROR: {
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Error not handled',
+    schema: {
+      type: 'object',
+      properties: {
+        ...INTERNAL_ERROR_COMMON_PROPERTIES,
+        type: { type: 'string', example: PATHS.GET_PROFILE },
       },
     },
   },

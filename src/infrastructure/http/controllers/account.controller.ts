@@ -25,6 +25,7 @@ import {
   ForgotPasswordService,
   GetMyEventsService,
   GetEventsCreatedByUserService,
+  GetProfileService,
   JoinEventService,
   LoginService,
   RefreshTokenService,
@@ -53,6 +54,7 @@ import {
   SwaggerForgotPasswordUpdate,
   SwaggerGetMyEvents,
   SwaggerGetEventsCreatedByUser,
+  SwaggerGetProfile,
   SwaggerJoinEvent,
   SwaggerRefreshToken,
   SwaggerSendEmailVerification,
@@ -62,6 +64,7 @@ import {
   AccountLoggedDto,
   NewPairOfTokensDto,
   EventListDto,
+  ProfileDto,
   EventListWithCreatorFlagDto,
 } from '../../dtos';
 import { RequestId, SessionId } from '../req-decorators';
@@ -80,6 +83,7 @@ export class AccountController {
     private readonly forgotPasswordService: ForgotPasswordService,
     private readonly getMyEventsService: GetMyEventsService,
     private readonly getEventsCreatedByUserService: GetEventsCreatedByUserService,
+    private readonly getProfileService: GetProfileService,
     private readonly joinEventService: JoinEventService,
     private readonly loginService: LoginService,
     private readonly refreshTokenService: RefreshTokenService,
@@ -214,6 +218,7 @@ export class AccountController {
     }
   }
 
+  @SkipThrottle({ default: true, public: false })
   @Post('/refresh')
   @SwaggerRefreshToken()
   @HttpCode(200)
@@ -431,7 +436,6 @@ export class AccountController {
     }
   }
 
-  @SkipThrottle({ public: false, default: true })
   @Put('/password')
   @ApiBearerAuth('access-token')
   @UseGuards(AuthGuard)
@@ -507,6 +511,37 @@ export class AccountController {
       }
 
       return;
+    }
+  }
+
+  @Get('/profile')
+  @UseGuards(AuthGuard)
+  @SwaggerGetProfile()
+  async getProfile(
+    @SessionId() sessionId: string,
+    @RequestId() requestId: string,
+  ): Promise<ProfileDto> {
+    try {
+      this.logger.info(
+        `[AccountController] [getProfile] - x-request-id: ${requestId}`,
+      );
+
+      const response: ProfileDto = await this.getProfileService.getProfile(
+        sessionId,
+        requestId,
+      );
+
+      return response;
+    } catch (error) {
+      this.logger.error(
+        `[AccountController] [getProfile] - x-request-id: ${requestId}, error: ${error}`,
+      );
+
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      throw new InternalServerErrorException();
     }
   }
 }

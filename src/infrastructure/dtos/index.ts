@@ -4,6 +4,7 @@ export * from './event-with-creator-flag.dto';
 export * from './event-list.dto';
 export * from './event-list-with-creator-flag.dto';
 export * from './new-pair-of-tokens.dto';
+export * from './profile.dto';
 export * from './session.dto';
 export * from './user-profile.dto';
 export * from './user-list.dto';
