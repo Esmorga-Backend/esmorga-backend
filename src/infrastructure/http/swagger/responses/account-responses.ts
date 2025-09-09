@@ -4,10 +4,12 @@ import {
   AccountLoggedDto,
   NewPairOfTokensDto,
   EventListDto,
+  EventListWithCreatorFlagDto,
   ProfileDto,
 } from '../../../dtos';
 import {
   BAD_REQUEST_ERROR_COMMON_PROPERTIES,
+  FORBIDDEN_INVALID_ROLE_COMMON_PROPERTIES,
   INTERNAL_ERROR_COMMON_PROPERTIES,
   NOT_ACCEPTABLE_ERROR_COMMON_PROPERTIES,
   TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES,
@@ -18,6 +20,7 @@ const PATHS = {
   ACTIVATE_ACCOUNT: '/v1/account/activate',
   CLOSE_CURRENT_SESSION: '/v1/account/session',
   FORGOT_PASSWORD: '/v1/account/password/forgot-init',
+  GET_EVENTS_CREATED_BY_USER: '/v1/account/events/created',
   GET_PROFILE: '/v1/accout/profile',
   JOIN_EVENT: '/v1/account/events',
   LOGIN: '/v1/account/login',
@@ -704,6 +707,56 @@ export const CLOSE_CURRENT_SESSION_RESPONSES: {
       properties: {
         ...INTERNAL_ERROR_COMMON_PROPERTIES,
         type: { type: 'string', example: PATHS.CLOSE_CURRENT_SESSION },
+      },
+    },
+  },
+};
+
+export const GET_EVENTS_CREATED_BY_USER_RESPONSES: {
+  [key: string]: ApiResponseOptions;
+} = {
+  OK: {
+    description: 'List of events created by the user',
+    type: EventListWithCreatorFlagDto,
+  },
+  UNAUTHORIZED_ERROR: {
+    description: 'Invalid credentials',
+    schema: {
+      type: 'object',
+      properties: {
+        ...UNAUTHORIZED_INVALID_TOKEN_COMMON_PROPERTIES,
+        type: { type: 'string', example: PATHS.GET_EVENTS_CREATED_BY_USER },
+      },
+    },
+  },
+  FORBIDDEN_ERROR: {
+    description: 'Error for not have enough privileges',
+    schema: {
+      type: 'object',
+      properties: {
+        ...FORBIDDEN_INVALID_ROLE_COMMON_PROPERTIES,
+        type: { example: PATHS.GET_EVENTS_CREATED_BY_USER },
+      },
+    },
+  },
+  TOO_MANY_REQUESTS_ERROR: {
+    description: 'Too many requests, rate limit exceeded',
+    schema: {
+      type: 'object',
+      properties: {
+        ...TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES,
+        type: { type: 'string', example: PATHS.GET_EVENTS_CREATED_BY_USER },
+      },
+    },
+  },
+  INTERNAL_ERROR: {
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Error not handled',
+    schema: {
+      type: 'object',
+      properties: {
+        ...INTERNAL_ERROR_COMMON_PROPERTIES,
+        type: { type: 'string', example: PATHS.GET_EVENTS_CREATED_BY_USER },
       },
     },
   },

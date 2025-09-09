@@ -13,6 +13,9 @@ export class EventDA {
   findOneById(_eventId: string): Promise<EventDto | null> {
     throw new NotImplementedException();
   }
+  findByEmail(_email: string): Promise<EventDto[]> {
+    throw new NotImplementedException();
+  }
   findByEventIds(_eventIds: string[]): Promise<EventDto[]> {
     throw new NotImplementedException();
   }

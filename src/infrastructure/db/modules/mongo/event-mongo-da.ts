@@ -43,6 +43,15 @@ export class EventMongoDA implements EventDA {
       }),
     );
   }
+  async findByEmail(email: string): Promise<EventDto[]> {
+    const events = await this.eventModel.find({ createdBy: email });
+
+    return events.map((event) =>
+      plainToInstance(EventDto, event, {
+        excludeExtraneousValues: true,
+      }),
+    );
+  }
   async updateById(
     eventId: string,
     eventUpdate: Partial<EventDto>,
