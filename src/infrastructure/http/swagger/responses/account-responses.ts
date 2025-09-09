@@ -730,15 +730,15 @@ export const GET_EVENTS_CREATED_BY_USER_RESPONSES: {
     },
   },
   FORBIDDEN_ERROR: {
-      description: 'Error for not have enough privileges',
-      schema: {
-        type: 'object',
-        properties: {
-          ...FORBIDDEN_INVALID_ROLE_COMMON_PROPERTIES,
-          type: { example: PATHS.GET_EVENTS_CREATED_BY_USER },
-        },
+    description: 'Error for not have enough privileges',
+    schema: {
+      type: 'object',
+      properties: {
+        ...FORBIDDEN_INVALID_ROLE_COMMON_PROPERTIES,
+        type: { example: PATHS.GET_EVENTS_CREATED_BY_USER },
       },
     },
+  },
   TOO_MANY_REQUESTS_ERROR: {
     description: 'Too many requests, rate limit exceeded',
     schema: {
