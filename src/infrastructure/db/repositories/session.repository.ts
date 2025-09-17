@@ -44,7 +44,7 @@ export class SessionRepository {
    *
    * @param uuid - User id.
    * @param requestId - Request id for API logger.
-   * @returns PairOfTokensDto[] - Array with tokens pairs.
+   * @returns SessionDto[] - Array with tokens pairs.
    */
   async getAllTokensByUuid(
     uuid: string,
@@ -69,7 +69,7 @@ export class SessionRepository {
    *
    * @param sessionId - Client session id stored.
    * @param requestId - Request id for API logger.
-   * @returns PairOfTokensDto - Pair of tokens and user id.
+   * @returns SessionDto - Pair of tokens and user id.
    */
   async getBySessionId(
     sessionId: string,
