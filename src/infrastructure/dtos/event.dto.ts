@@ -44,7 +44,7 @@ class LocationDto {
 
 export class EventDto {
   @Expose({ name: '_id' })
-  @Transform((value) => value.obj._id.toString())
+  @Transform((value) => value.obj._id.toString(), { toClassOnly: true })
   @IsString()
   @ApiProperty({
     example: '6656e23640e1fdb4ceb23cc9',
