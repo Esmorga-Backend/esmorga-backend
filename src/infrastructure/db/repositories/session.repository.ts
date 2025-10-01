@@ -3,14 +3,11 @@ import { PinoLogger } from 'nestjs-pino';
 import { DataBaseInternalError, DataBaseUnathorizedError } from '../errors';
 import { SessionDto } from '../../dtos';
 import { SessionDA } from '../modules/none/session-da';
-import { PairOfTokensDto } from '../../dtos/pair-of-tokens.dto';
-import { TokensDA } from '../modules/none/tokens-da';
 
 @Injectable()
 export class SessionRepository {
   constructor(
     private sessionDA: SessionDA,
-    private tokensDA: TokensDA,
     private readonly logger: PinoLogger,
   ) {}
 
@@ -47,7 +44,7 @@ export class SessionRepository {
    *
    * @param uuid - User id.
    * @param requestId - Request id for API logger.
-   * @returns PairOfTokensDto[] - Array with tokens pairs.
+   * @returns SessionDto[] - Array with tokens pairs.
    */
   async getAllTokensByUuid(
     uuid: string,
@@ -68,39 +65,11 @@ export class SessionRepository {
   }
 
   /**
-   * @deprecated Get pair of tokens with user id related to the refresh provided.
-   *
-   * @param refreshToken - Refresh token stored.
-   * @param requestId - Request id for API logger.
-   * @returns PairOfTokensDto - Pair of tokens and user id.
-   */
-  async getPairOfTokensByRefreshToken(
-    refreshToken: string,
-    requestId?: string,
-  ): Promise<PairOfTokensDto> {
-    try {
-      this.logger.info(
-        `[SessionRepository] [getPairOfTokensByRefreshToken] - x-request-id:${requestId}, refreshToken ${refreshToken}`,
-      );
-      const pairOfTokens =
-        await this.tokensDA.findOneByRefreshToken(refreshToken);
-      if (!pairOfTokens) throw new DataBaseUnathorizedError();
-      return pairOfTokens;
-    } catch (error) {
-      this.logger.error(
-        `[SessionRepository] [getPairOfTokensByRefreshToken] - x-request-id: ${requestId}, error: ${error}`,
-      );
-      if (error instanceof HttpException) throw error;
-      throw new DataBaseInternalError();
-    }
-  }
-
-  /**
    * Get sessions with user id related to the client session id provided.
    *
    * @param sessionId - Client session id stored.
    * @param requestId - Request id for API logger.
-   * @returns PairOfTokensDto - Pair of tokens and user id.
+   * @returns SessionDto - Pair of tokens and user id.
    */
   async getBySessionId(
     sessionId: string,

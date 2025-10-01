@@ -9,3 +9,5 @@ export const USER_MOCK_DB_ID = '665f019c17331ebee550b2ff';
 export const TEMPORAL_CODE_DB_ID = '6686785f52eb2b68944aacbc';
 
 export const SESSION_ID = '5c339b2e-f3c3-4cfc-9fae-ef7785638c51';
+
+export const REFRESH_TOKEN_ID = '2f7c1b84-5a3d-47c8-92e1-6b4a9f0d2317';
