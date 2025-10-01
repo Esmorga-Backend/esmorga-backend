@@ -3,7 +3,6 @@ import { ConfigService } from '@nestjs/config';
 import { PinoLogger } from 'nestjs-pino';
 import { plainToInstance } from 'class-transformer';
 import {
-  SessionRepository,
   AccountRepository,
   TemporalCodeRepository,
 } from '../../../infrastructure/db/repositories';
@@ -19,7 +18,6 @@ export class ActivateAccountService {
     private readonly logger: PinoLogger,
     private configService: ConfigService,
     private readonly sessionManager: SessionManager,
-    private readonly sessionRepository: SessionRepository,
     private readonly accountRepository: AccountRepository,
     private readonly temporalCodeRepository: TemporalCodeRepository,
   ) {}
