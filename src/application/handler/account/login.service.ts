@@ -10,15 +10,13 @@ import {
 } from '../../../infrastructure/db/errors';
 import {
   AccountRepository,
-  SessionRepository,
   LoginAttemptsRepository,
 } from '../../../infrastructure/db/repositories';
-import { AccountLoggedDto, SessionDto } from '../../../infrastructure/dtos';
+import { AccountLoggedDto } from '../../../infrastructure/dtos';
 import { AccountLoginDto } from '../../../infrastructure/http/dtos';
 import {
   ValidateLoginCredentialsService,
-  getOldestSession,
-  SessionGenerator,
+  SessionManager,
 } from '../../../domain/services';
 import {
   BlockedUserApiError,
@@ -31,10 +29,9 @@ import { PasswordSymbol } from '../../../infrastructure/db/modules/none/user-da'
 export class LoginService {
   constructor(
     private readonly logger: PinoLogger,
-    private readonly sessionGenerator: SessionGenerator,
     private readonly accountRepository: AccountRepository,
     private readonly loginAttemptsRepository: LoginAttemptsRepository,
-    private readonly sessionRepository: SessionRepository,
+    private readonly sessionManager: SessionManager,
     private readonly validateLoginCredentialsService: ValidateLoginCredentialsService,
     private configService: ConfigService,
   ) {}
@@ -88,27 +85,8 @@ export class LoginService {
 
       await this.loginAttemptsRepository.removeLoginAttempts(uuid, requestId);
 
-      const { accessToken, refreshToken, sessionId, refreshTokenId } =
-        await this.sessionGenerator.generateSession(uuid);
-
-      const pairOfTokens: SessionDto[] =
-        await this.sessionRepository.getAllTokensByUuid(uuid, requestId);
-
-      if (pairOfTokens.length >= this.configService.get('MAX_PAIR_OF_TOKEN')) {
-        const oldestPairOfTokenId = getOldestSession(pairOfTokens);
-
-        await this.sessionRepository.removeTokensById(
-          oldestPairOfTokenId,
-          requestId,
-        );
-      }
-
-      await this.sessionRepository.saveSession(
-        uuid,
-        sessionId,
-        refreshTokenId,
-        requestId,
-      );
+      const { accessToken, refreshToken } =
+        await this.sessionManager.createSession(uuid, requestId, true);
 
       const ttl = this.configService.get('ACCESS_TOKEN_TTL');
 
