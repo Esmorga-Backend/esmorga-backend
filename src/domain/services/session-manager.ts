@@ -20,7 +20,7 @@ export class SessionManager {
   async createSession(
     uuid: string,
     requestId?: string,
-    limitTokens: boolean = false,
+    checkMaxSessionsLimit: boolean = false,
   ) {
     try {
       this.logger.info(
@@ -29,7 +29,7 @@ export class SessionManager {
 
       const session = await this.sessionGenerator.generateSession(uuid);
 
-      if (limitTokens) {
+      if (checkMaxSessionsLimit) {
         await this.removeExtraTokens(uuid, requestId);
       }
 
