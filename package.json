@@ -29,7 +29,10 @@
     "migrate:qa-up": "cp migrations_qa.json migrations.json && npx mongo-migrate-ts up",
     "migrate:qa-down-all": "cp migrations_qa.json migrations.json && npx mongo-migrate-ts down -a",
     "migrate:prod-up": "cp migrations_prod.json migrations.json && npx mongo-migrate-ts up",
-    "migrate:prod-down-all": "cp migrations_prod.json migrations.json && npx mongo-migrate-ts down -a"
+    "migrate:prod-down-all": "cp migrations_prod.json migrations.json && npx mongo-migrate-ts down -a",
+    "playwright:testqa": "ENV_FILE=.env.qa npx playwright test",
+    "playwright:testqa-happy-path": "ENV_FILE=.env.qa npx playwright test --grep @happy-path",
+    "playwright:testprod": "ENV_FILE=.env.prod npx playwright test"
   },
   "dependencies": {
     "@nestjs-modules/mailer": "^2.0.2",
@@ -44,6 +47,7 @@
     "argon2": "^0.40.3",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
+    "dotenv": "^17.2.2",
     "mongoose": "^8.7.2",
     "nestjs-pino": "^4.1.0",
     "nodemailer": "^6.9.15",
@@ -62,6 +66,7 @@
     "@nestjs/schematics": "^10.2.2",
     "@nestjs/swagger": "^7.4.2",
     "@nestjs/testing": "^10.4.5",
+    "@playwright/test": "^1.55.0",
     "@types/express": "^4.17.21",
     "@types/jest": "^29.5.13",
     "@types/node": "^20.16.12",
