@@ -19,6 +19,7 @@ import {
 import {
   GenerateMailService,
   SessionGenerator,
+  SessionManager,
   ValidateLoginCredentialsService,
 } from '../../../domain/services';
 import { NodemailerService } from '../../services';
@@ -48,6 +49,7 @@ import {
     UpdatePasswordService,
     ActivateAccountService,
     SessionGenerator,
+    SessionManager,
     GenerateMailService,
     SendEmailVerificationService,
     ValidateLoginCredentialsService,

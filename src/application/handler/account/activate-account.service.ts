@@ -3,7 +3,6 @@ import { ConfigService } from '@nestjs/config';
 import { PinoLogger } from 'nestjs-pino';
 import { plainToInstance } from 'class-transformer';
 import {
-  SessionRepository,
   AccountRepository,
   TemporalCodeRepository,
 } from '../../../infrastructure/db/repositories';
@@ -11,15 +10,14 @@ import { TEMPORAL_CODE_TYPE } from '../../../domain/const';
 import { DataBaseNotFoundError } from '../../../infrastructure/db/errors';
 import { InvalidVerificationCodeApiError } from '../../../domain/errors';
 import { AccountLoggedDto } from '../../../infrastructure/dtos';
-import { SessionGenerator } from '../../../domain/services';
+import { SessionManager } from '../../../domain/services';
 
 @Injectable()
 export class ActivateAccountService {
   constructor(
     private readonly logger: PinoLogger,
     private configService: ConfigService,
-    private readonly sessionGenerator: SessionGenerator,
-    private readonly sessionRepository: SessionRepository,
+    private readonly sessionManager: SessionManager,
     private readonly accountRepository: AccountRepository,
     private readonly temporalCodeRepository: TemporalCodeRepository,
   ) {}
@@ -52,15 +50,8 @@ export class ActivateAccountService {
 
       const { uuid } = userProfileUpdated;
 
-      const { accessToken, refreshToken, sessionId, refreshTokenId } =
-        await this.sessionGenerator.generateSession(uuid);
-
-      await this.sessionRepository.saveSession(
-        uuid,
-        sessionId,
-        refreshTokenId,
-        requestId,
-      );
+      const { accessToken, refreshToken } =
+        await this.sessionManager.createSession(uuid, requestId);
 
       const ttl = this.configService.get('ACCESS_TOKEN_TTL');
 
