@@ -85,8 +85,14 @@ export class LoginService {
 
       await this.loginAttemptsRepository.removeLoginAttempts(uuid, requestId);
 
+      const checkMaxSessionsLimit = true;
+
       const { accessToken, refreshToken } =
-        await this.sessionManager.createSession(uuid, requestId, true);
+        await this.sessionManager.createSession(
+          uuid,
+          requestId,
+          checkMaxSessionsLimit,
+        );
 
       const ttl = this.configService.get('ACCESS_TOKEN_TTL');
 
