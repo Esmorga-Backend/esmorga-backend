@@ -19,8 +19,7 @@ jobs:
       USER_2_PASSWORD: ${{secrets.USER_2_PASSWORD}}
       USER_3_EMAIL: ${{vars.USER_3_EMAIL}}
       USER_3_PASSWORD: ${{secrets.USER_3_PASSWORD}}
-
-USER_EMAIL_FORGOT
+      USER_EMAIL_FORGOT: ${{vars.USER_EMAIL_FORGOT}}
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
