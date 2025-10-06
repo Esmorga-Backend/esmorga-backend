@@ -31,7 +31,7 @@
     "migrate:prod-up": "cp migrations_prod.json migrations.json && npx mongo-migrate-ts up",
     "migrate:prod-down-all": "cp migrations_prod.json migrations.json && npx mongo-migrate-ts down -a",
     "playwright:testqa": "ENV_FILE=.env.qa npx playwright test",
-    "playwright:testqa-happy-path": "ENV_FILE=.env.qa npx playwright test --grep @happy-path",
+    "playwright:happy-path": "npx playwright test --grep @happy-path",
     "playwright:testprod": "ENV_FILE=.env.prod npx playwright test"
   },
   "dependencies": {

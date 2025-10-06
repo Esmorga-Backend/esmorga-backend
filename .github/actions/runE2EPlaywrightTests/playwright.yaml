@@ -9,6 +9,18 @@ jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    env:
+      BASE_URL: ${{vars.BASE_URL}}
+      ADMIN_USER_EMAIL: ${{vars.ADMIN_USER_EMAIL}}
+      ADMIN_USER_PASSWORD: ${{secrets.ADMIN_USER_PASSWORD}}
+      USER_1_EMAIL: ${{vars.USER_1_EMAIL}}
+      USER_1_PASSWORD: ${{secrets.USER_1_PASSWORD}}
+      USER_2_EMAIL: ${{vars.USER_2_EMAIL}}
+      USER_2_PASSWORD: ${{secrets.USER_2_PASSWORD}}
+      USER_3_EMAIL: ${{vars.USER_3_EMAIL}}
+      USER_3_PASSWORD: ${{secrets.USER_3_PASSWORD}}
+
+USER_EMAIL_FORGOT
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
@@ -19,7 +31,7 @@ jobs:
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
     - name: Run Playwright tests
-      run: npm run playwright:testqa-happy-path
+      run: npm run playwright:happy-path
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
