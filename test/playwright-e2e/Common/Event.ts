@@ -72,13 +72,11 @@ export async function deleteEvent(
 
 export async function getEventId(
   request: APIRequestContext,
-  eventName: string,
+  eventNameToFind: string,
 ) {
   const response = await request.get('/v1/events');
-  const events = await response.json();
-  const event = await events.find(
-    (event: { eventName: string }) => event.eventName === eventName,
-  );
+  const { events } = await response.json();
+  const event = events.find(({ eventName }) => eventName === eventNameToFind);
   return event.eventId;
 }
 
@@ -88,6 +86,21 @@ export async function joinEvent(
   eventId: string,
 ) {
   return await request.post(`/v1/account/events`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+    data: {
+      eventId: eventId,
+    },
+  });
+}
+
+export async function leaveEvent(
+  request: APIRequestContext,
+  accessToken: string,
+  eventId: string,
+) {
+  return await request.delete(`/v1/account/events`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },

@@ -22,10 +22,13 @@ export async function loginAdminUser(request: APIRequestContext) {
   });
 }
 
-export async function logoutUser(request: APIRequestContext, token: string) {
+export async function logoutUser(
+  request: APIRequestContext,
+  accessToken: string,
+) {
   return await request.delete('/v1/account/session', {
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${accessToken}`,
     },
   });
 }

@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 
+//MOB-41 MOB=126
 test(
   'Test Register endpoint',
   {

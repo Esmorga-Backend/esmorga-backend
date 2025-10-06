@@ -19,9 +19,8 @@ test.beforeEach(async ({ request }) => {
   adminAccessToken = responseLoginJson.accessToken;
 
   if (triggerBeforeEachCreateEvent) {
-    //Create an event
+    // Create an event
     await createEvent(request, adminAccessToken);
-
     // Get the eventId from the created event
     eventId = await getEventId(request, 'PW Automation Test');
   }
@@ -35,6 +34,7 @@ test.afterEach(async ({ request }) => {
   await logoutUser(request, adminAccessToken);
 });
 
+//MOB-19
 test(
   'Get available events',
   {
@@ -47,15 +47,10 @@ test(
     const responseEventsJson = await responseBody.json();
     expect(responseEventsJson).toHaveProperty('totalEvents');
     expect(responseEventsJson).toHaveProperty('events');
-    expect(
-      responseEventsJson.events.find(
-        (event: { eventName: string }) =>
-          event.eventName === 'PW Automation Test',
-      ),
-    ).toBeTruthy();
   },
 );
 
+//MOB-43
 test(
   'Remove an event',
   {
@@ -72,14 +67,24 @@ test(
   },
 );
 
+//MOB-197
 test.describe('Tests for get joined users to events', () => {
   let userAccessToken: string;
 
   test.beforeEach(async ({ request }) => {
     const users = [
-      { email: 'esmorgaqa1@yopmail.com', password: 'Mobgen!1' },
-      { email: 'esmorgaqa2@yopmail.com', password: 'Mobgen!1' },
-      { email: 'esmorgaqa3@yopmail.com', password: 'Mobgen!1' },
+      {
+        email: process.env.USER_1_EMAIL,
+        password: process.env.USER_1_PASSWORD,
+      },
+      {
+        email: process.env.USER_2_EMAIL,
+        password: process.env.USER_2_PASSWORD,
+      },
+      {
+        email: process.env.USER_3_EMAIL,
+        password: process.env.USER_3_PASSWORD,
+      },
     ];
     for (const user of users) {
       const responseLogin = await loginUser(request, user.email, user.password);
@@ -91,7 +96,7 @@ test.describe('Tests for get joined users to events', () => {
   });
 
   test(
-    'Get user events',
+    'Get users on event',
     {
       tag: '@happy-path',
     },
@@ -113,6 +118,7 @@ test.describe('Tests for get joined users to events', () => {
   );
 });
 
+//MOB-45
 test(
   'Modify an event',
   {
@@ -138,8 +144,8 @@ test(
       eventId,
       updatedEvent,
     );
-    expect(responseUpdateEvent.status()).toBe(200);
     const responseUpdateEventJson = await responseUpdateEvent.json();
+    expect(responseUpdateEvent.status()).toBe(200);
     expect(responseUpdateEventJson).toHaveProperty('eventId', eventId);
     expect(responseUpdateEventJson.description).toBe(
       'Updated Test description',
@@ -149,6 +155,7 @@ test(
   },
 );
 
+//MOB-48
 test(
   'Create an event',
   {

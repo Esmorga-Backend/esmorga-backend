@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { loginUser, logoutUser } from '../Common/Login';
 
+//MOB-42
 test(
   'Test Refresh token endpoint',
   {
@@ -9,8 +10,8 @@ test(
   async ({ request }) => {
     const responseLogin = await loginUser(
       request,
-      'esmorgaqa1@yopmail.com',
-      'Mobgen!1',
+      process.env.USER_1_EMAIL,
+      process.env.USER_1_PASSWORD,
     );
 
     const responseRefresh = await request.post('v1/account/refresh', {

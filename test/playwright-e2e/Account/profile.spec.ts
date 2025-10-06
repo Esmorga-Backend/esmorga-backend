@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { loginAdminUser, loginUser, logoutUser } from '../Common/Login';
 
+//MOB-342
 test.describe('Test get profile', () => {
   let accessToken: string;
 
@@ -42,8 +43,8 @@ test.describe('Test get profile', () => {
     async ({ request }) => {
       const responseLogin = await loginUser(
         request,
-        'esmorgaqa1@yopmail.com',
-        'Mobgen!1',
+        process.env.USER_1_EMAIL,
+        process.env.USER_1_PASSWORD,
       );
       const responseLoginJson = await responseLogin.json();
       accessToken = responseLoginJson.accessToken;

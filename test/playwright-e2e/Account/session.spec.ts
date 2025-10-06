@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { loginUser, logoutUser } from '../Common/Login';
 
+//MOB-173
 test(
   'Test Logout endpoint',
   {
@@ -9,9 +10,10 @@ test(
   async ({ request }) => {
     const responseLogin = await loginUser(
       request,
-      'esmorgaqa1@yopmail.com',
-      'password',
+      process.env.USER_1_EMAIL,
+      process.env.USER_1_PASSWORD,
     );
+
     const responseLogout = await logoutUser(
       request,
       (await responseLogin.json()).accessToken,
