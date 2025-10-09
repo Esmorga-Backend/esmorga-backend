@@ -14,8 +14,6 @@ import {
   SessionSchema,
   TemporalCode,
   TemporalCodeSchema,
-  Tokens,
-  TokensSchema,
   User,
   UserSchema,
 } from './schema';
@@ -29,8 +27,6 @@ import { SessionDA } from '../none/session-da';
 import { SessionMongoDA } from './session-mongo-da';
 import { TemporalCodeMongoDA } from './temporal-code-mongo-da';
 import { EventParticipantsMongoDA } from './event-participant-mongo-da';
-import { TokensDA } from '../none/tokens-da';
-import { TokensMongoDA } from './tokens-mongo-da';
 
 const providers: Provider[] = [
   { provide: UserDA, useClass: UserMongoDA },
@@ -39,7 +35,6 @@ const providers: Provider[] = [
   { provide: LoginAttemptsDA, useClass: LoginAttemptsMongoDA },
   { provide: SessionDA, useClass: SessionMongoDA },
   { provide: TemporalCodeDA, useClass: TemporalCodeMongoDA },
-  { provide: TokensDA, useClass: TokensMongoDA },
 ];
 @Module({
   imports: [
@@ -61,7 +56,6 @@ const providers: Provider[] = [
     MongooseModule.forFeature([
       { name: TemporalCode.name, schema: TemporalCodeSchema },
     ]),
-    MongooseModule.forFeature([{ name: Tokens.name, schema: TokensSchema }]),
   ],
   providers: providers,
   exports: providers,

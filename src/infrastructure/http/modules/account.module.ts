@@ -7,6 +7,7 @@ import {
   RefreshTokenService,
   JoinEventService,
   GetMyEventsService,
+  GetEventsCreatedByUserService,
   GetProfileService,
   CloseCurrentSessionService,
   DisjoinEventService,
@@ -18,6 +19,7 @@ import {
 import {
   GenerateMailService,
   SessionGenerator,
+  SessionManager,
   ValidateLoginCredentialsService,
 } from '../../../domain/services';
 import { NodemailerService } from '../../services';
@@ -39,6 +41,7 @@ import {
     RefreshTokenService,
     JoinEventService,
     GetMyEventsService,
+    GetEventsCreatedByUserService,
     GetProfileService,
     CloseCurrentSessionService,
     DisjoinEventService,
@@ -46,6 +49,7 @@ import {
     UpdatePasswordService,
     ActivateAccountService,
     SessionGenerator,
+    SessionManager,
     GenerateMailService,
     SendEmailVerificationService,
     ValidateLoginCredentialsService,

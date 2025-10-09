@@ -44,6 +44,7 @@ export const refreshTokenSteps: StepDefinitions = ({ given, and }) => {
           if (refreshToken === _refreshToken) {
             return {
               sessionId: SESSION_ID,
+              id: SESSION_MOCK_DB.refreshTokenId,
             };
           }
         });

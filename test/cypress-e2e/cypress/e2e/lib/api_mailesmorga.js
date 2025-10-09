@@ -2,7 +2,7 @@
 class ApiMailEsmorga {
   #login = '';
   #name = 'mailesmorga';
-  #domain = 'esmorga.canarte.org';
+  #domain = 'esmorgaevents.com';
   constructor() {}
   get_name() {
     return this.#name;
@@ -12,7 +12,7 @@ class ApiMailEsmorga {
     return new Cypress.Promise((resolve, reject) => {
       cy.log(Cypress.env('MOCK_SERVER_USERNAME'));
       cy.request({
-        url: 'https://mail.esmorga.canarte.org/messages',
+        url: 'https://mail.esmorgaevents.com/messages',
         method: 'GET',
         auth: {
           username: Cypress.env('MOCK_SERVER_USERNAME'),
@@ -44,7 +44,7 @@ class ApiMailEsmorga {
   get_emails() {
     return new Cypress.Promise((resolve, reject) => {
       cy.request({
-        url: 'https://mail.esmorga.canarte.org/messages',
+        url: 'https://mail.esmorgaevents.com/messages',
         method: 'GET',
         auth: {
           username: Cypress.env('MOCK_SERVER_USERNAME'),
@@ -79,7 +79,7 @@ class ApiMailEsmorga {
       return new Cypress.Promise((resolve, reject) => {
         cy.request({
           url:
-            'https://mail.esmorga.canarte.org/messages/' +
+            'https://mail.esmorgaevents.com/messages/' +
             filtred_emails[filtred_emails.length - 1].id +
             '.html',
           method: 'GET',

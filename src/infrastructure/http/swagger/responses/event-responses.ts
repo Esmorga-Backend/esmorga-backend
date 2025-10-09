@@ -33,7 +33,7 @@ export const CREATE_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
     },
   },
   FORBIDDEN_ERROR: {
-    description: 'Error for not have enough privileges',
+    description: 'Not enough privileges',
     schema: {
       type: 'object',
       properties: {
@@ -63,7 +63,7 @@ export const CREATE_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
     },
   },
   UNAUTHORIZED_ERROR: {
-    description: 'Error for invalid token',
+    description: 'Invalid credentials',
     schema: {
       type: 'object',
       properties: {
@@ -119,7 +119,7 @@ export const UPDATE_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
     },
   },
   FORBIDDEN_ERROR: {
-    description: 'Error for not have enough privileges',
+    description: 'Not enough privileges',
     schema: {
       type: 'object',
       properties: {
@@ -149,7 +149,7 @@ export const UPDATE_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
     },
   },
   UNAUTHORIZED_ERROR: {
-    description: 'Error for invalid token',
+    description: 'Invalid credentials',
     schema: {
       type: 'object',
       properties: {
@@ -189,7 +189,7 @@ export const DELETE_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
     },
   },
   FORBIDDEN_ERROR: {
-    description: 'Invalid credentials',
+    description: 'Not enough privileges',
     schema: {
       type: 'object',
       properties: {
@@ -237,7 +237,7 @@ export const GET_EVENT_USERS_RESPONSES: { [key: string]: ApiResponseOptions } =
       },
     },
     FORBIDDEN_ERROR: {
-      description: 'Invalid credentials',
+      description: 'Not enough privileges',
       schema: {
         type: 'object',
         properties: {

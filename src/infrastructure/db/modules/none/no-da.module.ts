@@ -5,7 +5,6 @@ import { EventParticipantsDA } from './event-participant-da';
 import { LoginAttemptsDA } from './login-attempts-da';
 import { SessionDA } from './session-da';
 import { TemporalCodeDA } from './temporal-code-da';
-import { TokensDA } from './tokens-da';
 
 const providers: Provider[] = [
   UserDA,
@@ -14,7 +13,6 @@ const providers: Provider[] = [
   LoginAttemptsDA,
   SessionDA,
   TemporalCodeDA,
-  TokensDA,
 ];
 @Module({
   providers: providers,
