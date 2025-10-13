@@ -5,6 +5,6 @@
   "typescript.preferences.importModuleSpecifier": "relative",
   "editor.defaultFormatter": "rvest.vs-code-prettier-eslint",
   "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
   }
 }
