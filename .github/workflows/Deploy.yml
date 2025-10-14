@@ -33,6 +33,19 @@ jobs:
 
     - name: Create .env
       run: |
+        echo "APP_PORT=${{vars.APP_PORT}}" >> .env 
+        echo "MONGODB_URI=${{secrets.MONGODB_URI}}" >> .env 
+        echo "NODE_ENV=${{vars.NODE_ENV}}" >> .env 
+        echo "JWT_SECRET=${{secrets.JWT_SECRET}}" >> .env 
+        echo "JWT_REFRESH_SECRET=${{secrets.JWT_REFRESH_SECRET}}" >> .env 
+        echo "ACCESS_TOKEN_TTL=${{vars.ACCESS_TOKEN_TTL}}" >> .env 
+        echo "MAX_PAIR_OF_TOKEN=${{vars.MAX_PAIR_OF_TOKEN}}" >> .env 
+        echo "EMAIL_USER=${{vars.EMAIL_USER}}" >> .env 
+        echo "EMAIL_PASS=${{secrets.EMAIL_PASS}}" >> .env 
+        echo "APP_LINK=${{vars.APP_LINK}}" >> .env 
+        echo "LOGIN_ATTEMPTS_TTL=${{vars.LOGIN_ATTEMPTS_TTL}}" >> .env 
+        echo "MAX_LOGIN_ATTEMPTS=${{vars.MAX_LOGIN_ATTEMPTS}}" >> .env 
+        echo "DNS_NAME=${{vars.DNS_NAME}}" >> .env 
     - name: Set up Python "pypy3.9"
       uses: actions/setup-python@v5
       with:
