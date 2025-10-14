@@ -25,10 +25,9 @@ runs:
             postman login --with-api-key ${{inputs.POSTMAN_TOKEN}}
             postman collection run 25091136-0af5bd1f-1b37-450c-b138-b961128c40ec -e 34733067-4a57f5f3-ba99-4cdb-95a2-d89e4aaa24b7 --global-var mail_auth_user=${{inputs.DESPOSABLE_EMAIL_USER}} --global-var mail_auth_password=${{inputs.DESPOSABLE_EMAIL_PASS}}
             postman collection run 34733067-87db0ada-5ec1-435a-a33d-4cd36d19656d -e 34733067-dad4bba4-8253-4270-bb57-87cfe224d433
-
-        - name: Run Reporting
-          uses: ./.github/actions/SlackCom
-          with: 
-            msg: "Backend Postman Test Fails"
-            SLACK_WEBHOOK_URL: ${{ inputs.SLACK_WEBHOOK_URL }}
-          if: failure()
+        # - name: Run Reporting
+        #   uses: ./.github/actions/SlackCom
+        #   if: failure()
+        #   with: 
+        #     msg: "Backend Postman Test Fails"
+        #     SLACK_WEBHOOK_URL: ${{ inputs.SLACK_WEBHOOK_URL }}
