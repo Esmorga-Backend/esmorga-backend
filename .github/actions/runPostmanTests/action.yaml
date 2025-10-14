@@ -28,7 +28,8 @@ runs:
 
         - name: Run Reporting
           uses: ./.github/actions/SlackCom
-          with: 
-            msg: "Backend Postman Test Fails"
-            SLACK_WEBHOOK_URL: ${{ inputs.SLACK_WEBHOOK_URL }}
           if: failure()
+          with: 
+            text: "Backend Postman Test Fails"
+            SLACK_WEBHOOK_URL: ${{ inputs.SLACK_WEBHOOK_URL }}
+          
