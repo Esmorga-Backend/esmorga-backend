@@ -39,7 +39,7 @@ export const joinEventSteps: StepDefinitions = ({ given, and }) => {
 
     jest
       .spyOn(context.eventParticipantsDA, 'findAndUpdateParticipantsList')
-      .mockResolvedValue(null);
+      .mockResolvedValue(true);
 
     jest
       .spyOn(context.eventDA, 'incrementAttendeeCount')

@@ -14,7 +14,7 @@ export class EventParticipantsDA {
   findAndUpdateParticipantsList(
     _eventId: string,
     _userId: string,
-  ): Promise<void> {
+  ): Promise<boolean> {
     throw new NotImplementedException();
   }
 

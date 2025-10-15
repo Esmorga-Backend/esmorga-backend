@@ -22,13 +22,13 @@ export class EventParticipantsRepository {
     eventId: string,
     userId: string,
     requestId?: string,
-  ) {
+  ): Promise<boolean> {
     try {
       this.logger.info(
         `[EventParticipantsRepository] [updateParticipantList] - x-request-id: ${requestId}, eventId: ${eventId}, userId: ${userId}`,
       );
 
-      await this.eventParticipantDA.findAndUpdateParticipantsList(
+      return this.eventParticipantDA.findAndUpdateParticipantsList(
         eventId,
         userId,
       );

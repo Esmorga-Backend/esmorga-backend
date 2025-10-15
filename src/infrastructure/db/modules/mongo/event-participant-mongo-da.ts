@@ -37,12 +37,14 @@ export class EventParticipantsMongoDA implements EventParticipantsDA {
   async findAndUpdateParticipantsList(
     eventId: string,
     userId: string,
-  ): Promise<void> {
-    await this.eventParticipantsModel.findOneAndUpdate(
+  ): Promise<boolean> {
+    const result = await this.eventParticipantsModel.updateOne(
       { eventId },
       { $addToSet: { participants: userId } },
       { upsert: true },
     );
+
+    return Boolean(result.modifiedCount || result.upsertedCount);
   }
 
   async removeParticipantFromList(
