@@ -25,4 +25,8 @@ export class EventParticipantsDA {
   findEvent(_eventId: string): Promise<EventParticipantsDto | null> {
     throw new NotImplementedException();
   }
+
+  find(): Promise<EventParticipantsDto[]> {
+    throw new NotImplementedException();
+  }
 }

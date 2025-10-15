@@ -66,4 +66,14 @@ export class EventParticipantsMongoDA implements EventParticipantsDA {
       excludeExtraneousValues: true,
     });
   }
+
+  async find(): Promise<EventParticipantsDto[]> {
+    const eventsParcipantsDocs = await this.eventParticipantsModel.find();
+
+    return eventsParcipantsDocs.map((event) =>
+      plainToInstance(EventParticipantsDto, event, {
+        excludeExtraneousValues: true,
+      }),
+    );
+  }
 }

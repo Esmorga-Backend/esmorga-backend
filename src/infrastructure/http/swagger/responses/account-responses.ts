@@ -377,7 +377,7 @@ export const DISJOIN_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
 
 export const GET_MY_EVENTS_RESPONSES: { [key: string]: ApiResponseOptions } = {
   OK: {
-    description: 'List of avaliable events user joined',
+    description: 'List of available events user joined',
     type: EventListDto,
   },
   UNAUTHORIZED_ERROR: {

@@ -24,6 +24,12 @@ export class Event {
   @Prop({ required: false })
   imageUrl: string;
 
+  @Prop({ required: false })
+  maxCapacity: number;
+
+  @Prop({ required: true, default: 0 })
+  currentAttendeeCount: number;
+
   @Prop({ required: true })
   createdBy: string;
 

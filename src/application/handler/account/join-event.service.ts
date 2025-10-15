@@ -13,6 +13,7 @@ import {
   InvalidEventIdApiError,
   InvalidTokenApiError,
   NotAcceptableEventApiError,
+  NotAcceptableFullEventApiError,
 } from '../../../domain/errors';
 
 @Injectable()
@@ -33,6 +34,7 @@ export class JoinEventService {
    * @throws NotAcceptableEventApiError - User can not join past events.
    * @throws InvalidTokenApiError - No user found for the current session.
    * @throws InvalidEventIdApiError - EventId is not valid follwing DB schema ot not found.
+   * @throws NotAcceptableFullEventApiError - Event has reached maximum capacity.
    */
   async joinEvent(sessionId: string, eventId: string, requestId?: string) {
     try {
@@ -45,16 +47,23 @@ export class JoinEventService {
         requestId,
       );
 
-      const { eventDate } = await this.eventRepository.getEvent(
-        eventId,
-        requestId,
-      );
+      const { currentAttendeeCount, eventDate, maxCapacity } =
+        await this.eventRepository.getEvent(eventId, requestId);
 
       if (eventDate < new Date()) throw new NotAcceptableEventApiError();
+
+      if (currentAttendeeCount >= maxCapacity)
+        throw new NotAcceptableFullEventApiError();
 
       await this.eventParticipantsRepository.updateParticipantList(
         eventId,
         uuid,
+        requestId,
+      );
+
+      await this.eventRepository.incrementAttendeeCount(
+        uuid,
+        eventId,
         requestId,
       );
     } catch (error) {

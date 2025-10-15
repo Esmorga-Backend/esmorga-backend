@@ -20,6 +20,7 @@ export const EVENT_MOCK: EventDto = {
     name: 'A Coruña',
   },
   tags: ['Meal', 'Music'],
+  currentAttendeeCount: 0,
 };
 
 export const OLD_EVENT_MOCK: EventDto = {
@@ -35,4 +36,5 @@ export const OLD_EVENT_MOCK: EventDto = {
     name: 'Vigo',
   },
   tags: ['Shoots', 'Sports'],
+  currentAttendeeCount: 0,
 };

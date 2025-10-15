@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PinoLogger } from 'nestjs-pino';
-import { DataBaseInternalError, DataBaseBadRequestError } from '../errors';
+import { DataBaseInternalError } from '../errors';
 import { EventParticipantsDA } from '../modules/none/event-participant-da';
 import { EventParticipantsDto } from '../../dtos';
 
@@ -104,6 +104,32 @@ export class EventParticipantsRepository {
     } catch (error) {
       this.logger.error(
         `[EventParticipantsRepository] [disjoinParticipantList] - x-request-id: ${requestId}, error: ${error}`,
+      );
+
+      throw error;
+    }
+  }
+
+  /**
+   * Return all the events with the participants.
+   *
+   * @param requestId - Request identifier for API logger.
+   * @returns The data of the participants of all events.
+   */
+  async getAllEventsParticipantList(
+    eventId: string,
+    requestId?: string,
+  ): Promise<EventParticipantsDto[]> {
+    try {
+      this.logger.info(
+        `[EventParticipantsRepository] [getAllEventsParticipantList] - x-request-id: ${requestId}, eventId: ${eventId}`,
+      );
+      const events: EventParticipantsDto[] =
+        await this.eventParticipantDA.find();
+      return events;
+    } catch (error) {
+      this.logger.error(
+        `[EventParticipantsRepository] [getAllEventsParticipantList] - x-request-id: ${requestId}, error: ${error}`,
       );
 
       throw error;

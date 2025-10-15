@@ -50,7 +50,7 @@ export function SwaggerCreateEvent() {
 
 export function SwaggerGetEvents() {
   return applyDecorators(
-    ApiOperation({ summary: 'Return a list of avaliable events.' }),
+    ApiOperation({ summary: 'Return a list of available events.' }),
     ApiHeader(GET_EVENTS_HEADERS),
     ApiOkResponse(GET_EVENTS_RESPONSES.OK),
     ApiTooManyRequestsResponse(GET_EVENTS_RESPONSES.TOO_MANY_REQUESTS_ERROR),

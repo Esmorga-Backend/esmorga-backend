@@ -105,4 +105,19 @@ export class EventDto {
     maxLength: 25,
   })
   tags?: string[];
+
+  @Expose()
+  @IsNumber()
+  @IsOptional()
+  @ApiPropertyOptional({ example: 50 })
+  maxCapacity?: number;
+
+  @Expose()
+  @IsNumber()
+  @IsOptional()
+  @ApiProperty({
+    example: 13,
+    default: 0,
+  })
+  currentAttendeeCount: number;
 }
