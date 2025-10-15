@@ -104,8 +104,8 @@ jobs:
       uses: ./.github/actions/runE2ETests
       with:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        MOCK_SERVER_USERNAME : ${{ secrets.MOCK_SERVER_USERNAME }}
-        MOCK_SERVER_PASSWORD : ${{ secrets.MOCK_SERVER_PASSWORD }}
+        MOCK_SERVER_USERNAME: ${{ secrets.MOCK_SERVER_USERNAME }}
+        MOCK_SERVER_PASSWORD: ${{ secrets.MOCK_SERVER_PASSWORD }}
 
     - name: Run Reporting
       uses: ./.github/actions/runReporting

@@ -1,0 +1,56 @@
+name: "Run Playwright E2E Tests"
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 20 * * *'
+
+jobs:
+  run-e2e-tests:
+    runs-on: ubuntu-latest
+    env:
+      BASE_URL: ${{vars.BASE_URL}}
+      ADMIN_USER_EMAIL: ${{vars.ADMIN_USER_EMAIL}}
+      ADMIN_USER_PASSWORD: ${{secrets.ADMIN_USER_PASSWORD}}
+      USER_1_EMAIL: ${{vars.USER_1_EMAIL}}
+      USER_1_PASSWORD: ${{secrets.USER_1_PASSWORD}}
+      USER_2_EMAIL: ${{vars.USER_2_EMAIL}}
+      USER_2_PASSWORD: ${{secrets.USER_2_PASSWORD}}
+      USER_3_EMAIL: ${{vars.USER_3_EMAIL}}
+      USER_3_PASSWORD: ${{secrets.USER_3_PASSWORD}}
+      USER_EMAIL_FORGOT: ${{vars.USER_EMAIL_FORGOT}}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Notify Slack - Test Runner Starting
+        uses: slackapi/slack-github-action@v1.25.0
+        with:
+          channel-id: ${{ secrets.SLACK_E2E_CHANNEL}}
+          slack-message: "Playwright E2E test runner is starting."
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_TOKEN }}
+
+      - name: Run Playwright tests
+        run: npx playwright test --reporter=html
+
+      - name: Upload Playwright HTML report
+        uses: actions/upload-artifact@v3
+        with:
+          name: playwright-report
+          path: playwright-report
+
+      - name: Notify Slack - Test Runner Finished
+        uses: slackapi/slack-github-action@v1.25.0
+        with:
+          channel-id: ${{ secrets.SLACK_E2E_CHANNEL }}
+          slack-message: "Playwright E2E test runner finished. Report: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}>"
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_TOKEN }}
