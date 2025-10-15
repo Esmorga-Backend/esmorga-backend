@@ -39,7 +39,7 @@ export class EventParticipantsMongoDA implements EventParticipantsDA {
     userId: string,
   ): Promise<boolean> {
     const result = await this.eventParticipantsModel.updateOne(
-      { eventId, participants: { $ne: userId } },
+      { eventId: { $eq: eventId }, participants: { $ne: userId } },
       { $addToSet: { participants: userId } },
     );
 
@@ -65,7 +65,7 @@ export class EventParticipantsMongoDA implements EventParticipantsDA {
     userId: string,
   ): Promise<boolean> {
     const result = await this.eventParticipantsModel.updateOne(
-      { eventId, participants: userId },
+      { eventId: { $eq: eventId }, participants: userId },
       { $pull: { participants: userId } },
       { timestamps: false },
     );
