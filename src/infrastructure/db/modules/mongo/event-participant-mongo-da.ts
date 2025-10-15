@@ -52,7 +52,7 @@ export class EventParticipantsMongoDA implements EventParticipantsDA {
     }
 
     const upsertResult = await this.eventParticipantsModel.updateOne(
-      { eventId },
+      { eventId: { $eq: eventId } },
       { $addToSet: { participants: userId } },
       { upsert: true, timestamps: false },
     );
