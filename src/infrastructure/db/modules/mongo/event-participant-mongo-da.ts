@@ -39,12 +39,25 @@ export class EventParticipantsMongoDA implements EventParticipantsDA {
     userId: string,
   ): Promise<boolean> {
     const result = await this.eventParticipantsModel.updateOne(
-      { eventId },
+      { eventId, participants: { $ne: userId } },
       { $addToSet: { participants: userId } },
-      { upsert: true },
     );
 
-    return Boolean(result.modifiedCount || result.upsertedCount);
+    if (result.modifiedCount > 0) {
+      return true;
+    }
+
+    if (result.matchedCount > 0) {
+      return false;
+    }
+
+    const upsertResult = await this.eventParticipantsModel.updateOne(
+      { eventId },
+      { $addToSet: { participants: userId } },
+      { upsert: true, timestamps: false },
+    );
+
+    return Boolean(upsertResult.modifiedCount || upsertResult.upsertedCount);
   }
 
   async removeParticipantFromList(
@@ -52,11 +65,20 @@ export class EventParticipantsMongoDA implements EventParticipantsDA {
     userId: string,
   ): Promise<boolean> {
     const result = await this.eventParticipantsModel.updateOne(
-      { eventId },
+      { eventId, participants: userId },
       { $pull: { participants: userId } },
+      { timestamps: false },
     );
 
-    return Boolean(result.modifiedCount || result.upsertedCount);
+    if (result.modifiedCount > 0) {
+      return true;
+    }
+
+    if (result.matchedCount > 0) {
+      return false;
+    }
+
+    return false;
   }
 
   async findEvent(eventId: string): Promise<EventParticipantsDto | null> {
