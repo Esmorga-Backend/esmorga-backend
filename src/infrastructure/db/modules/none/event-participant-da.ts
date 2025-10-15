@@ -18,7 +18,10 @@ export class EventParticipantsDA {
     throw new NotImplementedException();
   }
 
-  removeParticipantFromList(_eventId: string, _userId: string): Promise<void> {
+  removeParticipantFromList(
+    _eventId: string,
+    _userId: string,
+  ): Promise<boolean> {
     throw new NotImplementedException();
   }
 

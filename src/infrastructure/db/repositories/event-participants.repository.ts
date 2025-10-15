@@ -17,6 +17,7 @@ export class EventParticipantsRepository {
    * @param eventId - Event identifier.
    * @param userId - User identifier.
    * @param requestId - Request identifier for API logger.
+   * @returns True if the user was added to the participant list, false otherwise.
    */
   async updateParticipantList(
     eventId: string,
@@ -89,18 +90,19 @@ export class EventParticipantsRepository {
    * @param eventId - Event identifier.
    * @param userId - User identifier.
    * @param requestId - Request identifier for API logger.
+   * @returns True if the user was removed from the participant list, false otherwise.
    */
   async disjoinParticipantList(
     eventId: string,
     userId: string,
     requestId?: string,
-  ) {
+  ): Promise<boolean> {
     try {
       this.logger.info(
         `[EventParticipantsRepository] [disjoinParticipantList] - x-request-id: ${requestId}, eventId: ${eventId}, userId: ${userId}`,
       );
 
-      await this.eventParticipantDA.removeParticipantFromList(eventId, userId);
+      return this.eventParticipantDA.removeParticipantFromList(eventId, userId);
     } catch (error) {
       this.logger.error(
         `[EventParticipantsRepository] [disjoinParticipantList] - x-request-id: ${requestId}, error: ${error}`,
