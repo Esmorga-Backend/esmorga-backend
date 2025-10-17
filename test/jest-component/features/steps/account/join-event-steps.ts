@@ -118,4 +118,12 @@ export const joinEventSteps: StepDefinitions = ({ given, and }) => {
       .spyOn(context.eventDA, 'findOneById')
       .mockResolvedValue(OLD_EVENT_MOCK_DTO);
   });
+
+  and('the event has reached its full capacity', () => {
+    jest.spyOn(context.eventDA, 'findOneById').mockResolvedValue({
+      ...FUTURE_EVENT_MOCK_DTO,
+      currentAttendeeCount: 5,
+      maxCapacity: 5,
+    });
+  });
 };

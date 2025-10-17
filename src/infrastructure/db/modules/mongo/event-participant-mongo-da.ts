@@ -74,10 +74,6 @@ export class EventParticipantsMongoDA implements EventParticipantsDA {
       return true;
     }
 
-    if (result.matchedCount > 0) {
-      return false;
-    }
-
     return false;
   }
 
