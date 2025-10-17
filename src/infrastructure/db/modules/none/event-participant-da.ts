@@ -14,15 +14,22 @@ export class EventParticipantsDA {
   findAndUpdateParticipantsList(
     _eventId: string,
     _userId: string,
-  ): Promise<void> {
+  ): Promise<boolean> {
     throw new NotImplementedException();
   }
 
-  removeParticipantFromList(_eventId: string, _userId: string): Promise<void> {
+  removeParticipantFromList(
+    _eventId: string,
+    _userId: string,
+  ): Promise<boolean> {
     throw new NotImplementedException();
   }
 
   findEvent(_eventId: string): Promise<EventParticipantsDto | null> {
+    throw new NotImplementedException();
+  }
+
+  find(): Promise<EventParticipantsDto[]> {
     throw new NotImplementedException();
   }
 }

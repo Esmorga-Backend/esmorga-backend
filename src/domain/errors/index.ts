@@ -11,6 +11,7 @@ export * from './invalid-token-error';
 export * from './invalid-verification-code';
 export * from './not-acceptable-disjoin-event-error';
 export * from './not-acceptable-event-error';
+export * from './not-acceptable-full-event-error';
 export * from './not-admin-account-error';
 export * from './not-found-event-error';
 export * from './unverified-user-error';

@@ -1,14 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import { PinoLogger } from 'nestjs-pino';
-import { EventRepository } from '../../../infrastructure/db/repositories';
-import { filterAvaliableEvents } from '../../../domain/services';
-import { EventDto, EventListDto } from '../../../infrastructure/dtos';
+import {
+  EventRepository,
+  EventParticipantsRepository,
+} from '../../../infrastructure/db/repositories';
+import { filterAvailableEvents } from '../../../domain/services';
+import {
+  EventDto,
+  EventListDto,
+  EventParticipantsDto,
+} from '../../../infrastructure/dtos';
 
 @Injectable()
 export class GetEventListService {
   constructor(
     private readonly logger: PinoLogger,
     private readonly eventRepository: EventRepository,
+    private readonly eventParticipantsRepository: EventParticipantsRepository,
   ) {}
 
   /**
@@ -23,12 +31,29 @@ export class GetEventListService {
       );
 
       const events: EventDto[] = await this.eventRepository.getEventList();
+      const eventsParticipantLists: EventParticipantsDto[] =
+        (await this.eventParticipantsRepository.getAllEventsParticipantList(
+          requestId,
+        )) ?? [];
 
-      const avaliableEvents = filterAvaliableEvents(events);
+      const availableEvents = filterAvailableEvents(events);
+
+      const updatedEvents = availableEvents.map((event) => {
+        const eventParticipantsInfo = eventsParticipantLists.find(
+          ({ eventId }) => eventId === event.eventId,
+        );
+        const currentAttendeeCount =
+          eventParticipantsInfo?.participants?.length ?? 0;
+
+        return {
+          ...event,
+          currentAttendeeCount,
+        };
+      });
 
       return {
-        totalEvents: avaliableEvents.length,
-        events: avaliableEvents,
+        totalEvents: updatedEvents.length,
+        events: updatedEvents,
       };
     } catch (error) {
       this.logger.error(

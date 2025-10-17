@@ -27,6 +27,8 @@ export const UPDATED_EVENT_MOCK_DB = {
     name: 'A Coruña',
   },
   tags: ['Meal', 'Music'],
+  currentAttendeeCount: 10,
+  maxCapacity: 50,
   createdAt: currentDate,
   updatedAt: currentDate,
   updatedBy: '665f019c17331ebee550b2f5',
@@ -50,6 +52,7 @@ export const FUTURE_EVENT_MOCK_DB = {
     name: 'A Coruña',
   },
   tags: ['Meal', 'Music'],
+  currentAttendeeCount: 0,
   createdAt: currentDate,
   updatedAt: currentDate,
 };
@@ -69,6 +72,7 @@ export const EVENT_CORE_FIELDS_MOCK_DB = {
   location: {
     name: 'A Coruña',
   },
+  currentAttendeeCount: 0,
   createdBy: 'esmorga.test.03@yopmail.com',
   createdAt: currentDate,
   updatedAt: currentDate,
@@ -93,6 +97,7 @@ export const OLD_EVENT_MOCK_DB = {
     name: 'Vigo',
   },
   tags: ['Shoots', 'Sports'],
+  currentAttendeeCount: 0,
   createdAt: currentDate,
   updatedAt: currentDate,
 };

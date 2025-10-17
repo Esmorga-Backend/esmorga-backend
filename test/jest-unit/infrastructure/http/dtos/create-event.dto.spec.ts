@@ -574,4 +574,38 @@ describe('[unit-test] [CreateEventDto]', () => {
       });
     });
   });
+
+  describe('[UpdateEventDto] [maxCapacity]', () => {
+    it('Should only accept number values', async () => {
+      const event: any = { ...CREATE_EVENT_MOCK };
+
+      event.maxCapacity = 'invalid type';
+
+      const createEventDto = plainToInstance(CreateEventDto, event);
+
+      const errors = await validate(createEventDto, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('maxCapacity');
+      expect(errors[0].constraints).toEqual({
+        isNumber: 'maxCapacity must be a number',
+      });
+    });
+
+    it('Should only accept number values greater than 0', async () => {
+      const event: any = { ...CREATE_EVENT_MOCK };
+
+      event.maxCapacity = -2;
+
+      const createEventDto = plainToInstance(CreateEventDto, event);
+
+      const errors = await validate(createEventDto, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('maxCapacity');
+      expect(errors[0].constraints).toEqual({
+        isPositive: 'maxCapacity must be greater than 0',
+      });
+    });
+  });
 });

@@ -9,6 +9,7 @@ import {
   IsNumber,
   IsObject,
   IsOptional,
+  IsPositive,
   IsString,
   Matches,
   MaxLength,
@@ -170,4 +171,10 @@ export class UpdateEventDto {
       : value;
   })
   tags?: string[];
+
+  @ApiPropertyOptional({ example: 50 })
+  @IsPositive({ message: 'maxCapacity must be greater than 0' })
+  @IsNumber({}, { message: 'maxCapacity must be a number' })
+  @IsOptional()
+  maxCapacity?: number;
 }

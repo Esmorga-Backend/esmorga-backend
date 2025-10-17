@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PinoLogger } from 'nestjs-pino';
-import { DataBaseInternalError, DataBaseBadRequestError } from '../errors';
+import { DataBaseInternalError } from '../errors';
 import { EventParticipantsDA } from '../modules/none/event-participant-da';
 import { EventParticipantsDto } from '../../dtos';
 
@@ -17,18 +17,19 @@ export class EventParticipantsRepository {
    * @param eventId - Event identifier.
    * @param userId - User identifier.
    * @param requestId - Request identifier for API logger.
+   * @returns True if the user was added to the participant list, false otherwise.
    */
   async updateParticipantList(
     eventId: string,
     userId: string,
     requestId?: string,
-  ) {
+  ): Promise<boolean> {
     try {
       this.logger.info(
         `[EventParticipantsRepository] [updateParticipantList] - x-request-id: ${requestId}, eventId: ${eventId}, userId: ${userId}`,
       );
 
-      await this.eventParticipantDA.findAndUpdateParticipantsList(
+      return this.eventParticipantDA.findAndUpdateParticipantsList(
         eventId,
         userId,
       );
@@ -89,21 +90,48 @@ export class EventParticipantsRepository {
    * @param eventId - Event identifier.
    * @param userId - User identifier.
    * @param requestId - Request identifier for API logger.
+   * @returns True if the user was removed from the participant list, false otherwise.
    */
   async disjoinParticipantList(
     eventId: string,
     userId: string,
     requestId?: string,
-  ) {
+  ): Promise<boolean> {
     try {
       this.logger.info(
         `[EventParticipantsRepository] [disjoinParticipantList] - x-request-id: ${requestId}, eventId: ${eventId}, userId: ${userId}`,
       );
 
-      await this.eventParticipantDA.removeParticipantFromList(eventId, userId);
+      return this.eventParticipantDA.removeParticipantFromList(eventId, userId);
     } catch (error) {
       this.logger.error(
         `[EventParticipantsRepository] [disjoinParticipantList] - x-request-id: ${requestId}, error: ${error}`,
+      );
+
+      throw error;
+    }
+  }
+
+  /**
+   * Return all the events with the participants.
+   *
+   * @param requestId - Request identifier for API logger.
+   * @returns The data of the participants of all events.
+   */
+  async getAllEventsParticipantList(
+    eventId: string,
+    requestId?: string,
+  ): Promise<EventParticipantsDto[]> {
+    try {
+      this.logger.info(
+        `[EventParticipantsRepository] [getAllEventsParticipantList] - x-request-id: ${requestId}, eventId: ${eventId}`,
+      );
+      const events: EventParticipantsDto[] =
+        await this.eventParticipantDA.find();
+      return events;
+    } catch (error) {
+      this.logger.error(
+        `[EventParticipantsRepository] [getAllEventsParticipantList] - x-request-id: ${requestId}, error: ${error}`,
       );
 
       throw error;
