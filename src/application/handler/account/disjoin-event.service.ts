@@ -12,6 +12,7 @@ import {
 import {
   InvalidEventIdApiError,
   InvalidTokenApiError,
+  NotAcceptableFullEventApiError,
   NotAccepteableDisjoinEventApiError,
 } from '../../../domain/errors';
 
@@ -54,15 +55,24 @@ export class DisjoinEventService {
         throw new NotAccepteableDisjoinEventApiError();
       }
 
-      // if (joinDeadline < new Date()) {
-      //   throw new NotAcceptableFullEventApiError();
-      // }
+      if (joinDeadline < new Date()) {
+        throw new NotAcceptableFullEventApiError();
+      }
 
-      await this.eventParticipantsRepository.disjoinParticipantList(
-        eventId,
-        uuid,
-        requestId,
-      );
+      const participantRemoved =
+        await this.eventParticipantsRepository.disjoinParticipantList(
+          eventId,
+          uuid,
+          requestId,
+        );
+
+      if (participantRemoved) {
+        await this.eventRepository.decreaseAttendeeCount(
+          uuid,
+          eventId,
+          requestId,
+        );
+      }
     } catch (error) {
       this.logger.error(
         `[DisjoinEventService] [disJoinEvent] - x-request-id: ${requestId}, error ${error}`,

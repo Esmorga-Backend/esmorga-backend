@@ -6,6 +6,8 @@ export const REQUIRED_DTO_FIELDS = {
     'eventType',
     'description',
     'location.name',
+    'currentAttendeeCount',
+    'joinDeadline',
   ],
   UPDATE_EVENT: ['eventId'],
   USER_PROFILE: ['uuid', 'name', 'lastName', 'email', 'role'],
