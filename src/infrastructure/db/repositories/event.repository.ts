@@ -253,4 +253,58 @@ export class EventRepository {
       throw new DataBaseInternalError();
     }
   }
+
+  /**
+   * Update attendee count for event found by eventId.
+   *
+   * @uuid - User identifier.
+   * @param eventId - Event identifier.
+   * @param requestId - Request identifier for API logger.
+   */
+  async incrementAttendeeCount(
+    uuid: string,
+    eventId: string,
+    requestId?: string,
+  ) {
+    try {
+      this.logger.info(
+        `[EventRepository] [incrementAttendeeCount] - x-request-id: ${requestId}, eventId: ${eventId}`,
+      );
+
+      await this.eventDA.incrementAttendeeCount(eventId, uuid);
+    } catch (error) {
+      this.logger.error(
+        `[EventRepository] [incrementAttendeeCount] - x-request-id: ${requestId}, error: ${error}`,
+      );
+
+      throw new DataBaseInternalError();
+    }
+  }
+
+  /**
+   * Update attendee count for event found by eventId.
+   *
+   * @uuid - User identifier.
+   * @param eventId - Event identifier.
+   * @param requestId - Request identifier for API logger.
+   */
+  async decreaseAttendeeCount(
+    uuid: string,
+    eventId: string,
+    requestId?: string,
+  ) {
+    try {
+      this.logger.info(
+        `[EventRepository] [decreaseAttendeeCount] - x-request-id: ${requestId}, eventId: ${eventId}`,
+      );
+
+      await this.eventDA.decreaseAttendeeCount(eventId, uuid);
+    } catch (error) {
+      this.logger.error(
+        `[EventRepository] [decreaseAttendeeCount] - x-request-id: ${requestId}, error: ${error}`,
+      );
+
+      throw new DataBaseInternalError();
+    }
+  }
 }

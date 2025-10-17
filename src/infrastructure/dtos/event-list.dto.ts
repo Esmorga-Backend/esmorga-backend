@@ -8,7 +8,7 @@ export class EventListDto {
   @ApiProperty({ example: 1 })
   totalEvents: number;
 
-  @IsArray()   
+  @IsArray()
   @ValidateNested({ each: true })
   @Type(() => EventDto)
   @ApiProperty({ type: [EventDto] })

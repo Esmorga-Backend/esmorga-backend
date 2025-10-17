@@ -7,6 +7,7 @@ import {
   OLD_EVENT_MOCK_DTO,
 } from '../../../../mocks/db';
 import { EventDA } from '../../../../../src/infrastructure/db/modules/none/event-da';
+import { EventParticipantsDA } from '../../../../../src/infrastructure/db/modules/none/event-participant-da';
 
 export const getEventsSteps: StepDefinitions = ({ given, and, then }) => {
   given('the GET Events API is available', () => {
@@ -14,6 +15,10 @@ export const getEventsSteps: StepDefinitions = ({ given, and, then }) => {
 
     context.eventDA = moduleFixture.get<EventDA>(EventDA);
     jest.spyOn(context.eventDA, 'find').mockResolvedValue([]);
+
+    context.eventParticipantsDA =
+      moduleFixture.get<EventParticipantsDA>(EventParticipantsDA);
+    jest.spyOn(context.eventParticipantsDA, 'find').mockResolvedValue([]);
   });
 
   given('the GET Events API is unavailable', () => {

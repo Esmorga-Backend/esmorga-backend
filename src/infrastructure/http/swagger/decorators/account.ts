@@ -98,6 +98,9 @@ export function SwaggerJoinEvent() {
     ApiNoContentResponse(JOIN_EVENT_RESPONSES.NO_CONTENT),
     ApiBadRequestResponse(JOIN_EVENT_RESPONSES.BAD_REQUEST_ERROR),
     ApiUnauthorizedResponse(JOIN_EVENT_RESPONSES.UNAUTHORIZED_ERROR),
+    ApiUnprocessableEntityResponse(
+      JOIN_EVENT_RESPONSES.UNPROCESABLE_CONTENT_ERROR,
+    ),
     ApiNotAcceptableResponse(JOIN_EVENT_RESPONSES.NOT_ACCEPTABLE_ERROR),
     ApiTooManyRequestsResponse(JOIN_EVENT_RESPONSES.TOO_MANY_REQUESTS_ERROR),
     ApiInternalServerErrorResponse(JOIN_EVENT_RESPONSES.INTERNAL_ERROR),

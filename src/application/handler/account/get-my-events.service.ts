@@ -6,7 +6,7 @@ import {
   EventRepository,
   EventParticipantsRepository,
 } from '../../../infrastructure/db/repositories';
-import { filterAvaliableEvents } from '../../../domain/services';
+import { filterAvailableEvents } from '../../../domain/services';
 import { DataBaseUnathorizedError } from '../../../infrastructure/db/errors';
 import { InvalidTokenApiError } from '../../../domain/errors';
 
@@ -46,11 +46,11 @@ export class GetMyEventsService {
       const events: EventDto[] =
         await this.eventRepository.getEventListByEventsIds(eventIds, requestId);
 
-      const avaliableEvents = filterAvaliableEvents(events);
+      const availableEvents = filterAvailableEvents(events);
 
       const eventList: EventListDto = {
-        totalEvents: avaliableEvents.length,
-        events: avaliableEvents,
+        totalEvents: availableEvents.length,
+        events: availableEvents,
       };
 
       return eventList;

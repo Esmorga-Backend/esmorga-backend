@@ -76,7 +76,7 @@ export const CREATE_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
 
 export const GET_EVENTS_RESPONSES: { [key: string]: ApiResponseOptions } = {
   OK: {
-    description: 'List of avaliable events',
+    description: 'List of available events',
     type: EventListDto,
   },
   TOO_MANY_REQUESTS_ERROR: {

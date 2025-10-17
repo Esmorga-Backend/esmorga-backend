@@ -272,6 +272,28 @@ export const JOIN_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
       },
     },
   },
+  UNPROCESABLE_CONTENT_ERROR: {
+    description: 'The event is full',
+    schema: {
+      type: 'object',
+      properties: {
+        title: {
+          type: 'string',
+          example: 'unprocesableContentError',
+        },
+        status: { type: 'number', example: HttpStatus.UNPROCESSABLE_ENTITY },
+        type: { type: 'string', example: PATHS.JOIN_EVENT },
+        detail: {
+          type: 'string',
+          example: 'maximum capacity reached',
+        },
+        errors: {
+          type: 'array',
+          example: ['event cannot accept more attendees'],
+        },
+      },
+    },
+  },
   NOT_ACCEPTABLE_ERROR: {
     description: 'Can not join celebrated events',
     schema: {
@@ -377,7 +399,7 @@ export const DISJOIN_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
 
 export const GET_MY_EVENTS_RESPONSES: { [key: string]: ApiResponseOptions } = {
   OK: {
-    description: 'List of avaliable events user joined',
+    description: 'List of available events user joined',
     type: EventListDto,
   },
   UNAUTHORIZED_ERROR: {
