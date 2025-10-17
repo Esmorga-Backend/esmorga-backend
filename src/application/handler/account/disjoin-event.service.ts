@@ -45,7 +45,7 @@ export class DisjoinEventService {
         requestId,
       );
 
-      const { eventDate } = await this.eventRepository.getEvent(
+      const { eventDate, joinDeadline } = await this.eventRepository.getEvent(
         eventId,
         requestId,
       );
@@ -53,6 +53,10 @@ export class DisjoinEventService {
       if (eventDate < new Date()) {
         throw new NotAccepteableDisjoinEventApiError();
       }
+
+      // if (joinDeadline < new Date()) {
+      //   throw new NotAcceptableFullEventApiError();
+      // }
 
       await this.eventParticipantsRepository.disjoinParticipantList(
         eventId,

@@ -45,12 +45,13 @@ export class JoinEventService {
         requestId,
       );
 
-      const { eventDate } = await this.eventRepository.getEvent(
+      const { eventDate, joinDeadline } = await this.eventRepository.getEvent(
         eventId,
         requestId,
       );
 
       if (eventDate < new Date()) throw new NotAcceptableEventApiError();
+      // if (joinDeadline < new Date()) throw new NotAcceptableFullEventApiError();
 
       await this.eventParticipantsRepository.updateParticipantList(
         eventId,

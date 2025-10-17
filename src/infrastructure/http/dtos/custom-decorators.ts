@@ -1,4 +1,8 @@
-import { ValidationOptions, registerDecorator } from 'class-validator';
+import {
+  ValidationArguments,
+  ValidationOptions,
+  registerDecorator,
+} from 'class-validator';
 
 function isValidISODate(eventDate: string): boolean {
   const [datePart, timePartWithZ] = eventDate.split('T');
@@ -82,6 +86,36 @@ export function IsNotEmptyObject(validationOptions?: ValidationOptions) {
             value !== null &&
             Object.keys(value).length > 0
           );
+        },
+      },
+    });
+  };
+}
+
+export function IsBeforeDateProperty(
+  eventDate: string,
+  validationOptions?: ValidationOptions,
+) {
+  return function (object: object, propertyName: string) {
+    registerDecorator({
+      target: object.constructor,
+      propertyName,
+      options: validationOptions,
+      constraints: [eventDate],
+      validator: {
+        validate(value: any, args: ValidationArguments) {
+          if (value === undefined || value === null) {
+            return true;
+          }
+
+          const [property] = args.constraints;
+          const relatedValue = (args.object as Record<string, any>)[property];
+
+          if (relatedValue === undefined || relatedValue === null) {
+            return true;
+          }
+
+          return new Date(value) <= new Date(relatedValue);
         },
       },
     });

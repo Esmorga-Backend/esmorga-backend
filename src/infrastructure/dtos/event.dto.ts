@@ -105,4 +105,15 @@ export class EventDto {
     maxLength: 25,
   })
   tags?: string[];
+
+  @Expose()
+  @Transform(({ value, obj }) =>
+    (value ?? obj.eventDate) || obj.eventDate < value ? obj.eventDate : value,
+  )
+  @ApiProperty({
+    example: '2024-03-03T10:05:30.915Z',
+    format: 'date-time',
+  })
+  @IsString()
+  joinDeadline: string;
 }

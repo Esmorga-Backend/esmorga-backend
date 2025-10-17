@@ -24,6 +24,9 @@ export class Event {
   @Prop({ required: false })
   imageUrl: string;
 
+  @Prop({ required: false })
+  joinDeadline: string;
+
   @Prop({ required: true })
   createdBy: string;
 

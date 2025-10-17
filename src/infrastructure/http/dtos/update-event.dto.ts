@@ -170,4 +170,17 @@ export class UpdateEventDto {
       : value;
   })
   tags?: string[];
+
+  @ApiPropertyOptional({
+    example: '3000-02-27T10:05:30.915Z',
+    format: 'date-time',
+  })
+  @IsOptional()
+  @IsNotPastDate({ message: 'joinDeadline cannot be in the past' })
+  @IsValidDate({ message: 'joinDeadline must be valid' })
+  @Matches(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/, {
+    message: 'joinDeadline must be in ISO format (yyyy-MM-ddTHH:mm:ss.SSSZ)',
+  })
+  @IsString()
+  joinDeadline?: string;
 }
