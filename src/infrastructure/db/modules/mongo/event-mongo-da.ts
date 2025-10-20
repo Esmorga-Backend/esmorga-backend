@@ -71,15 +71,24 @@ export class EventMongoDA implements EventDA {
 
   async incrementAttendeeCount(eventId: string, uuid: string): Promise<void> {
     await this.eventModel.updateOne(
-      { _id: { $eq: eventId } },
-      { $inc: { currentAttendeeCount: 1 }, $set: { updatedBy: uuid } },
+      { _id: eventId },
+      {
+        $inc: { currentAttendeeCount: 1 },
+        $set: { updatedBy: uuid },
+      },
+      { timestamps: true },
     );
   }
 
   async decreaseAttendeeCount(eventId: string, uuid: string): Promise<void> {
+    const filter = { _id: eventId, currentAttendeeCount: { $gt: 0 } };
     await this.eventModel.updateOne(
-      { _id: { $eq: eventId }, currentAttendeeCount: { $gt: 0 } },
-      { $inc: { currentAttendeeCount: -1 }, $set: { updatedBy: uuid } },
+      filter,
+      {
+        $inc: { currentAttendeeCount: -1 },
+        $set: { updatedBy: uuid },
+      },
+      { timestamps: true },
     );
   }
 }
