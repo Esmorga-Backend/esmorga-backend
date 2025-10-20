@@ -119,6 +119,9 @@ export function SwaggerDisjoinEvent() {
     ApiNoContentResponse(DISJOIN_EVENT_RESPONSES.NO_CONTENT),
     ApiBadRequestResponse(DISJOIN_EVENT_RESPONSES.BAD_REQUEST_ERROR),
     ApiUnauthorizedResponse(DISJOIN_EVENT_RESPONSES.UNAUTHORIZED_ERROR),
+    ApiUnprocessableEntityResponse(
+      DISJOIN_EVENT_RESPONSES.UNPROCESABLE_CONTENT_ERROR,
+    ),
     ApiNotAcceptableResponse(DISJOIN_EVENT_RESPONSES.NOT_ACCEPTABLE_ERROR),
     ApiTooManyRequestsResponse(DISJOIN_EVENT_RESPONSES.TOO_MANY_REQUESTS_ERROR),
     ApiInternalServerErrorResponse(DISJOIN_EVENT_RESPONSES.INTERNAL_ERROR),
