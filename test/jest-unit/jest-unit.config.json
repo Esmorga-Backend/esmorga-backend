@@ -24,7 +24,8 @@
   ],
   "testPathIgnorePatterns": [
     "/node_modules/",
-    "/test/jest-component/"
+    "/test/jest-component/",
+    "/test/playwright-e2e/"
   ],
   "coverageReporters": [
     "json",
