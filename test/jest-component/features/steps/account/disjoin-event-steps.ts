@@ -43,6 +43,10 @@ export const disjoinEventSteps: StepDefinitions = ({ given, and }) => {
     jest
       .spyOn(context.eventParticipantsDA, 'removeParticipantFromList')
       .mockResolvedValue(null);
+
+    jest
+      .spyOn(context.eventDA, 'decreaseAttendeeCount')
+      .mockResolvedValue(null);
   });
 
   // TC-102

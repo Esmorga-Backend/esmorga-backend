@@ -37,22 +37,44 @@ export class EventParticipantsMongoDA implements EventParticipantsDA {
   async findAndUpdateParticipantsList(
     eventId: string,
     userId: string,
-  ): Promise<void> {
-    await this.eventParticipantsModel.findOneAndUpdate(
-      { eventId },
+  ): Promise<boolean> {
+    const result = await this.eventParticipantsModel.updateOne(
+      { eventId: { $eq: eventId }, participants: { $ne: userId } },
       { $addToSet: { participants: userId } },
-      { upsert: true },
     );
+
+    if (result.modifiedCount > 0) {
+      return true;
+    }
+
+    if (result.matchedCount > 0) {
+      return false;
+    }
+
+    const upsertResult = await this.eventParticipantsModel.updateOne(
+      { eventId: { $eq: eventId } },
+      { $addToSet: { participants: userId } },
+      { upsert: true, timestamps: false },
+    );
+
+    return Boolean(upsertResult.modifiedCount || upsertResult.upsertedCount);
   }
 
   async removeParticipantFromList(
     eventId: string,
     userId: string,
-  ): Promise<void> {
-    await this.eventParticipantsModel.updateOne(
-      { eventId },
+  ): Promise<boolean> {
+    const result = await this.eventParticipantsModel.updateOne(
+      { eventId: { $eq: eventId }, participants: userId },
       { $pull: { participants: userId } },
+      { timestamps: false },
     );
+
+    if (result.modifiedCount > 0) {
+      return true;
+    }
+
+    return false;
   }
 
   async findEvent(eventId: string): Promise<EventParticipantsDto | null> {
@@ -65,5 +87,15 @@ export class EventParticipantsMongoDA implements EventParticipantsDA {
     return plainToInstance(EventParticipantsDto, eventParcipantsDoc, {
       excludeExtraneousValues: true,
     });
+  }
+
+  async find(): Promise<EventParticipantsDto[]> {
+    const eventsParcipantsDocs = await this.eventParticipantsModel.find();
+
+    return eventsParcipantsDocs.map((event) =>
+      plainToInstance(EventParticipantsDto, event, {
+        excludeExtraneousValues: true,
+      }),
+    );
   }
 }
