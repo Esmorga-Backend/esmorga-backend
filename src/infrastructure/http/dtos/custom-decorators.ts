@@ -35,6 +35,8 @@ export function IsValidDate(validationOptions?: ValidationOptions) {
       constraints: [],
       validator: {
         validate(value: any) {
+          if (value === undefined || value === null || value === '')
+            return true;
           return typeof value === 'string' && isValidISODate(value);
         },
       },
@@ -50,6 +52,8 @@ export function IsNotPastDate(validationOptions?: ValidationOptions) {
       options: validationOptions,
       validator: {
         validate(value: any) {
+          if (value === undefined || value === null || value === '')
+            return true;
           const date = new Date(value);
           return date > new Date();
         },
@@ -104,14 +108,18 @@ export function IsBeforeDateProperty(
       constraints: [eventDate],
       validator: {
         validate(value: any, args: ValidationArguments) {
-          if (value === undefined || value === null) {
+          if (value === undefined || value === null || value === '') {
             return true;
           }
 
           const [property] = args.constraints;
           const relatedValue = (args.object as Record<string, any>)[property];
 
-          if (relatedValue === undefined || relatedValue === null) {
+          if (
+            relatedValue === undefined ||
+            relatedValue === null ||
+            relatedValue === ''
+          ) {
             return true;
           }
 
