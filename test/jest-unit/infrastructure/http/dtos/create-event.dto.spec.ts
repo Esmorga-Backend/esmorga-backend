@@ -113,6 +113,7 @@ describe('[unit-test] [CreateEventDto]', () => {
       const event = { ...CREATE_EVENT_MOCK };
 
       event.eventDate = '2020-03-08T10:65:30.915Z';
+      delete event.joinDeadline;
 
       const createEventDto = plainToInstance(CreateEventDto, event);
 
@@ -129,6 +130,7 @@ describe('[unit-test] [CreateEventDto]', () => {
       const event = { ...CREATE_EVENT_MOCK };
 
       event.eventDate = '2020-03-08T10:05:30.915Z';
+      delete event.joinDeadline;
 
       const createEventDto = plainToInstance(CreateEventDto, event);
 
@@ -145,6 +147,7 @@ describe('[unit-test] [CreateEventDto]', () => {
       const event = { ...CREATE_EVENT_MOCK };
 
       event.eventDate = '02-02-1996T03:04:05.000Z';
+      delete event.joinDeadline;
 
       const createEventDto = plainToInstance(CreateEventDto, event);
 
@@ -161,6 +164,7 @@ describe('[unit-test] [CreateEventDto]', () => {
       const event: any = { ...CREATE_EVENT_MOCK };
 
       event.eventDate = 123;
+      delete event.joinDeadline;
 
       const createEventDto = plainToInstance(CreateEventDto, event);
 
