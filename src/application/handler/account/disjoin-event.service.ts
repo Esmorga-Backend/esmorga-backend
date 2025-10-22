@@ -13,7 +13,7 @@ import {
   InvalidEventIdApiError,
   InvalidTokenApiError,
   NotAcceptableFullEventApiError,
-  NotAccepteableDisjoinEventApiError,
+  NotAcceptableDisjoinEventApiError,
 } from '../../../domain/errors';
 
 @Injectable()
@@ -31,7 +31,7 @@ export class DisjoinEventService {
    * @param sessionId - Client session id.
    * @param eventId - Event identifier.
    * @param requestId - Request identifier.
-   * @throws NotAccepteableDisjoinEventApiError - User can not disjoin from a celebrated event.
+   * @throws NotAcceptableDisjoinEventApiError - User can not disjoin from a celebrated event.
    * @throws InvalidTokenApiError - No user found for the current session.
    * @throws InvalidEventIdApiError - EventId is not valid follwing DB schema ot not found.
    */
@@ -52,7 +52,7 @@ export class DisjoinEventService {
       );
 
       if (eventDate < new Date()) {
-        throw new NotAccepteableDisjoinEventApiError();
+        throw new NotAcceptableDisjoinEventApiError();
       }
 
       if (joinDeadline < new Date()) {

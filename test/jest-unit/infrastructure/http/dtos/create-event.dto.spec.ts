@@ -575,7 +575,7 @@ describe('[unit-test] [CreateEventDto]', () => {
     });
   });
 
-  describe('[UpdateEventDto] [maxCapacity]', () => {
+  describe('[CreateEventDto] [maxCapacity]', () => {
     it('Should only accept number values', async () => {
       const event: any = { ...CREATE_EVENT_MOCK };
 
@@ -609,7 +609,7 @@ describe('[unit-test] [CreateEventDto]', () => {
     });
   });
 
-  describe('[UpdateEventDto] [joinDeadline]', () => {
+  describe('[CreateEventDto] [joinDeadline]', () => {
     it('Should not accept invalid dates', async () => {
       const event = { ...CREATE_EVENT_MOCK };
 
