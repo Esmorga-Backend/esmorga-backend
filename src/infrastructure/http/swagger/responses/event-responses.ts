@@ -236,16 +236,6 @@ export const GET_EVENT_USERS_RESPONSES: { [key: string]: ApiResponseOptions } =
         },
       },
     },
-    FORBIDDEN_ERROR: {
-      description: 'Not enough privileges',
-      schema: {
-        type: 'object',
-        properties: {
-          ...FORBIDDEN_INVALID_ROLE_COMMON_PROPERTIES,
-          type: { example: PATHS.GET_EVENT_USERS },
-        },
-      },
-    },
     NOT_FOUND_ERROR: {
       description: 'EventId not found',
       schema: {
