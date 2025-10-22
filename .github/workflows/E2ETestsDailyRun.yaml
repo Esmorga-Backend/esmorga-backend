@@ -27,18 +27,25 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 22.1
 
       - name: Install dependencies
         run: npm ci
 
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
       - name: Notify Slack - Test Runner Starting
-        uses: slackapi/slack-github-action@v1.25.0
-        with:
-          channel-id: ${{ secrets.SLACK_E2E_CHANNEL }}
-          slack-message: "🚀 Playwright E2E test runner is starting."
         env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_TOKEN }}
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          if [ -z "$SLACK_WEBHOOK" ]; then
+            echo "SLACK_WEBHOOK_URL secret is not set"
+            exit 1
+          fi
+          curl -s -X POST -H 'Content-type: application/json' \
+            --data '{"text":"🚀 Playwright E2E test runner is starting."}' \
+            "$SLACK_WEBHOOK"
 
       - name: Run Playwright tests
         run: npx playwright test --reporter=html
@@ -50,11 +57,14 @@ jobs:
           path: playwright-report
 
       - name: Notify Slack - Test Runner Finished
-        uses: slackapi/slack-github-action@v1.25.0
-        with:
-          channel-id: ${{ secrets.SLACK_E2E_CHANNEL }}
-          slack-message: |
-            ✅ Playwright E2E test runner finished.  
-            View report: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}>
         env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_TOKEN }}
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+          REPORT_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          if [ -z "$SLACK_WEBHOOK" ]; then
+            echo "SLACK_WEBHOOK_URL secret is not set"
+            exit 1
+          fi
+          curl -s -X POST -H 'Content-type: application/json' \
+            --data "{\"text\":\"✅ Playwright E2E test runner finished. View report: <$REPORT_URL>\"}" \
+            "$SLACK_WEBHOOK"
