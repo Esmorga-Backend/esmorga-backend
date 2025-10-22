@@ -192,7 +192,6 @@ export class EventController {
   @SwaggerGetEventUsers()
   @HttpCode(200)
   async getEventUsers(
-    @SessionId() sessionId: string,
     @Param('eventId') eventId: string,
     @RequestId() requestId: string,
   ): Promise<UserListDto> {
@@ -202,11 +201,7 @@ export class EventController {
       );
 
       const response: UserListDto =
-        await this.getEventUsersListService.getUsersList(
-          sessionId,
-          eventId,
-          requestId,
-        );
+        await this.getEventUsersListService.getUsersList(eventId, requestId);
 
       return response;
     } catch (error) {

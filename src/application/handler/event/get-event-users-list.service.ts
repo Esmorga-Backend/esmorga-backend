@@ -6,11 +6,7 @@ import {
   EventParticipantsRepository,
   EventRepository,
 } from '../../../infrastructure/db/repositories';
-import { ACCOUNT_ROLES } from '../../../domain/const';
-import {
-  NotFoundEventIdApiError,
-  NotAdminAccountApiError,
-} from '../../../domain/errors';
+import { NotFoundEventIdApiError } from '../../../domain/errors';
 import {
   EventParticipantsDto,
   UserListDto,
@@ -35,7 +31,6 @@ export class GetEventUsersListService {
    * @throws NotFoundEventIdApiError - EventId is not valid following DB schema ot not found.
    */
   async getUsersList(
-    sessionId: string,
     eventId: string,
     requestId?: string,
   ): Promise<UserListDto> {
@@ -43,18 +38,6 @@ export class GetEventUsersListService {
       this.logger.info(
         `[GetEventUsersListService] [getUsers] - x-request-id: ${requestId}, eventId ${eventId}`,
       );
-
-      const { uuid } = await this.sessionRepository.getBySessionId(
-        sessionId,
-        requestId,
-      );
-
-      const { role } = await this.accountRepository.getUserById(
-        uuid,
-        requestId,
-      );
-
-      if (role !== ACCOUNT_ROLES.ADMIN) throw new NotAdminAccountApiError();
 
       await this.eventRepository.findOneByEventId(eventId);
 
