@@ -12,7 +12,6 @@ import { UserDA } from '../../../../../src/infrastructure/db/modules/none/user-d
 import { SessionDA } from '../../../../../src/infrastructure/db/modules/none/session-da';
 import { EventParticipantsDA } from '../../../../../src/infrastructure/db/modules/none/event-participant-da';
 import { SESSION_ID } from '../../../../mocks/db/common';
-import { ACCOUNT_ROLES } from '../../../../../src/domain/const';
 import { EventDA } from '../../../../../src/infrastructure/db/modules/none/event-da';
 
 export const getEventUsersList: StepDefinitions = ({ given, and }) => {
@@ -39,13 +38,6 @@ export const getEventUsersList: StepDefinitions = ({ given, and }) => {
     jest
       .spyOn(context.sessionDA, 'findOneBySessionId')
       .mockResolvedValue(SESSION_MOCK_DB);
-
-    const ADMIN_USER = {
-      ...(await getUserProfile()),
-      role: ACCOUNT_ROLES.ADMIN,
-    };
-
-    jest.spyOn(context.userDA, 'findOneById').mockResolvedValue(ADMIN_USER);
 
     jest.spyOn(context.eventDA, 'findOneById').mockResolvedValue(EVENT_MOCK);
 
