@@ -101,7 +101,6 @@ export function SwaggerGetEventUsers() {
     ApiParam(GET_EVENT_USERS_LIST_PARAM),
     ApiOkResponse(GET_EVENT_USERS_RESPONSES.OK),
     ApiUnauthorizedResponse(GET_EVENT_USERS_RESPONSES.UNAUTHORIZED_ERROR),
-    ApiForbiddenResponse(GET_EVENT_USERS_RESPONSES.FORBIDDEN_ERROR),
     ApiNotFoundResponse(GET_EVENT_USERS_RESPONSES.NOT_FOUND_ERROR),
     ApiTooManyRequestsResponse(
       GET_EVENT_USERS_RESPONSES.TOO_MANY_REQUESTS_ERROR,
