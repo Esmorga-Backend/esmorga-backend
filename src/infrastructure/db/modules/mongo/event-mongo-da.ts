@@ -56,11 +56,19 @@ export class EventMongoDA implements EventDA {
     eventId: string,
     eventUpdate: Partial<EventDto>,
   ): Promise<EventDto | null> {
+    const update: any = { $set: eventUpdate };
+
+    if (eventUpdate && eventUpdate.joinDeadline === null) {
+      update.$unset = { joinDeadline: 1 };
+      delete update.$set.joinDeadline;
+    }
+
     const updatedEvent = await this.eventModel.findOneAndUpdate(
       { _id: eventId },
-      { $set: eventUpdate },
+      update,
       { new: true },
     );
+
     return plainToInstance(EventDto, updatedEvent, {
       excludeExtraneousValues: true,
     });

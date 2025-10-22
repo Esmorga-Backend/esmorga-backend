@@ -77,6 +77,16 @@ export class UpdateEventService {
         }
       }
 
+      if (
+        updateEventDto.eventDate &&
+        updateEventDto.joinDeadline === undefined &&
+        existingEvent.joinDeadline != null &&
+        new Date(existingEvent.joinDeadline) >
+          new Date(updateEventDto.eventDate)
+      ) {
+        updateEventDto.joinDeadline = null;
+      }
+
       if (updateEventDto.location) {
         updateEventDto.location = {
           ...existingEvent.location,
