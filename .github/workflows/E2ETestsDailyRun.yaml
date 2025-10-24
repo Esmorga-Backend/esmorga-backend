@@ -52,10 +52,7 @@ jobs:
           USER_3_EMAIL: ${{ vars.PW_USER_3_EMAIL }}
           USER_3_PASSWORD: ${{ secrets.PW_USER_3_PASSWORD }}
           USER_EMAIL_FORGOT: ${{ vars.PW_USER_EMAIL_FORGOT }}
-        run: npx playwright test --reporter=html
-
-      - name: Open Playwright HTML report
-        run: npx playwright show-report  
+        run: npx playwright test --reporter=list
 
       - name: Upload Playwright HTML report
         if: always()
