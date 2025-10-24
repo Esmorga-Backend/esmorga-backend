@@ -33,14 +33,15 @@ jobs:
           SLACK_WEBHOOK: ${{ vars.SLACK_WEB }}
         run: |
           if [ -z "$SLACK_WEBHOOK" ]; then
-            echo "SLACK_WEBHOOK_URL secret is not set"
+            echo "SLACK_E2E_WEBHOOK secret is not set"
             exit 1
           fi
           curl -s -X POST -H 'Content-type: application/json' \
             --data '{"text":"🚀 Playwright E2E test runner is starting."}' \
             "$SLACK_WEBHOOK"
 
-      - name: Run Playwright tests
+      - name: Run Playwright tests (capture results)
+        id: run_playwright
         env:
           BASE_URL: ${{ vars.PW_BASE_URL }}
           ADMIN_USER_EMAIL: ${{ vars.PW_ADMIN_USER_EMAIL }}
@@ -52,7 +53,29 @@ jobs:
           USER_3_EMAIL: ${{ vars.PW_USER_3_EMAIL }}
           USER_3_PASSWORD: ${{ secrets.PW_USER_3_PASSWORD }}
           USER_EMAIL_FORGOT: ${{ vars.PW_USER_EMAIL_FORGOT }}
-        run: npx playwright test --reporter=list
+        run: |
+          set -euo pipefail
+          apt-get update -y
+          apt-get install -y jq
+
+          # Run playwright and dump JSON reporter output
+          npx playwright test --reporter=json > test-results.json || true
+          rc=$?
+
+          # Count statuses (robust to nested structure)
+          passed=$(jq '[.. | objects | select(.status == "passed")] | length' test-results.json || echo 0)
+          failed=$(jq '[.. | objects | select(.status == "failed")] | length' test-results.json || echo 0)
+          skipped=$(jq '[.. | objects | select(.status == "skipped")] | length' test-results.json || echo 0)
+
+          # Try to compute total duration from test duration fields (fallback to 0)
+          duration=$(jq '[.. | objects | select(has("duration")) | .duration] | add // 0' test-results.json || echo 0)
+
+          # Expose outputs for later steps
+          echo "exit_code=$rc" >> $GITHUB_OUTPUT
+          echo "passed=$passed" >> $GITHUB_OUTPUT
+          echo "failed=$failed" >> $GITHUB_OUTPUT
+          echo "skipped=$skipped" >> $GITHUB_OUTPUT
+          echo "duration=$duration" >> $GITHUB_OUTPUT
 
       - name: Upload Playwright HTML report
         if: always()
@@ -66,11 +89,26 @@ jobs:
         env:
           SLACK_WEBHOOK: ${{ vars.SLACK_WEB }}
           REPORT_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          PASSED: ${{ steps.run_playwright.outputs.passed }}
+          FAILED: ${{ steps.run_playwright.outputs.failed }}
+          SKIPPED: ${{ steps.run_playwright.outputs.skipped }}
+          DURATION: ${{ steps.run_playwright.outputs.duration }}
+          EXIT_CODE: ${{ steps.run_playwright.outputs.exit_code }}
         run: |
           if [ -z "$SLACK_WEBHOOK" ]; then
-            echo "SLACK_WEBHOOK_URL secret is not set"
+            echo "SLACK_E2E_WEBHOOK secret is not set"
             exit 1
           fi
+
+          summary="✅ Playwright E2E test runner finished.
+          Passed: ${PASSED}
+          Failed: ${FAILED}
+          Skipped: ${SKIPPED}
+          Duration(ms): ${DURATION}
+          Report: ${REPORT_URL}"
+
+          # Send a compact JSON payload to Slack
+          payload=$(jq -n --arg text "$summary" '{text:$text}')
           curl -s -X POST -H 'Content-type: application/json' \
-            --data "{\"text\":\"✅ Playwright E2E test runner finished. View report: <$REPORT_URL>\"}" \
+            --data "$payload" \
             "$SLACK_WEBHOOK"
