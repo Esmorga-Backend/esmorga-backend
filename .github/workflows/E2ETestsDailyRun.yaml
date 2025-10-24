@@ -54,6 +54,9 @@ jobs:
           USER_EMAIL_FORGOT: ${{ vars.PW_USER_EMAIL_FORGOT }}
         run: npx playwright test --reporter=html
 
+      - name: Open Playwright HTML report
+        run: npx playwright show-report  
+
       - name: Upload Playwright HTML report
         if: always()
         uses: actions/upload-artifact@v4
