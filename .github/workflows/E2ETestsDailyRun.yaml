@@ -24,7 +24,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Install Playwright browsers
+      - name: Install Playwright
         run: npx playwright install --with-deps
 
       - name: Notify Slack - Test Runner Starting
@@ -53,29 +53,9 @@ jobs:
           USER_3_EMAIL: ${{ vars.PW_USER_3_EMAIL }}
           USER_3_PASSWORD: ${{ secrets.PW_USER_3_PASSWORD }}
           USER_EMAIL_FORGOT: ${{ vars.PW_USER_EMAIL_FORGOT }}
-        run: |
-          set -euo pipefail
-          apt-get update -y
-          apt-get install -y jq
-
+        run:
           # Run playwright and dump JSON reporter output
-          npx playwright test --reporter=json > test-results.json || true
-          rc=$?
-
-          # Count statuses (robust to nested structure)
-          passed=$(jq '[.. | objects | select(.status == "passed")] | length' test-results.json || echo 0)
-          failed=$(jq '[.. | objects | select(.status == "failed")] | length' test-results.json || echo 0)
-          skipped=$(jq '[.. | objects | select(.status == "skipped")] | length' test-results.json || echo 0)
-
-          # Try to compute total duration from test duration fields (fallback to 0)
-          duration=$(jq '[.. | objects | select(has("duration")) | .duration] | add // 0' test-results.json || echo 0)
-
-          # Expose outputs for later steps
-          echo "exit_code=$rc" >> $GITHUB_OUTPUT
-          echo "passed=$passed" >> $GITHUB_OUTPUT
-          echo "failed=$failed" >> $GITHUB_OUTPUT
-          echo "skipped=$skipped" >> $GITHUB_OUTPUT
-          echo "duration=$duration" >> $GITHUB_OUTPUT
+          npx playwright test --reporter=json
 
       - name: Upload Playwright HTML report
         if: always()
@@ -101,12 +81,7 @@ jobs:
           fi
 
           summary="✅ Playwright E2E test runner finished.
-          Passed: ${PASSED}
-          Failed: ${FAILED}
-          Skipped: ${SKIPPED}
-          Duration(ms): ${DURATION}
-          Report: ${REPORT_URL}"
-
+          
           # Send a compact JSON payload to Slack
           payload=$(jq -n --arg text "$summary" '{text:$text}')
           curl -s -X POST -H 'Content-type: application/json' \
