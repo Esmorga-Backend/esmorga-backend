@@ -25,6 +25,9 @@ export class Event {
   imageUrl: string;
 
   @Prop({ required: false })
+  joinDeadline: Date;
+
+  @Prop({ required: false })
   maxCapacity: number;
 
   @Prop({ required: true, default: 0 })

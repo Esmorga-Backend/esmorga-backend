@@ -113,6 +113,7 @@ describe('[unit-test] [CreateEventDto]', () => {
       const event = { ...CREATE_EVENT_MOCK };
 
       event.eventDate = '2020-03-08T10:65:30.915Z';
+      delete event.joinDeadline;
 
       const createEventDto = plainToInstance(CreateEventDto, event);
 
@@ -129,6 +130,7 @@ describe('[unit-test] [CreateEventDto]', () => {
       const event = { ...CREATE_EVENT_MOCK };
 
       event.eventDate = '2020-03-08T10:05:30.915Z';
+      delete event.joinDeadline;
 
       const createEventDto = plainToInstance(CreateEventDto, event);
 
@@ -145,6 +147,7 @@ describe('[unit-test] [CreateEventDto]', () => {
       const event = { ...CREATE_EVENT_MOCK };
 
       event.eventDate = '02-02-1996T03:04:05.000Z';
+      delete event.joinDeadline;
 
       const createEventDto = plainToInstance(CreateEventDto, event);
 
@@ -161,6 +164,7 @@ describe('[unit-test] [CreateEventDto]', () => {
       const event: any = { ...CREATE_EVENT_MOCK };
 
       event.eventDate = 123;
+      delete event.joinDeadline;
 
       const createEventDto = plainToInstance(CreateEventDto, event);
 
@@ -575,7 +579,7 @@ describe('[unit-test] [CreateEventDto]', () => {
     });
   });
 
-  describe('[UpdateEventDto] [maxCapacity]', () => {
+  describe('[CreateEventDto] [maxCapacity]', () => {
     it('Should only accept number values', async () => {
       const event: any = { ...CREATE_EVENT_MOCK };
 
@@ -605,6 +609,57 @@ describe('[unit-test] [CreateEventDto]', () => {
       expect(errors[0].property).toEqual('maxCapacity');
       expect(errors[0].constraints).toEqual({
         isPositive: 'maxCapacity must be greater than 0',
+      });
+    });
+  });
+
+  describe('[CreateEventDto] [joinDeadline]', () => {
+    it('Should not accept invalid dates', async () => {
+      const event = { ...CREATE_EVENT_MOCK };
+
+      event.joinDeadline = '2020-03-08T10:65:30.915Z';
+
+      const createEventDto = plainToInstance(CreateEventDto, event);
+
+      const errors = await validate(createEventDto, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('joinDeadline');
+      expect(errors[0].constraints).toEqual({
+        customValidation: 'joinDeadline must be valid',
+      });
+    });
+
+    it('Should not accept past dates', async () => {
+      const event = { ...CREATE_EVENT_MOCK };
+
+      event.joinDeadline = '2020-03-08T10:05:30.915Z';
+
+      const createEventDto = plainToInstance(CreateEventDto, event);
+
+      const errors = await validate(createEventDto, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('joinDeadline');
+      expect(errors[0].constraints).toEqual({
+        customValidation: 'joinDeadline cannot be in the past',
+      });
+    });
+
+    it('Should only accept ISO format', async () => {
+      const event = { ...CREATE_EVENT_MOCK };
+
+      event.joinDeadline = '02-02-1996T03:04:05.000Z';
+
+      const createEventDto = plainToInstance(CreateEventDto, event);
+
+      const errors = await validate(createEventDto, { stopAtFirstError: true });
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('joinDeadline');
+      expect(errors[0].constraints).toEqual({
+        matches:
+          'joinDeadline must be in ISO format (yyyy-MM-ddTHH:mm:ss.SSSZ)',
       });
     });
   });

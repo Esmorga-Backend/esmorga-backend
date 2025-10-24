@@ -16,6 +16,7 @@ import {
   InvalidEventIdApiError,
   NotAdminAccountApiError,
   InvalidTokenApiError,
+  InvalidJoinDeadlineApiError,
 } from '../../../domain/errors';
 
 @Injectable()
@@ -65,6 +66,26 @@ export class UpdateEventService {
         eventId,
         requestId,
       );
+
+      if (updateEventDto.joinDeadline !== undefined) {
+        const currentEventDate =
+          updateEventDto.eventDate ?? existingEvent.eventDate;
+        if (
+          new Date(updateEventDto.joinDeadline) > new Date(currentEventDate)
+        ) {
+          throw new InvalidJoinDeadlineApiError();
+        }
+      }
+
+      if (
+        updateEventDto.eventDate &&
+        updateEventDto.joinDeadline === undefined &&
+        existingEvent.joinDeadline != null &&
+        new Date(existingEvent.joinDeadline) >
+          new Date(updateEventDto.eventDate)
+      ) {
+        updateEventDto.joinDeadline = null;
+      }
 
       if (updateEventDto.location) {
         updateEventDto.location = {

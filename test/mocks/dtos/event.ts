@@ -4,6 +4,9 @@ import { EVENT_TYPE } from '../../../src/domain/const';
 const futureDate: Date = new Date();
 futureDate.setFullYear(new Date().getFullYear() + 1);
 
+const joinDeadlineDate: Date = new Date(futureDate);
+joinDeadlineDate.setDate(joinDeadlineDate.getDate() - 1);
+
 const oldDate: Date = new Date();
 oldDate.setFullYear(new Date().getFullYear() - 1);
 
@@ -20,6 +23,8 @@ export const EVENT_MOCK: EventDto = {
     name: 'A Coruña',
   },
   tags: ['Meal', 'Music'],
+  joinDeadline: joinDeadlineDate,
+  maxCapacity: 50,
   currentAttendeeCount: 0,
 };
 

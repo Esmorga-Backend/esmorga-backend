@@ -6,6 +6,7 @@ export * from './invalid-current-password-error';
 export * from './invalid-empty-token-error';
 export * from './invalid-eventId-error';
 export * from './invalid-forgot-password-code';
+export * from './invalid-join-deadline-error';
 export * from './invalid-same-password-error';
 export * from './invalid-token-error';
 export * from './invalid-verification-code';

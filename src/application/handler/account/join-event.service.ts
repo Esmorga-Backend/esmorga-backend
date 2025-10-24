@@ -47,10 +47,12 @@ export class JoinEventService {
         requestId,
       );
 
-      const { currentAttendeeCount, eventDate, maxCapacity } =
+      const { currentAttendeeCount, eventDate, joinDeadline, maxCapacity } =
         await this.eventRepository.getEvent(eventId, requestId);
 
       if (eventDate < new Date()) throw new NotAcceptableEventApiError();
+
+      if (joinDeadline < new Date()) throw new NotAcceptableFullEventApiError();
 
       if (currentAttendeeCount >= maxCapacity)
         throw new NotAcceptableFullEventApiError();
