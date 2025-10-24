@@ -107,6 +107,15 @@ export class EventDto {
   tags?: string[];
 
   @Expose()
+  @Transform(({ value, obj }) => value ?? obj.eventDate)
+  @IsDateString()
+  @ApiProperty({
+    example: '2024-03-03T10:05:30.915Z',
+    format: 'date-time',
+  })
+  joinDeadline?: Date;
+
+  @Expose()
   @IsNumber()
   @IsOptional()
   @ApiPropertyOptional({ example: 50 })

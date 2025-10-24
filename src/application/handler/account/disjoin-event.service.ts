@@ -12,7 +12,8 @@ import {
 import {
   InvalidEventIdApiError,
   InvalidTokenApiError,
-  NotAccepteableDisjoinEventApiError,
+  NotAcceptableFullEventApiError,
+  NotAcceptableDisjoinEventApiError,
 } from '../../../domain/errors';
 
 @Injectable()
@@ -30,7 +31,7 @@ export class DisjoinEventService {
    * @param sessionId - Client session id.
    * @param eventId - Event identifier.
    * @param requestId - Request identifier.
-   * @throws NotAccepteableDisjoinEventApiError - User can not disjoin from a celebrated event.
+   * @throws NotAcceptableDisjoinEventApiError - User can not disjoin from a celebrated event.
    * @throws InvalidTokenApiError - No user found for the current session.
    * @throws InvalidEventIdApiError - EventId is not valid follwing DB schema ot not found.
    */
@@ -45,13 +46,17 @@ export class DisjoinEventService {
         requestId,
       );
 
-      const { eventDate } = await this.eventRepository.getEvent(
+      const { eventDate, joinDeadline } = await this.eventRepository.getEvent(
         eventId,
         requestId,
       );
 
       if (eventDate < new Date()) {
-        throw new NotAccepteableDisjoinEventApiError();
+        throw new NotAcceptableDisjoinEventApiError();
+      }
+
+      if (joinDeadline < new Date()) {
+        throw new NotAcceptableFullEventApiError();
       }
 
       const participantRemoved =

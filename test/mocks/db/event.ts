@@ -11,6 +11,9 @@ const currentDate: Date = new Date();
 const futureDate: Date = new Date();
 futureDate.setFullYear(new Date().getFullYear() + 1);
 
+const joinDeadlineDate: Date = new Date(futureDate);
+joinDeadlineDate.setDate(joinDeadlineDate.getDate() - 1);
+
 const oldDate: Date = new Date();
 oldDate.setFullYear(new Date().getFullYear() - 1);
 
@@ -29,6 +32,7 @@ export const UPDATED_EVENT_MOCK_DB = {
   tags: ['Meal', 'Music'],
   currentAttendeeCount: 10,
   maxCapacity: 50,
+  joinDeadline: joinDeadlineDate.toISOString(),
   createdAt: currentDate,
   updatedAt: currentDate,
   updatedBy: '665f019c17331ebee550b2f5',
@@ -53,6 +57,8 @@ export const FUTURE_EVENT_MOCK_DB = {
   },
   tags: ['Meal', 'Music'],
   currentAttendeeCount: 0,
+  maxCapacity: 50,
+  joinDeadline: joinDeadlineDate,
   createdAt: currentDate,
   updatedAt: currentDate,
 };

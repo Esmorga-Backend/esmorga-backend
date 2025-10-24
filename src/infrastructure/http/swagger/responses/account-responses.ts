@@ -272,14 +272,14 @@ export const JOIN_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
       },
     },
   },
-  UNPROCESABLE_CONTENT_ERROR: {
+  UNPROCESSABLE_CONTENT_ERROR: {
     description: 'The event is full',
     schema: {
       type: 'object',
       properties: {
         title: {
           type: 'string',
-          example: 'unprocesableContentError',
+          example: 'unprocessableContentError',
         },
         status: { type: 'number', example: HttpStatus.UNPROCESSABLE_ENTITY },
         type: { type: 'string', example: PATHS.JOIN_EVENT },
@@ -357,6 +357,28 @@ export const DISJOIN_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
       properties: {
         ...UNAUTHORIZED_INVALID_TOKEN_COMMON_PROPERTIES,
         type: { type: 'string', example: PATHS.JOIN_EVENT },
+      },
+    },
+  },
+  UNPROCESSABLE_CONTENT_ERROR: {
+    description: 'The event is full',
+    schema: {
+      type: 'object',
+      properties: {
+        title: {
+          type: 'string',
+          example: 'unprocessableContentError',
+        },
+        status: { type: 'number', example: HttpStatus.UNPROCESSABLE_ENTITY },
+        type: { type: 'string', example: PATHS.JOIN_EVENT },
+        detail: {
+          type: 'string',
+          example: 'maximum capacity reached',
+        },
+        errors: {
+          type: 'array',
+          example: ['event cannot accept more attendees'],
+        },
       },
     },
   },
@@ -642,14 +664,14 @@ export const UPDATE_PASSWORD_RESPONSES: {
       },
     },
   },
-  UNPROCESABLE_CONTENT_ERROR: {
+  UNPROCESSABLE_CONTENT_ERROR: {
     description: 'Some inputs are invalid',
     schema: {
       type: 'object',
       properties: {
         title: {
           type: 'string',
-          example: 'unprocesableContentError',
+          example: 'unprocessableContentError',
         },
         status: { type: 'number', example: HttpStatus.UNPROCESSABLE_ENTITY },
         type: { type: 'string', example: PATHS.UPDATE_PASSWORD },
