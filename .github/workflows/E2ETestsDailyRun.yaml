@@ -54,8 +54,7 @@ jobs:
           USER_3_PASSWORD: ${{ secrets.PW_USER_3_PASSWORD }}
           USER_EMAIL_FORGOT: ${{ vars.PW_USER_EMAIL_FORGOT }}
         run:
-          # Run playwright and dump JSON reporter output
-          npx playwright test --reporter=json
+          npx playwright test --reporter=html
 
       - name: Upload Playwright HTML report
         if: always()
@@ -69,21 +68,11 @@ jobs:
         env:
           SLACK_WEBHOOK: ${{ vars.SLACK_WEB }}
           REPORT_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-          PASSED: ${{ steps.run_playwright.outputs.passed }}
-          FAILED: ${{ steps.run_playwright.outputs.failed }}
-          SKIPPED: ${{ steps.run_playwright.outputs.skipped }}
-          DURATION: ${{ steps.run_playwright.outputs.duration }}
-          EXIT_CODE: ${{ steps.run_playwright.outputs.exit_code }}
         run: |
           if [ -z "$SLACK_WEBHOOK" ]; then
             echo "SLACK_E2E_WEBHOOK secret is not set"
             exit 1
           fi
-
-          summary="✅ Playwright E2E test runner finished.
-          
-          # Send a compact JSON payload to Slack
-          payload=$(jq -n --arg text "$summary" '{text:$text}')
           curl -s -X POST -H 'Content-type: application/json' \
-            --data "$payload" \
+            --data "✅ Playwright E2E test runner finished." \
             "$SLACK_WEBHOOK"
