@@ -23,13 +23,13 @@ runs:
            echo "MOCK_SERVER_USERNAME=${{ inputs.MOCK_SERVER_USERNAME }}" > test/cypress-e2e/.env
            echo "MOCK_SERVER_PASSWORD=${{ inputs.MOCK_SERVER_PASSWORD }}" >> test/cypress-e2e/.env
            npm run test:e2e-run-cypress
-        - name : Upload Results
-          shell: bash
-          if: always()
-          run: |
-                if [ "${GITHUB_HEAD_REF}" == "" ]; then
-                node test/scripts/features-tool.js report/junit-e2e.xml --Upload-Results 
-                fi
+        # - name : Upload Results
+        #   shell: bash
+        #   if: always()
+        #   run: |
+        #         if [ "${GITHUB_HEAD_REF}" == "" ]; then
+        #         node test/scripts/features-tool.js report/junit-e2e.xml --Upload-Results 
+        #         fi
         - name: remove env file
           shell: bash
           run: |
