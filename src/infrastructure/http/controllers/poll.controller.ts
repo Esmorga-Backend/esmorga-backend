@@ -14,6 +14,7 @@ import { AuthGuard } from '../guards';
 import { RequestId, SessionId } from '../req-decorators';
 import { CreatePollDto } from '../dtos';
 import { CreatePollService } from '../../../application/handler/poll/create-poll.service';
+import { SwaggerCreatePoll } from '../swagger/decorators/polls';
 
 @ApiTags('Poll')
 @Controller('/v1/polls')
@@ -26,7 +27,7 @@ export class PollController {
   @Post('/')
   @ApiBearerAuth('access-token')
   @UseGuards(AuthGuard)
-  //   @SwaggerCreatePoll()
+  @SwaggerCreatePoll()
   async createPoll(
     @Body() createPollDto: CreatePollDto,
     @SessionId() sessionId: string,
