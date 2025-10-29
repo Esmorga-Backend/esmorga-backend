@@ -19,10 +19,10 @@ runs:
             msg: "Backend Component Test Fails"
             SLACK_WEBHOOK_URL: ${{ inputs.SLACK_WEBHOOK_URL }}
           if: failure()
-        - name : Upload Results
-          shell: bash
-          if: always()
-          run: |
-                if [ "${GITHUB_HEAD_REF}" == "" ]; then
-                node test/scripts/features-tool.js report/junit-component.xml --Upload-Results
-                fi
+        # - name : Upload Results
+        #   shell: bash
+        #   if: always()
+        #   run: |
+        #         if [ "${GITHUB_HEAD_REF}" == "" ]; then
+        #         node test/scripts/features-tool.js report/junit-component.xml --Upload-Results
+        #         fi
