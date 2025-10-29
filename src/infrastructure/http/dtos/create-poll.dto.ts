@@ -19,7 +19,7 @@ import {
 
 export class CreatePollDto {
   @ApiProperty({
-    example: '',
+    example: 'Festival de Talentos',
     minLength: 3,
     maxLength: 100,
   })
@@ -30,7 +30,8 @@ export class CreatePollDto {
   pollName: string;
 
   @ApiProperty({
-    example: '',
+    example:
+      'Trae tu talento más absurdo u original: desde silbar al revés hasta hacer la ola con las cejas. No juzgamos, ¡solo aplaudimos!',
     minLength: 2,
     maxLength: 1000,
   })
@@ -41,7 +42,7 @@ export class CreatePollDto {
   description: string;
 
   @ApiProperty({
-    example: ['', 'Option 2'],
+    example: ['13 de Marzo', '27 de Marzo', '3 de Abril'],
     minItems: 2,
     maxItems: 5,
     minLength: 1,
