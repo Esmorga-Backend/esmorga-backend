@@ -9,7 +9,11 @@ import { minutes, ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { LoggerModule } from 'nestjs-pino';
 import { validateEnvVars, getLoggerConfig } from './config';
-import { EventModule, AccountModule } from './infrastructure/http/modules';
+import {
+  AccountModule,
+  EventModule,
+  PollModule,
+} from './infrastructure/http/modules';
 import { RequestIdMiddleware } from './infrastructure/http/middlewares';
 import {
   DataAccessModule,
@@ -61,6 +65,7 @@ const { ConfigurableModuleClass } =
     }),
     AccountModule,
     EventModule,
+    PollModule,
   ],
   providers: [
     {

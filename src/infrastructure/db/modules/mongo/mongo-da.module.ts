@@ -10,6 +10,8 @@ import {
   EventSchema,
   LoginAttempts,
   LoginAttemptsSchema,
+  Poll,
+  PollSchema,
   Session,
   SessionSchema,
   TemporalCode,
@@ -27,12 +29,15 @@ import { SessionDA } from '../none/session-da';
 import { SessionMongoDA } from './session-mongo-da';
 import { TemporalCodeMongoDA } from './temporal-code-mongo-da';
 import { EventParticipantsMongoDA } from './event-participant-mongo-da';
+import { PollDA } from '../none/poll-da';
+import { PollMongoDA } from './poll-mongo-da';
 
 const providers: Provider[] = [
   { provide: UserDA, useClass: UserMongoDA },
   { provide: EventDA, useClass: EventMongoDA },
   { provide: EventParticipantsDA, useClass: EventParticipantsMongoDA },
   { provide: LoginAttemptsDA, useClass: LoginAttemptsMongoDA },
+  { provide: PollDA, useClass: PollMongoDA },
   { provide: SessionDA, useClass: SessionMongoDA },
   { provide: TemporalCodeDA, useClass: TemporalCodeMongoDA },
 ];
@@ -46,6 +51,7 @@ const providers: Provider[] = [
     }),
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     MongooseModule.forFeature([{ name: Event.name, schema: EventSchema }]),
+    MongooseModule.forFeature([{ name: Poll.name, schema: PollSchema }]),
     MongooseModule.forFeature([
       { name: EventParticipants.name, schema: EventParticipantsSchema },
     ]),

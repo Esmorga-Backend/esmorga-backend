@@ -67,7 +67,7 @@ export function SwaggerAccountLogin() {
 
 export function SwaggerAccountRegister() {
   return applyDecorators(
-    ApiOperation({ summary: 'Register a new user' }),
+    ApiOperation({ summary: 'Register a new user.' }),
     ApiHeader(REGISTER_HEADER),
     ApiCreatedResponse(REGISTER_RESPONSES.CREATED),
     ApiBadRequestResponse(REGISTER_RESPONSES.BAD_REQUEST_ERROR),
