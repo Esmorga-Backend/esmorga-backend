@@ -2,6 +2,7 @@ export * from './account-register.dto';
 export * from './account-login.dto';
 export * from './activate-account.dto';
 export * from './create-event.dto';
+export * from './create-poll.dto';
 export * from './email.dto';
 export * from './event-id.dto';
 export * from './refresh-token.dto';
