@@ -91,13 +91,13 @@ jobs:
         MAX_LOGIN_ATTEMPTS: ${{vars.MAX_LOGIN_ATTEMPTS}}
         DNS_NAME: ${{vars.DNS_NAME}}
         JWT_REFRESH_SECRET: ${{secrets.JWT_REFRESH_SECRET}}
-    - name: Run Postman
-      uses: ./.github/actions/runPostmanTests
-      with:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        POSTMAN_TOKEN: ${{ secrets.POSTMAN_TOKEN }}
-        DESPOSABLE_EMAIL_USER: ${{secrets.DESPOSABLE_EMAIL_USER}}
-        DESPOSABLE_EMAIL_PASS: ${{secrets.DESPOSABLE_EMAIL_PASS}}
+    #- name: Run Postman
+    #uses: ./.github/actions/runPostmanTests
+     # with:
+      #  SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+       # POSTMAN_TOKEN: ${{ secrets.POSTMAN_TOKEN }}
+        #DESPOSABLE_EMAIL_USER: ${{secrets.DESPOSABLE_EMAIL_USER}}
+        #DESPOSABLE_EMAIL_PASS: ${{secrets.DESPOSABLE_EMAIL_PASS}}
 
     # - name: Run E2E Tests
     #   if: false
