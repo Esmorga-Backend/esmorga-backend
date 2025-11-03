@@ -4,7 +4,6 @@ import { context, moduleFixture } from '../../../steps-config';
 
 import { HEADERS } from '../../../../mocks/common-data';
 import { SESSION_ID } from '../../../../mocks/db/common';
-import { UserDA } from '../../../../../src/infrastructure/db/modules/none/user-da';
 import { PollDA } from '../../../../../src/infrastructure/db/modules/none/poll-da';
 import { SessionDA } from '../../../../../src/infrastructure/db/modules/none/session-da';
 import { SESSION_MOCK_DB } from '../../../../mocks/db';
@@ -17,11 +16,9 @@ export const createPollSteps: StepDefinitions = ({ given }) => {
 
     context.jwtService = moduleFixture.get<JwtService>(JwtService);
 
-    context.userDA = moduleFixture.get<UserDA>(UserDA);
+    context.sessionDA = moduleFixture.get<SessionDA>(SessionDA);
 
     context.pollDA = moduleFixture.get<PollDA>(PollDA);
-
-    context.sessionDA = moduleFixture.get<SessionDA>(SessionDA);
 
     jest
       .spyOn(context.jwtService, 'verifyAsync')
