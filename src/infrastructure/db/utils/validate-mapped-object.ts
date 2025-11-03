@@ -1,4 +1,4 @@
-import { EventDto, UserProfileDto } from '../../dtos';
+import { EventDto, PollDto, UserProfileDto } from '../../dtos';
 import { DataBaseInternalError } from '../errors';
 
 /**
@@ -8,7 +8,7 @@ import { DataBaseInternalError } from '../errors';
  * @param requiredFields - List of fields to check
  */
 export function validateObjectDto(
-  objectDto: EventDto | UserProfileDto,
+  objectDto: EventDto | UserProfileDto | PollDto,
   requiredFields: string[],
 ) {
   const missingFields = requiredFields.filter((field) => {
