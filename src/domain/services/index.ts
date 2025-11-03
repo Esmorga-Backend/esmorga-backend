@@ -1,5 +1,6 @@
 export * from './encode-value';
 export * from './filter-available-events';
+export * from './filter-available-polls';
 export * from './generate-mail';
 export * from './generate-temporal-code';
 export * from './get-oldest-session';

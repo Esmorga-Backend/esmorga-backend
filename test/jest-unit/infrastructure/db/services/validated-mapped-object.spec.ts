@@ -1,7 +1,11 @@
 import { validateObjectDto } from '../../../../../src/infrastructure/db/utils';
 import { REQUIRED_DTO_FIELDS } from '../../../../../src/infrastructure/db/consts';
 import { DataBaseInternalError } from '../../../../../src/infrastructure/db/errors';
-import { EVENT_MOCK, USER_PROFILE_MOCK } from '../../../../mocks/dtos';
+import {
+  EVENT_MOCK,
+  USER_PROFILE_MOCK,
+  POLL_MOCK,
+} from '../../../../mocks/dtos';
 
 describe('[unit-test] [validateObjectDto]', () => {
   describe('[EventDto]', () => {
@@ -134,6 +138,68 @@ describe('[unit-test] [validateObjectDto]', () => {
         delete userProfile.role;
 
         validateObjectDto(userProfile, REQUIRED_DTO_FIELDS.USER_PROFILE);
+      } catch (error) {
+        expect(error).toBeInstanceOf(DataBaseInternalError);
+      }
+    });
+  });
+
+  describe('[PollDto]', () => {
+    it('Should throw an error if pollId is missed', () => {
+      try {
+        const poll = { ...POLL_MOCK };
+
+        delete poll.pollId;
+
+        validateObjectDto(poll, REQUIRED_DTO_FIELDS.POLLS);
+      } catch (error) {
+        expect(error).toBeInstanceOf(DataBaseInternalError);
+      }
+    });
+
+    it('Should throw an error if pollName is missed', () => {
+      try {
+        const poll = { ...POLL_MOCK };
+
+        delete poll.pollName;
+
+        validateObjectDto(poll, REQUIRED_DTO_FIELDS.POLLS);
+      } catch (error) {
+        expect(error).toBeInstanceOf(DataBaseInternalError);
+      }
+    });
+
+    it('Should throw an error if description is missed', () => {
+      try {
+        const poll = { ...POLL_MOCK };
+
+        delete poll.description;
+
+        validateObjectDto(poll, REQUIRED_DTO_FIELDS.POLLS);
+      } catch (error) {
+        expect(error).toBeInstanceOf(DataBaseInternalError);
+      }
+    });
+
+    it('Should throw an error if options is missed', () => {
+      try {
+        const poll = { ...POLL_MOCK };
+
+        delete poll.options;
+
+        validateObjectDto(poll, REQUIRED_DTO_FIELDS.POLLS);
+      } catch (error) {
+        expect(error).toBeInstanceOf(DataBaseInternalError);
+      }
+    });
+
+    it('Should throw an error if isMultipleChoice is missed', () => {
+      try {
+        const poll = { ...POLL_MOCK };
+
+        delete poll.isMultipleChoice;
+
+        validateObjectDto(poll, REQUIRED_DTO_FIELDS.POLLS);
       } catch (error) {
         expect(error).toBeInstanceOf(DataBaseInternalError);
       }

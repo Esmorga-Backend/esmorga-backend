@@ -6,6 +6,7 @@ export * from './create-poll';
 export * from './email';
 export * from './event';
 export * from './event-id';
+export * from './poll';
 export * from './refresh-token';
 export * from './update-event';
 export * from './update-forgot-password';

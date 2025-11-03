@@ -10,4 +10,5 @@ export const REQUIRED_DTO_FIELDS = {
   ],
   UPDATE_EVENT: ['eventId'],
   USER_PROFILE: ['uuid', 'name', 'lastName', 'email', 'role'],
+  POLLS: ['pollId', 'pollName', 'description', 'options', 'isMultipleChoice'],
 };
