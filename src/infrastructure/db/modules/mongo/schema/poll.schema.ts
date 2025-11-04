@@ -18,6 +18,9 @@ export class Poll {
   @Prop({ required: true })
   description: string;
 
+  @Prop({ required: false })
+  imageUrl: string;
+
   @Prop({ type: [PollOptionSchema], required: true })
   options: PollOption[];
 
