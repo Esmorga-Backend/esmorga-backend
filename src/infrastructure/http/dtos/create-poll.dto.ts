@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   ArrayMaxSize,
   ArrayMinSize,
@@ -6,6 +6,7 @@ import {
   IsArray,
   IsBoolean,
   IsNotEmpty,
+  IsOptional,
   IsString,
   Matches,
   MaxLength,
@@ -40,6 +41,14 @@ export class CreatePollDto {
   @IsString()
   @IsNotEmpty()
   description: string;
+
+  @ApiPropertyOptional({ example: 'image.url', maxLength: 500 })
+  @MaxLength(500, {
+    message: 'imageUrl must have max 500 characters',
+  })
+  @IsString()
+  @IsOptional()
+  imageUrl?: string;
 
   @ApiProperty({
     example: ['13 de Marzo', '27 de Marzo', '3 de Abril'],

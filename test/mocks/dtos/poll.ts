@@ -10,6 +10,7 @@ export const POLL_MOCK: PollDto = {
   pollId: '6656e23640e1fdb4ceb23cc9',
   pollName: 'MobgenFest',
   description: 'Hello World',
+  imageUrl: 'image.url',
   voteDeadline: futureDate,
   options: [
     {
@@ -31,6 +32,7 @@ export const OLD_POLL_MOCK: PollDto = {
   pollId: '6656e23640e1fdb4ceb23cc8',
   pollName: 'Old Poll',
   description: 'Hello World',
+  imageUrl: 'image.url',
   voteDeadline: oldDate,
   options: [
     {

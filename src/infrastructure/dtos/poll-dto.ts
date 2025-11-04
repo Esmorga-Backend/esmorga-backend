@@ -1,4 +1,8 @@
-import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
+import {
+  ApiHideProperty,
+  ApiProperty,
+  ApiPropertyOptional,
+} from '@nestjs/swagger';
 import {
   IsString,
   IsDateString,
@@ -77,6 +81,13 @@ export class PollDto {
     maxLength: 1000,
   })
   description: string;
+
+  @Expose()
+  @Transform(({ value }) => (value ? value : undefined))
+  @IsString()
+  @IsOptional()
+  @ApiPropertyOptional({ example: 'img.url', maxLength: 500 })
+  imageUrl?: string;
 
   @Expose()
   @ValidateNested({ each: true })
