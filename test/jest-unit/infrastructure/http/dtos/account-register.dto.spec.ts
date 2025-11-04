@@ -101,6 +101,10 @@ describe('[unit test] [AccountRegisterDto]', () => {
         `John'`,
         'John-',
         'Jo hn',
+        'jóhn',
+        'jòhn',
+        'jóhñ',
+        'johnç',
       ];
 
       validExamples.forEach((value) =>
