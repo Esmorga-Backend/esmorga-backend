@@ -4,6 +4,7 @@ import {
   Get,
   HttpException,
   InternalServerErrorException,
+  Param,
   Post,
   UseFilters,
   UseGuards,
@@ -13,16 +14,17 @@ import { PinoLogger } from 'nestjs-pino';
 import { HttpExceptionFilter } from '../errors';
 import { AuthGuard } from '../guards';
 import { RequestId, SessionId } from '../req-decorators';
-import { CreatePollDto } from '../dtos';
+import { CreatePollDto, VotePollDto } from '../dtos';
 import {
   CreatePollService,
   GetPollListService,
+  VotePollService,
 } from '../../../application/handler/poll';
 import {
   SwaggerCreatePoll,
   SwaggerGetPolls,
 } from '../swagger/decorators/polls';
-import { PollListDto } from '../../dtos';
+import { PollDto, PollListDto } from '../../dtos';
 
 @ApiTags('Poll')
 @Controller('/v1/polls')
@@ -32,6 +34,7 @@ export class PollController {
     private readonly logger: PinoLogger,
     private readonly createPollService: CreatePollService,
     private readonly getPollListService: GetPollListService,
+    private readonly votePollService: VotePollService,
   ) {}
   @Post('/')
   @ApiBearerAuth('access-token')
@@ -82,6 +85,42 @@ export class PollController {
     } catch (error) {
       this.logger.error(
         `[PollController] [getPolls] - x-request-id:${requestId}, error ${error}`,
+      );
+
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new InternalServerErrorException();
+    }
+  }
+
+  @Post('/:pollId/vote')
+  @ApiBearerAuth('access-token')
+  @UseGuards(AuthGuard)
+  // ! AÑADIR SWAGGER
+  // @SwaggerVotePoll()
+  async votePoll(
+    @Body() votePollDto: VotePollDto,
+    @Param('pollId') pollId: string,
+    @SessionId() sessionId: string,
+    @RequestId() requestId: string,
+  ): Promise<PollDto> {
+    try {
+      this.logger.info(
+        `[PollController] [votePoll] - x-request-id:${requestId}`,
+      );
+
+      const poll = await this.votePollService.vote(
+        sessionId,
+        votePollDto,
+        pollId,
+        requestId,
+      );
+
+      return poll;
+    } catch (error) {
+      this.logger.error(
+        `[PollController] [votePoll] - x-request-id:${requestId}, error ${error}`,
       );
 
       if (error instanceof HttpException) {
