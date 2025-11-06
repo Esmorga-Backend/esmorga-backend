@@ -4,6 +4,7 @@ import { AuthGuard } from '../guards';
 import {
   CreatePollService,
   GetPollListService,
+  VotePollService,
 } from '../../../application/handler/poll';
 import { PollSharedModule } from './poll-shared.module';
 import { AccountSharedModule } from './account-shared.module';
@@ -11,6 +12,11 @@ import { AccountSharedModule } from './account-shared.module';
 @Module({
   imports: [AccountSharedModule, PollSharedModule],
   controllers: [PollController],
-  providers: [AuthGuard, CreatePollService, GetPollListService],
+  providers: [
+    AuthGuard,
+    CreatePollService,
+    GetPollListService,
+    VotePollService,
+  ],
 })
 export class PollModule {}

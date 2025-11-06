@@ -14,6 +14,7 @@ import {
   NOT_ACCEPTABLE_ERROR_COMMON_PROPERTIES,
   TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES,
   UNAUTHORIZED_INVALID_TOKEN_COMMON_PROPERTIES,
+  UNPROCESSABLE_ERROR_COMMON_PROPERTIES,
 } from './common-response-properties';
 
 const PATHS = {
@@ -277,11 +278,7 @@ export const JOIN_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
     schema: {
       type: 'object',
       properties: {
-        title: {
-          type: 'string',
-          example: 'unprocessableContentError',
-        },
-        status: { type: 'number', example: HttpStatus.UNPROCESSABLE_ENTITY },
+        ...UNPROCESSABLE_ERROR_COMMON_PROPERTIES,
         type: { type: 'string', example: PATHS.JOIN_EVENT },
         detail: {
           type: 'string',
@@ -365,12 +362,7 @@ export const DISJOIN_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
     schema: {
       type: 'object',
       properties: {
-        title: {
-          type: 'string',
-          example: 'unprocessableContentError',
-        },
-        status: { type: 'number', example: HttpStatus.UNPROCESSABLE_ENTITY },
-        type: { type: 'string', example: PATHS.JOIN_EVENT },
+        ...UNPROCESSABLE_ERROR_COMMON_PROPERTIES,
         detail: {
           type: 'string',
           example: 'maximum capacity reached',
@@ -669,11 +661,7 @@ export const UPDATE_PASSWORD_RESPONSES: {
     schema: {
       type: 'object',
       properties: {
-        title: {
-          type: 'string',
-          example: 'unprocessableContentError',
-        },
-        status: { type: 'number', example: HttpStatus.UNPROCESSABLE_ENTITY },
+        ...UNPROCESSABLE_ERROR_COMMON_PROPERTIES,
         type: { type: 'string', example: PATHS.UPDATE_PASSWORD },
         detail: {
           type: 'string',

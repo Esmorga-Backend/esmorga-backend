@@ -9,3 +9,4 @@ export * from './refresh-token.dto';
 export * from './update-event.dto';
 export * from './update-forgot-password.dto';
 export * from './update-password.dto';
+export * from './vote-poll.dto';

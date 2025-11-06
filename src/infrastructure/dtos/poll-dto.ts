@@ -35,13 +35,16 @@ class OptionDto {
   option: string;
 
   @Expose({ toClassOnly: true })
-  @Transform(({ value }) => (Array.isArray(value) ? value : []))
+  @Transform(({ value }) => (Array.isArray(value) ? value : undefined))
   @IsArray()
   @IsString({ each: true })
   @ApiHideProperty()
   votes?: string[];
 
   @Expose()
+  @Transform(({ obj }) => (obj.votes ? obj.votes.length : 0), {
+    toClassOnly: true,
+  })
   @IsNumber()
   @IsOptional()
   @ApiProperty({

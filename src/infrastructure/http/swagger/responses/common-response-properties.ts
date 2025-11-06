@@ -13,6 +13,19 @@ export const BAD_REQUEST_ERROR_COMMON_PROPERTIES = {
   },
 };
 
+export const CONFLICT_ERROR_COMMON_PROPERTIES = {
+  title: {
+    type: 'string',
+    example: 'conflictError',
+  },
+  status: { type: 'number', example: HttpStatus.CONFLICT },
+  type: { type: 'string', example: '' },
+  detail: {
+    type: 'string',
+    example: 'voting period has ended',
+  },
+};
+
 export const FORBIDDEN_INVALID_ROLE_COMMON_PROPERTIES = {
   title: {
     type: 'string',
@@ -27,23 +40,6 @@ export const FORBIDDEN_INVALID_ROLE_COMMON_PROPERTIES = {
   errors: {
     type: 'array',
     example: ['not enough privileges'],
-  },
-};
-
-export const UNAUTHORIZED_INVALID_TOKEN_COMMON_PROPERTIES = {
-  title: {
-    type: 'string',
-    example: 'unauthorizedRequestError',
-  },
-  status: { type: 'number', example: HttpStatus.UNAUTHORIZED },
-  type: { type: 'string', example: '' },
-  detail: {
-    type: 'string',
-    example: 'not authorized',
-  },
-  errors: {
-    type: 'array',
-    example: ['token invalid'],
   },
 };
 
@@ -65,9 +61,27 @@ export const NOT_FOUND_ERROR_COMMON_PROPERTIES = {
     example: 'notFoundError',
   },
   status: { type: 'number', example: HttpStatus.NOT_FOUND },
+  type: { type: 'string', example: '' },
   detail: {
     type: 'string',
     example: 'not found',
+  },
+};
+
+export const UNAUTHORIZED_INVALID_TOKEN_COMMON_PROPERTIES = {
+  title: {
+    type: 'string',
+    example: 'unauthorizedRequestError',
+  },
+  status: { type: 'number', example: HttpStatus.UNAUTHORIZED },
+  type: { type: 'string', example: '' },
+  detail: {
+    type: 'string',
+    example: 'not authorized',
+  },
+  errors: {
+    type: 'array',
+    example: ['token invalid'],
   },
 };
 
@@ -85,6 +99,19 @@ export const TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES = {
   errors: {
     type: 'array',
     example: ['IP temporarily blocked'],
+  },
+};
+
+export const UNPROCESSABLE_ERROR_COMMON_PROPERTIES = {
+  title: {
+    type: 'string',
+    example: 'unprocesableContentError',
+  },
+  status: { type: 'number', example: HttpStatus.UNPROCESSABLE_ENTITY },
+  type: { type: 'string', example: '' },
+  detail: {
+    type: 'string',
+    example: 'too many options provided',
   },
 };
 

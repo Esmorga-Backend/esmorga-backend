@@ -41,17 +41,16 @@ export class GetPollListService {
         const userSelectedOptions: string[] = [];
 
         const options = (poll.options ?? []).map((option) => {
-          const voteIds = option.votes ?? [];
+          const votesForOption = option.votes ?? [];
 
-          if (voteIds.includes(uuid)) {
+          if (votesForOption.includes(uuid)) {
             userSelectedOptions.push(option.optionId);
           }
 
-          const { votes, ...optionWithoutVotes } = option;
-
           return {
-            ...optionWithoutVotes,
-            voteCount: voteIds.length,
+            optionId: option.optionId,
+            option: option.option,
+            voteCount: votesForOption.length,
           };
         });
 

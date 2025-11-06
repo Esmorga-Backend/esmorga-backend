@@ -10,4 +10,16 @@ export class PollDA {
   find(): Promise<PollDto[]> {
     throw new NotImplementedException();
   }
+
+  findOneById(_pollId: string): Promise<PollDto | null> {
+    throw new NotImplementedException();
+  }
+
+  vote(
+    _selectedOptions: string[],
+    _userId: string,
+    _pollId: string,
+  ): Promise<PollDto> {
+    throw new NotImplementedException();
+  }
 }

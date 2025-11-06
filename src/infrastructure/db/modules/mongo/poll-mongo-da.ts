@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { type Model } from 'mongoose';
+import { Types, type Model } from 'mongoose';
 import { plainToInstance } from 'class-transformer';
 import { PollDA } from '../none/poll-da';
 import { Poll } from './schema';
@@ -28,5 +28,42 @@ export class PollMongoDA implements PollDA {
         excludeExtraneousValues: true,
       }),
     );
+  }
+
+  async findOneById(pollId: string): Promise<PollDto | null> {
+    const pollDoc = await this.pollModel.findById({ _id: pollId });
+    if (!pollDoc) return null;
+    return plainToInstance(PollDto, pollDoc, {
+      excludeExtraneousValues: true,
+    });
+  }
+
+  async vote(
+    selectedOptions: string[],
+    uuid: string,
+    pollId: string,
+  ): Promise<PollDto> {
+    const selectedIds = selectedOptions.map((id) => new Types.ObjectId(id));
+
+    const updated = await this.pollModel.findOneAndUpdate(
+      { _id: pollId },
+      {
+        $addToSet: { 'options.$[selectedOpt].votes': uuid },
+        $pull: { 'options.$[notSelectedOpt].votes': uuid },
+      },
+      {
+        arrayFilters: [
+          { 'selectedOpt._id': { $in: selectedIds } },
+          { 'notSelectedOpt._id': { $nin: selectedIds } },
+        ],
+        new: true,
+      },
+    );
+
+    if (!updated) return null;
+
+    return plainToInstance(PollDto, updated, {
+      excludeExtraneousValues: true,
+    });
   }
 }
