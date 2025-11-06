@@ -6,7 +6,7 @@ import {
   EventParticipantsRepository,
   EventRepository,
 } from '../../../infrastructure/db/repositories';
-import { NotFoundEventIdApiError } from '../../../domain/errors';
+import { NotFoundApiError } from '../../../domain/errors';
 import {
   EventParticipantsDto,
   UserListDto,
@@ -28,7 +28,7 @@ export class GetEventUsersListService {
    *
    * @returns - Object containing the total number of joined users and the list of their names.
    * @throws NotAdminAccountApiError - User is not admin.
-   * @throws NotFoundEventIdApiError - EventId is not valid following DB schema ot not found.
+   * @throws NotFoundApiError - EventId is not valid following DB schema ot not found.
    */
   async getUsersList(
     eventId: string,
@@ -39,7 +39,7 @@ export class GetEventUsersListService {
         `[GetEventUsersListService] [getUsers] - x-request-id: ${requestId}, eventId ${eventId}`,
       );
 
-      await this.eventRepository.findOneByEventId(eventId);
+      await this.eventRepository.findOneByEventId(eventId, requestId);
 
       const participantList: EventParticipantsDto =
         await this.eventParticipantsRepository.getEventParticipantList(
@@ -67,7 +67,7 @@ export class GetEventUsersListService {
         `[GetEventUsersListService] [getUsers] - x-request-id: ${requestId}, error: ${error}`,
       );
       if (error instanceof DataBaseBadRequestError) {
-        throw new NotFoundEventIdApiError();
+        throw new NotFoundApiError('eventId');
       }
 
       throw error;

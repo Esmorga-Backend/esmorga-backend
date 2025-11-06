@@ -5,7 +5,12 @@ import {
   PollRepository,
   SessionRepository,
 } from '../../../infrastructure/db/repositories';
-import { InvalidTokenApiError } from '../../../domain/errors';
+import {
+  InvalidMultipleSelectionApiError,
+  InvalidTokenApiError,
+  NotFoundApiError,
+  VoteClosedApiError,
+} from '../../../domain/errors';
 import {
   DataBaseNotFoundError,
   DataBaseUnathorizedError,
@@ -44,14 +49,57 @@ export class VotePollService {
         requestId,
       );
 
-      const poll = await this.pollRepository.votePoll(
-        votePollDto,
+      const poll = await this.pollRepository.findOneByPollId(pollId, requestId);
+
+      if (poll.voteDeadline < new Date()) {
+        throw new VoteClosedApiError();
+      }
+
+      const { selectedOptions } = votePollDto;
+
+      if (poll.isMultipleChoice === false && selectedOptions.length > 1) {
+        throw new InvalidMultipleSelectionApiError();
+      }
+
+      const availableOptions = poll.options.map((option) => option.optionId);
+
+      if (
+        !selectedOptions.every((optionId) =>
+          availableOptions.includes(optionId),
+        )
+      ) {
+        throw new NotFoundApiError('optionId');
+      }
+
+      const updatedPoll = await this.pollRepository.votePoll(
+        selectedOptions,
         uuid,
         pollId,
         requestId,
       );
 
-      return poll;
+      const userSelectedOptions: string[] = [];
+
+      updatedPoll.options = (updatedPoll.options ?? []).map((option) => {
+        const votesForOption = option.votes ?? [];
+
+        if (votesForOption.includes(uuid)) {
+          userSelectedOptions.push(option.optionId);
+        }
+
+        return {
+          optionId: option.optionId,
+          option: option.option,
+          voteCount: votesForOption.length,
+        };
+      });
+
+      return {
+        ...updatedPoll,
+        userSelectedOptions,
+      };
+
+      return updatedPoll;
     } catch (error) {
       this.logger.error(
         `[VotePollService] [vote] - x-request-id: ${requestId}, error: ${error}`,
@@ -61,10 +109,9 @@ export class VotePollService {
         throw new InvalidTokenApiError();
 
       if (error instanceof DataBaseNotFoundError)
-        // ! Ver que error poner
-        // throw new InvalidPollIdApiError();
+        throw new NotFoundApiError('pollId');
 
-        throw error;
+      throw error;
     }
   }
 }

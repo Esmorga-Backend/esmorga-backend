@@ -11,7 +11,15 @@ export class PollDA {
     throw new NotImplementedException();
   }
 
-  vote(_votePollDto: any, _userId: string, _pollId: string): Promise<PollDto> {
+  findOneById(_pollId: string): Promise<PollDto | null> {
+    throw new NotImplementedException();
+  }
+
+  vote(
+    _selectedOptions: string[],
+    _userId: string,
+    _pollId: string,
+  ): Promise<PollDto> {
     throw new NotImplementedException();
   }
 }

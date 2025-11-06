@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { type Model, Types } from 'mongoose';
+import { Types, type Model } from 'mongoose';
 import { plainToInstance } from 'class-transformer';
 import { PollDA } from '../none/poll-da';
 import { Poll } from './schema';
-import { CreatePollDto, VotePollDto } from '../../../http/dtos';
+import { CreatePollDto } from '../../../http/dtos';
 import { PollDto } from '../../../dtos';
 
 @Injectable({})
@@ -30,26 +30,40 @@ export class PollMongoDA implements PollDA {
     );
   }
 
+  async findOneById(pollId: string): Promise<PollDto | null> {
+    const pollDoc = await this.pollModel.findById({ _id: pollId });
+    if (!pollDoc) return null;
+    return plainToInstance(PollDto, pollDoc, {
+      excludeExtraneousValues: true,
+    });
+  }
+
   async vote(
-    votePollDto: VotePollDto,
+    selectedOptions: string[],
     uuid: string,
     pollId: string,
   ): Promise<PollDto> {
-    // ! Ver como gestionar esta lógica
-    const { selectedOptions } = votePollDto;
-    const pollDoc = await this.pollModel.findById({ _id: pollId });
+    const selectedIds = selectedOptions.map((id) => new Types.ObjectId(id));
 
-    if (!pollDoc) return null;
+    const updated = await this.pollModel.findOneAndUpdate(
+      { _id: pollId },
+      {
+        $addToSet: { 'options.$[selectedOpt].votes': uuid },
+        $pull: { 'options.$[notSelectedOpt].votes': uuid },
+      },
+      {
+        arrayFilters: [
+          { 'selectedOpt._id': { $in: selectedIds } },
+          { 'notSelectedOpt._id': { $nin: selectedIds } },
+        ],
+        new: true,
+      },
+    );
 
-    const poll = plainToInstance(PollDto, pollDoc, {
+    if (!updated) return null;
+
+    return plainToInstance(PollDto, updated, {
       excludeExtraneousValues: true,
     });
-
-    const availableOptions = poll.options.map((option) => option.optionId);
-
-    if (
-      !selectedOptions.every((optionId) => availableOptions.includes(optionId))
-    )
-      return null;
   }
 }
