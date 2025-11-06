@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  HttpCode,
   HttpException,
   InternalServerErrorException,
   Param,
@@ -98,6 +99,7 @@ export class PollController {
   @Post('/:pollId/vote')
   @ApiBearerAuth('access-token')
   @UseGuards(AuthGuard)
+  @HttpCode(200)
   @SwaggerVotePoll()
   async votePoll(
     @Body() votePollDto: VotePollDto,

@@ -71,7 +71,9 @@ export function SwaggerVotePoll() {
     ApiUnauthorizedResponse(VOTE_POLL_RESPONSES.UNAUTHORIZED_ERROR),
     ApiNotFoundResponse(VOTE_POLL_RESPONSES.NOT_FOUND_ERROR),
     ApiConflictResponse(VOTE_POLL_RESPONSES.CONFLICT_ERROR),
-    ApiUnprocessableEntityResponse(VOTE_POLL_RESPONSES.UNPROCESSABLE_ERROR),
+    ApiUnprocessableEntityResponse(
+      VOTE_POLL_RESPONSES.UNPROCESSABLE_CONTENT_ERROR,
+    ),
     ApiTooManyRequestsResponse(VOTE_POLL_RESPONSES.TOO_MANY_REQUESTS_ERROR),
     ApiInternalServerErrorResponse(VOTE_POLL_RESPONSES.INTERNAL_ERROR),
   );

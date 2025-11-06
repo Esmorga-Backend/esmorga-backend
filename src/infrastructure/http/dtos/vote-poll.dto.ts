@@ -22,9 +22,11 @@ export class VotePollDto {
     minLength: 24,
     maxLength: 24,
   })
-  @ArrayUnique((option: string) => option.trim().toLowerCase(), {
-    message: 'optionId cannot be duplicated',
-  })
+  @ArrayUnique(
+    (option: unknown) =>
+      typeof option === 'string' ? option.trim().toLowerCase() : option,
+    { message: 'optionId cannot be duplicated' },
+  )
   @MinLength(24, {
     each: true,
     message: 'selectedOptions must have min 24 characters for each optionId',
