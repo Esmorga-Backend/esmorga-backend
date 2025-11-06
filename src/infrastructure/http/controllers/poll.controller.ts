@@ -23,6 +23,7 @@ import {
 import {
   SwaggerCreatePoll,
   SwaggerGetPolls,
+  SwaggerVotePoll,
 } from '../swagger/decorators/polls';
 import { PollDto, PollListDto } from '../../dtos';
 
@@ -97,8 +98,7 @@ export class PollController {
   @Post('/:pollId/vote')
   @ApiBearerAuth('access-token')
   @UseGuards(AuthGuard)
-  // ! AÑADIR SWAGGER
-  // @SwaggerVotePoll()
+  @SwaggerVotePoll()
   async votePoll(
     @Body() votePollDto: VotePollDto,
     @Param('pollId') pollId: string,
