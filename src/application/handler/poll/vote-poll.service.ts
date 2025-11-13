@@ -12,6 +12,7 @@ import {
   VoteClosedApiError,
 } from '../../../domain/errors';
 import {
+  DataBaseBadRequestError,
   DataBaseNotFoundError,
   DataBaseUnathorizedError,
 } from '../../../infrastructure/db/errors';
@@ -107,6 +108,9 @@ export class VotePollService {
 
       if (error instanceof DataBaseUnathorizedError)
         throw new InvalidTokenApiError();
+
+      if (error instanceof DataBaseBadRequestError)
+        throw new NotFoundApiError('pollId');
 
       if (error instanceof DataBaseNotFoundError)
         throw new NotFoundApiError('pollId');
