@@ -20,7 +20,7 @@ import {
   pollRepository,
 } from '../../../../mocks/repositories';
 
-const createSessionUser = (uuid = 'user-uuid') => ({ uuid }) as any;
+const createSessionUser = (uuid = 'userId') => ({ uuid }) as any;
 
 const createActivePoll = (): PollDto => ({
   ...POLL_MOCK,
@@ -47,9 +47,9 @@ describe('[unit-test] [VotePollService]', () => {
   let logger: PinoLogger;
   let service: VotePollService;
 
-  const sessionId = 'session-id';
+  const sessionId = 'sessionId';
   const pollId = POLL_MOCK.pollId;
-  const requestId = 'request-id';
+  const requestId = 'requestId';
   const OPTION_A = POLL_MOCK.options[0].optionId;
   const OPTION_B = POLL_MOCK.options[1].optionId;
   const votePollDto: VotePollDto = {
