@@ -7,6 +7,8 @@ import {
 import { filterAvailablePolls } from '../../../domain/services';
 import { PollDto } from '../../../infrastructure/dtos';
 import { PollListDto } from '../../../infrastructure/dtos/poll-list.dto';
+import { DataBaseUnathorizedError } from '../../../infrastructure/db/errors';
+import { InvalidTokenApiError } from '../../../domain/errors';
 
 @Injectable()
 export class GetPollListService {
@@ -69,6 +71,9 @@ export class GetPollListService {
       this.logger.error(
         `[GetPollListService] [find] - x-request-id: ${requestId}, error: ${error}`,
       );
+
+      if (error instanceof DataBaseUnathorizedError)
+        throw new InvalidTokenApiError();
 
       throw error;
     }
