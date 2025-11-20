@@ -159,8 +159,7 @@ export class AccountRepository {
    */
   async updateAccountPassword(
     uuid: string,
-    currentPassword: string,
-    newPassword: string,
+    password: string,
     requestId?: string,
   ) {
     try {
@@ -168,13 +167,7 @@ export class AccountRepository {
         `[AccountRepository] [updateAccountPassword] - x-request-id: ${requestId}, uuid: ${uuid}`,
       );
 
-      const updatedPassword = await this.userDA.updatePasswordByUuid(
-        uuid,
-        currentPassword,
-        newPassword,
-      );
-
-      if (!updatedPassword) throw new DataBaseUnprocesableContentError();
+      await this.userDA.updatePasswordByUuid(uuid, password);
     } catch (error) {
       this.logger.error(
         `[AccountRepository] [updateAccountPassword] - x-request-id: ${requestId}, error: ${error}`,
@@ -319,6 +312,32 @@ export class AccountRepository {
     } catch (error) {
       this.logger.error(
         `[AccountRepository] [saveUser] - x-request-id: ${requestId}, error: ${error}`,
+      );
+
+      throw new DataBaseInternalError();
+    }
+  }
+
+  /**
+   * Get current password by uuid.
+   *
+   * @param uuid - User identifier.
+   * @param requestId - Request identifier.
+   * @returns Current password hashed string.
+   */
+  async getCurrentPasswordByUuid(
+    uuid: string,
+    requestId?: string,
+  ): Promise<string | null> {
+    try {
+      this.logger.info(
+        `[AccountRepository] [getCurrentPasswordByUuid] - x-request-id: ${requestId}, uuid: ${uuid}`,
+      );
+
+      return this.userDA.getCurrentPasswordByUuid(uuid);
+    } catch (error) {
+      this.logger.error(
+        `[AccountRepository] [getCurrentPasswordByUuid] - x-request-id: ${requestId}, error: ${error}`,
       );
 
       throw new DataBaseInternalError();
