@@ -324,4 +324,26 @@ export class AccountRepository {
       throw new DataBaseInternalError();
     }
   }
+
+  /**
+   * Delete account by UUID.
+   *
+   * @param uuid - User identifier..
+   * @param requestId - Request identifier.
+   */
+  async deleteAccountByUuid(uuid: string, requestId?: string) {
+    try {
+      this.logger.info(
+        `[AccountRepository] [deleteAccountByUuid] - x-request-id: ${requestId}, uuid: ${uuid}`,
+      );
+
+      await this.userDA.deleteByUuid(uuid);
+    } catch (error) {
+      this.logger.error(
+        `[AccountRepository] [deleteAccountByUuid] - x-request-id: ${requestId}, error: ${error}`,
+      );
+
+      throw new DataBaseInternalError();
+    }
+  }
 }

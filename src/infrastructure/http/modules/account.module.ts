@@ -13,6 +13,7 @@ import {
   DisjoinEventService,
   UpdateForgotPasswordService,
   UpdatePasswordService,
+  DeleteAccountService,
   ActivateAccountService,
   SendEmailVerificationService,
 } from '../../../application/handler/account';
@@ -47,6 +48,7 @@ import {
     DisjoinEventService,
     UpdateForgotPasswordService,
     UpdatePasswordService,
+    DeleteAccountService,
     ActivateAccountService,
     SessionGenerator,
     SessionManager,

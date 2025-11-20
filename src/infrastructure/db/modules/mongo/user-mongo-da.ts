@@ -116,4 +116,8 @@ export class UserMongoDA implements UserDA {
   async create(userData: AccountRegisterDto): Promise<void> {
     await new this.userModel(userData).save();
   }
+
+  async deleteByUuid(uuid: string): Promise<void> {
+    await this.userModel.deleteOne({ _id: uuid });
+  }
 }

@@ -53,4 +53,8 @@ export class UserDA {
   create(_userData: AccountRegisterDto) {
     throw new NotImplementedException();
   }
+
+  deleteByUuid(_uuid: string): Promise<void> {
+    throw new NotImplementedException();
+  }
 }
