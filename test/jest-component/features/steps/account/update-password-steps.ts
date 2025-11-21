@@ -1,5 +1,6 @@
 import { JwtService } from '@nestjs/jwt';
 import { StepDefinitions } from 'jest-cucumber';
+import * as argon2 from 'argon2';
 import { context, moduleFixture } from '../../../steps-config';
 import { SessionGenerator } from '../../../../../src/domain/services';
 import { HEADERS } from '../../../../mocks/common-data';
@@ -24,6 +25,8 @@ export const updatePasswordSteps: StepDefinitions = ({ given, and, then }) => {
       moduleFixture.get<SessionGenerator>(SessionGenerator);
     context.jwtService = moduleFixture.get<JwtService>(JwtService);
 
+    jest.spyOn(argon2, 'verify').mockResolvedValue(true);
+
     jest
       .spyOn(context.jwtService, 'verifyAsync')
       .mockResolvedValue({ sessionId: SESSION_ID });
@@ -32,7 +35,11 @@ export const updatePasswordSteps: StepDefinitions = ({ given, and, then }) => {
       .spyOn(context.sessionDA, 'findOneBySessionId')
       .mockResolvedValue({ uuid: USER_MOCK_DB_ID });
 
-    jest.spyOn(context.userDA, 'updatePasswordByUuid').mockResolvedValue(true);
+    jest
+      .spyOn(context.userDA, 'getCurrentPasswordByUuid')
+      .mockResolvedValue('hashedPassword');
+
+    jest.spyOn(context.userDA, 'updatePasswordByUuid').mockResolvedValue(null);
 
     jest.spyOn(context.sessionDA, 'removeAllByUuid').mockResolvedValue(null);
 
@@ -58,6 +65,6 @@ export const updatePasswordSteps: StepDefinitions = ({ given, and, then }) => {
   });
 
   and('the currentPassword does not match the stored password', () => {
-    jest.spyOn(context.userDA, 'updatePasswordByUuid').mockResolvedValue(false);
+    jest.spyOn(argon2, 'verify').mockResolvedValue(false);
   });
 };

@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import * as argon2 from 'argon2';
 import { plainToInstance } from 'class-transformer';
 import type { Model } from 'mongoose';
 import { UserProfileDto } from '../../../dtos';
@@ -43,20 +42,11 @@ export class UserMongoDA implements UserDA {
     });
   }
 
-  async updatePasswordByUuid(
-    uuid: string,
-    currentPassword: string,
-    newPassword: string,
-  ): Promise<boolean> {
-    const user = await this.userModel.findById({ _id: uuid });
-    const passwordMatch = await argon2.verify(user.password, currentPassword);
-
-    if (!passwordMatch) return false;
-
-    const newHashedPassword = await argon2.hash(newPassword);
-    user.password = newHashedPassword;
-    await user.save();
-    return true;
+  async updatePasswordByUuid(uuid: string, password: string): Promise<void> {
+    await this.userModel.findOneAndUpdate(
+      { _id: uuid },
+      { password: password },
+    );
   }
 
   async findOneById(uuid: string): Promise<UserProfileDto | null> {
@@ -115,5 +105,11 @@ export class UserMongoDA implements UserDA {
 
   async create(userData: AccountRegisterDto): Promise<void> {
     await new this.userModel(userData).save();
+  }
+
+  async getCurrentPasswordByUuid(uuid: string): Promise<string | null> {
+    const user = await this.userModel.findById({ _id: uuid });
+    if (!user) return null;
+    return user.password;
   }
 }
