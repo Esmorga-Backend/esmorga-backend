@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import * as argon2 from 'argon2';
 import { plainToInstance } from 'class-transformer';
 import type { Model } from 'mongoose';
 import { UserProfileDto } from '../../../dtos';
