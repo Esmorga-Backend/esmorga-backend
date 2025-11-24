@@ -7,3 +7,4 @@ export * from './get-oldest-session';
 export * from './session-generator';
 export * from './session-manager';
 export * from './validate-login-credentials';
+export * from './verify-hashed-value';
