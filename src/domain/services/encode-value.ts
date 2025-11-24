@@ -4,7 +4,7 @@ import { ApiError } from '../errors';
 export async function encodeValue(value: string) {
   try {
     return await argon2.hash(value);
-  } catch (error) {
+  } catch (_error) {
     throw new ApiError();
   }
 }

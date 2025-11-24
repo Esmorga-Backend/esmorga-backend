@@ -34,11 +34,7 @@ export class UserDA {
     throw new NotImplementedException();
   }
 
-  updatePasswordByUuid(
-    _uuid: string,
-    _currentPassword: string,
-    _newPassword: string,
-  ): Promise<boolean> {
+  updatePasswordByUuid(_uuid: string, _hashedPassword: string): Promise<void> {
     throw new NotImplementedException();
   }
 
@@ -51,6 +47,10 @@ export class UserDA {
   }
 
   create(_userData: AccountRegisterDto) {
+    throw new NotImplementedException();
+  }
+
+  getCurrentPasswordByUuid(_uuid: string): Promise<string | null> {
     throw new NotImplementedException();
   }
 }

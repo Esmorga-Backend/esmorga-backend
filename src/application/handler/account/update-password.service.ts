@@ -6,9 +6,13 @@ import {
   AccountRepository,
   SessionRepository,
 } from '../../../infrastructure/db/repositories';
+import {
+  encodeValue,
+  SessionGenerator,
+  verifyHashedValue,
+} from '../../../domain/services';
 import { UpdatePasswordDto } from '../../../infrastructure/http/dtos';
 import { NewPairOfTokensDto } from '../../../infrastructure/dtos';
-import { SessionGenerator } from '../../../domain/services';
 import {
   InvalidCredentialsRefreshApiError,
   InvalidCurrentPasswordError,
@@ -59,10 +63,24 @@ export class UpdatePasswordService {
 
       if (!session?.uuid) throw new InvalidCredentialsRefreshApiError();
 
+      const profilePasswordHashed =
+        await this.accountRepository.getCurrentPasswordByUuid(
+          session.uuid,
+          requestId,
+        );
+
+      const doPasswordsMatch = await verifyHashedValue(
+        profilePasswordHashed,
+        currentPassword,
+      );
+
+      if (!doPasswordsMatch) throw new DataBaseUnprocesableContentError();
+
+      const hashedPassword = await encodeValue(newPassword);
+
       await this.accountRepository.updateAccountPassword(
         session.uuid,
-        currentPassword,
-        newPassword,
+        hashedPassword,
         requestId,
       );
 
