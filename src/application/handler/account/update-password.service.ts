@@ -63,14 +63,14 @@ export class UpdatePasswordService {
 
       if (!session?.uuid) throw new InvalidCredentialsRefreshApiError();
 
-      const currentProfilePassword =
+      const profilePasswordHashed =
         await this.accountRepository.getCurrentPasswordByUuid(
           session.uuid,
           requestId,
         );
 
       const doPasswordsMatch = await verifyHashedValue(
-        currentProfilePassword,
+        profilePasswordHashed,
         currentPassword,
       );
 
