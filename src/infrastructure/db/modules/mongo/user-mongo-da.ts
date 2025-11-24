@@ -42,10 +42,13 @@ export class UserMongoDA implements UserDA {
     });
   }
 
-  async updatePasswordByUuid(uuid: string, password: string): Promise<void> {
+  async updatePasswordByUuid(
+    uuid: string,
+    hashedPassword: string,
+  ): Promise<void> {
     await this.userModel.findOneAndUpdate(
       { _id: uuid },
-      { password: password },
+      { password: hashedPassword },
     );
   }
 

@@ -153,13 +153,12 @@ export class AccountRepository {
    * Find an account by uuid and update the password with the value encoded provided
    *
    * @param uuid - User identifier.
-   * @param currentPassword - User current password.
-   * @param newPassword - User new password.
+   * @param hashedPassword - User password to update.
    * @param requestId - Request identifier.
    */
   async updateAccountPassword(
     uuid: string,
-    password: string,
+    hashedPassword: string,
     requestId?: string,
   ) {
     try {
@@ -167,7 +166,7 @@ export class AccountRepository {
         `[AccountRepository] [updateAccountPassword] - x-request-id: ${requestId}, uuid: ${uuid}`,
       );
 
-      await this.userDA.updatePasswordByUuid(uuid, password);
+      await this.userDA.updatePasswordByUuid(uuid, hashedPassword);
     } catch (error) {
       this.logger.error(
         `[AccountRepository] [updateAccountPassword] - x-request-id: ${requestId}, error: ${error}`,

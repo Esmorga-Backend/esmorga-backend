@@ -34,7 +34,7 @@ export class UserDA {
     throw new NotImplementedException();
   }
 
-  updatePasswordByUuid(_uuid: string, _password: string): Promise<void> {
+  updatePasswordByUuid(_uuid: string, _hashedPassword: string): Promise<void> {
     throw new NotImplementedException();
   }
 

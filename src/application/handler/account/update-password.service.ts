@@ -69,18 +69,18 @@ export class UpdatePasswordService {
           requestId,
         );
 
-      const passwordMatch = await verifyHashedValue(
+      const doPasswordsMatch = await verifyHashedValue(
         currentProfilePassword,
         currentPassword,
       );
 
-      if (!passwordMatch) throw new DataBaseUnprocesableContentError();
+      if (!doPasswordsMatch) throw new DataBaseUnprocesableContentError();
 
-      const hashPassword = await encodeValue(newPassword);
+      const hashedPassword = await encodeValue(newPassword);
 
       await this.accountRepository.updateAccountPassword(
         session.uuid,
-        hashPassword,
+        hashedPassword,
         requestId,
       );
 
