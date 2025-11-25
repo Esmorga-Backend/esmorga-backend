@@ -51,6 +51,7 @@ import {
   SwaggerActivateAccount,
   SwaggerAccountRegister,
   SwaggerCloseCurrentSession,
+  SwaggerDeleteAccount,
   SwaggerDisjoinEvent,
   SwaggerForgotPassword,
   SwaggerForgotPasswordUpdate,
@@ -552,6 +553,7 @@ export class AccountController {
   @ApiBearerAuth('access-token')
   @UseGuards(AuthGuard)
   @HttpCode(204)
+  @SwaggerDeleteAccount()
   async deleteAccount(
     @SessionId() sessionId: string,
     @Body() deleteAccountDto: DeleteAccountDto,

@@ -2,11 +2,7 @@ import { HttpException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PinoLogger } from 'nestjs-pino';
 import { AccountRegisterDto } from '../..//http/dtos';
-import {
-  DataBaseInternalError,
-  DataBaseUnathorizedError,
-  DataBaseUnprocesableContentError,
-} from '../errors';
+import { DataBaseInternalError, DataBaseUnathorizedError } from '../errors';
 import { UserProfileDto } from '../../dtos';
 import { validateObjectDto } from '../utils';
 import { REQUIRED_DTO_FIELDS } from '../consts';

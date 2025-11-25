@@ -27,13 +27,14 @@ import { NodemailerService } from '../../services';
 import { AuthGuard } from '../guards';
 import { EventSharedModule } from './event-shared.module';
 import { AccountSharedModule } from './account-shared.module';
+import { PollSharedModule } from './poll-shared.module';
 import {
   LoginAttemptsRepository,
   TemporalCodeRepository,
 } from '../../db/repositories';
 
 @Module({
-  imports: [AccountSharedModule, EventSharedModule],
+  imports: [AccountSharedModule, EventSharedModule, PollSharedModule],
   controllers: [AccountController],
   providers: [
     ForgotPasswordService,
