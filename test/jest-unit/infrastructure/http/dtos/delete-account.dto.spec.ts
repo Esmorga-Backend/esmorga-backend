@@ -2,7 +2,6 @@ import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
 import { DeleteAccountDto } from '../../../../../src/infrastructure/http/dtos';
 import { DELETE_ACCOUNT } from '../../../../mocks/dtos';
-import { ACCOUNT_REGEX } from '../../../../../src/domain/regex';
 
 describe('[unit-test] [DeleteAccountDto]', () => {
   it('Should validate all fields successfully', async () => {
