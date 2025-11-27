@@ -20,6 +20,7 @@ import {
 const PATHS = {
   ACTIVATE_ACCOUNT: '/v1/account/activate',
   CLOSE_CURRENT_SESSION: '/v1/account/session',
+  DELETE_ACCOUNT: '/v1/account',
   FORGOT_PASSWORD: '/v1/account/password/forgot-init',
   GET_EVENTS_CREATED_BY_USER: '/v1/account/events/created',
   GET_PROFILE: '/v1/accout/profile',
@@ -322,6 +323,75 @@ export const JOIN_EVENT_RESPONSES: { [key: string]: ApiResponseOptions } = {
       properties: {
         ...INTERNAL_ERROR_COMMON_PROPERTIES,
         type: { type: 'string', example: PATHS.JOIN_EVENT },
+      },
+    },
+  },
+};
+
+export const DELETE_ACCOUNT_RESPONSES: { [key: string]: ApiResponseOptions } = {
+  NO_CONTENT: {
+    description: 'User account has been deleted successfully',
+  },
+  BAD_REQUEST_ERROR: {
+    description: 'Some inputs are missed or wrong',
+    schema: {
+      type: 'object',
+      properties: {
+        ...BAD_REQUEST_ERROR_COMMON_PROPERTIES,
+        type: { type: 'string', example: PATHS.DELETE_ACCOUNT },
+        errors: {
+          type: 'array',
+          example: ['password should not be empty'],
+        },
+      },
+    },
+  },
+  UNAUTHORIZED_ERROR: {
+    description: 'Invalid credentials',
+    schema: {
+      type: 'object',
+      properties: {
+        ...UNAUTHORIZED_INVALID_TOKEN_COMMON_PROPERTIES,
+        type: { type: 'string', example: PATHS.DELETE_ACCOUNT },
+      },
+    },
+  },
+  UNPROCCESABLE_CONTENT_ERROR: {
+    description: 'Password is incorrect',
+    schema: {
+      type: 'object',
+      properties: {
+        ...UNPROCESSABLE_ERROR_COMMON_PROPERTIES,
+        type: { type: 'string', example: PATHS.DELETE_ACCOUNT },
+        detail: {
+          type: 'string',
+          example: 'invalid credentials',
+        },
+        errors: {
+          type: 'array',
+          example: ['password is invalid'],
+        },
+      },
+    },
+  },
+  TOO_MANY_REQUESTS_ERROR: {
+    description: 'Too many requests, rate limit exceeded',
+    schema: {
+      type: 'object',
+      properties: {
+        ...TOO_MANY_REQUESTS_ERROR_COMMON_PROPERTIES,
+        type: { type: 'string', example: PATHS.DELETE_ACCOUNT },
+      },
+    },
+  },
+  INTERNAL_ERROR: {
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Error not handled',
+    schema: {
+      type: 'object',
+      properties: {
+        ...INTERNAL_ERROR_COMMON_PROPERTIES,
+        type: { type: 'string', example: PATHS.DELETE_ACCOUNT },
       },
     },
   },

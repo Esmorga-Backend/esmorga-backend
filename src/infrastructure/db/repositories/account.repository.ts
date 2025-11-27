@@ -2,11 +2,7 @@ import { HttpException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PinoLogger } from 'nestjs-pino';
 import { AccountRegisterDto } from '../..//http/dtos';
-import {
-  DataBaseInternalError,
-  DataBaseUnathorizedError,
-  DataBaseUnprocesableContentError,
-} from '../errors';
+import { DataBaseInternalError, DataBaseUnathorizedError } from '../errors';
 import { UserProfileDto } from '../../dtos';
 import { validateObjectDto } from '../utils';
 import { REQUIRED_DTO_FIELDS } from '../consts';
@@ -337,6 +333,28 @@ export class AccountRepository {
     } catch (error) {
       this.logger.error(
         `[AccountRepository] [getCurrentPasswordByUuid] - x-request-id: ${requestId}, error: ${error}`,
+      );
+
+      throw new DataBaseInternalError();
+    }
+  }
+
+  /**
+   * Delete account by UUID.
+   *
+   * @param uuid - User identifier..
+   * @param requestId - Request identifier.
+   */
+  async deleteAccountByUuid(uuid: string, requestId?: string) {
+    try {
+      this.logger.info(
+        `[AccountRepository] [deleteAccountByUuid] - x-request-id: ${requestId}, uuid: ${uuid}`,
+      );
+
+      await this.userDA.deleteByUuid(uuid);
+    } catch (error) {
+      this.logger.error(
+        `[AccountRepository] [deleteAccountByUuid] - x-request-id: ${requestId}, error: ${error}`,
       );
 
       throw new DataBaseInternalError();

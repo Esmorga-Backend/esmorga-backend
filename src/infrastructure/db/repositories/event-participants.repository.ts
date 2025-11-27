@@ -64,6 +64,27 @@ export class EventParticipantsRepository {
     }
   }
 
+  /**   * Remove user from all events they are participating in.
+   *
+   * @param userId - User identifier.
+   * @param requestId - Request identifier for API logger.
+   * @returns an array with the event IDs the user was removed from.
+   */
+  async removeUserFromAllEvents(userId: string, requestId?: string) {
+    try {
+      this.logger.info(
+        `[EventParticipantsRepository] [removeUserFromAllEvents] - x-request-id:${requestId}, userId ${userId}`,
+      );
+      await this.eventParticipantDA.removeUserFromAllEvents(userId);
+    } catch (error) {
+      this.logger.error(
+        `[EventParticipantsRepository] [removeUserFromAllEvents] - x-request-id:${requestId}, error ${error}`,
+      );
+
+      throw new DataBaseInternalError();
+    }
+  }
+
   /**
    * Return the event IDs the user has joined as participant.
    *

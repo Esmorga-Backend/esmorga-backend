@@ -115,4 +115,8 @@ export class UserMongoDA implements UserDA {
     if (!user) return null;
     return user.password;
   }
+
+  async deleteByUuid(uuid: string): Promise<void> {
+    await this.userModel.deleteOne({ _id: uuid });
+  }
 }

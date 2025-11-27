@@ -3,6 +3,7 @@ export * from './account-register';
 export * from './activate-account';
 export * from './create-event';
 export * from './create-poll';
+export * from './delete-account';
 export * from './email';
 export * from './event';
 export * from './event-id';

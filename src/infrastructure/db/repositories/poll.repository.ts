@@ -103,6 +103,27 @@ export class PollRepository {
   }
 
   /**
+   * Remove user from all polls.
+   *
+   * @param uuid - User identifier.
+   * @param requestId - Request identifier for API logger.
+   */
+  async removeUserFromAllPolls(uuid: string, requestId?: string) {
+    try {
+      this.logger.info(
+        `[PollRepository] [removeUserFromAllPolls] - x-request-id: ${requestId}, uuid: ${uuid} `,
+      );
+      await this.pollDA.removeUserFromAllPolls(uuid);
+    } catch (error) {
+      this.logger.error(
+        `[PollRepository] [removeUserFromAllPolls] - x-request-id: ${requestId}, error: ${error}`,
+      );
+
+      throw new DataBaseInternalError();
+    }
+  }
+
+  /**
    * Vote on a poll.
    *
    * @param votePollDto - Data transfer object containing poll vote details.

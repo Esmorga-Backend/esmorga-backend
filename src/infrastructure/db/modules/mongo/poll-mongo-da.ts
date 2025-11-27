@@ -38,6 +38,13 @@ export class PollMongoDA implements PollDA {
     });
   }
 
+  async removeUserFromAllPolls(userId: string): Promise<void> {
+    await this.pollModel.updateMany(
+      { 'options.votes': userId },
+      { $pull: { 'options.$[].votes': userId } },
+    );
+  }
+
   async vote(
     selectedOptions: string[],
     uuid: string,
