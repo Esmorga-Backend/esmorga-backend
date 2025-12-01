@@ -33,3 +33,8 @@ export async function getUserMockDb() {
 export async function getUserProfile() {
   return plainToInstance(UserProfileDto, getUserMockDb());
 }
+
+export async function getCurrentPassword() {
+  const user = await getUserMockDb();
+  return user.password;
+}

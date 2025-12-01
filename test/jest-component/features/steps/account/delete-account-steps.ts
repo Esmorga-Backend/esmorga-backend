@@ -66,6 +66,14 @@ export const deleteAccountSteps: StepDefinitions = ({ given, when, and }) => {
     jest.spyOn(context.userDA, 'deleteByUuid').mockResolvedValue(null);
   });
 
+  and('password is correct', () => {
+    const verifySpy = jest.spyOn(argon2, 'verify');
+    expect(verifySpy).toHaveBeenCalledWith(
+      'hashed-password',
+      context.mock.password,
+    );
+  });
+
   and('user profile data is removed', () => {
     expect(context.userDA.deleteByUuid).toHaveBeenCalled();
   });
