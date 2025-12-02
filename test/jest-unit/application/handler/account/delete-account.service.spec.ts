@@ -73,12 +73,13 @@ describe('[unit-test] [DeleteAccountService]', () => {
       accountRepository,
       'deleteAccountByUuid',
     );
-
-    await deleteAccountService.deleteAccount(
+    const result = await deleteAccountService.deleteAccount(
       'valid-session-id',
       { password: PASSWORD_MOCK_DB },
       MOCKED_REQUEST_ID,
     );
+
+    expect(result).toBeUndefined();
 
     expect(removeUserFromAllEventsSpy).toHaveBeenCalledWith(
       MOCKED_PROFILE.uuid,
