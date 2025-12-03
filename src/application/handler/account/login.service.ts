@@ -6,7 +6,7 @@ import { PinoLogger } from 'nestjs-pino';
 import {
   DataBaseBlockedError,
   DataBaseForbiddenError,
-  DataBaseUnathorizedError,
+  DataBaseUnauthorizedError,
 } from '../../../infrastructure/db/errors';
 import {
   AccountRepository,
@@ -62,7 +62,7 @@ export class LoginService {
         requestId,
       );
       if (!userProfile) {
-        throw new DataBaseUnathorizedError();
+        throw new DataBaseUnauthorizedError();
       }
       const { expireBlockedAt, uuid, role } = userProfile;
       let { status } = userProfile;
@@ -119,7 +119,7 @@ export class LoginService {
       if (error instanceof DataBaseForbiddenError)
         throw new UnverifiedUserApiError();
 
-      if (error instanceof DataBaseUnathorizedError)
+      if (error instanceof DataBaseUnauthorizedError)
         throw new InvalidCredentialsLoginApiError();
 
       throw error;

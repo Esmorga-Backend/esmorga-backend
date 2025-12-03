@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PinoLogger } from 'nestjs-pino';
 import {
-  DataBaseUnathorizedError,
+  DataBaseUnauthorizedError,
   DataBaseNotFoundError,
 } from '../../../infrastructure/db/errors';
 import {
@@ -78,7 +78,7 @@ export class DisjoinEventService {
         `[DisjoinEventService] [disJoinEvent] - x-request-id: ${requestId}, error ${error}`,
       );
 
-      if (error instanceof DataBaseUnathorizedError)
+      if (error instanceof DataBaseUnauthorizedError)
         throw new InvalidTokenApiError();
 
       if (error instanceof DataBaseNotFoundError)

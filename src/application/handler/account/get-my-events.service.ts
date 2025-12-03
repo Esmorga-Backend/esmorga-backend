@@ -7,7 +7,7 @@ import {
   EventParticipantsRepository,
 } from '../../../infrastructure/db/repositories';
 import { filterAvailableEvents } from '../../../domain/services';
-import { DataBaseUnathorizedError } from '../../../infrastructure/db/errors';
+import { DataBaseUnauthorizedError } from '../../../infrastructure/db/errors';
 import { InvalidTokenApiError } from '../../../domain/errors';
 
 @Injectable()
@@ -59,7 +59,7 @@ export class GetMyEventsService {
         `[GetMyEventsService] [getEvents] - x-request-id: ${requestId}, error ${error}`,
       );
 
-      if (error instanceof DataBaseUnathorizedError)
+      if (error instanceof DataBaseUnauthorizedError)
         throw new InvalidTokenApiError();
 
       throw error;

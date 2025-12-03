@@ -3,7 +3,7 @@ import { SessionRepository } from '../../../../../src/infrastructure/db/reposito
 import { SessionDA } from '../../../../../src/infrastructure/db/modules/none/session-da';
 import {
   DataBaseInternalError,
-  DataBaseUnathorizedError,
+  DataBaseUnauthorizedError,
 } from '../../../../../src/infrastructure/db/errors';
 import { SessionDto } from '../../../../../src/infrastructure/dtos/session.dto';
 import { SESSION_MOCK_DB } from '../../../../mocks/db/tokens';
@@ -100,12 +100,12 @@ describe('[unit-test] [SessionRepository]', () => {
       expect(sessionDA.findOneBySessionId).toHaveBeenCalledWith('sessionId');
     });
 
-    it('throws DataBaseUnathorizedError when session does not exist', async () => {
+    it('throws DataBaseUnauthorizedError when session does not exist', async () => {
       sessionDA.findOneBySessionId.mockResolvedValue(null);
 
       await expect(
         repository.getBySessionId('sessionId'),
-      ).rejects.toBeInstanceOf(DataBaseUnathorizedError);
+      ).rejects.toBeInstanceOf(DataBaseUnauthorizedError);
     });
 
     it('throws DataBaseInternalError', async () => {

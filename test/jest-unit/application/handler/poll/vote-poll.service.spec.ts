@@ -12,7 +12,7 @@ import {
 import {
   DataBaseBadRequestError,
   DataBaseNotFoundError,
-  DataBaseUnathorizedError,
+  DataBaseUnauthorizedError,
 } from '../../../../../src/infrastructure/db/errors';
 import { POLL_MOCK, OLD_POLL_MOCK } from '../../../../mocks/dtos/poll';
 import {
@@ -154,7 +154,7 @@ describe('[unit-test] [VotePollService]', () => {
 
   it('throws InvalidTokenApiError when session is invalid', async () => {
     sessionRepository.getBySessionId.mockRejectedValue(
-      new DataBaseUnathorizedError(),
+      new DataBaseUnauthorizedError(),
     );
 
     await expect(

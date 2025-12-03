@@ -7,7 +7,7 @@ import {
   PollRepository,
 } from '../../../infrastructure/db/repositories';
 import { DeleteAccountDto } from '../../../infrastructure/http/dtos';
-import { DataBaseUnathorizedError } from '../../../infrastructure/db/errors';
+import { DataBaseUnauthorizedError } from '../../../infrastructure/db/errors';
 import {
   InvalidTokenApiError,
   InvalidPasswordError,
@@ -63,9 +63,11 @@ export class DeleteAccountService {
 
       await this.pollRepository.removeUserFromAllPolls(uuid, requestId);
 
+      const noSessionIdToKeep = null;
+
       await this.sessionRepository.removeAllSessionsByUuid(
         uuid,
-        null,
+        noSessionIdToKeep,
         requestId,
       );
 
@@ -75,7 +77,7 @@ export class DeleteAccountService {
         `[DeleteAccountService] [deleteAccount] - x-request-id:${requestId}, error ${error}`,
       );
 
-      if (error instanceof DataBaseUnathorizedError)
+      if (error instanceof DataBaseUnauthorizedError)
         throw new InvalidTokenApiError();
 
       throw error;

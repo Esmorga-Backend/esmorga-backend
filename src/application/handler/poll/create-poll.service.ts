@@ -10,7 +10,7 @@ import {
   InvalidTokenApiError,
 } from '../../../domain/errors';
 import { CreatePollDto } from '../../../infrastructure/http/dtos';
-import { DataBaseUnathorizedError } from '../../../infrastructure/db/errors';
+import { DataBaseUnauthorizedError } from '../../../infrastructure/db/errors';
 import { ACCOUNT_ROLES } from '../../../domain/const';
 
 @Injectable()
@@ -59,7 +59,7 @@ export class CreatePollService {
         `[CreatePollService] [create] - x-request-id: ${requestId}, error: ${error}`,
       );
 
-      if (error instanceof DataBaseUnathorizedError)
+      if (error instanceof DataBaseUnauthorizedError)
         throw new InvalidTokenApiError();
 
       throw error;

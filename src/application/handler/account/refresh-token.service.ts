@@ -6,7 +6,7 @@ import { PinoLogger } from 'nestjs-pino';
 import { SessionRepository } from '../../../infrastructure/db/repositories';
 import { RefreshTokenDto } from '../../../infrastructure/http/dtos';
 import { NewPairOfTokensDto } from '../../../infrastructure/dtos';
-import { DataBaseUnathorizedError } from '../../../infrastructure/db/errors';
+import { DataBaseUnauthorizedError } from '../../../infrastructure/db/errors';
 import { InvalidCredentialsRefreshApiError } from '../../../domain/errors';
 import { SessionGenerator } from '../../../domain/services';
 
@@ -87,7 +87,7 @@ export class RefreshTokenService {
       );
 
       if (
-        error instanceof DataBaseUnathorizedError ||
+        error instanceof DataBaseUnauthorizedError ||
         error instanceof JsonWebTokenError
       )
         throw new InvalidCredentialsRefreshApiError();

@@ -14,7 +14,7 @@ import {
 } from '../../../domain/errors';
 import {
   DataBaseNotFoundError,
-  DataBaseUnathorizedError,
+  DataBaseUnauthorizedError,
 } from '../../../infrastructure/db/errors';
 @Injectable()
 export class DeleteEventService {
@@ -67,7 +67,7 @@ export class DeleteEventService {
         `[DeleteEventService] [delete] - x-request-id:${requestId}, error ${error}`,
       );
 
-      if (error instanceof DataBaseUnathorizedError)
+      if (error instanceof DataBaseUnauthorizedError)
         throw new InvalidTokenApiError();
 
       if (error instanceof DataBaseNotFoundError)

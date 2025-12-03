@@ -2,7 +2,7 @@ import { PinoLogger } from 'nestjs-pino';
 import { GetPollListService } from '../../../../../src/application/handler/poll/get-poll-list.service';
 import { PollDto } from '../../../../../src/infrastructure/dtos';
 import { InvalidTokenApiError } from '../../../../../src/domain/errors';
-import { DataBaseUnathorizedError } from '../../../../../src/infrastructure/db/errors';
+import { DataBaseUnauthorizedError } from '../../../../../src/infrastructure/db/errors';
 import { POLL_MOCK, OLD_POLL_MOCK } from '../../../../mocks/dtos/poll';
 import {
   pollRepository,
@@ -106,7 +106,7 @@ describe('[unit-test] [GetPollListService]', () => {
 
   it('throws InvalidTokenApiError when session is invalid', async () => {
     sessionRepository.getBySessionId.mockRejectedValue(
-      new DataBaseUnathorizedError(),
+      new DataBaseUnauthorizedError(),
     );
 
     await expect(service.find(sessionId, requestId)).rejects.toBeInstanceOf(
