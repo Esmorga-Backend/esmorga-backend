@@ -32,6 +32,7 @@ import {
   RegisterService,
   SendEmailVerificationService,
   UpdatePasswordService,
+  DeleteAccountService,
 } from '../../../application/handler/account';
 import { HttpExceptionFilter } from '../errors';
 import {
@@ -43,12 +44,14 @@ import {
   RefreshTokenDto,
   UpdateForgotPasswordDto,
   UpdatePasswordDto,
+  DeleteAccountDto,
 } from '../dtos';
 import {
   SwaggerAccountLogin,
   SwaggerActivateAccount,
   SwaggerAccountRegister,
   SwaggerCloseCurrentSession,
+  SwaggerDeleteAccount,
   SwaggerDisjoinEvent,
   SwaggerForgotPassword,
   SwaggerForgotPasswordUpdate,
@@ -91,6 +94,7 @@ export class AccountController {
     private readonly sendEmailVerificationService: SendEmailVerificationService,
     private readonly updateForgotPasswordService: UpdateForgotPasswordService,
     private readonly updatePasswordService: UpdatePasswordService,
+    private readonly deleteAccountService: DeleteAccountService,
     private configService: ConfigService,
     private jwtService: JwtService,
   ) {}
@@ -535,6 +539,39 @@ export class AccountController {
     } catch (error) {
       this.logger.error(
         `[AccountController] [getProfile] - x-request-id: ${requestId}, error: ${error}`,
+      );
+
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      throw new InternalServerErrorException();
+    }
+  }
+
+  @Delete('/')
+  @ApiBearerAuth('access-token')
+  @UseGuards(AuthGuard)
+  @HttpCode(204)
+  @SwaggerDeleteAccount()
+  async deleteAccount(
+    @SessionId() sessionId: string,
+    @Body() deleteAccountDto: DeleteAccountDto,
+    @RequestId() requestId: string,
+  ) {
+    try {
+      this.logger.info(
+        `[AccountController] [deleteAccount] - x-request-id: ${requestId}`,
+      );
+
+      await this.deleteAccountService.deleteAccount(
+        sessionId,
+        deleteAccountDto,
+        requestId,
+      );
+    } catch (error) {
+      this.logger.error(
+        `[AccountController] [deleteAccount] - x-request-id: ${requestId}, error: ${error}`,
       );
 
       if (error instanceof HttpException) {

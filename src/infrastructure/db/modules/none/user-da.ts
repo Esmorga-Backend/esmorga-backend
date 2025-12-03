@@ -53,4 +53,8 @@ export class UserDA {
   getCurrentPasswordByUuid(_uuid: string): Promise<string | null> {
     throw new NotImplementedException();
   }
+
+  deleteByUuid(_uuid: string): Promise<void> {
+    throw new NotImplementedException();
+  }
 }

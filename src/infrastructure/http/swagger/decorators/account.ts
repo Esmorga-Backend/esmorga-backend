@@ -30,6 +30,7 @@ import {
   REGISTER_HEADER,
   SEND_EMAIL_VERIFICATION_HEADER,
   UPDATE_PASSWORD_HEADERS,
+  DELETE_ACCOUNT_HEADERS,
 } from '../headers';
 import {
   ACTIVATE_ACCOUNT_RESPONSES,
@@ -46,6 +47,7 @@ import {
   REGISTER_RESPONSES,
   SEND_EMAIL_VERIFICATION_RESPONSES,
   UPDATE_PASSWORD_RESPONSES,
+  DELETE_ACCOUNT_RESPONSES,
 } from '../responses';
 
 export function SwaggerAccountLogin() {
@@ -282,5 +284,26 @@ export function SwaggerGetProfile() {
     ApiUnauthorizedResponse(GET_PROFILE_RESPONSES.UNAUTHORIZED_ERROR),
     ApiTooManyRequestsResponse(GET_PROFILE_RESPONSES.TOO_MANY_REQUESTS_ERROR),
     ApiInternalServerErrorResponse(GET_PROFILE_RESPONSES.INTERNAL_ERROR),
+  );
+}
+
+export function SwaggerDeleteAccount() {
+  return applyDecorators(
+    ApiOperation({
+      summary: 'Delete account and all related data.',
+    }),
+    ApiBearerAuth(),
+    ApiHeader(DELETE_ACCOUNT_HEADERS.AUTHORIZATION_BEARER),
+    ApiHeader(DELETE_ACCOUNT_HEADERS.CONTENT_TYPE),
+    ApiNoContentResponse(DELETE_ACCOUNT_RESPONSES.NO_CONTENT),
+    ApiBadRequestResponse(DELETE_ACCOUNT_RESPONSES.BAD_REQUEST_ERROR),
+    ApiUnauthorizedResponse(DELETE_ACCOUNT_RESPONSES.UNAUTHORIZED_ERROR),
+    ApiUnprocessableEntityResponse(
+      DELETE_ACCOUNT_RESPONSES.UNPROCCESABLE_CONTENT_ERROR,
+    ),
+    ApiTooManyRequestsResponse(
+      DELETE_ACCOUNT_RESPONSES.TOO_MANY_REQUESTS_ERROR,
+    ),
+    ApiInternalServerErrorResponse(DELETE_ACCOUNT_RESPONSES.INTERNAL_ERROR),
   );
 }

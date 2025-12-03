@@ -25,6 +25,10 @@ export class EventParticipantsDA {
     throw new NotImplementedException();
   }
 
+  removeUserFromAllEvents(_userId: string): Promise<void> {
+    throw new NotImplementedException();
+  }
+
   findEvent(_eventId: string): Promise<EventParticipantsDto | null> {
     throw new NotImplementedException();
   }

@@ -15,6 +15,9 @@ export class PollDA {
     throw new NotImplementedException();
   }
 
+  removeUserFromAllPolls(_userId: string): Promise<void> {
+    throw new NotImplementedException();
+  }
   vote(
     _selectedOptions: string[],
     _userId: string,

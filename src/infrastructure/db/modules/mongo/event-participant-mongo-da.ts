@@ -77,6 +77,14 @@ export class EventParticipantsMongoDA implements EventParticipantsDA {
     return false;
   }
 
+  async removeUserFromAllEvents(userId: string): Promise<void> {
+    await this.eventParticipantsModel.updateMany(
+      { participants: userId },
+      { $pull: { participants: userId } },
+      { timestamps: false },
+    );
+  }
+
   async findEvent(eventId: string): Promise<EventParticipantsDto | null> {
     const eventParcipantsDoc = await this.eventParticipantsModel.findOne({
       eventId: eventId,
