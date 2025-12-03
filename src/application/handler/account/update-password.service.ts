@@ -19,7 +19,7 @@ import {
   InvalidSamePasswordApiError,
 } from '../../../domain/errors';
 import {
-  DataBaseUnathorizedError,
+  DataBaseUnauthorizedError,
   DataBaseUnprocesableContentError,
 } from '../../../infrastructure/db/errors';
 
@@ -124,7 +124,7 @@ export class UpdatePasswordService {
         throw new InvalidCurrentPasswordError();
       }
 
-      if (error instanceof DataBaseUnathorizedError) {
+      if (error instanceof DataBaseUnauthorizedError) {
         throw new InvalidCredentialsRefreshApiError();
       }
 

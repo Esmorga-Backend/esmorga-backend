@@ -99,5 +99,11 @@ export const deleteAccountSteps: StepDefinitions = ({ given, when, and }) => {
     context.mock = {
       password: '',
     };
+    expect(
+      context.eventParticipantsDA.removeUserFromAllEvents,
+    ).not.toHaveBeenCalled();
+    expect(context.pollDA.removeUserFromAllPolls).not.toHaveBeenCalled();
+    expect(context.sessionDA.removeAllByUuid).not.toHaveBeenCalled();
+    expect(context.userDA.deleteByUuid).not.toHaveBeenCalled();
   });
 };

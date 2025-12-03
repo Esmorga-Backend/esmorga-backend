@@ -1,6 +1,6 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { PinoLogger } from 'nestjs-pino';
-import { DataBaseInternalError, DataBaseUnathorizedError } from '../errors';
+import { DataBaseInternalError, DataBaseUnauthorizedError } from '../errors';
 import { SessionDto } from '../../dtos';
 import { SessionDA } from '../modules/none/session-da';
 
@@ -80,7 +80,7 @@ export class SessionRepository {
         `[SessionRepository] [getBySessionId] - x-request-id:${requestId}, sessionId ${sessionId}`,
       );
       const sessionData = await this.sessionDA.findOneBySessionId(sessionId);
-      if (!sessionData) throw new DataBaseUnathorizedError();
+      if (!sessionData) throw new DataBaseUnauthorizedError();
       return sessionData;
     } catch (error) {
       this.logger.error(

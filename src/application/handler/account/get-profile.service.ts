@@ -6,7 +6,7 @@ import {
   AccountRepository,
   SessionRepository,
 } from '../../../infrastructure/db/repositories';
-import { DataBaseUnathorizedError } from '../../../infrastructure/db/errors';
+import { DataBaseUnauthorizedError } from '../../../infrastructure/db/errors';
 import { InvalidTokenApiError } from '../../../domain/errors';
 
 @Injectable()
@@ -41,7 +41,7 @@ export class GetProfileService {
       );
 
       if (!userProfile) {
-        throw new DataBaseUnathorizedError();
+        throw new DataBaseUnauthorizedError();
       }
 
       const profileDto: ProfileDto = plainToInstance(ProfileDto, userProfile, {
@@ -54,7 +54,7 @@ export class GetProfileService {
         `[GetProfileService] [getProfile] - x-request-id: ${requestId}, error ${error}`,
       );
 
-      if (error instanceof DataBaseUnathorizedError)
+      if (error instanceof DataBaseUnauthorizedError)
         throw new InvalidTokenApiError();
 
       throw error;

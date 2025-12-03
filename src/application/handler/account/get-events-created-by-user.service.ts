@@ -9,7 +9,7 @@ import {
   EventWithCreatorFlagDto,
   EventListWithCreatorFlagDto,
 } from '../../../infrastructure/dtos';
-import { DataBaseUnathorizedError } from '../../../infrastructure/db/errors';
+import { DataBaseUnauthorizedError } from '../../../infrastructure/db/errors';
 import {
   InvalidTokenApiError,
   NotAdminAccountApiError,
@@ -67,7 +67,7 @@ export class GetEventsCreatedByUserService {
         `[GetUserCreatedEventsService] [getEvents] - x-request-id: ${requestId}, error ${error}`,
       );
 
-      if (error instanceof DataBaseUnathorizedError)
+      if (error instanceof DataBaseUnauthorizedError)
         throw new InvalidTokenApiError();
 
       throw error;

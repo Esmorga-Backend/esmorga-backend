@@ -5,7 +5,7 @@ import { UpdateEventDto } from '../../../infrastructure/http/dtos';
 import { ACCOUNT_ROLES } from '../../../domain/const';
 import {
   DataBaseBadRequestError,
-  DataBaseUnathorizedError,
+  DataBaseUnauthorizedError,
 } from '../../../infrastructure/db/errors';
 import {
   AccountRepository,
@@ -110,7 +110,7 @@ export class UpdateEventService {
       if (error instanceof DataBaseBadRequestError)
         throw new InvalidEventIdApiError();
 
-      if (error instanceof DataBaseUnathorizedError)
+      if (error instanceof DataBaseUnauthorizedError)
         throw new InvalidTokenApiError();
 
       throw error;

@@ -2,7 +2,7 @@ import { HttpException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PinoLogger } from 'nestjs-pino';
 import { AccountRegisterDto } from '../..//http/dtos';
-import { DataBaseInternalError, DataBaseUnathorizedError } from '../errors';
+import { DataBaseInternalError, DataBaseUnauthorizedError } from '../errors';
 import { UserProfileDto } from '../../dtos';
 import { validateObjectDto } from '../utils';
 import { REQUIRED_DTO_FIELDS } from '../consts';
@@ -23,7 +23,7 @@ export class AccountRepository {
    * @param id - User identifier.
    * @param requestId - Request identifier.
    * @returns User data following business schema.
-   * @throws DataBaseUnathorizedError - User not found.
+   * @throws DataBaseUnauthorizedError - User not found.
    */
   async getUserById(id: string, requestId?: string) {
     try {
@@ -33,7 +33,7 @@ export class AccountRepository {
 
       const userProfile = await this.userDA.findOneById(id);
 
-      if (!userProfile) throw new DataBaseUnathorizedError();
+      if (!userProfile) throw new DataBaseUnauthorizedError();
 
       validateObjectDto(userProfile, REQUIRED_DTO_FIELDS.USER_PROFILE);
 
@@ -55,7 +55,7 @@ export class AccountRepository {
    * @param email - User email.
    * @param requestId - Request identifier.
    * @returns User data following business schema.
-   * @throws DataBaseUnathorizedError - User not found.
+   * @throws DataBaseUnauthorizedError - User not found.
    */
   async getUserByEmail(
     email: string,

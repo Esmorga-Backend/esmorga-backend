@@ -14,7 +14,7 @@ import {
 import {
   DataBaseBadRequestError,
   DataBaseNotFoundError,
-  DataBaseUnathorizedError,
+  DataBaseUnauthorizedError,
 } from '../../../infrastructure/db/errors';
 import { VotePollDto } from '../../../infrastructure/http/dtos';
 import { PollDto } from '../../../infrastructure/dtos';
@@ -106,7 +106,7 @@ export class VotePollService {
         `[VotePollService] [vote] - x-request-id: ${requestId}, error: ${error}`,
       );
 
-      if (error instanceof DataBaseUnathorizedError)
+      if (error instanceof DataBaseUnauthorizedError)
         throw new InvalidTokenApiError();
 
       if (error instanceof DataBaseBadRequestError)
