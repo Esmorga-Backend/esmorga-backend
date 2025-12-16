@@ -82,3 +82,4 @@ $ node test/scripts/features-tool --Create-Cycle-for-US
 Nest is [MIT licensed](LICENSE).
 
 
+release/esmorga-1.4.0
