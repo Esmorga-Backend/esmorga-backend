@@ -5,6 +5,7 @@ import {
   IsNumber,
   validateSync,
   IsPositive,
+  IsBoolean,
 } from 'class-validator';
 
 class EnvVars {
@@ -64,6 +65,12 @@ class EnvVars {
   @IsNotEmpty()
   @IsString()
   DNS_NAME: string;
+
+  @IsBoolean()
+  ENABLE_CORS: boolean = false;
+
+  @IsString()
+  CORS_ORIGIN: string = '*';
 
   @IsNumber()
   @IsPositive()
