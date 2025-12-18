@@ -5,7 +5,6 @@ import {
   IsNumber,
   validateSync,
   IsPositive,
-  IsBoolean,
 } from 'class-validator';
 
 class EnvVars {

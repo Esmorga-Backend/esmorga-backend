@@ -27,7 +27,12 @@ async function main() {
     }
 
     const allowAllOrigins = corsOrigin === '*';
-    const origins = allowAllOrigins ? true : corsOrigin.split(',');
+    const origins = allowAllOrigins
+      ? true
+      : corsOrigin
+          .split(',')
+          .map((origin) => origin.trim())
+          .filter((origin) => origin.length > 0);
     const allowCredentials = !allowAllOrigins;
 
     app.enableCors({
