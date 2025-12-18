@@ -18,12 +18,21 @@ async function main() {
 
   const configService = app.get(ConfigService);
   const enableCors = configService.get<boolean>('ENABLE_CORS');
-  const corsOrigin = configService.get<string>('CORS_ORIGIN');
 
   if (enableCors) {
+    const corsOrigin = configService.get<string>('CORS_ORIGIN');
+
+    if (!corsOrigin) {
+      throw new Error('CORS_ORIGIN must be defined when ENABLE_CORS is true.');
+    }
+
+    const allowAllOrigins = corsOrigin === '*';
+    const origins = allowAllOrigins ? true : corsOrigin.split(',');
+    const allowCredentials = !allowAllOrigins;
+
     app.enableCors({
-      origin: corsOrigin === '*' ? true : corsOrigin.split(','),
-      credentials: true,
+      origin: origins,
+      credentials: allowCredentials,
       methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
       allowedHeaders: ['Content-Type', 'Authorization'],
     });
