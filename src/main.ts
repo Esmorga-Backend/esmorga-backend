@@ -17,7 +17,7 @@ async function main() {
   );
 
   const configService = app.get(ConfigService);
-  const enableCors = configService.get<boolean>('ENABLE_CORS');
+  const enableCors = configService.get<string>('ENABLE_CORS') === 'true';
 
   if (enableCors) {
     const corsOrigin = configService.get<string>('CORS_ORIGIN');

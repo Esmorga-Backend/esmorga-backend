@@ -66,8 +66,8 @@ class EnvVars {
   @IsString()
   DNS_NAME: string;
 
-  @IsBoolean()
-  ENABLE_CORS: boolean = false;
+  @IsString()
+  ENABLE_CORS: string = 'false';
 
   @IsString()
   CORS_ORIGIN: string = '*';
