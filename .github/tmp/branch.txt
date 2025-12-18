@@ -1,1 +1,1 @@
-enablePostmanTests
+revert-213-feature/MOB-502
