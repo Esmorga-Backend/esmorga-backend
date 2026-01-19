@@ -98,7 +98,7 @@ jobs:
         CORS_ORIGIN: ${{vars.CORS_ORIGIN}}
         ENABLE_CORS: ${{vars.ENABLE_CORS}}
 
-    - name: Run Postman
+    - name: Run Postman Tests
       uses: ./.github/actions/runPostmanTests
       with:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
