@@ -95,7 +95,7 @@ jobs:
         JWT_REFRESH_SECRET: ${{secrets.JWT_REFRESH_SECRET}}
         CORS_ORIGIN: ${{vars.CORS_ORIGIN}}
         ENABLE_CORS: ${{vars.ENABLE_CORS}}
-        
+
     - name: Run Postman
       uses: ./.github/actions/runPostmanTests
       with:
