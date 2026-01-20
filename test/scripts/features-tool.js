@@ -1,4 +1,5 @@
 require('dotenv').config();
+const fs = require('fs');
 const Aio = require('./lib/Aio.js');
 const aio = new Aio();
 const Features = require('./lib/Features.js');
@@ -49,8 +50,12 @@ async function main() {
 
     if (!usName || !usVersionName) {
       console.log(
-        'No Jira ticket found in branch name. Skipping test management.',
+        '⚠️  No Jira ticket found in branch name. Skipping test management.',
       );
+
+      fs.mkdirSync('test/jest-component/features', { recursive: true });
+      fs.writeFileSync('test/jest-component/features/.gitkeep', '');
+
       process.exit(0);
     }
 
