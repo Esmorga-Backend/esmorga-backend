@@ -47,6 +47,13 @@ async function main() {
     }
     let [usName, usVersionName] = features.getUsNameFromBranch(branchName);
 
+    if (!usName || !usVersionName) {
+      console.log(
+        'No Jira ticket found in branch name. Skipping test management.',
+      );
+      process.exit(0);
+    }
+
     //Comment use nexts to force a US with tests
     // usName = 'MOB-1';
     // usVersionName = 'MOB-1';
