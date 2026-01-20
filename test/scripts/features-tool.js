@@ -1,4 +1,5 @@
 require('dotenv').config();
+const fs = require('fs');
 const Aio = require('./lib/Aio.js');
 const aio = new Aio();
 const Features = require('./lib/Features.js');
@@ -46,6 +47,17 @@ async function main() {
       console.log(branchName);
     }
     let [usName, usVersionName] = features.getUsNameFromBranch(branchName);
+
+    if (!usName || !usVersionName) {
+      console.log(
+        '⚠️  No Jira ticket found in branch name. Skipping test management.',
+      );
+
+      fs.mkdirSync('test/jest-component/features', { recursive: true });
+      fs.writeFileSync('test/jest-component/features/.gitkeep', '');
+
+      process.exit(0);
+    }
 
     //Comment use nexts to force a US with tests
     // usName = 'MOB-1';
