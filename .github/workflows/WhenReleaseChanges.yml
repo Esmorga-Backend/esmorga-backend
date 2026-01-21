@@ -28,7 +28,6 @@ jobs:
       with:
         node-version: '22.1'
 
-
     - name: Checkout repository
       uses: actions/checkout@v2
 
