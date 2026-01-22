@@ -64,7 +64,7 @@ jobs:
       shell: bash
       if: ${{ inputs.environment == 'QA' }}
       run: |
-        python -m pip install --upgrade pip paramiko 
+        # python -m pip install --upgrade pip paramiko 
         python .github/workflows/scripts/DeployToEnv.py qa.api.esmorgaevents.com ${{vars.SERVICE}} ${{vars.SERVER_PATH}} $GITHUB_REF ${{secrets.SSHRSA}}
 
     - name: Remove .env
