@@ -45,7 +45,7 @@ class Features {
       return [match[1], matchV[1]];
     }
     console.log(matchV, match);
-    return [null, null];
+    return;
   }
 }
 
