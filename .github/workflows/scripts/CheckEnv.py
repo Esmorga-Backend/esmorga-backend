@@ -68,8 +68,7 @@ def add_envs_to_create_from_urls():
                 data = response.read().decode()
                 values = json.loads(data)
                 for v in values[urls[url]]:
-                    if os.getenv(v['name'])==None:
-                        envs_to_create[v['name']]=urls[url]
+                    envs_to_create[v['name']]=urls[url]
 
 
         except urllib.error.HTTPError as e:
