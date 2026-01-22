@@ -68,6 +68,7 @@ def add_envs_to_create_from_urls():
                 data = response.read().decode()
                 values = json.loads(data)
                 for v in values[urls[url]]:
+                    if os.getenv(v['name'])==None:
                     envs_to_create[v['name']]=urls[url]
 
 
@@ -116,11 +117,10 @@ def check_create_env_steps(data,change,job,step_n):
     if 'name' in data['jobs'][job]['steps'][step_n] and data['jobs'][job]['steps'][step_n]['name'] =='Create .env' :
         run=''
         for var in failed_vars:
-            if var in envs_to_create:
-                if envs_to_create[var] == 'variables':
-                    run=run+'echo "'+var+'=${{vars.'+var+'}}" >> .env \n'
-                else:
-                    run=run+'echo "'+var+'=${{'+envs_to_create[var]+'.'+var+'}}" >> .env \n'
+            if envs_to_create[var] == 'variables':
+                run=run+'echo "'+var+'=${{vars.'+var+'}}" >> .env \n'
+            else:
+                run=run+'echo "'+var+'=${{'+envs_to_create[var]+'.'+var+'}}" >> .env \n'
         if run!=data['jobs'][job]['steps'][step_n]['run']:
             data['jobs'][job]['steps'][step_n]['run']=run
             change=1
@@ -133,7 +133,7 @@ def check_steps_need_vars(data,change,job,step_n):
             data['jobs'][job]['steps'][step_n]['env']=dict()
 
         for var in failed_vars:
-            if var not in data['jobs'][job]['steps'][step_n]['env'] and var in envs_to_create:
+            if var not in data['jobs'][job]['steps'][step_n]['env']:
                 if envs_to_create[var] == 'variables':
                     data['jobs'][job]['steps'][step_n]['env'][var]='${{vars.'+var+'}}'
                 else:
