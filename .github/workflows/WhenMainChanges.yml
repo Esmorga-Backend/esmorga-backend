@@ -50,8 +50,6 @@ jobs:
         MAX_LOGIN_ATTEMPTS: ${{vars.MAX_LOGIN_ATTEMPTS}}
         DNS_NAME: ${{vars.DNS_NAME}}
         JWT_REFRESH_SECRET: ${{secrets.JWT_REFRESH_SECRET}}
-        CORS_ORIGIN: ${{vars.CORS_ORIGIN}}
-        ENABLE_CORS: ${{vars.ENABLE_CORS}}
     - name: Run Component Tests
       uses: ./.github/actions/runComponentTests
       with:
@@ -70,8 +68,6 @@ jobs:
         MAX_LOGIN_ATTEMPTS: ${{vars.MAX_LOGIN_ATTEMPTS}}
         DNS_NAME: ${{vars.DNS_NAME}}
         JWT_REFRESH_SECRET: ${{secrets.JWT_REFRESH_SECRET}}
-        CORS_ORIGIN: ${{vars.CORS_ORIGIN}}
-        ENABLE_CORS: ${{vars.ENABLE_CORS}}
     - name: Run Reporting
       uses: ./.github/actions/runReporting
       with:
@@ -95,8 +91,6 @@ jobs:
         MAX_LOGIN_ATTEMPTS: ${{vars.MAX_LOGIN_ATTEMPTS}}
         DNS_NAME: ${{vars.DNS_NAME}}
         JWT_REFRESH_SECRET: ${{secrets.JWT_REFRESH_SECRET}}
-        CORS_ORIGIN: ${{vars.CORS_ORIGIN}}
-        ENABLE_CORS: ${{vars.ENABLE_CORS}}
 
     - name: Run Postman Tests
       uses: ./.github/actions/runPostmanTests
