@@ -13,7 +13,7 @@ import {
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { PinoLogger } from 'nestjs-pino';
 import { HttpExceptionFilter } from '../errors';
-import { AuthGuard } from '../guards';
+import { AuthGuard, OptionalAuthGuard } from '../guards';
 import { RequestId, SessionId } from '../req-decorators';
 import { CreatePollDto, VotePollDto } from '../dtos';
 import {
@@ -67,7 +67,7 @@ export class PollController {
 
   @Get('/')
   @ApiBearerAuth('access-token')
-  @UseGuards(AuthGuard)
+  @UseGuards(OptionalAuthGuard)
   @SwaggerGetPolls()
   async getPolls(
     @RequestId() requestId: string,
