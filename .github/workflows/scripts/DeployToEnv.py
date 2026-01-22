@@ -1,20 +1,20 @@
-import paramiko
+# import paramiko
 import sys
 import io
 service=sys.argv[2]
 service_path=sys.argv[3]
 branch=sys.argv[4]
 hostname=sys.argv[1]
-ssh_client =paramiko.SSHClient()
+# ssh_client =paramiko.SSHClient()
 
-ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+# ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 if len(sys.argv)>5:
     key=sys.argv[5]
     print(key[:15]+"..."+key[-15:])
-    pkey = paramiko.RSAKey.from_private_key(io.StringIO(key))
-    ssh_client.connect(hostname=hostname,port='22',username='ubuntu',pkey=pkey)
-else:
-    ssh_client.connect(hostname=hostname,port='22',username='ubuntu')
+#     pkey = paramiko.RSAKey.from_private_key(io.StringIO(key))
+#     ssh_client.connect(hostname=hostname,port='22',username='ubuntu',pkey=pkey)
+# else:
+#     ssh_client.connect(hostname=hostname,port='22',username='ubuntu')
 # command = """
 # sudo touch  /var/www/html/"""+service+""".flag
 # sudo systemctl stop """+service+"""
