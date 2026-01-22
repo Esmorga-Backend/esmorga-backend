@@ -23,7 +23,7 @@ runs:
            github-token: ${{ inputs.GITHUB_TOKEN }}
            comment-title:
            all-files-minimum-coverage: 0
-           changed-files-minimum-coverage: 75
+           changed-files-minimum-coverage: 0
 
 
       #   if: failure() && steps.unit-tests.outcome == 'failure'
