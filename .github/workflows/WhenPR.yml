@@ -13,12 +13,12 @@ on:
   workflow_dispatch:
 
 jobs:
-  # SetupEnv:
-  #   uses: ./.github/workflows/CheckEnv.yml
-  #   secrets: inherit
+  SetupEnv:
+    uses: ./.github/workflows/CheckEnv.yml
+    secrets: inherit
 
   Run-tests-on-Ubuntu:
-    # needs: SetupEnv
+    needs: SetupEnv
     name: Run npm test on Ubuntu
     runs-on: ubuntu-latest
     permissions:
