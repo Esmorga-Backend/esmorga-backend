@@ -13,13 +13,12 @@ on:
   workflow_dispatch:
 
 jobs:
-  SetupEnv:
-    uses: ./.github/workflows/CheckEnv.yml
-    secrets: inherit
-
+  # SetupEnv:
+  #   uses: ./.github/workflows/CheckEnv.yml
+  #   secrets: inherit
 
   Run-tests-on-Ubuntu:
-    needs: SetupEnv
+    # needs: SetupEnv
     name: Run npm test on Ubuntu
     runs-on: ubuntu-latest
     permissions:
@@ -28,16 +27,16 @@ jobs:
     env:
       AIO_TOKEN: ${{secrets.AIO_TOKEN}}
 
-
-
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-    - uses: actions/checkout@v4
+    
     - uses: actions/setup-node@v4
       with:
         node-version: '22.1'
+    
     - run: npm ci
+
     - run: npm run test:create:cycle
 
     - name: Run Unit Tests
@@ -60,6 +59,7 @@ jobs:
         JWT_REFRESH_SECRET: ${{secrets.JWT_REFRESH_SECRET}}
         CORS_ORIGIN: ${{vars.CORS_ORIGIN}}
         ENABLE_CORS: ${{vars.ENABLE_CORS}}
+
     - name: Run Component Tests
       uses: ./.github/actions/runComponentTests
       with:
@@ -80,6 +80,7 @@ jobs:
         JWT_REFRESH_SECRET: ${{secrets.JWT_REFRESH_SECRET}}
         CORS_ORIGIN: ${{vars.CORS_ORIGIN}}
         ENABLE_CORS: ${{vars.ENABLE_CORS}}
+
     - name: Run Reporting
       uses: ./.github/actions/runReporting
       with:
