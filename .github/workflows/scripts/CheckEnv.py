@@ -77,18 +77,7 @@ def get_all_envs_and_vars():
         if os.getenv(s['name']) == None:
             envs_to_create[s['name']] = "secrets"
 
-    # 2. Org variables/secrets (if owner is an org)
-    org_vars = fetch_github_items(f"https://api.github.com/orgs/{owner}/actions/variables", "variables")
-    for v in org_vars:
-        if v['name'] not in envs_to_create and os.getenv(v['name']) == None:
-            envs_to_create[v['name']] = "variables"
-
-    org_secrets = fetch_github_items(f"https://api.github.com/orgs/{owner}/actions/secrets", "secrets")
-    for s in org_secrets:
-        if s['name'] not in envs_to_create and os.getenv(s['name']) == None:
-            envs_to_create[s['name']] = "secrets"
-
-    # 3. Environment variables/secrets
+    # 2. Environment variables/secrets
     try:
         req = urllib.request.Request(f"https://api.github.com/repos/{owner}/{repo}/environments", headers=headers)
         with urllib.request.urlopen(req) as response:
