@@ -37,15 +37,15 @@ class Features {
   }
 
   getUsNameFromBranch(branchName) {
-    const regex = /\/(MOB-\d+|mob-\d+)/;
+    const regex = /(ESM-\d+|esm-\d+)/;
     const match = branchName.match(regex);
-    const regexV = /\/(MOB-\d+\([^)]+\)|MOB-\d+|mob-\d+|mob-\d+\([^)]+\))/;
+    const regexV = /(ESM-\d+\([^)]+\)|ESM-\d+|esm-\d+|esm-\d+\([^)]+\))/;
     const matchV = branchName.match(regexV);
-    if (match && match.length > 1) {
+    if (match && match.length > 0 && matchV && matchV.length > 0) {
       return [match[1], matchV[1]];
     }
-    console.log(matchV, match);
-    return;
+    console.warn('No User Story ID found in branch name:', branchName);
+    return [null, null];
   }
 }
 

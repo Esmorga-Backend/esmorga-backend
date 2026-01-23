@@ -47,9 +47,27 @@ async function main() {
     }
     let [usName, usVersionName] = features.getUsNameFromBranch(branchName);
 
+    if (!usName || !usVersionName) {
+      console.warn(
+        'Warning: Pipeline running on a branch without a ESM-XXX identifier. Skipping Jira/Aio updates.',
+      );
+      // If we are just running tests, we might want to continue if features exist,
+      // but most logic below depends on usVersionName.
+      // For now, let's gracefully exit if we are in a mode that REQUIRE Jira interaction.
+      if (
+        process.argv.includes('--Upload-Results') ||
+        process.argv.includes('--Update-Test-to-Automated') ||
+        process.argv.includes('--Create-Cycle-for-US')
+      ) {
+        process.exit(0); // Exit gracefully
+      }
+      // If none of the above, we might be in the "else" block (downloading features)
+      // We skip it and proceed.
+    }
+
     //Comment use nexts to force a US with tests
-    // usName = 'MOB-1';
-    // usVersionName = 'MOB-1';
+    // usName = 'ESM-1';
+    // usVersionName = 'ESM-1';
 
     selectedTestTypes = features.getSelectedTestTypes(testTypes);
     console.log(selectedTestTypes);
@@ -104,7 +122,7 @@ async function main() {
           'This US has a CY created, for ADD new TCs do it on Jira ' + cyKey,
         );
       }
-    } else {
+    } else if (usVersionName) {
       const cyKey = await aio.findCycleByUs(onErrorMsg, usVersionName);
       if (cyKey == null) {
         console.log(

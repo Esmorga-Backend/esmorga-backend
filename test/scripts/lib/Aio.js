@@ -16,7 +16,7 @@ class Aio {
   async getTests(data, onErrorMsg) {
     const tests = [];
     const url =
-      'https://tcms.aiojiraapps.com/aio-tcms/api/v1/project/MOB/testcase/search';
+      'https://tcms.aiojiraapps.com/aio-tcms/api/v1/project/ESM/testcase/search';
 
     try {
       const response = await axios.post(url, data, { headers: this.headers });
@@ -33,7 +33,7 @@ class Aio {
   async getFeatures(Tests, selectedTestType) {
     const num = selectedTestType['num'];
     const url =
-      'https://tcms.aiojiraapps.com/aio-tcms/api/v1/project/MOB/testcase/export/feature?type=NONE';
+      'https://tcms.aiojiraapps.com/aio-tcms/api/v1/project/ESM/testcase/export/feature?type=NONE';
 
     const data = {
       ID: {
@@ -120,7 +120,7 @@ class Aio {
   }
   async createCycle(onErrorMsg, usName, usVersionName) {
     let url =
-      'https://tcms.aiojiraapps.com/aio-tcms/api/v1/project/MOB/testcycle/detail';
+      'https://tcms.aiojiraapps.com/aio-tcms/api/v1/project/ESM/testcycle/detail';
 
     const data = {
       jiraTaskIDs: [usName],
@@ -154,7 +154,7 @@ class Aio {
     delayS = 30,
   ) {
     let url =
-      'https://tcms.aiojiraapps.com/aio-tcms/api/v1/project/MOB/testcycle/' +
+      'https://tcms.aiojiraapps.com/aio-tcms/api/v1/project/ESM/testcycle/' +
       cyKey +
       '/testcase/' +
       test;
@@ -178,7 +178,7 @@ class Aio {
   }
   async findCycleByUs(onErrorMsg, usName) {
     let url =
-      'https://tcms.aiojiraapps.com/aio-tcms/api/v1/project/MOB/testcycle/search';
+      'https://tcms.aiojiraapps.com/aio-tcms/api/v1/project/ESM/testcycle/search';
 
     const data = {
       title: {
@@ -203,7 +203,7 @@ class Aio {
   async getTestsByCy(onErrorMsg, cyKey) {
     try {
       const url =
-        'aio-tcms/api/v1/project/MOB/testcycle/' + cyKey + '/testcase';
+        'aio-tcms/api/v1/project/ESM/testcycle/' + cyKey + '/testcase';
 
       const req = axios.create({
         headers: this.headers,
@@ -222,7 +222,7 @@ class Aio {
     }
   }
   async getTest(onErrorMsg, tc) {
-    const url = '/aio-tcms/api/v1/project/MOB/testcase/' + tc + '/detail';
+    const url = '/aio-tcms/api/v1/project/ESM/testcase/' + tc + '/detail';
 
     const req = axios.create({
       headers: this.headers,
@@ -239,7 +239,7 @@ class Aio {
   }
   async UploadResults(cyKey, onErrorMsg) {
     const url =
-      'https://tcms.aiojiraapps.com/aio-tcms/api/v1/project/MOB/testcycle/' +
+      'https://tcms.aiojiraapps.com/aio-tcms/api/v1/project/ESM/testcycle/' +
       cyKey +
       '/import/results?type=JUnit';
 
