@@ -8,11 +8,10 @@ on:
         description: DEPLOY ENV
         required: true
         default: PROD
-
-      release_num:
-        description: Release Number
-        required: true
-        default: 0.0.0
+      branch_name: 
+        description: BRANCH NAME (e.g. release/esmorga-1.0.0)
+        required: false
+        type: string
 
   workflow_call:
     inputs:
@@ -21,6 +20,10 @@ on:
         required: true
         type: string
         default: QA
+      branch_name: 
+        description: BRANCH NAME
+        required: false
+        type: string
 
 jobs:
   Deploy:
@@ -59,7 +62,7 @@ jobs:
       if: ${{ inputs.environment == 'PROD' }}
       run: |
         python -m pip install --upgrade pip paramiko 
-        python .github/workflows/scripts/DeployToEnv.py api.esmorgaevents.com ${{vars.SERVICE}} ${{vars.SERVER_PATH}} release/esmorga-${{ inputs.release_num }} ${{secrets.SSHRSA}}
+        python .github/workflows/scripts/DeployToEnv.py api.esmorgaevents.com ${{vars.SERVICE}} ${{vars.SERVER_PATH}} $branch_name ${{secrets.SSHRSA}}
 
     - name: Install dependencies And Deploy QA
       shell: bash

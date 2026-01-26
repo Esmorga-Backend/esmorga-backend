@@ -1,5 +1,6 @@
-name: Test code on release before deploy to Prod
-run-name: ${{ github.actor }} has changed the code on the release, testing it 🚀
+name: Deploy to Prod
+run-name: Deploying ${{ github.ref_name }} to PROD 🚀
+
 on:
   push:
     branches:
@@ -10,5 +11,8 @@ jobs:
   Deploy-To-PROD:
     uses: ./.github/workflows/Deploy.yml
     secrets: inherit
+    permissions:
+      contents: read
     with:
       environment: PROD
+      branch_name: ${{ github.ref_name }}
