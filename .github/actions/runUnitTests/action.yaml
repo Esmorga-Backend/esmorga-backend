@@ -1,29 +1,17 @@
 name: "Run Unit Tests"
 description: "Run Unit Tests"
-inputs:
-  SLACK_WEBHOOK_URL:
-    description: 'URL'
-    required: true
 runs:
   using: "composite"
   steps:
-        - name: Install dependencies
-          run: npm ci
-          shell: bash
-        - name: Run tests now
-          run: npm run test:cov:unit
-          shell: bash
-        - name: Run Reporting
-          uses: ./.github/actions/SlackCom
-          with: 
-            msg: "Backend Unit Test Fails"
-            SLACK_WEBHOOK_URL: ${{ inputs.SLACK_WEBHOOK_URL }}
-          if: failure()
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22.1'
+        
+    - name: Install dependencies
+      run: npm ci
+      shell: bash
 
-        # - name : Upload Results
-        #   shell: bash
-        #   if: always()
-        #   run: |
-        #     if [ "${GITHUB_HEAD_REF}" == "" ]; then
-        #     node test/scripts/features-tool.js report/junit-unit.xml --Upload-Results
-        #     fi
+    - name: Run tests now
+      run: npm run test:cov:unit
+      shell: bash

@@ -1,126 +1,53 @@
-name: Deploy QA Env & Then Test E2E & Test Postman
-run-name: ${{ github.actor }} is deploying new code to QA Env 🚀
+name: When Main Changes
+run-name: Testing and Deploying new code to QA Env 🚀
 on:
   push:
     branches:
     - main
 
 jobs:
-  RunTestsOnUbuntu:
-    name: Run npm test on Ubuntu
+  Run-Unit-Tests:
+    name: Run Unit Tests
     runs-on: ubuntu-latest
     permissions:
       contents: write
       pull-requests: write
-    env:
-      AIO_TOKEN: ${{secrets.AIO_TOKEN}}
-
 
     steps:
-    - name: Start MongoDB
-      uses: supercharge/mongodb-github-action@1.11.0
-      with:
-        mongodb-version: '7.0'
-        mongodb-db: esmorga
-        mongodb-port: 27017
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
-      with:
-        node-version: '22.1'
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - run: npm ci
-    - run: npm run test:create:cycle
-    - name: Checkout repository
-      uses: actions/checkout@v2
-    - name: Run Unit Tests
-      uses: ./.github/actions/runUnitTests
-      with:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-      env:
-        NODE_ENV: LOCAL
-        MONGODB_URI: ${{secrets.MONGODB_URI}}
-        JWT_SECRET: ${{secrets.JWT_SECRET}}
-        ACCESS_TOKEN_TTL: ${{vars.ACCESS_TOKEN_TTL}}
-        MAX_PAIR_OF_TOKEN: ${{vars.MAX_PAIR_OF_TOKEN}}
-        EMAIL_USER: ${{vars.EMAIL_USER}}
-        EMAIL_PASS: ${{secrets.EMAIL_PASS}}
-        APP_PORT: ${{vars.APP_PORT}}
-        APP_LINK: ${{vars.APP_LINK}}
-        LOGIN_ATTEMPTS_TTL: ${{vars.LOGIN_ATTEMPTS_TTL}}
-        MAX_LOGIN_ATTEMPTS: ${{vars.MAX_LOGIN_ATTEMPTS}}
-        DNS_NAME: ${{vars.DNS_NAME}}
-        JWT_REFRESH_SECRET: ${{secrets.JWT_REFRESH_SECRET}}
-        CORS_ORIGIN: ${{vars.CORS_ORIGIN}}
-        ENABLE_CORS: ${{vars.ENABLE_CORS}}
-    # - name: Run Component Tests
-    #   uses: ./.github/actions/runComponentTests
-    #   with:
-    #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-    #   env:
-    #     MONGODB_URI: ${{secrets.MONGODB_URI}}
-    #     APP_PORT: ${{vars.APP_PORT}}
-    #     NODE_ENV: ${{vars.NODE_ENV}}
-    #     JWT_SECRET: ${{secrets.JWT_SECRET}}
-    #     ACCESS_TOKEN_TTL: ${{vars.ACCESS_TOKEN_TTL}}
-    #     MAX_PAIR_OF_TOKEN: ${{vars.MAX_PAIR_OF_TOKEN}}
-    #     EMAIL_USER: ${{vars.EMAIL_USER}}
-    #     EMAIL_PASS: ${{secrets.EMAIL_PASS}}
-    #     APP_LINK: ${{vars.APP_LINK}}
-    #     LOGIN_ATTEMPTS_TTL: ${{vars.LOGIN_ATTEMPTS_TTL}}
-    #     MAX_LOGIN_ATTEMPTS: ${{vars.MAX_LOGIN_ATTEMPTS}}
-    #     DNS_NAME: ${{vars.DNS_NAME}}
-    #     JWT_REFRESH_SECRET: ${{secrets.JWT_REFRESH_SECRET}}
-    #     CORS_ORIGIN: ${{vars.CORS_ORIGIN}}
-    #     ENABLE_CORS: ${{vars.ENABLE_CORS}}
-    - name: Run Reporting
-      uses: ./.github/actions/runReporting
-      with:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: ./.github/actions/runUnitTests
+        env:
+          NODE_ENV: LOCAL
 
+      - name: Run Service
+        uses: ./.github/actions/runService
+        env:
+          MONGODB_URI: ${{secrets.MONGODB_URI}}
+          NODE_ENV: ${{vars.NODE_ENV}}
+          JWT_SECRET: ${{secrets.JWT_SECRET}}
+          ACCESS_TOKEN_TTL: ${{vars.ACCESS_TOKEN_TTL}}
+          MAX_PAIR_OF_TOKEN: ${{vars.MAX_PAIR_OF_TOKEN}}
+          EMAIL_USER: ${{vars.EMAIL_USER}}
+          EMAIL_PASS: ${{secrets.EMAIL_PASS}}
+          APP_PORT: ${{vars.APP_PORT}}
+          APP_LINK: ${{vars.APP_LINK}}
+          LOGIN_ATTEMPTS_TTL: ${{vars.LOGIN_ATTEMPTS_TTL}}
+          MAX_LOGIN_ATTEMPTS: ${{vars.MAX_LOGIN_ATTEMPTS}}
+          DNS_NAME: ${{vars.DNS_NAME}}
+          JWT_REFRESH_SECRET: ${{secrets.JWT_REFRESH_SECRET}}
 
-
-    - name: Run Service
-      uses: ./.github/actions/runService
-      env:
-        MONGODB_URI: ${{secrets.MONGODB_URI}}
-        NODE_ENV: ${{vars.NODE_ENV}}
-        JWT_SECRET: ${{secrets.JWT_SECRET}}
-        ACCESS_TOKEN_TTL: ${{vars.ACCESS_TOKEN_TTL}}
-        MAX_PAIR_OF_TOKEN: ${{vars.MAX_PAIR_OF_TOKEN}}
-        EMAIL_USER: ${{vars.EMAIL_USER}}
-        EMAIL_PASS: ${{secrets.EMAIL_PASS}}
-        APP_PORT: ${{vars.APP_PORT}}
-        APP_LINK: ${{vars.APP_LINK}}
-        LOGIN_ATTEMPTS_TTL: ${{vars.LOGIN_ATTEMPTS_TTL}}
-        MAX_LOGIN_ATTEMPTS: ${{vars.MAX_LOGIN_ATTEMPTS}}
-        DNS_NAME: ${{vars.DNS_NAME}}
-        JWT_REFRESH_SECRET: ${{secrets.JWT_REFRESH_SECRET}}
-        CORS_ORIGIN: ${{vars.CORS_ORIGIN}}
-        ENABLE_CORS: ${{vars.ENABLE_CORS}}
-
-    - name: Run Postman Tests
-      uses: ./.github/actions/runPostmanTests
-      with:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        POSTMAN_TOKEN: ${{ secrets.POSTMAN_TOKEN }}
-        DESPOSABLE_EMAIL_USER: ${{secrets.DESPOSABLE_EMAIL_USER}}
-        DESPOSABLE_EMAIL_PASS: ${{secrets.DESPOSABLE_EMAIL_PASS}}
-
-    # - name: Run E2E Tests
-    #   if: false
-    #   uses: ./.github/actions/runE2ETests
-    #   with:
-    #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-    #     MOCK_SERVER_USERNAME: ${{ secrets.MOCK_SERVER_USERNAME }}
-    #     MOCK_SERVER_PASSWORD: ${{ secrets.MOCK_SERVER_PASSWORD }}
-
-    - name: Run Reporting
-      uses: ./.github/actions/runReporting
-      with:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Run Postman Tests
+        uses: ./.github/actions/runPostmanTests
+        with:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          POSTMAN_TOKEN: ${{ secrets.POSTMAN_TOKEN }}
+          DESPOSABLE_EMAIL_USER: ${{secrets.DESPOSABLE_EMAIL_USER}}
+          DESPOSABLE_EMAIL_PASS: ${{secrets.DESPOSABLE_EMAIL_PASS}}
 
   DeployToQA:
-    needs: RunTestsOnUbuntu
+    needs: Run-Unit-Tests
     uses: ./.github/workflows/Deploy.yml
     secrets: inherit
     with:

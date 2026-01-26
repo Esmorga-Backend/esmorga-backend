@@ -1,5 +1,5 @@
-name: "Run Component Tests"
-description: "Run Component Tests"
+name: "Merge Coverage files"
+description: "Merge Unit and Component coverage files and create a report on GitHub"
 inputs:
   GITHUB_TOKEN:
     description: 'A Github PAT'
@@ -7,15 +7,14 @@ inputs:
 runs:
   using: "composite"
   steps:
-        - name: Install dependencies
-          run: npm ci
-          shell: bash
         - name: Merge Covergage
           run: npm run test:merge-coverage 
           shell: bash
+
         - name: Create Report
           run: npm run test:report
           shell: bash
+
         - name: Coverage report on Git Hub
           uses: boris-amenitiz/lcov-pull-request-report@v1.0.0
           with:
@@ -23,16 +22,7 @@ runs:
            github-token: ${{ inputs.GITHUB_TOKEN }}
            comment-title:
            all-files-minimum-coverage: 0
-           changed-files-minimum-coverage: 0
+           changed-files-minimum-coverage: 50
 
-
-      #   if: failure() && steps.unit-tests.outcome == 'failure'
-      #   run: node test/scripts/features-tool.js report/junit-unit.xml --Upload-Results 
-      # - name : Run Component Tests
-      #   id: component-tests
-      #   run: npm run test:cov:component
-      # - name : Upload Results
-      #   if: failure() && steps.component-tests.outcome == 'failure'
-      #   run: node test/scripts/features-tool.js report/junit-component.xml --Upload-Results
 
 
