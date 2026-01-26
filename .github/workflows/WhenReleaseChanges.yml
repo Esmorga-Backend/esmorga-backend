@@ -7,106 +7,20 @@ on:
   workflow_dispatch:
 
 jobs:
-  Run-tests-on-Ubuntu:
-    name: Run npm test on Ubuntu
+  Run-tests:
+    name: Run npm test
     runs-on: ubuntu-latest
     permissions:
       contents: write
       pull-requests: write
-    env:
-      AIO_TOKEN: ${{ secrets.AIO_TOKEN }}
 
     steps:
-    - name: Start MongoDB
-      uses: supercharge/mongodb-github-action@1.11.0
-      with:
-        mongodb-version: '7.0'
-        mongodb-db: esmorga
-        mongodb-port: 27017
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
-      with:
-        node-version: '22.1'
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - run: npm ci
-    - run: npm run test:create:cycle
-
-    - name: Run Unit Tests
-      uses: ./.github/actions/runUnitTests
-      with:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-      env:
-        MONGODB_URI: mongodb://localhost:27017/esmorga
-        NODE_ENV: ${{vars.NODE_ENV}}
-        JWT_SECRET: ${{secrets.JWT_SECRET}}
-        ACCESS_TOKEN_TTL: ${{vars.ACCESS_TOKEN_TTL}}
-        MAX_PAIR_OF_TOKEN: ${{vars.MAX_PAIR_OF_TOKEN}}
-        EMAIL_USER: ${{vars.EMAIL_USER}}
-        EMAIL_PASS: ${{secrets.EMAIL_PASS}}
-        APP_PORT: ${{vars.APP_PORT}}
-        APP_LINK: ${{vars.APP_LINK}}
-        LOGIN_ATTEMPTS_TTL: ${{vars.LOGIN_ATTEMPTS_TTL}}
-        MAX_LOGIN_ATTEMPTS: ${{vars.MAX_LOGIN_ATTEMPTS}}
-        DNS_NAME: ${{vars.DNS_NAME}}
-        JWT_REFRESH_SECRET: ${{secrets.JWT_REFRESH_SECRET}}
-        CORS_ORIGIN: ${{vars.CORS_ORIGIN}}
-        ENABLE_CORS: ${{vars.ENABLE_CORS}}
-
-    - name: Run Component Tests
-      uses: ./.github/actions/runComponentTests
-      with:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-      env:
-        MONGODB_URI: mongodb://localhost:27017/esmorga
-        NODE_ENV: ${{vars.NODE_ENV}}
-        JWT_SECRET: ${{secrets.JWT_SECRET}}
-        ACCESS_TOKEN_TTL: ${{vars.ACCESS_TOKEN_TTL}}
-        MAX_PAIR_OF_TOKEN: ${{vars.MAX_PAIR_OF_TOKEN}}
-        EMAIL_USER: ${{vars.EMAIL_USER}}
-        EMAIL_PASS: ${{secrets.EMAIL_PASS}}
-        APP_PORT: ${{vars.APP_PORT}}
-        APP_LINK: ${{vars.APP_LINK}}
-        LOGIN_ATTEMPTS_TTL: ${{vars.LOGIN_ATTEMPTS_TTL}}
-        MAX_LOGIN_ATTEMPTS: ${{vars.MAX_LOGIN_ATTEMPTS}}
-        DNS_NAME: ${{vars.DNS_NAME}}
-        JWT_REFRESH_SECRET: ${{secrets.JWT_REFRESH_SECRET}}
-        CORS_ORIGIN: ${{vars.CORS_ORIGIN}}
-        ENABLE_CORS: ${{vars.ENABLE_CORS}}
-
-    - name: Run Service
-      uses: ./.github/actions/runService
-      env:
-        MONGODB_URI: mongodb://localhost:27017/esmorga
-        NODE_ENV: ${{vars.NODE_ENV}}
-        JWT_SECRET: ${{secrets.JWT_SECRET}}
-        ACCESS_TOKEN_TTL: ${{vars.ACCESS_TOKEN_TTL}}
-        MAX_PAIR_OF_TOKEN: ${{vars.MAX_PAIR_OF_TOKEN}}
-        EMAIL_USER: ${{vars.EMAIL_USER}}
-        EMAIL_PASS: ${{secrets.EMAIL_PASS}}
-        APP_PORT: ${{vars.APP_PORT}}
-        APP_LINK: ${{vars.APP_LINK}}
-        LOGIN_ATTEMPTS_TTL: ${{vars.LOGIN_ATTEMPTS_TTL}}
-        MAX_LOGIN_ATTEMPTS: ${{vars.MAX_LOGIN_ATTEMPTS}}
-        DNS_NAME: ${{vars.DNS_NAME}}
-        JWT_REFRESH_SECRET: ${{secrets.JWT_REFRESH_SECRET}}
-        CORS_ORIGIN: ${{vars.CORS_ORIGIN}}
-        ENABLE_CORS: ${{vars.ENABLE_CORS}}
-
-    - name: Run Postman
-      uses: ./.github/actions/runPostmanTests
-      with:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        POSTMAN_TOKEN: ${{ secrets.POSTMAN_TOKEN }}
-        DESPOSABLE_EMAIL_USER: ${{secrets.DESPOSABLE_EMAIL_USER}}
-        DESPOSABLE_EMAIL_PASS: ${{secrets.DESPOSABLE_EMAIL_PASS}}
-
-    # - name: Run E2E Tests
-    #   uses: ./.github/actions/runE2ETests
-    #   with:
-    #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-    #     MOCK_SERVER_USERNAME: ${{ secrets.MOCK_SERVER_USERNAME }}
-    #     MOCK_SERVER_PASSWORD: ${{ secrets.MOCK_SERVER_PASSWORD }}
-
+  Deploy-To-PROD:
+    needs: Run-tests
+    uses: ./.github/workflows/Deploy.yml
+    secrets: inherit
+    with:
+      environment: PROD

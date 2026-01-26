@@ -1,6 +1,5 @@
 name: Deploy
-run-name: ${{ github.actor }} is deploying release to ${{ inputs.environment }} 
-  Env 🚀
+run-name: Deploying release to ${{ inputs.environment }} Env 🚀
 on:
 
   workflow_dispatch:
@@ -22,6 +21,7 @@ on:
         required: true
         type: string
         default: QA
+
 jobs:
   Deploy:
     name: Deploy to ${{ inputs.environment }}
@@ -48,6 +48,7 @@ jobs:
         echo "DNS_NAME=${{vars.DNS_NAME}}" >> .env 
         echo "CORS_ORIGIN=${{vars.CORS_ORIGIN}}" >> .env 
         echo "ENABLE_CORS=${{vars.ENABLE_CORS}}" >> .env 
+        
     - name: Set up Python "pypy3.9"
       uses: actions/setup-python@v5
       with:
