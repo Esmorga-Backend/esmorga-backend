@@ -7,19 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  Run-tests:
-    name: Run npm test
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
   Deploy-To-PROD:
-    needs: Run-tests
     uses: ./.github/workflows/Deploy.yml
     secrets: inherit
     with:
