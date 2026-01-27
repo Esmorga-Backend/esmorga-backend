@@ -66,7 +66,6 @@ export class PollController {
   }
 
   @Get('/')
-  @ApiBearerAuth('access-token')
   @UseGuards(OptionalAuthGuard)
   @SwaggerGetPolls()
   async getPolls(
