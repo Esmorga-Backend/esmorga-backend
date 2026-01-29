@@ -20,7 +20,8 @@
     "/src/domain/entities/.*\\.ts$",
     "/src/infrastructure/services/.*\\.ts$",
     "/src/infrastructure/db/modules/.*",
-    "/src/config/execute-migrations\\.ts"
+    "/src/config/execute-migrations\\.ts",
+    "src/infrastructure/http/swagger.*"
   ],
   "testPathIgnorePatterns": [
     "/node_modules/",
