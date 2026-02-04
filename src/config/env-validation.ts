@@ -65,6 +65,12 @@ class EnvVars {
   @IsString()
   DNS_NAME: string;
 
+  @IsString()
+  ENABLE_CORS: string = 'false';
+
+  @IsString()
+  CORS_ORIGIN: string = '*';
+
   @IsNumber()
   @IsPositive()
   API_RATE_LIMIT: number = 100;

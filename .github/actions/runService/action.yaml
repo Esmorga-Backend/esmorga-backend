@@ -3,16 +3,28 @@ description: "Run Service"
 runs:
   using: "composite"
   steps:
-        - name: Install dependencies
-          env:
-            API_RATE_LIMIT: 100
-            API_RATE_LIMIT_TTL: 60
-            PUBLIC_API_RATE_LIMIT: 100
-            PUBLIC_API_RATE_LIMIT_TTL: 100
+      - name: Install dependencies
+        env:
+          API_RATE_LIMIT: 100
+          API_RATE_LIMIT_TTL: 60
+          PUBLIC_API_RATE_LIMIT: 100
+          PUBLIC_API_RATE_LIMIT_TTL: 100
+        shell: bash
+        run: npm ci
 
-          shell: bash
-          run: |
-            npm ci
-            npx mongo-migrate-ts up
-            npm run start &
-            sleep 10
+      - name: Start MongoDB
+        uses: supercharge/mongodb-github-action@1.11.0
+        with:
+          mongodb-version: '7.0'
+          mongodb-db: esmorga
+          mongodb-port: 27017
+
+      - name: Migrate MongoDB
+        shell: bash
+        run: npx mongo-migrate-ts up
+
+      - name: Start Service
+        shell: bash
+        run: |
+          npm run start &
+          sleep 10

@@ -16,6 +16,33 @@ async function main() {
     AppModule.register({ db: 'mongodb' }),
   );
 
+  const configService = app.get(ConfigService);
+  const enableCors = configService.get<string>('ENABLE_CORS') === 'true';
+
+  if (enableCors) {
+    const corsOrigin = configService.get<string>('CORS_ORIGIN');
+
+    if (!corsOrigin) {
+      throw new Error('CORS_ORIGIN must be defined when ENABLE_CORS is true.');
+    }
+
+    const allowAllOrigins = corsOrigin === '*';
+    const origins = allowAllOrigins
+      ? true
+      : corsOrigin
+          .split(',')
+          .map((origin) => origin.trim())
+          .filter((origin) => origin.length > 0);
+    const allowCredentials = !allowAllOrigins;
+
+    app.enableCors({
+      origin: origins,
+      credentials: allowCredentials,
+      methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+      allowedHeaders: ['Content-Type', 'Authorization'],
+    });
+  }
+
   app.set('trust proxy', true);
 
   app.useLogger(app.get(Logger));
@@ -55,8 +82,6 @@ async function main() {
       operationsSorter: 'method',
     },
   });
-
-  const configService = app.get(ConfigService);
 
   await app.listen(configService.get<number>('APP_PORT'));
 }

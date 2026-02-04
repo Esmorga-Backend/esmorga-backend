@@ -12,3 +12,13 @@ export const AUTHORIZATION_BEARER = {
     example: 'Bearer accessToken',
   },
 };
+
+export const AUTHORIZATION_BEARER_OPTIONAL = {
+  name: 'Authorization',
+  description: 'Bearer accessToken',
+  required: false,
+  schema: {
+    type: 'string',
+    example: 'Bearer accessToken',
+  },
+};

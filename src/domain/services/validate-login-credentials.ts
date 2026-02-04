@@ -1,6 +1,7 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as argon2 from 'argon2';
+import * as crypto from 'crypto';
 import {
   AccountRepository,
   LoginAttemptsRepository,
@@ -41,7 +42,19 @@ export class ValidateLoginCredentialsService {
     requestId?: string,
   ) {
     try {
-      if (!(await argon2.verify(userDbPassword, requestPassword))) {
+      let isPasswordValid = false;
+
+      if (/^[a-f0-9]{64}$/i.test(userDbPassword)) {
+        const hash = crypto
+          .createHash('sha256')
+          .update(requestPassword)
+          .digest('hex');
+        isPasswordValid = userDbPassword === hash;
+      } else {
+        isPasswordValid = await argon2.verify(userDbPassword, requestPassword);
+      }
+
+      if (!isPasswordValid) {
         if (status === ACCOUNT_STATUS.ACTIVE) {
           const updatedAttempts =
             await this.loginAttemptsRepository.updateLoginAttempts(
@@ -70,6 +83,7 @@ export class ValidateLoginCredentialsService {
       }
     } catch (error) {
       if (error instanceof HttpException) throw error;
+      throw error;
     }
   }
 }

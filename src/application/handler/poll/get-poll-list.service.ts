@@ -29,10 +29,15 @@ export class GetPollListService {
         `[GetPollListService] [find] - x-request-id: ${requestId}`,
       );
 
-      const { uuid } = await this.sessionRepository.getBySessionId(
-        sessionId,
-        requestId,
-      );
+      let userUuid: string;
+
+      if (sessionId) {
+        const { uuid } = await this.sessionRepository.getBySessionId(
+          sessionId,
+          requestId,
+        );
+        userUuid = uuid;
+      }
 
       const polls: PollDto[] =
         (await this.pollRepository.getPollList(requestId)) ?? [];
@@ -45,7 +50,7 @@ export class GetPollListService {
         const options = (poll.options ?? []).map((option) => {
           const votesForOption = option.votes ?? [];
 
-          if (votesForOption.includes(uuid)) {
+          if (votesForOption.includes(userUuid)) {
             userSelectedOptions.push(option.optionId);
           }
 
