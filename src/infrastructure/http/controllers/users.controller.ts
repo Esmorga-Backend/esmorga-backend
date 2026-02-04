@@ -3,6 +3,7 @@ import {
   Get,
   HttpException,
   InternalServerErrorException,
+  Query,
   UseFilters,
   UseGuards,
 } from '@nestjs/common';
@@ -13,11 +14,12 @@ import { AuthGuard } from '../guards';
 import { RequestId, SessionId } from '../req-decorators';
 import { GetUsersService } from '../../../application/handler/users';
 import { UsersListPaginatedDto } from '../../dtos';
+import { GetUsersDto } from '../dtos/get-users.dto';
 
 @Controller('/v1/users')
 @ApiTags('Users')
 @UseFilters(new HttpExceptionFilter())
-export class UserController {
+export class UsersController {
   constructor(
     private readonly logger: PinoLogger,
     private readonly getUsersService: GetUsersService,
@@ -29,14 +31,18 @@ export class UserController {
   async getUsers(
     @SessionId() sessionId: string,
     @RequestId() requestId: string,
+    @Query() getUsersDto: GetUsersDto,
   ): Promise<UsersListPaginatedDto> {
     try {
       this.logger.info(
         `[UsersController] [getUsers] - x-request-id: ${requestId}`,
       );
 
-      const result: UsersListPaginatedDto =
-        await this.getUsersService.getUsers(sessionId);
+      const result: UsersListPaginatedDto = await this.getUsersService.getUsers(
+        requestId,
+        sessionId,
+        getUsersDto,
+      );
 
       return result;
     } catch (error) {

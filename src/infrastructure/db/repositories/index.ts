@@ -5,3 +5,4 @@ export * from './login-attempts.repository';
 export * from './poll.repository';
 export * from './temporal-code.repository';
 export * from './session.repository';
+export * from './users.repository';

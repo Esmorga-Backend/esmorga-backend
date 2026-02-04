@@ -1,6 +1,7 @@
 import { Injectable, NotImplementedException } from '@nestjs/common';
-import { UserProfileDto } from '../../../dtos';
+import { UserProfileDto, UserPaginatedItemDto } from '../../../dtos';
 import { AccountRegisterDto } from '../../../http/dtos';
+import { GetUsersDto } from '../../../http/dtos/get-users.dto';
 
 export const PasswordSymbol = Symbol('_password');
 
@@ -55,6 +56,12 @@ export class UserDA {
   }
 
   deleteByUuid(_uuid: string): Promise<void> {
+    throw new NotImplementedException();
+  }
+
+  getAllUsers(
+    _getUsersDto: GetUsersDto,
+  ): Promise<UserPaginatedItemDto[] | null> {
     throw new NotImplementedException();
   }
 }
