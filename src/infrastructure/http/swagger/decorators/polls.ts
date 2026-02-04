@@ -11,6 +11,7 @@ import {
   ApiOkResponse,
   ApiOperation,
   ApiParam,
+  ApiSecurity,
   ApiTooManyRequestsResponse,
   ApiUnauthorizedResponse,
   ApiUnprocessableEntityResponse,
@@ -48,7 +49,7 @@ export function SwaggerGetPolls() {
     ApiOperation({
       summary: 'Return a list of available polls.',
     }),
-    ApiHeader(GET_POLLS_HEADERS.AUTHORIZATION_BEARER_OPTIONAL),
+    ApiSecurity('access-token', []),
     ApiHeader(GET_POLLS_HEADERS.CONTENT_TYPE),
     ApiOkResponse(GET_POLLS_RESPONSES.OK),
     ApiUnauthorizedResponse(GET_POLLS_RESPONSES.UNAUTHORIZED_ERROR),
