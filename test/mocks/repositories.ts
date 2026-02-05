@@ -4,6 +4,7 @@ import {
   EventRepository,
   AccountRepository,
   EventParticipantsRepository,
+  UsersRepository,
 } from '../../src/infrastructure/db/repositories';
 
 export const sessionRepository = {
@@ -37,9 +38,14 @@ export const accountRepository = {
   getAccountByEmail: jest.fn(),
   getCurrentPasswordByUuid: jest.fn(),
   deleteAccountByUuid: jest.fn(),
+  getUserById: jest.fn(),
 } as unknown as jest.Mocked<AccountRepository>;
 
 export const eventParticipantsRepository = {
   addParticipantToEvent: jest.fn(),
   removeUserFromAllEvents: jest.fn(),
 } as unknown as jest.Mocked<EventParticipantsRepository>;
+
+export const usersRepository = {
+  getAllUsers: jest.fn(),
+} as unknown as jest.Mocked<UsersRepository>;
