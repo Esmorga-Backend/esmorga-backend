@@ -12,13 +12,15 @@ export class UsersRepository {
     private readonly userDA: UserDA,
   ) {}
 
-  async getAllUsers(getUsersDto: GetUsersDto): Promise<UserPaginatedItemDto[]> {
+  async getAllUsers(
+    getUsersDto: GetUsersDto,
+  ): Promise<{ users: UserPaginatedItemDto[]; total: number }> {
     try {
       this.logger.info(`[UsersRepository] [getAllUsers]`);
 
-      const users = await this.userDA.getAllUsers(getUsersDto);
+      const result = await this.userDA.getAllUsers(getUsersDto);
 
-      return users;
+      return result;
     } catch (error) {
       this.logger.error(`[UsersRepository] [getAllUsers] - error: ${error}`);
 

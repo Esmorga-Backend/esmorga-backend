@@ -55,11 +55,11 @@ describe('[unit-test] [UsersRepository]', () => {
         order: 'asc' as any,
       };
 
-      userDA.getAllUsers.mockResolvedValue(users);
+      userDA.getAllUsers.mockResolvedValue({ users, total: users.length });
 
       const result = await repository.getAllUsers(getUsersDto);
 
-      expect(result).toEqual(users);
+      expect(result).toEqual({ users, total: users.length });
       expect(userDA.getAllUsers).toHaveBeenCalledWith(getUsersDto);
     });
 
@@ -71,11 +71,11 @@ describe('[unit-test] [UsersRepository]', () => {
         order: 'asc' as any,
       };
 
-      userDA.getAllUsers.mockResolvedValue([]);
+      userDA.getAllUsers.mockResolvedValue({ users: [], total: 0 });
 
       const result = await repository.getAllUsers(getUsersDto);
 
-      expect(result).toEqual([]);
+      expect(result).toEqual({ users: [], total: 0 });
       expect(userDA.getAllUsers).toHaveBeenCalledWith(getUsersDto);
     });
 

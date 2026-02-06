@@ -85,7 +85,7 @@ describe('[unit-test] [GetUsersService]', () => {
 
     const getAllUsersSpy = jest
       .spyOn(usersRepository, 'getAllUsers')
-      .mockResolvedValue(MOCKED_USERS as any);
+      .mockResolvedValue({ users: MOCKED_USERS, total: 2 } as any);
 
     const result = await getUsersService.getUsers(
       MOCKED_REQUEST_ID,
@@ -142,7 +142,7 @@ describe('[unit-test] [GetUsersService]', () => {
 
     jest
       .spyOn(usersRepository, 'getAllUsers')
-      .mockResolvedValue(MOCKED_USERS as any);
+      .mockResolvedValue({ users: MOCKED_USERS, total: 25 } as any);
 
     const result = await getUsersService.getUsers(
       MOCKED_REQUEST_ID,

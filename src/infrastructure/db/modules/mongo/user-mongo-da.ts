@@ -123,7 +123,7 @@ export class UserMongoDA implements UserDA {
 
   async getAllUsers(
     getUsersDto: GetUsersDto,
-  ): Promise<UserPaginatedItemDto[] | null> {
+  ): Promise<{ users: UserPaginatedItemDto[]; total: number } | null> {
     const { page, limit, sortBy, order } = getUsersDto;
 
     const skip = (page - 1) * limit;
@@ -131,11 +131,10 @@ export class UserMongoDA implements UserDA {
     const sortOrder = order === 'asc' ? 1 : -1;
     const sortObject: Record<string, 1 | -1> = { [sortBy]: sortOrder };
 
-    const users = await this.userModel
-      .find()
-      .sort(sortObject)
-      .skip(skip)
-      .limit(limit);
+    const [users, total] = await Promise.all([
+      this.userModel.find().sort(sortObject).skip(skip).limit(limit).exec(),
+      this.userModel.countDocuments().exec(),
+    ]);
 
     if (!users) return null;
 
@@ -143,6 +142,6 @@ export class UserMongoDA implements UserDA {
       excludeExtraneousValues: true,
     });
 
-    return userProfiles;
+    return { users: userProfiles, total };
   }
 }

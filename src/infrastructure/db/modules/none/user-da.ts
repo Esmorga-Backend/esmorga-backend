@@ -61,7 +61,7 @@ export class UserDA {
 
   getAllUsers(
     _getUsersDto: GetUsersDto,
-  ): Promise<UserPaginatedItemDto[] | null> {
+  ): Promise<{ users: UserPaginatedItemDto[]; total: number } | null> {
     throw new NotImplementedException();
   }
 }

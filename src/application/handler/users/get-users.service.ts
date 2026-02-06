@@ -45,15 +45,18 @@ export class GetUsersService {
 
       if (role !== ACCOUNT_ROLES.ADMIN) throw new NotAdminAccountApiError();
 
-      const users = await this.usersRepository.getAllUsers(getUsersDto);
+      const { users, total } =
+        await this.usersRepository.getAllUsers(getUsersDto);
+
+      const totalPages = Math.ceil(total / getUsersDto.limit);
 
       return {
         users,
         meta: {
           currentPage: getUsersDto.page,
           itemsPerPage: getUsersDto.limit,
-          totalItems: users.length,
-          totalPages: Math.ceil(users.length / getUsersDto.limit),
+          totalItems: total,
+          totalPages: totalPages,
         },
       };
     } catch (error) {
