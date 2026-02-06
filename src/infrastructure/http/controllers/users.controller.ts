@@ -15,6 +15,7 @@ import { RequestId, SessionId } from '../req-decorators';
 import { GetUsersService } from '../../../application/handler/users';
 import { UsersListPaginatedDto } from '../../dtos';
 import { GetUsersDto } from '../dtos/get-users.dto';
+import { SwaggerGetUsers } from '../swagger/decorators/users';
 
 @Controller('/v1/users')
 @ApiTags('Users')
@@ -28,6 +29,7 @@ export class UsersController {
   @Get('/')
   @ApiBearerAuth('access-token')
   @UseGuards(AuthGuard)
+  @SwaggerGetUsers()
   async getUsers(
     @SessionId() sessionId: string,
     @RequestId() requestId: string,
