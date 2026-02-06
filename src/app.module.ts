@@ -13,6 +13,7 @@ import {
   AccountModule,
   EventModule,
   PollModule,
+  UsersModule,
 } from './infrastructure/http/modules';
 import { RequestIdMiddleware } from './infrastructure/http/middlewares';
 import {
@@ -66,6 +67,7 @@ const { ConfigurableModuleClass } =
     AccountModule,
     EventModule,
     PollModule,
+    UsersModule,
   ],
   providers: [
     {

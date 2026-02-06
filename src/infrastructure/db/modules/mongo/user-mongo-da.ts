@@ -2,11 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { plainToInstance } from 'class-transformer';
 import type { Model } from 'mongoose';
-import { UserProfileDto } from '../../../dtos';
+import { UserProfileDto, UserPaginatedItemDto } from '../../../dtos';
 import { AccountRegisterDto } from '../../../http/dtos';
 import { PasswordSymbol, UserDA } from '../none/user-da';
 import { User } from './schema';
 import { ACCOUNT_STATUS } from '../../../../domain/const';
+import { GetUsersDto } from '../../../http/dtos/get-users.dto';
 @Injectable({})
 export class UserMongoDA implements UserDA {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
@@ -118,5 +119,29 @@ export class UserMongoDA implements UserDA {
 
   async deleteByUuid(uuid: string): Promise<void> {
     await this.userModel.deleteOne({ _id: uuid });
+  }
+
+  async getAllUsers(
+    getUsersDto: GetUsersDto,
+  ): Promise<{ users: UserPaginatedItemDto[]; total: number } | null> {
+    const { page, limit, sortBy, order } = getUsersDto;
+
+    const skip = (page - 1) * limit;
+
+    const sortOrder = order === 'asc' ? 1 : -1;
+    const sortObject: Record<string, 1 | -1> = { [sortBy]: sortOrder };
+
+    const [users, total] = await Promise.all([
+      this.userModel.find().sort(sortObject).skip(skip).limit(limit).exec(),
+      this.userModel.countDocuments().exec(),
+    ]);
+
+    if (!users) return null;
+
+    const userProfiles = plainToInstance(UserPaginatedItemDto, users, {
+      excludeExtraneousValues: true,
+    });
+
+    return { users: userProfiles, total };
   }
 }

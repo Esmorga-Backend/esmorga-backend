@@ -1,0 +1,6 @@
+import { CONTENT_TYPE, AUTHORIZATION_BEARER } from './common';
+
+export const GET_USERS_HEADERS = {
+  CONTENT_TYPE,
+  AUTHORIZATION_BEARER,
+};

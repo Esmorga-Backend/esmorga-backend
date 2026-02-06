@@ -11,4 +11,5 @@ export * from './profile.dto';
 export * from './session.dto';
 export * from './user-profile.dto';
 export * from './user-list.dto';
+export * from './users-list-paginated.dto';
 export * from './temporal-code.dto';
