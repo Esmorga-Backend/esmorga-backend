@@ -42,7 +42,7 @@ export const getEventUsersList: StepDefinitions = ({ given, and }) => {
     jest.spyOn(context.eventDA, 'findOneById').mockResolvedValue(EVENT_MOCK);
 
     jest
-      .spyOn(context.eventParticipantsDA, 'findEvent')
+      .spyOn(context.eventParticipantsDA, 'findByEvent')
       .mockResolvedValue(EVENT_PARTICIPANT_MOCK_DB);
 
     const USER_MOCK_DB = await getUserProfile();
@@ -54,7 +54,7 @@ export const getEventUsersList: StepDefinitions = ({ given, and }) => {
 
   and('there are not upcoming users joined', async () => {
     jest
-      .spyOn(context.eventParticipantsDA, 'findEvent')
+      .spyOn(context.eventParticipantsDA, 'findByEvent')
       .mockResolvedValue(null);
   });
 

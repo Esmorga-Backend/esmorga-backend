@@ -97,7 +97,7 @@ export class EventParticipantsRepository {
       this.logger.info(
         `[EventParticipantsRepository] [getEventParticipant] - x-request-id: ${requestId}, userId: ${userId}`,
       );
-      return await this.eventParticipantDA.findEventParticipant(userId);
+      return await this.eventParticipantDA.findJoinedEventIds(userId);
     } catch (error) {
       this.logger.error(
         `[EventParticipantsRepository] [getEventParticipant] - x-request-id: ${requestId}, error: ${error}`,
@@ -174,10 +174,9 @@ export class EventParticipantsRepository {
       this.logger.info(
         `[EventParticipantsRepository] [getEventParticipantsList] - x-request-id: ${requestId}, eventId: ${eventId}`,
       );
-      const event: EventParticipantsDto =
-        await this.eventParticipantDA.findEvent(eventId);
-
-      return event;
+      const eventParticipants: EventParticipantsDto =
+        await this.eventParticipantDA.findByEvent(eventId);
+      return eventParticipants;
     } catch (error) {
       this.logger.error(
         `[EventParticipantsRepository] [getEventParticipantsList] - x-request-id: ${requestId}, error: ${error}`,

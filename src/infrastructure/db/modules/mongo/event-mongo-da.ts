@@ -11,7 +11,7 @@ import { CreateEventDto } from '../../../http/dtos';
 export class EventMongoDA implements EventDA {
   constructor(@InjectModel(Event.name) private eventModel: Model<Event>) {}
   async find(): Promise<EventDto[]> {
-    const events = await this.eventModel.find();
+    const events = await this.eventModel.find().populate('currentAttendeeCount');
     return events.map((event) =>
       plainToInstance(EventDto, event, {
         excludeExtraneousValues: true,
@@ -25,7 +25,7 @@ export class EventMongoDA implements EventDA {
     }).save();
   }
   async findOneById(eventId: string): Promise<EventDto | null> {
-    const eventDoc = await this.eventModel.findById({ _id: eventId });
+    const eventDoc = await this.eventModel.findById({ _id: eventId }).populate('currentAttendeeCount');
     if (!eventDoc) return null;
     return plainToInstance(EventDto, eventDoc, {
       excludeExtraneousValues: true,
@@ -36,7 +36,7 @@ export class EventMongoDA implements EventDA {
     const objectIds = eventIds.map((id) => {
       return new Types.ObjectId(id);
     });
-    const events = await this.eventModel.find({ _id: { $in: objectIds } });
+    const events = await this.eventModel.find({ _id: { $in: objectIds } }).populate('currentAttendeeCount');;
     return events.map((event) =>
       plainToInstance(EventDto, event, {
         excludeExtraneousValues: true,
@@ -44,7 +44,7 @@ export class EventMongoDA implements EventDA {
     );
   }
   async findByEmail(email: string): Promise<EventDto[]> {
-    const events = await this.eventModel.find({ createdBy: email });
+    const events = await this.eventModel.find({ createdBy: email }).populate('currentAttendeeCount');;
 
     return events.map((event) =>
       plainToInstance(EventDto, event, {
@@ -67,7 +67,7 @@ export class EventMongoDA implements EventDA {
       { _id: eventId },
       update,
       { new: true },
-    );
+    ).populate('currentAttendeeCount');
 
     return plainToInstance(EventDto, updatedEvent, {
       excludeExtraneousValues: true,

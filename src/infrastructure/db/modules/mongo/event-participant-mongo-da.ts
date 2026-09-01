@@ -12,7 +12,7 @@ export class EventParticipantsMongoDA implements EventParticipantsDA {
     @InjectModel(EventParticipants.name)
     private eventParticipantsModel: Model<EventParticipants>,
   ) {}
-  async findEventParticipant(userId: string): Promise<string[]> {
+  async findJoinedEventIds(userId: string): Promise<string[]> {
     const eventParticipantsDocs = await this.eventParticipantsModel.find({
       participants: { $in: [userId] },
     });
@@ -85,7 +85,7 @@ export class EventParticipantsMongoDA implements EventParticipantsDA {
     );
   }
 
-  async findEvent(eventId: string): Promise<EventParticipantsDto | null> {
+  async findByEvent(eventId: string): Promise<EventParticipantsDto | null> {
     const eventParcipantsDoc = await this.eventParticipantsModel.findOne({
       eventId: eventId,
     });

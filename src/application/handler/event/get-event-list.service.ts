@@ -2,13 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { PinoLogger } from 'nestjs-pino';
 import {
   EventRepository,
-  EventParticipantsRepository,
 } from '../../../infrastructure/db/repositories';
 import { filterAvailableEvents } from '../../../domain/services';
 import {
   EventDto,
   EventListDto,
-  EventParticipantsDto,
 } from '../../../infrastructure/dtos';
 
 @Injectable()
@@ -16,7 +14,6 @@ export class GetEventListService {
   constructor(
     private readonly logger: PinoLogger,
     private readonly eventRepository: EventRepository,
-    private readonly eventParticipantsRepository: EventParticipantsRepository,
   ) {}
 
   /**
@@ -31,29 +28,12 @@ export class GetEventListService {
       );
 
       const events: EventDto[] = await this.eventRepository.getEventList();
-      const eventsParticipantLists: EventParticipantsDto[] =
-        (await this.eventParticipantsRepository.getAllEventsParticipantList(
-          requestId,
-        )) ?? [];
 
       const availableEvents = filterAvailableEvents(events);
 
-      const updatedEvents = availableEvents.map((event) => {
-        const eventParticipantsInfo = eventsParticipantLists.find(
-          ({ eventId }) => eventId === event.eventId,
-        );
-        const currentAttendeeCount =
-          eventParticipantsInfo?.participants?.length ?? 0;
-
-        return {
-          ...event,
-          currentAttendeeCount,
-        };
-      });
-
       return {
-        totalEvents: updatedEvents.length,
-        events: updatedEvents,
+        totalEvents: availableEvents.length,
+        events: availableEvents,
       };
     } catch (error) {
       this.logger.error(
