@@ -9,9 +9,10 @@ import { CreateEventDto } from '../../../http/dtos';
 
 @Injectable({})
 export class EventMongoDA implements EventDA {
+  private readonly currentAttendeeCountField: keyof Event= 'currentAttendeeCount';
   constructor(@InjectModel(Event.name) private eventModel: Model<Event>) {}
   async find(): Promise<EventDto[]> {
-    const events = await this.eventModel.find().populate('currentAttendeeCount');
+    const events = await this.eventModel.find().populate(this.currentAttendeeCountField);
     return events.map((event) =>
       plainToInstance(EventDto, event, {
         excludeExtraneousValues: true,
@@ -25,7 +26,7 @@ export class EventMongoDA implements EventDA {
     }).save();
   }
   async findOneById(eventId: string): Promise<EventDto | null> {
-    const eventDoc = await this.eventModel.findById({ _id: eventId }).populate('currentAttendeeCount');
+    const eventDoc = await this.eventModel.findById({ _id: eventId }).populate(this.currentAttendeeCountField);
     if (!eventDoc) return null;
     return plainToInstance(EventDto, eventDoc, {
       excludeExtraneousValues: true,
@@ -36,7 +37,7 @@ export class EventMongoDA implements EventDA {
     const objectIds = eventIds.map((id) => {
       return new Types.ObjectId(id);
     });
-    const events = await this.eventModel.find({ _id: { $in: objectIds } }).populate('currentAttendeeCount');;
+    const events = await this.eventModel.find({ _id: { $in: objectIds } }).populate(this.currentAttendeeCountField);;
     return events.map((event) =>
       plainToInstance(EventDto, event, {
         excludeExtraneousValues: true,
@@ -44,7 +45,7 @@ export class EventMongoDA implements EventDA {
     );
   }
   async findByEmail(email: string): Promise<EventDto[]> {
-    const events = await this.eventModel.find({ createdBy: email }).populate('currentAttendeeCount');;
+    const events = await this.eventModel.find({ createdBy: email }).populate(this.currentAttendeeCountField);;
 
     return events.map((event) =>
       plainToInstance(EventDto, event, {
@@ -67,7 +68,7 @@ export class EventMongoDA implements EventDA {
       { _id: eventId },
       update,
       { new: true },
-    ).populate('currentAttendeeCount');
+    ).populate(this.currentAttendeeCountField);
 
     return plainToInstance(EventDto, updatedEvent, {
       excludeExtraneousValues: true,
