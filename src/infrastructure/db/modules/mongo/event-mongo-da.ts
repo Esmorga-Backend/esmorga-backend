@@ -76,27 +76,4 @@ export class EventMongoDA implements EventDA {
   async removeById(eventId: string): Promise<void> {
     await this.eventModel.findOneAndDelete({ _id: eventId });
   }
-
-  async incrementAttendeeCount(eventId: string, uuid: string): Promise<void> {
-    await this.eventModel.updateOne(
-      { _id: eventId },
-      {
-        $inc: { currentAttendeeCount: 1 },
-        $set: { updatedBy: uuid },
-      },
-      { timestamps: true },
-    );
-  }
-
-  async decreaseAttendeeCount(eventId: string, uuid: string): Promise<void> {
-    const filter = { _id: eventId, currentAttendeeCount: { $gt: 0 } };
-    await this.eventModel.updateOne(
-      filter,
-      {
-        $inc: { currentAttendeeCount: -1 },
-        $set: { updatedBy: uuid },
-      },
-      { timestamps: true },
-    );
-  }
 }

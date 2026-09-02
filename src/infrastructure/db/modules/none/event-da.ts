@@ -28,11 +28,4 @@ export class EventDA {
   removeById(_eventId: string): Promise<void> {
     throw new NotImplementedException();
   }
-  incrementAttendeeCount(_eventId: string, _userId: string): Promise<void> {
-    throw new NotImplementedException();
-  }
-
-  decreaseAttendeeCount(_eventId: string, _userId: string): Promise<void> {
-    throw new NotImplementedException();
-  }
 }
