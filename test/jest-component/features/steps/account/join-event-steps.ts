@@ -40,10 +40,6 @@ export const joinEventSteps: StepDefinitions = ({ given, and }) => {
     jest
       .spyOn(context.eventParticipantsDA, 'findAndUpdateParticipantsList')
       .mockResolvedValue(true);
-
-    jest
-      .spyOn(context.eventDA, 'incrementAttendeeCount')
-      .mockResolvedValue(null);
   });
 
   and('I am authenticated, with valid accessToken and eventId', () => {

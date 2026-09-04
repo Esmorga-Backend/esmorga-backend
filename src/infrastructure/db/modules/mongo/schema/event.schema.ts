@@ -1,5 +1,6 @@
-import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
+import { Schema, Prop, SchemaFactory, Virtual } from '@nestjs/mongoose';
 import { Location, LocationSchema } from './location.schema';
+import { EventParticipants } from './event-participants.schema';
 
 @Schema({ timestamps: true })
 export class Event {
@@ -30,8 +31,15 @@ export class Event {
   @Prop({ required: false })
   maxCapacity: number;
 
-  @Prop({ required: true, default: 0 })
-  currentAttendeeCount: number;
+  @Virtual({ 
+    options: {
+        ref: EventParticipants.name,
+        localField: '_id',
+        foreignField: 'eventId',
+        justOne: true
+    }
+   })
+  currentAttendeeCount: EventParticipants;
 
   @Prop({ required: true })
   createdBy: string;

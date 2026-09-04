@@ -3,7 +3,7 @@ import { EventParticipantsDto } from '../../../dtos';
 
 @Injectable()
 export class EventParticipantsDA {
-  findEventParticipant(_userId: string): Promise<string[]> {
+  findJoinedEventIds(_userId: string): Promise<string[]> {
     throw new NotImplementedException();
   }
 
@@ -29,7 +29,7 @@ export class EventParticipantsDA {
     throw new NotImplementedException();
   }
 
-  findEvent(_eventId: string): Promise<EventParticipantsDto | null> {
+  findByEvent(_eventId: string): Promise<EventParticipantsDto | null> {
     throw new NotImplementedException();
   }
 

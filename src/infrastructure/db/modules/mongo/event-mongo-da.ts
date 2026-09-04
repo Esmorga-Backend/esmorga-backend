@@ -9,9 +9,10 @@ import { CreateEventDto } from '../../../http/dtos';
 
 @Injectable({})
 export class EventMongoDA implements EventDA {
+  private readonly currentAttendeeCountField: keyof Event= 'currentAttendeeCount';
   constructor(@InjectModel(Event.name) private eventModel: Model<Event>) {}
   async find(): Promise<EventDto[]> {
-    const events = await this.eventModel.find();
+    const events = await this.eventModel.find().populate(this.currentAttendeeCountField);
     return events.map((event) =>
       plainToInstance(EventDto, event, {
         excludeExtraneousValues: true,
@@ -25,7 +26,7 @@ export class EventMongoDA implements EventDA {
     }).save();
   }
   async findOneById(eventId: string): Promise<EventDto | null> {
-    const eventDoc = await this.eventModel.findById({ _id: eventId });
+    const eventDoc = await this.eventModel.findById({ _id: eventId }).populate(this.currentAttendeeCountField);
     if (!eventDoc) return null;
     return plainToInstance(EventDto, eventDoc, {
       excludeExtraneousValues: true,
@@ -36,7 +37,7 @@ export class EventMongoDA implements EventDA {
     const objectIds = eventIds.map((id) => {
       return new Types.ObjectId(id);
     });
-    const events = await this.eventModel.find({ _id: { $in: objectIds } });
+    const events = await this.eventModel.find({ _id: { $in: objectIds } }).populate(this.currentAttendeeCountField);;
     return events.map((event) =>
       plainToInstance(EventDto, event, {
         excludeExtraneousValues: true,
@@ -44,7 +45,7 @@ export class EventMongoDA implements EventDA {
     );
   }
   async findByEmail(email: string): Promise<EventDto[]> {
-    const events = await this.eventModel.find({ createdBy: email });
+    const events = await this.eventModel.find({ createdBy: email }).populate(this.currentAttendeeCountField);;
 
     return events.map((event) =>
       plainToInstance(EventDto, event, {
@@ -67,7 +68,7 @@ export class EventMongoDA implements EventDA {
       { _id: eventId },
       update,
       { new: true },
-    );
+    ).populate(this.currentAttendeeCountField);
 
     return plainToInstance(EventDto, updatedEvent, {
       excludeExtraneousValues: true,
@@ -75,28 +76,5 @@ export class EventMongoDA implements EventDA {
   }
   async removeById(eventId: string): Promise<void> {
     await this.eventModel.findOneAndDelete({ _id: eventId });
-  }
-
-  async incrementAttendeeCount(eventId: string, uuid: string): Promise<void> {
-    await this.eventModel.updateOne(
-      { _id: eventId },
-      {
-        $inc: { currentAttendeeCount: 1 },
-        $set: { updatedBy: uuid },
-      },
-      { timestamps: true },
-    );
-  }
-
-  async decreaseAttendeeCount(eventId: string, uuid: string): Promise<void> {
-    const filter = { _id: eventId, currentAttendeeCount: { $gt: 0 } };
-    await this.eventModel.updateOne(
-      filter,
-      {
-        $inc: { currentAttendeeCount: -1 },
-        $set: { updatedBy: uuid },
-      },
-      { timestamps: true },
-    );
   }
 }

@@ -56,21 +56,11 @@ export class JoinEventService {
 
       if (currentAttendeeCount >= maxCapacity)
         throw new NotAcceptableFullEventApiError();
-
-      const participantAdded =
-        await this.eventParticipantsRepository.updateParticipantList(
-          eventId,
-          uuid,
-          requestId,
-        );
-
-      if (participantAdded) {
-        await this.eventRepository.incrementAttendeeCount(
-          uuid,
-          eventId,
-          requestId,
-        );
-      }
+      await this.eventParticipantsRepository.updateParticipantList(
+        eventId,
+        uuid,
+        requestId,
+      );
     } catch (error) {
       this.logger.error(
         `[JoinEventService] [joinEvent] - x-request-id: ${requestId}, error ${error}`,

@@ -59,20 +59,11 @@ export class DisjoinEventService {
         throw new NotAcceptableFullEventApiError();
       }
 
-      const participantRemoved =
-        await this.eventParticipantsRepository.disjoinParticipantList(
-          eventId,
-          uuid,
-          requestId,
-        );
-
-      if (participantRemoved) {
-        await this.eventRepository.decreaseAttendeeCount(
-          uuid,
-          eventId,
-          requestId,
-        );
-      }
+      await this.eventParticipantsRepository.disjoinParticipantList(
+        eventId,
+        uuid,
+        requestId,
+      );
     } catch (error) {
       this.logger.error(
         `[DisjoinEventService] [disJoinEvent] - x-request-id: ${requestId}, error ${error}`,

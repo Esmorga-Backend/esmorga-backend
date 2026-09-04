@@ -128,5 +128,6 @@ export class EventDto {
     example: 13,
     default: 0,
   })
+  @Transform(({ obj }) => obj?.currentAttendeeCount?.participants?.length ?? 0)
   currentAttendeeCount: number;
 }

@@ -37,7 +37,7 @@ export const getMyEventsStepts: StepDefinitions = ({ given, and }) => {
       moduleFixture.get<EventParticipantsDA>(EventParticipantsDA);
 
     jest
-      .spyOn(context.eventParticipantsDA, 'findEventParticipant')
+      .spyOn(context.eventParticipantsDA, 'findJoinedEventIds')
       .mockResolvedValue([EVENT_PARTICIPANT_MOCK_DB]);
   });
 
@@ -60,7 +60,7 @@ export const getMyEventsStepts: StepDefinitions = ({ given, and }) => {
   // TC-105
   and('there are not upcoming events that I have joined', () => {
     jest
-      .spyOn(context.eventParticipantsDA, 'findEventParticipant')
+      .spyOn(context.eventParticipantsDA, 'findJoinedEventIds')
       .mockResolvedValue([]);
 
     jest.spyOn(context.eventDA, 'findByEventIds').mockResolvedValue([]);
