@@ -94,7 +94,7 @@ export class PollRepository {
         `[PollRepository] [findOneByPollId] - x-request-id: ${requestId}, error: ${error}`,
       );
 
-      if (error.path === '_id') throw new DataBaseBadRequestError();
+      if ((error as any).path === '_id') throw new DataBaseBadRequestError();
 
       if (error instanceof HttpException) throw error;
 
@@ -150,7 +150,7 @@ export class PollRepository {
         `[PollRepository] [votePoll] - x-request-id: ${requestId}, error: ${error}`,
       );
 
-      if (error.path === '_id') throw new DataBaseNotFoundError();
+      if ((error as any).path === '_id') throw new DataBaseNotFoundError();
 
       if (error instanceof HttpException) throw error;
 

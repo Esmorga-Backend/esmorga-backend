@@ -1,3 +1,4 @@
+import { jest, beforeEach, describe, it, afterEach, expect } from '@jest/globals';
 import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
 import { VotePollDto } from '../../../../../src/infrastructure/http/dtos';

@@ -70,7 +70,7 @@ export class EventRepository {
         `[EventRepository] [findOneByEventId] - x-request-id: ${requestId}, error: ${error}`,
       );
 
-      if (error.path === '_id') throw new DataBaseBadRequestError();
+      if ((error as any).path === '_id') throw new DataBaseBadRequestError();
 
       if (error instanceof HttpException) throw error;
 
@@ -227,7 +227,7 @@ export class EventRepository {
       );
 
       // In case eventId is malformed from db side for char length
-      if (error.path === '_id') throw new DataBaseNotFoundError();
+      if ((error as any).path === '_id') throw new DataBaseNotFoundError();
 
       if (error instanceof HttpException) throw error;
 

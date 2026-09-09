@@ -1,3 +1,4 @@
+import { jest, beforeEach, describe, it, afterEach, expect } from '@jest/globals';
 import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
 import { validateNotNullableFields } from '../../../../../src/infrastructure/http/services';
@@ -7,6 +8,7 @@ import {
   UPDATE_EVENT_MOCK,
   UPDATE_EVENT_WITHOUT_OPTIONAL_FIELDS_MOCK,
 } from '../../../../mocks/dtos';
+import { fail } from 'assert';
 
 describe('[unit-test] [UpdateEventDto]', () => {
   it('Should validate all fields successfully (required and optional)', async () => {
@@ -57,7 +59,7 @@ describe('[unit-test] [UpdateEventDto]', () => {
         fail('Expected InvalidNullFieldApiError to be thrown');
       } catch (error) {
         expect(error).toBeInstanceOf(InvalidNullFieldApiError);
-        expect(error.message).toBe('eventName should not be empty');
+        expect((error as InvalidNullFieldApiError).message).toBe('eventName should not be empty');
       }
     });
 
@@ -121,7 +123,7 @@ describe('[unit-test] [UpdateEventDto]', () => {
         fail('Expected InvalidNullFieldApiError to be thrown');
       } catch (error) {
         expect(error).toBeInstanceOf(InvalidNullFieldApiError);
-        expect(error.message).toBe('eventDate should not be empty');
+        expect((error as InvalidNullFieldApiError).message).toBe('eventDate should not be empty');
       }
     });
 
@@ -201,7 +203,7 @@ describe('[unit-test] [UpdateEventDto]', () => {
         fail('Expected InvalidNullFieldApiError to be thrown');
       } catch (error) {
         expect(error).toBeInstanceOf(InvalidNullFieldApiError);
-        expect(error.message).toBe('description should not be empty');
+        expect((error as InvalidNullFieldApiError).message).toBe('description should not be empty');
       }
     });
 
@@ -265,7 +267,7 @@ describe('[unit-test] [UpdateEventDto]', () => {
         fail('Expected InvalidNullFieldApiError to be thrown');
       } catch (error) {
         expect(error).toBeInstanceOf(InvalidNullFieldApiError);
-        expect(error.message).toBe('evenType should not be empty');
+        expect((error as InvalidNullFieldApiError).message).toBe('evenType should not be empty');
       }
     });
 
@@ -360,7 +362,7 @@ describe('[unit-test] [UpdateEventDto]', () => {
         fail('Expected InvalidNullFieldApiError to be thrown');
       } catch (error) {
         expect(error).toBeInstanceOf(InvalidNullFieldApiError);
-        expect(error.message).toBe('location should not be empty');
+        expect((error as InvalidNullFieldApiError).message).toBe('location should not be empty');
       }
     });
 
@@ -409,7 +411,7 @@ describe('[unit-test] [UpdateEventDto]', () => {
         fail('Expected InvalidNullFieldApiError to be thrown');
       } catch (error) {
         expect(error).toBeInstanceOf(InvalidNullFieldApiError);
-        expect(error.message).toBe('name should not be empty');
+        expect((error as InvalidNullFieldApiError).message).toBe('name should not be empty');
       }
     });
 
@@ -478,7 +480,7 @@ describe('[unit-test] [UpdateEventDto]', () => {
         fail('Expected InvalidNullFieldApiError to be thrown');
       } catch (error) {
         expect(error).toBeInstanceOf(InvalidNullFieldApiError);
-        expect(error.message).toBe('lat should not be empty');
+        expect((error as InvalidNullFieldApiError).message).toBe('lat should not be empty');
       }
     });
 
@@ -529,7 +531,7 @@ describe('[unit-test] [UpdateEventDto]', () => {
         fail('Expected InvalidNullFieldApiError to be thrown');
       } catch (error) {
         expect(error).toBeInstanceOf(InvalidNullFieldApiError);
-        expect(error.message).toBe('long should not be empty');
+        expect((error as InvalidNullFieldApiError).message).toBe('long should not be empty');
       }
     });
 
