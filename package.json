@@ -48,6 +48,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.15.1",
     "dotenv": "^17.4.2",
+    "mongo-migrate-ts": "^2.0.0",
     "mongoose": "^9.0.0",
     "nestjs-pino": "^5.0.1",
     "nodemailer": "^9.1.0",
@@ -59,7 +60,6 @@
   "devDependencies": {
     "@nestjs/cli": "^11.0.0",
     "@nestjs/schematics": "^11.0.0",
-    "@nestjs/swagger": "^11.4.0",
     "@nestjs/testing": "^11.1.0",
     "@playwright/test": "^1.55.0",
     "@types/express": "^4.17.21",
@@ -80,7 +80,6 @@
     "jest": "^29.7.0",
     "jest-json-schema": "^6.1.0",
     "jest-junit": "^17.0.0",
-    "mongo-migrate-ts": "^2.0.0",
     "nyc": "^18.0.0",
     "prettier": "^3.3.3",
     "source-map-support": "^0.5.21",
