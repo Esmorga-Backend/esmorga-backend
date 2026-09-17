@@ -1,3 +1,4 @@
+import { jest, beforeEach, describe, it, afterAll, expect } from '@jest/globals';
 import { filterAvailablePolls } from '../../../../src/domain/services';
 import { POLL_MOCK, OLD_POLL_MOCK } from '../../../mocks/dtos';
 
@@ -5,7 +6,7 @@ describe('[unit-test] [filterAvailablePolls]', () => {
   it('Should return polls not expired yet', () => {
     const response = filterAvailablePolls([POLL_MOCK, OLD_POLL_MOCK]);
 
-    expect(response).toMatchObject([POLL_MOCK]);
+    expect(response).toMatchObject([POLL_MOCK as any]);
   });
 
   it('Should not return a list of polls that have expired', () => {

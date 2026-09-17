@@ -1,3 +1,4 @@
+import { jest, beforeEach, describe, it, afterEach, expect } from '@jest/globals';
 import { ExecutionContext } from '@nestjs/common';
 import { PinoLogger } from 'nestjs-pino';
 import { OptionalAuthGuard } from '../../../../../src/infrastructure/http/guards/optional-auth.guard';
@@ -43,7 +44,7 @@ describe('[unit-test] [OptionalAuthGuard]', () => {
 
     mockExecutionContext.switchToHttp = jest.fn().mockReturnValue({
       getRequest: jest.fn().mockReturnValue(mockRequest),
-    });
+    }) as any;
 
     const result = await optionalAuthGuard.canActivate(mockExecutionContext);
 
@@ -67,7 +68,7 @@ describe('[unit-test] [OptionalAuthGuard]', () => {
 
     mockExecutionContext.switchToHttp = jest.fn().mockReturnValue({
       getRequest: jest.fn().mockReturnValue(mockRequest),
-    });
+    }) as any;
 
     const result = await optionalAuthGuard.canActivate(mockExecutionContext);
 
@@ -91,7 +92,7 @@ describe('[unit-test] [OptionalAuthGuard]', () => {
 
     mockExecutionContext.switchToHttp = jest.fn().mockReturnValue({
       getRequest: jest.fn().mockReturnValue(mockRequest),
-    });
+    }) as any;
 
     authGuard.canActivate.mockResolvedValue(true);
 
@@ -115,7 +116,7 @@ describe('[unit-test] [OptionalAuthGuard]', () => {
 
     mockExecutionContext.switchToHttp = jest.fn().mockReturnValue({
       getRequest: jest.fn().mockReturnValue(mockRequest),
-    });
+    }) as any;
 
     authGuard.canActivate.mockResolvedValue(false);
 
@@ -135,7 +136,7 @@ describe('[unit-test] [OptionalAuthGuard]', () => {
 
     mockExecutionContext.switchToHttp = jest.fn().mockReturnValue({
       getRequest: jest.fn().mockReturnValue(mockRequest),
-    });
+    }) as any;
 
     const mockError = new Error('Invalid token');
     authGuard.canActivate.mockRejectedValue(mockError);
@@ -156,7 +157,7 @@ describe('[unit-test] [OptionalAuthGuard]', () => {
 
     mockExecutionContext.switchToHttp = jest.fn().mockReturnValue({
       getRequest: jest.fn().mockReturnValue(mockRequest),
-    });
+    }) as any;
 
     authGuard.canActivate.mockResolvedValue(true);
 
@@ -179,7 +180,7 @@ describe('[unit-test] [OptionalAuthGuard]', () => {
 
     mockExecutionContext.switchToHttp = jest.fn().mockReturnValue({
       getRequest: jest.fn().mockReturnValue(mockRequest),
-    });
+    }) as any;
 
     const result = await optionalAuthGuard.canActivate(mockExecutionContext);
 

@@ -1,3 +1,4 @@
+import { jest, beforeEach, describe, it, afterEach, expect } from '@jest/globals';
 import {
   BadRequestException,
   InternalServerErrorException,
@@ -61,7 +62,7 @@ describe('[unit-test] [UsersController]', () => {
         },
       };
 
-      (getUsersService.getUsers as jest.Mock).mockResolvedValue(expectedResult);
+      (getUsersService.getUsers as jest.Mock<typeof getUsersService.getUsers>).mockResolvedValue(expectedResult);
 
       const result = await usersController.getUsers(
         MOCKED_SESSION_ID,
@@ -87,7 +88,7 @@ describe('[unit-test] [UsersController]', () => {
       };
 
       const error = new BadRequestException('Invalid parameters');
-      (getUsersService.getUsers as jest.Mock).mockRejectedValue(error);
+      (getUsersService.getUsers as jest.Mock<typeof getUsersService.getUsers>).mockRejectedValue(error);
 
       await expect(
         usersController.getUsers(
@@ -111,7 +112,7 @@ describe('[unit-test] [UsersController]', () => {
       };
 
       const error = new Error('Unexpected database error');
-      (getUsersService.getUsers as jest.Mock).mockRejectedValue(error);
+      (getUsersService.getUsers as jest.Mock<typeof getUsersService.getUsers>).mockRejectedValue(error);
 
       await expect(
         usersController.getUsers(
