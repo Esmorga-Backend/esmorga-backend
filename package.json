@@ -24,6 +24,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e-run-cypress": "node test/scripts/features-tool && cypress run --config-file test/cypress-e2e/cypress.config.js --no-runner-ui --headless --browser chrome",
     "test:e2e-open-cypress": "node test/scripts/features-tool &&cypress open --config-file test/cypress-e2e/cypress.config.js",
+    "migrate:compose-up": "cp migrations_compose.json migrations.json && npx mongo-migrate-ts up",
     "migrate:local-up": "cp migrations_local.json migrations.json && npx mongo-migrate-ts up",
     "migrate:local-down-all": "cp migrations_local.json migrations.json && npx mongo-migrate-ts down -a",
     "migrate:qa-up": "cp migrations_qa.json migrations.json && npx mongo-migrate-ts up",

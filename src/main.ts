@@ -10,7 +10,8 @@ import { executeMigrations } from './config';
 const DNS_NAME = process.env.DNS_NAME;
 
 async function main() {
-  executeMigrations();
+  executeMigrations()
+    .catch(err => console.error("Migrations returned an unexpected error: " + err?.message));
 
   const app = await NestFactory.create<NestExpressApplication>(
     AppModule.register({ db: 'mongodb' }),

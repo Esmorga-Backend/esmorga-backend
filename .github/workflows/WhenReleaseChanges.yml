@@ -15,4 +15,4 @@ jobs:
       contents: read
     with:
       environment: PROD
-      branch_name: ${{ github.ref_name }}
+      image_and_tag: ghcr.io/${{ github.repository }}:${{ github.sha }}
