@@ -31,7 +31,7 @@ ftp_client.put('.env','.env')
 command = """
 cp .env """+service_path+"""
 cd """+service_path+"""
-sudo docker run -d --memory 150m --memory-swap 150m --env-file $(pwd)/.env -p """port""":"""port""" --name """+service+""" """+image_and_tag+"""
+sudo docker run -d --memory 150m --memory-swap 150m --env-file "$(pwd)/.env" -p """+port+""": """+port+""" --name """+service+""" """+image_and_tag+"""
 sleep 10
 sudo rm /var/www/html/"""+service+""".flag
 """
