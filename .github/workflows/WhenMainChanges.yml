@@ -19,6 +19,15 @@ jobs:
         env:
           NODE_ENV: LOCAL
   BuildAndPushDocker:
+    name: Build and Push Docker Image
+    runs-on: ubuntu-latest
+    needs: RunUnitTests
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
       - name: Build and Push Image
         uses: ./.github/actions/pushDockerImage
         with:
