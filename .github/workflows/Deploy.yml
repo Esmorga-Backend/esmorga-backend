@@ -63,14 +63,14 @@ jobs:
       if: ${{ inputs.environment == 'PROD' }}
       run: |
         python -m pip install --upgrade pip paramiko 
-        python .github/workflows/scripts/DeployToEnv.py api.esmorgaevents.com ${{vars.SERVICE}} ${{vars.SERVER_PATH}} $image_and_tag ${{vars.APP_PORT}} ${{secrets.SSHRSA}}
+        python .github/workflows/scripts/DeployToEnv.py api.esmorgaevents.com ${{vars.SERVICE}} ${{vars.SERVER_PATH}} ${{ inputs.image_and_tag }} ${{vars.APP_PORT}} ${{secrets.SSHRSA}}
 
     - name: Install dependencies And Deploy QA
       shell: bash
       if: ${{ inputs.environment == 'QA' }}
       run: |
         python -m pip install --upgrade pip paramiko 
-        python .github/workflows/scripts/DeployToEnv.py qa.api.esmorgaevents.com ${{vars.SERVICE}} ${{vars.SERVER_PATH}} $image_and_tag ${{vars.APP_PORT}} ${{secrets.SSHRSA}}
+        python .github/workflows/scripts/DeployToEnv.py qa.api.esmorgaevents.com ${{vars.SERVICE}} ${{vars.SERVER_PATH}} ${{ inputs.image_and_tag }} ${{vars.APP_PORT}} ${{secrets.SSHRSA}}
 
     - name: Remove .env
       run: |
