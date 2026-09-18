@@ -18,7 +18,7 @@ else:
 command = """
 docker pull """+image_and_tag+"""
 sudo touch /var/www/html/"""+service+""".flag
-sudo docker stop """+service+""" ; docker stop """+service+"""
+sudo docker stop """+service+""" ; docker rm """+service+"""
 """
 
 stdin, stdout, stderr = ssh_client.exec_command(command)

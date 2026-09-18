@@ -15,4 +15,4 @@ jobs:
       contents: read
     with:
       environment: PROD
-      image_and_tag: ghcr.io/esmorga-backend:${{ github.sha }}
+      image_and_tag: ghcr.io/esmorga-backend/esmorga-backend:${{ github.sha }}
