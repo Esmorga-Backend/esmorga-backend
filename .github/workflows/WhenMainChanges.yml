@@ -31,7 +31,7 @@ jobs:
       - name: Build and Push Image
         uses: ./.github/actions/pushDockerImage
         with:
-          image_name: ${{ github.repository }}
+          image_name: esmorga-backend
           image_tag: ${{ github.sha }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -42,4 +42,4 @@ jobs:
   #   secrets: inherit
   #   with:
   #     environment: QA
-  #     image_and_tag: ghcr.io/${{ github.repository }}:${{ github.sha }}
+  #     image_and_tag: ghcr.io/esmorga-backend:${{ github.sha }}
