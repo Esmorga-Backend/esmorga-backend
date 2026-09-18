@@ -18,7 +18,7 @@ else:
 command = """
 docker pull """+image_and_tag+"""
 sudo touch /var/www/html/"""+service+""".flag
-sudo docker stop """+service+""" ; docker rm """+service+"""
+sudo docker stop """+service+""" ; sudo docker rm """+service+""" ;
 """
 
 stdin, stdout, stderr = ssh_client.exec_command(command)
@@ -31,7 +31,7 @@ ftp_client.put('.env','.env')
 command = """
 cp .env """+service_path+"""
 cd """+service_path+"""
-sudo docker run -d --restart unless-stopped --memory 100m --memory-swap 100m -p """port""":"""port""" --env-file .env --name """+service+""" """+image_and_tag+"""
+sudo docker run -d --memory 150m --memory-swap 150m --env-file "$(pwd)/.env" -p """port""":"""port""" --name """+service+""" """+image_and_tag+"""
 sleep 10
 sudo rm /var/www/html/"""+service+""".flag"""
 

@@ -49,7 +49,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.15.1",
     "dotenv": "^17.4.2",
-    "mongo-migrate-ts": "^2.0.0",
+    "mongo-migrate-ts": "^1.6.2",
     "mongoose": "^9.0.0",
     "nestjs-pino": "^5.0.1",
     "nodemailer": "^9.1.0",
