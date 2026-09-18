@@ -54,7 +54,7 @@ jobs:
         echo "ENABLE_CORS=${{vars.ENABLE_CORS}}" >> .env 
         
     - name: Set up Python "pypy3.9"
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v7
       with:
         python-version: pypy3.9
 
