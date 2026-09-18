@@ -35,11 +35,10 @@ jobs:
           image_tag: ${{ github.sha }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
-  # COMMENTED WHILE TESTING
-  # DeployToQA:
-  #   needs: Run-Unit-Tests
-  #   uses: ./.github/workflows/Deploy.yml
-  #   secrets: inherit
-  #   with:
-  #     environment: QA
-  #     image_and_tag: ghcr.io/esmorga-backend/esmorga-backend:${{ github.sha }}
+  DeployToQA:
+    needs: BuildAndPushDocker
+    uses: ./.github/workflows/Deploy.yml
+    secrets: inherit
+    with:
+      environment: QA
+      image_and_tag: ghcr.io/esmorga-backend/esmorga-backend:${{ github.sha }}
