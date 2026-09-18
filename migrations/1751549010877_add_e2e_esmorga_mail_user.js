@@ -72,10 +72,14 @@ var add_e2e_esmorga_mail_user1751549010877 = /** @class */ (function () {
                         return [4 /*yield*/, encodeValue(user.password)];
                     case 1:
                         _a.password = _b.sent();
-                        return [4 /*yield*/, db.collection(collection).insertOne(user)];
+                        return [4 /*yield*/, db.collection(collection).findOne(user)];
                     case 2:
+                        if (!((_b.sent()) != null)) return [3 /*break*/, 4];
+                        return [4 /*yield*/, db.collection(collection).insertOne(user)];
+                    case 3:
                         _b.sent();
-                        return [2 /*return*/];
+                        _b.label = 4;
+                    case 4: return [2 /*return*/];
                 }
             });
         });
