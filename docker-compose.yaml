@@ -1,0 +1,28 @@
+services:
+  mongodb:
+    container_name: mongodb
+    networks: 
+      - esmorga-net
+    image: mongodb/mongodb-community-server:latest
+    volumes:
+      - ./.docker_mongo:/data/db
+    ports:
+      - 27017:27017
+  esmorga:
+    container_name: esmorga
+    networks: 
+      - esmorga-net
+    build:
+        context: ./
+    env_file:
+      - path: ./.env
+        required: true 
+    environment:
+      - MIGRATION_ENV=COMPOSE
+      - MONGODB_URI=mongodb://mongodb:27017/esmorga
+      - APP_PORT=3000
+      - DNS_NAME=http://localhost:3000/
+    ports:
+      - 3000:3000
+networks:
+  esmorga-net:
