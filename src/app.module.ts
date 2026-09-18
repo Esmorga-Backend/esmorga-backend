@@ -43,6 +43,7 @@ const { ConfigurableModuleClass } =
     ConfigModule.forRoot({
       isGlobal: true,
       validate: validateEnvVars,
+      ignoreEnvFile: process.env.IGNORE_ENV_FILE === 'true',
     }),
     ThrottlerModule.forRootAsync({
       inject: [ConfigService],

@@ -39,6 +39,7 @@ RUN chown -R appuser /app
 ENV NODE_ENV=PROD \
     NPM_CONFIG_PRODUCTION=true \
     APP_PORT=3000 \
+    IGNORE_ENV_FILE=true \
     MIGRATION_ENV=PROD
 
 # Copy only production node_modules (dev dependencies are pruned away)
