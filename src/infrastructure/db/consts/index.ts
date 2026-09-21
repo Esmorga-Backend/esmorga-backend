@@ -4,7 +4,6 @@ export const REQUIRED_DTO_FIELDS = {
     'eventName',
     'eventDate',
     'eventType',
-    'description',
     'location.name',
     'currentAttendeeCount',
   ],
