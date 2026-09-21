@@ -13,7 +13,7 @@ export class Event {
   @Prop({ required: true })
   eventType: string;
 
-  @Prop({ required: true })
+  @Prop({ required: false, default: undefined })
   description: string;
 
   @Prop({ type: [String], required: false, default: undefined })

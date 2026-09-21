@@ -180,7 +180,7 @@ describe('[unit-test] [CreateEventDto]', () => {
   });
 
   describe('[CreateEventDto] [description]', () => {
-    it('Should not accept empty value', async () => {
+    it('Should accept empty value', async () => {
       const event = { ...CREATE_EVENT_MOCK };
 
       delete event.description;
@@ -189,11 +189,7 @@ describe('[unit-test] [CreateEventDto]', () => {
 
       const errors = await validate(createEventDto, { stopAtFirstError: true });
 
-      expect(errors.length).toEqual(1);
-      expect(errors[0].property).toEqual('description');
-      expect(errors[0].constraints).toEqual({
-        isNotEmpty: 'description should not be empty',
-      });
+      expect(errors.length).toEqual(0);
     });
 
     it('Should not accept more than 5000 characters', async () => {

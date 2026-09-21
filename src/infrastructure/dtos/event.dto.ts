@@ -68,7 +68,8 @@ export class EventDto {
 
   @Expose()
   @IsString()
-  @ApiProperty({ example: 'Hello World', minLength: 4, maxLength: 5000 })
+  @IsOptional()
+  @ApiProperty({ example: 'Hello World', maxLength: 5000, required: false })
   description: string;
 
   @Expose()
