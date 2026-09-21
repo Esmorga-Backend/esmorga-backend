@@ -8,7 +8,7 @@ export const UPDATE_EVENT_MOCK: UpdateEventDto = {
   eventId: '6656e23640e1fdb4ceb23cc9',
   eventName: 'MobgenFest',
   eventDate: futureDate.toISOString(),
-  description: 'Hello World',
+  description: 'Hello World heeeeeeeeeeeeeeeeeeey 20',
   eventType: EVENT_TYPE.PARTY,
   imageUrl: 'img.url',
   location: {

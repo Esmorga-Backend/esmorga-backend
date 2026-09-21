@@ -207,16 +207,21 @@ describe('[unit-test] [UpdateEventDto]', () => {
       }
     });
 
-    it('Should accept less than 4 characters', async () => {
+    it('Should not accept less than 20 characters', async () => {
       const event = { ...UPDATE_EVENT_MOCK };
 
-      event.description = 'a';
+      event.description = '';
+      for (var i = 0; i < 19; i++) event.description = `${event.description}a`
 
       const updateEventDto = plainToInstance(UpdateEventDto, event);
 
       const errors = await validate(updateEventDto, { stopAtFirstError: true });
 
-      expect(errors.length).toEqual(0);
+      expect(errors.length).toEqual(1);
+      expect(errors[0].property).toEqual('description');
+      expect(errors[0].constraints).toEqual({
+        minLength: 'description must have min 20 characters',
+      });
     });
 
     it('Should not accept more than 5000 characters', async () => {

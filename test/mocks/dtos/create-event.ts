@@ -9,7 +9,7 @@ joinDeadlineDate.setDate(joinDeadlineDate.getDate() - 1);
 export const CREATE_EVENT_MOCK: CreateEventDto = {
   eventName: 'MobgenFest',
   eventDate: futureDate.toISOString(),
-  description: 'Hello World',
+  description: 'Hello World heeeeeeeeeeeeeeeeeeey 20',
   eventType: EVENT_TYPE.PARTY,
   imageUrl: 'img.url',
   location: {
@@ -25,7 +25,7 @@ export const CREATE_EVENT_MOCK: CreateEventDto = {
 export const CREATE_EVENT_WITHOUT_OPTIONAL_FIELDS_MOCK: CreateEventDto = {
   eventName: 'MobgenFest',
   eventDate: futureDate.toISOString(),
-  description: 'Hello World',
+  description: 'Hello World heeeeeeeeeeeeeeeeeeey 20 2',
   eventType: EVENT_TYPE.PARTY,
   location: {
     name: 'A Coruña',

@@ -208,7 +208,7 @@ describe('[unit-test] [CreateEventDto]', () => {
       });
     });
 
-    it('Should not accept less than 4 characters', async () => {
+    it('Should not accept less than 20 characters', async () => {
       const event = { ...CREATE_EVENT_MOCK };
 
       event.description = 'a';
@@ -220,7 +220,7 @@ describe('[unit-test] [CreateEventDto]', () => {
       expect(errors.length).toEqual(1);
       expect(errors[0].property).toEqual('description');
       expect(errors[0].constraints).toEqual({
-        minLength: 'description must have min 4 characters',
+        minLength: 'description must have min 20 characters',
       });
     });
 
