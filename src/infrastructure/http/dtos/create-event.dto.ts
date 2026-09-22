@@ -84,7 +84,7 @@ export class CreateEventDto {
   @ApiProperty({
     example:
       'Join us for an unforgettable celebration as we dance into the apocalypse.',
-    minLength: 4,
+    minLength: 20,
     maxLength: 5000,
   })
   @MinLength(20, { message: 'description must have min 20 characters' })

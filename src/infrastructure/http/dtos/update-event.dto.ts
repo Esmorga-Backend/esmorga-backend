@@ -103,13 +103,14 @@ export class UpdateEventDto {
   @ApiPropertyOptional({
     example:
       'Join us for an unforgettable celebration as we dance into the apocalypse.',
-    minLength: 4,
+    minLength: 20,
     maxLength: 5000,
   })
-  @MinLength(20, { message: 'description must have min 20 characters' })
+  @MinLength(20, { message: 'description must have min 20 characters', validateIf: (_, value)=> value !== null })
   @MaxLength(5000, { message: 'description must have max 5000 characters' })
   @IsString()
   @IsOptional()
+  @Transform(({ value }) => value === "" ? null : value)
   description?: string;
 
   @ApiPropertyOptional({ example: 'Party', enum: EVENT_TYPE })

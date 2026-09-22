@@ -116,7 +116,7 @@ export class EventController {
       this.logger.info(
         `[EventController] [updateEvent] - x-request-id:${requestId}`,
       );
-      const { eventName, eventDate, description, eventType, location } =
+      const { eventName, eventDate, eventType, location } =
         updateEventDto;
 
       const updatedLocation =
@@ -129,7 +129,6 @@ export class EventController {
       const fieldsToValidate = {
         eventName,
         eventDate,
-        description,
         eventType,
         location: updatedLocation,
       };
