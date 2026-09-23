@@ -1,5 +1,5 @@
 import { Db } from 'mongodb';
-import { MigrationInterface } from 'mongo-migrate-ts';
+
 import { createHash } from 'crypto';
 
 function hash(password: string) {
@@ -34,7 +34,7 @@ const USERS = [
   },
 ];
 
-export class add_users1719473131171 implements MigrationInterface {
+class add_users1719473131171 implements MongoDbMigration {
   public async up(db: Db): Promise<any> {
     await db.collection('users').insertMany(USERS);
   }
@@ -45,3 +45,5 @@ export class add_users1719473131171 implements MigrationInterface {
     });
   }
 }
+
+export default new add_users1719473131171()

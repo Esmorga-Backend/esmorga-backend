@@ -1,5 +1,5 @@
 import { Db } from 'mongodb';
-import { MigrationInterface } from 'mongo-migrate-ts';
+
 import * as argon2 from 'argon2';
 
 const collection = 'users';
@@ -19,7 +19,7 @@ async function encodeValue(value: string) {
   return await argon2.hash(value);
 }
 
-export class add_e2e_user1726050364431 implements MigrationInterface {
+class add_e2e_user1726050364431 implements MongoDbMigration {
   public async up(db: Db): Promise<any> {
     user.password = await encodeValue(user.password);
 
@@ -32,3 +32,5 @@ export class add_e2e_user1726050364431 implements MigrationInterface {
     });
   }
 }
+
+export default new add_e2e_user1726050364431()

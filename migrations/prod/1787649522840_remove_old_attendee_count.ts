@@ -1,6 +1,5 @@
 import { AnyBulkWriteOperation, Db, Document } from 'mongodb';
 
-
 class remove_old_attendee_count_1787649522840 implements MongoDbMigration {
   public async up(db: Db): Promise<void | never> {
     await db.collection('events').updateMany({}, { $unset: { currentAttendeeCount: "" } });

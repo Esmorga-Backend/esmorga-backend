@@ -1,9 +1,7 @@
 import { Db } from 'mongodb';
-import { MigrationInterface } from 'mongo-migrate-ts';
 
-export class update_user_status_to_active1726575490719
-  implements MigrationInterface
-{
+
+class update_user_status_to_active1726575490719 implements MongoDbMigration {
   public async up(db: Db): Promise<any> {
     const result = await db.collection('users').updateMany(
       {
@@ -29,3 +27,5 @@ export class update_user_status_to_active1726575490719
     return result;
   }
 }
+
+export default new update_user_status_to_active1726575490719()

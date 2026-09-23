@@ -1,5 +1,5 @@
 import { Db } from 'mongodb';
-import { MigrationInterface } from 'mongo-migrate-ts';
+
 
 const collection = 'events';
 const eventNames = ['MobgenFest', 'Paintball', 'MobgenFest 2', 'MobgenFest 3'];
@@ -12,7 +12,7 @@ futureDate.setFullYear(2025);
 const oldDate = new Date();
 oldDate.setFullYear(2023);
 
-export class add_events1715175185780 implements MigrationInterface {
+class add_events1715175185780 implements MongoDbMigration {
   public async up(db: Db): Promise<any> {
     const newEvents = [
       {
@@ -80,3 +80,5 @@ export class add_events1715175185780 implements MigrationInterface {
     });
   }
 }
+
+export default new add_events1715175185780()

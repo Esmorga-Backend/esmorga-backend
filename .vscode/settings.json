@@ -5,6 +5,9 @@
   "typescript.preferences.importModuleSpecifier": "relative",
   "editor.defaultFormatter": "rvest.vs-code-prettier-eslint",
   "[typescript]": {
-    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
   }
 }
