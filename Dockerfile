@@ -20,9 +20,10 @@ RUN npm ci
 # Project config needed for the build
 COPY tsconfig.json tsconfig.build.json nest-cli.json ./
 COPY src ./src
+COPY migrations ./migrations
 
 # Compile to dist/ (only runtime deps are needed here)
-RUN npm run build && npm prune --omit=dev
+RUN npm run build && npm run build:migrations && npm prune --omit=dev
 
 # ---------- Runtime stage ----------
 FROM node:26-slim AS runtime
@@ -32,9 +33,6 @@ RUN groupadd --system nodejs \
   && useradd --system --gid nodejs --create-home appuser
 
 WORKDIR /app
-
-# Needed for DB migrations file swap done by the app
-RUN chown -R appuser /app
 
 ENV NODE_ENV=PROD \
     NPM_CONFIG_PRODUCTION=true \
@@ -51,8 +49,7 @@ COPY package.json ./
 
 # DB migrations
 COPY --from=build /app/node_modules/.bin ./node_modules/.bin
-COPY migrations ./migrations
-COPY migrations_prod.json migrations_qa.json migrations_local.json migrations_compose.json ./
+COPY --from=build /app/dist_migrations ./dist_migrations
 
 USER appuser
 

@@ -1,5 +1,5 @@
 import { Db } from 'mongodb';
-import { MigrationInterface } from 'mongo-migrate-ts';
+
 import { createHash } from 'crypto';
 
 function hash(string) {
@@ -26,9 +26,7 @@ const users = [
   },
 ];
 
-export class update_password_user_login_fow1718793301030
-  implements MigrationInterface
-{
+class update_password_user_login_fow1718793301030 implements MongoDbMigration {
   public async up(db: Db): Promise<any> {
     users.forEach((user) => {
       db.collection(collection).updateOne(
@@ -47,3 +45,5 @@ export class update_password_user_login_fow1718793301030
     });
   }
 }
+
+export default new update_password_user_login_fow1718793301030()

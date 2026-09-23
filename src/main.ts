@@ -10,8 +10,14 @@ import { executeMigrations } from './config';
 const DNS_NAME = process.env.DNS_NAME;
 
 async function main() {
-  executeMigrations()
-    .catch(err => console.error("Migrations returned an unexpected error: " + err?.message));
+  if (process.env.MIGRATE_SKIP !== 'true') {
+    await executeMigrations()
+      .then(() => (process.env.MIGRATE_ONLY !== 'true') || process.exit(0))
+      .catch(err => {
+        console.error("Migrations returned an unexpected error: " + err?.message);
+        (process.env.MIGRATE_ONLY !== 'true') || process.exit(1);
+      });
+  }
 
   const app = await NestFactory.create<NestExpressApplication>(
     AppModule.register({ db: 'mongodb' }),
@@ -31,9 +37,9 @@ async function main() {
     const origins = allowAllOrigins
       ? true
       : corsOrigin
-          .split(',')
-          .map((origin) => origin.trim())
-          .filter((origin) => origin.length > 0);
+        .split(',')
+        .map((origin) => origin.trim())
+        .filter((origin) => origin.length > 0);
     const allowCredentials = !allowAllOrigins;
 
     app.enableCors({

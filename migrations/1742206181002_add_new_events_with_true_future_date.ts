@@ -1,5 +1,5 @@
 import { Db } from 'mongodb';
-import { MigrationInterface } from 'mongo-migrate-ts';
+
 
 const collection = 'events';
 const eventNames = [
@@ -21,9 +21,7 @@ futureDate.setFullYear(2135);
 const oldDate: Date = new Date();
 oldDate.setFullYear(new Date().getFullYear() - 1);
 
-export class add_new_events_with_true_future_date1742206181002
-  implements MigrationInterface
-{
+class add_new_events_with_true_future_date1742206181002 implements MongoDbMigration {
   public async up(db: Db): Promise<any> {
     const newEvents = [
       {
@@ -105,3 +103,5 @@ export class add_new_events_with_true_future_date1742206181002
     });
   }
 }
+
+export default new add_new_events_with_true_future_date1742206181002()

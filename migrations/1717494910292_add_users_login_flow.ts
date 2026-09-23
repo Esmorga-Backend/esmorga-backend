@@ -1,5 +1,5 @@
 import { Db } from 'mongodb';
-import { MigrationInterface } from 'mongo-migrate-ts';
+
 import { createHash } from 'crypto';
 
 function hash(string) {
@@ -16,7 +16,7 @@ const emails = [
 
 const currentDate = new Date();
 
-export class add_users_login_flow1717494910292 implements MigrationInterface {
+class add_users_login_flow1717494910292 implements MongoDbMigration {
   public async up(db: Db): Promise<any> {
     const users = [
       {
@@ -54,3 +54,5 @@ export class add_users_login_flow1717494910292 implements MigrationInterface {
     });
   }
 }
+
+export default new add_users_login_flow1717494910292()

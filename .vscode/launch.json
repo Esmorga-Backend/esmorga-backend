@@ -15,6 +15,10 @@
         "--",
         "--inspect-brk"
       ],
+      "env": {
+        "MIGRATE_DOWN": "false",
+        "MIGRATE_ONLY": "false"
+      },
       "autoAttachChildProcesses": true,
       "restart": true,
       "sourceMaps": true,
@@ -31,7 +35,7 @@
         "--i",
         "--config",
         "./test/jest-component/jest-component.config.json",
-        "--detectOpenHandles", 
+        "--detectOpenHandles",
         "--testTimeout",
         "300000",
         "--forceExit"

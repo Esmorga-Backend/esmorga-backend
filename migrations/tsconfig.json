@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "rootDir": "./src",
     "module": "commonjs",
     "declaration": true,
     "removeComments": true,
@@ -9,7 +8,7 @@
     "allowSyntheticDefaultImports": true,
     "target": "ES2021",
     "sourceMap": true,
-    "outDir": "./dist",
+    "outDir": "../dist_migrations",
     "incremental": false,
     "skipLibCheck": true,
     "strictNullChecks": false,
@@ -17,9 +16,7 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
-    "esModuleInterop": true
-  },
-  "include": [
-    "./src/",
-  ]
+    "esModuleInterop": true,
+    "types": ["./index.d.ts","../node_modules/@types/node/crypto.d.ts"]
+  }
 }

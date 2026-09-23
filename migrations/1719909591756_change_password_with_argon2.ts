@@ -1,5 +1,5 @@
 import { Db } from 'mongodb';
-import { MigrationInterface } from 'mongo-migrate-ts';
+
 import * as argon2 from 'argon2';
 import { createHash } from 'crypto';
 
@@ -31,9 +31,7 @@ const USERS_TO_UPDATE = [
   },
 ];
 
-export class change_password_with_argon21719909591756
-  implements MigrationInterface
-{
+class change_password_with_argon21719909591756 implements MongoDbMigration {
   public async up(db: Db): Promise<any> {
     USERS_TO_UPDATE[0].encodedPassword = await encodeValue(
       USERS_TO_UPDATE[0].password,
@@ -72,3 +70,5 @@ export class change_password_with_argon21719909591756
     await Promise.all(promises);
   }
 }
+
+export default new change_password_with_argon21719909591756()
