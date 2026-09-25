@@ -53,9 +53,9 @@ jobs:
         echo "DNS_NAME=${{vars.DNS_NAME}}" >> .env 
         echo "CORS_ORIGIN=${{vars.CORS_ORIGIN}}" >> .env 
         echo "ENABLE_CORS=${{vars.ENABLE_CORS}}" >> .env 
-        echo "ONESIGNAL_APP_ID=${{vars.ONESIGNAL_APP_ID}}" >> .env 
+        echo "ONESIGNAL_APP_ID=${{secrets.ONESIGNAL_APP_ID}}" >> .env 
         echo "ONESIGNAL_API_BASE_URL=${{vars.ONESIGNAL_API_BASE_URL}}" >> .env 
-        echo "ONESIGNAL_REST_API_KEY=${{vars.ONESIGNAL_REST_API_KEY}}" >> .env 
+        echo "ONESIGNAL_REST_API_KEY=${{secrets.ONESIGNAL_REST_API_KEY}}" >> .env 
         
     - name: Set up Python "pypy3.9"
       uses: actions/setup-python@v7
