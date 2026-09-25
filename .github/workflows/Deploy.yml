@@ -36,7 +36,7 @@ jobs:
 
     - name: Create .env
       run: |
-        echo "APP_ENV=${{vars.environment}}" >> .env
+        echo "APP_ENV=${{ inputs.environment }}" >> .env
         echo "MIGRATION_ENV=${{ inputs.environment }}" >> .env 
         echo "APP_PORT=${{vars.APP_PORT}}" >> .env 
         echo "MONGODB_URI=${{secrets.MONGODB_URI}}" >> .env 
