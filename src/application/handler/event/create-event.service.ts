@@ -12,6 +12,7 @@ import {
 import { CreateEventDto } from '../../../infrastructure/http/dtos';
 import { DataBaseUnauthorizedError } from '../../../infrastructure/db/errors';
 import { ACCOUNT_ROLES } from '../../../domain/const';
+import { OnesignalService } from '../../../infrastructure/services';
 
 @Injectable()
 export class CreateEventService {
@@ -20,7 +21,8 @@ export class CreateEventService {
     private readonly accountRepository: AccountRepository,
     private readonly eventRepository: EventRepository,
     private readonly sessionRepository: SessionRepository,
-  ) {}
+    private readonly onesignalService: OnesignalService,
+  ) { }
 
   /**
    * Create an event.
@@ -64,5 +66,15 @@ export class CreateEventService {
 
       throw error;
     }
+    // try to send push notification in background.
+    this.onesignalService.sendPushNotification({
+      heading: createEventDto.eventName,
+      content: createEventDto.location.name,
+      data: { eventDate: createEventDto.eventDate },
+    }).catch(error => {
+      this.logger.error(
+        `[CreateEventService] [notify] - x-request-id: ${requestId}, error: ${error}`,
+      );
+    });
   }
 }

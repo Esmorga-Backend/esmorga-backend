@@ -27,6 +27,7 @@ jobs:
       - uses: ./.github/actions/runUnitTests
         env:
           NODE_ENV: LOCAL
+          APP_ENV: LOCAL
 
       - name: Run Reporting
         uses: ./.github/actions/runReporting

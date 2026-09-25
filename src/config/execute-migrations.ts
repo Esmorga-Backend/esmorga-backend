@@ -37,7 +37,7 @@ function setMongoUrl(config: mongoMigrate.config.Config) {
   config.mongodb.url = mongoURL.toString();
 }
 export async function executeMigrations(info: (...data: any[]) => void = console.log.bind(console)) {
-  const mongoMigrateConfig = configs[process.env.MIGRATION_ENV ?? process.env.NODE_ENV] ?? defaultConfig
+  const mongoMigrateConfig = configs[process.env.MIGRATION_ENV ?? process.env.APP_ENV] ?? defaultConfig
   setMongoUrl(mongoMigrateConfig);
   const { database, config, up, down } = await mongoMigrate;
   config.set(mongoMigrateConfig);
@@ -46,13 +46,14 @@ export async function executeMigrations(info: (...data: any[]) => void = console
     const migrated = await down(db, client);
     info("Reverted migrations:")
     migrated.forEach(fileName => info(' - ', fileName));
-    return;
-  }
-  const migrated = await up(db, client);
-  if (!migrated?.length) {
-    info("No new migrations.")
   } else {
-    info("Applied migrations:")
-    migrated.forEach(fileName => info(' - ', fileName));
+    const migrated = await up(db, client);
+    if (!migrated?.length) {
+      info("No new migrations.")
+    } else {
+      info("Applied migrations:")
+      migrated.forEach(fileName => info(' - ', fileName));
+    }
   }
+  await client.close();
 }

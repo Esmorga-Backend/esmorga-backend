@@ -18,6 +18,7 @@ jobs:
       - uses: ./.github/actions/runUnitTests
         env:
           NODE_ENV: LOCAL
+          APP_ENV: LOCAL
   BuildAndPushDocker:
     name: Build and Push Docker Image
     runs-on: ubuntu-latest

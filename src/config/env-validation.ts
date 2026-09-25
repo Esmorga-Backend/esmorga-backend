@@ -23,6 +23,10 @@ class EnvVars {
 
   @IsNotEmpty()
   @IsString()
+  APP_ENV: string;
+  
+  @IsNotEmpty()
+  @IsString()
   JWT_SECRET: string;
 
   @IsNotEmpty()
@@ -64,6 +68,15 @@ class EnvVars {
   @IsNotEmpty()
   @IsString()
   DNS_NAME: string;
+
+  @IsString()
+  ONESIGNAL_API_BASE_URL: string = '';
+
+  @IsString()
+  ONESIGNAL_APP_ID: string = '';
+
+  @IsString()
+  ONESIGNAL_REST_API_KEY: string = '';
 
   @IsString()
   ENABLE_CORS: string = 'false';

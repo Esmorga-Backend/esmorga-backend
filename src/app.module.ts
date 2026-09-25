@@ -62,7 +62,7 @@ const { ConfigurableModuleClass } =
     LoggerModule.forRootAsync({
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
-        return getLoggerConfig(configService.get('NODE_ENV'));
+        return getLoggerConfig(configService.get('APP_ENV'));
       },
     }),
     AccountModule,

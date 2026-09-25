@@ -39,7 +39,8 @@ jobs:
         echo "MIGRATION_ENV=${{ inputs.environment }}" >> .env 
         echo "APP_PORT=${{vars.APP_PORT}}" >> .env 
         echo "MONGODB_URI=${{secrets.MONGODB_URI}}" >> .env 
-        echo "NODE_ENV=${{vars.NODE_ENV}}" >> .env 
+        echo "NODE_ENV=production" >> .env 
+        echo "APP_ENV=${{vars.environment}}" >> .env
         echo "JWT_SECRET=${{secrets.JWT_SECRET}}" >> .env 
         echo "JWT_REFRESH_SECRET=${{secrets.JWT_REFRESH_SECRET}}" >> .env 
         echo "ACCESS_TOKEN_TTL=${{vars.ACCESS_TOKEN_TTL}}" >> .env 
