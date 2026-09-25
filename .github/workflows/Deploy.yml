@@ -39,7 +39,8 @@ jobs:
         echo "MIGRATION_ENV=${{ inputs.environment }}" >> .env 
         echo "APP_PORT=${{vars.APP_PORT}}" >> .env 
         echo "MONGODB_URI=${{secrets.MONGODB_URI}}" >> .env 
-        echo "NODE_ENV=${{vars.NODE_ENV}}" >> .env 
+        echo "NODE_ENV=production" >> .env 
+        echo "APP_ENV=${{vars.environment}}" >> .env
         echo "JWT_SECRET=${{secrets.JWT_SECRET}}" >> .env 
         echo "JWT_REFRESH_SECRET=${{secrets.JWT_REFRESH_SECRET}}" >> .env 
         echo "ACCESS_TOKEN_TTL=${{vars.ACCESS_TOKEN_TTL}}" >> .env 
@@ -52,6 +53,9 @@ jobs:
         echo "DNS_NAME=${{vars.DNS_NAME}}" >> .env 
         echo "CORS_ORIGIN=${{vars.CORS_ORIGIN}}" >> .env 
         echo "ENABLE_CORS=${{vars.ENABLE_CORS}}" >> .env 
+        echo "ONESIGNAL_APP_ID=${{vars.ONESIGNAL_APP_ID}}" >> .env 
+        echo "ONESIGNAL_API_BASE_URL=${{vars.ONESIGNAL_API_BASE_URL}}" >> .env 
+        echo "ONESIGNAL_REST_API_KEY=${{vars.ONESIGNAL_REST_API_KEY}}" >> .env 
         
     - name: Set up Python "pypy3.9"
       uses: actions/setup-python@v7

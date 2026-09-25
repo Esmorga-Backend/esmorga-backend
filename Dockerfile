@@ -23,7 +23,9 @@ COPY src ./src
 COPY migrations ./migrations
 
 # Compile to dist/ (only runtime deps are needed here)
-RUN npm run build && npm run build:migrations && npm prune --omit=dev
+RUN npm run build:migrations
+RUN npm run build
+RUN npm prune --omit=dev
 
 # ---------- Runtime stage ----------
 FROM node:26-slim AS runtime
@@ -34,7 +36,8 @@ RUN groupadd --system nodejs \
 
 WORKDIR /app
 
-ENV NODE_ENV=PROD \
+ENV NODE_ENV=production \
+    APP_ENV=PROD \
     NPM_CONFIG_PRODUCTION=true \
     APP_PORT=3000 \
     IGNORE_ENV_FILE=true \

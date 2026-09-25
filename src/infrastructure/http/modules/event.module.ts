@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { EventController } from '../controllers/event.controller';
 import { AuthGuard } from '../guards';
+import { OnesignalService } from '../../services';
 import {
   CreateEventService,
   DeleteEventService,
@@ -21,6 +22,7 @@ import { AccountSharedModule } from './account-shared.module';
     GetEventListService,
     GetEventUsersListService,
     UpdateEventService,
+    OnesignalService,
   ],
 })
 export class EventModule {}
