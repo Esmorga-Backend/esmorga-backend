@@ -70,7 +70,7 @@ export class EventDto {
   @IsString()
   @IsOptional()
   @ApiProperty({ example: 'Hello World', maxLength: 5000, required: false })
-  @Transform(({ value }) => value == null ? undefined : value)
+  @Transform(({ value }) => value == null ? "" : value)
   description: string;
 
   @Expose()
