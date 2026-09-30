@@ -19,12 +19,16 @@ RUN npm ci
 
 # Project config needed for the build
 COPY tsconfig.json tsconfig.build.json nest-cli.json ./
-COPY src ./src
-COPY migrations ./migrations
 
-# Compile to dist/ (only runtime deps are needed here)
+# Compile to dist_migrations/
+COPY migrations ./migrations
 RUN npm run build:migrations
+
+# Compile to dist/
+COPY src ./src
 RUN npm run build
+
+# only runtime deps are needed from here
 RUN npm prune --omit=dev
 
 # ---------- Runtime stage ----------
@@ -51,7 +55,6 @@ COPY --from=build /app/dist ./dist
 COPY package.json ./
 
 # DB migrations
-COPY --from=build /app/node_modules/.bin ./node_modules/.bin
 COPY --from=build /app/dist_migrations ./dist_migrations
 
 USER appuser
