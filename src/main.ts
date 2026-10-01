@@ -68,7 +68,7 @@ async function main() {
 
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Esmorga API')
-    .setVersion('1.1.1')
+    .setVersion(configService.get<string>('APP_VERSION'))
     .addServer(`${DNS_NAME}`)
     .setDescription(description)
     .addBearerAuth(

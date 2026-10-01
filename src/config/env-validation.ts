@@ -84,6 +84,9 @@ class EnvVars {
   @IsString()
   CORS_ORIGIN: string = '*';
 
+  @IsString()
+  APP_VERSION: string = '0.0.0';
+
   @IsNumber()
   @IsPositive()
   API_RATE_LIMIT: number = 100;

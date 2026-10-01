@@ -34,6 +34,12 @@ runs:
         registry: ghcr.io
         username: ${{ github.actor }}
         password: ${{ inputs.github_token }}
+        
+    - name: Extract version from package.json
+      id: pkg_version
+      run: |
+        VERSION=$(jq -r .version ${{ inputs.dockerfile_path }}/package.json)
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
 
     - name: Build and push Docker image
       id: build-push
@@ -44,3 +50,5 @@ runs:
         tags: ghcr.io/${{ inputs.image_name }}:${{ inputs.image_tag }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
+        build-args: |
+          APP_VERSION=${{ steps.pkg_version.outputs.version }}

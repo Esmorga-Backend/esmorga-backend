@@ -34,6 +34,9 @@ RUN npm prune --omit=dev
 # ---------- Runtime stage ----------
 FROM node:26-slim AS runtime
 
+ARG APP_VERSION=0.0.0
+ENV APP_VERSION=${APP_VERSION}
+
 # Run as a non-root user for security
 RUN groupadd --system nodejs \
   && useradd --system --gid nodejs --create-home appuser
