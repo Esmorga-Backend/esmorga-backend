@@ -37,6 +37,7 @@ runs:
         
     - name: Extract version from package.json
       id: pkg_version
+      shell: bash
       run: |
         VERSION=$(jq -r .version ${{ inputs.dockerfile_path }}/package.json)
         echo "version=$VERSION" >> $GITHUB_OUTPUT
